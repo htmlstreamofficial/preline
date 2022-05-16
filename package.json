@@ -1,0 +1,50 @@
+{
+  "name": "@preline",
+  "version": "1.0.0",
+  "description": "Preline UI is an open-source set of prebuilt UI components based on the utility-first Tailwind CSS framework.",
+  "main": "dist/hs-ui.bundle.js",
+  "repository": "https://github.com/htmlstreamofficial/preline.git",
+  "keywords": [],
+  "author": "Htmlstream",
+  "license": "MIT",
+  "keywords": [
+    "preline",
+    "html",
+    "css",
+    "javascript",
+    "tailwind",
+    "tailwind components",
+    "tailwind elements",
+    "tailwind library",
+    "tailwind sections",
+    "tailwind css",
+    "tailwind ui",
+    "tailwind css react",
+    "tailwind css vue",
+    "tailwind css angular",
+    "tailwind css laravel"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "contributors": [
+    "Zoltán Szőgyényi <zoltan@themesberg.com>",
+    "Robert Tanislav <robert@themesberg.com>",
+    "Victor Cordos <victor@themesberg.com>"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
+    "babel-loader": "^8.2.3",
+    "source-map-loader": "^3.0.1",
+    "webpack": "^5.69.1",
+    "webpack-cli": "^4.9.2"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.2"
+  }
+}
