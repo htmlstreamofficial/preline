@@ -28,7 +28,11 @@ First, you need to make sure that you have a working <a href="https://tailwindcs
 
 2. Include Preline UI as a plugin in the <code>tailwind.config.js</code> file
 
-<pre><code>npm i preline</code></pre>
+<pre><code>module.exports = {
+  plugins: [
+    require('preline/plugin')
+  ]
+}</code></pre>
 
 3. Include the JavaScript <code><script></code> that powers the interactive elements near the end of your <code><body></code> tag:
 
