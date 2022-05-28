@@ -62,14 +62,6 @@ Preline UI is Open Source project and licensed under MIT for better Web.
 
 Learn more <a href="https://preline.co/docs/license.html">here</a>.
 
-## Roadmap
-
-<ul>
-  <li></li>
-</ul>
-
-## Github Releases
-
 ## A product of Htmlstream
 
 Preline Ui is built by the team that has customers in the background such us Stanford University, The University of Maryland, University of Victoria and many more Governments, Corporate Agencies.
