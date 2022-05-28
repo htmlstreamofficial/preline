@@ -42,9 +42,11 @@ First, you need to make sure that you have a working <a href="https://tailwindcs
 
 For full documentation of the Preline options, visit <a href="https://preline.co/">preline.co</a>. The site also contains information on the wide variety of <a href="https://preline.co/docs/plugins.html">plugins</a> that are available for TailwindCSS projects.
 
-## Contributing
+## Community
 
-If you're interested in contributing to Preline UI, please read our <a href="https://github.com/htmlstreamofficial/preline/contributing">contributing docs</a> before <strong>submitting a pull request.</strong>
+For help, discussion about best practices, or any other conversation that would benefit from being searchable:
+
+<a href="https://github.com/htmlstreamofficial/preline/discussions">Discuss Preline UI on GitHub</a>
 
 ## Support
 
