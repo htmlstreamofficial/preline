@@ -1,4 +1,6 @@
-# preline logo
+<img src="https://preline.co/preline-readme-image-files/hero-image.jpg" alt="Hero Image" width="100%" height="auto">
+
+<img src="https://preline.co/preline-readme-image-files/preline-logo.svg" alt="Logo" width="200" height="auto">
 
 Preline UI is an open-source set of prebuilt UI components based on the utility-first Tailwind CSS framework.
 
