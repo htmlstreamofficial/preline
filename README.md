@@ -1,4 +1,4 @@
-<img src="https://preline.co/preline-readme-image-files/hero-image.jpg" alt="Hero Image" width="100%" height="auto">
+<img src="https://preline.co/hero-image.jpg" alt="Hero Image" width="100%" height="auto">
 
 <img src="https://preline.co/preline-logo.svg" alt="Logo" width="200" height="auto">
 
