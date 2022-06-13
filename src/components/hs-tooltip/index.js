@@ -1,3 +1,12 @@
+/*
+* HSTabs
+* @version: 1.0.0
+* @author: HtmlStream
+* @requires: @popperjs/core ^2.11.2
+* @license: Licensed under MIT (https://preline.co/docs/license.html)
+* Copyright 2022 Htmlstream
+*/
+
 import Component from "../../core/Component";
 import {createPopper} from "@popperjs/core";
 
@@ -12,13 +21,14 @@ class HSTooltip extends Component {
             const $tooltipEl = $targetEl.closest(this.selector)
 
             if ($tooltipEl && $tooltipEl.getAttribute('data-hs-tooltip-trigger') === 'focus') this._focus($tooltipEl)
+            if ($tooltipEl && $tooltipEl.getAttribute('data-hs-tooltip-trigger') === 'click') this._click($tooltipEl)
         })
 
         document.addEventListener('mousemove', e => {
             const $targetEl = e.target
             const $tooltipEl = $targetEl.closest(this.selector)
 
-            if ($tooltipEl && $tooltipEl.getAttribute('data-hs-tooltip-trigger') !== 'focus') this._hover($tooltipEl)
+            if ($tooltipEl && $tooltipEl.getAttribute('data-hs-tooltip-trigger') !== 'focus' && $tooltipEl.getAttribute('data-hs-tooltip-trigger') !== 'click') this._hover($tooltipEl)
         })
     }
 
@@ -79,6 +89,41 @@ class HSTooltip extends Component {
 
 
         $tooltipEl.addEventListener('blur', handleMouseoverOnTooltip, true)
+    }
+
+    _click ($tooltipEl) {
+        if ($tooltipEl.classList.contains('show')) return
+
+        const $tooltipToggleEl = $tooltipEl.querySelector('.hs-tooltip-toggle')
+        const $tooltipContentEl = $tooltipEl.querySelector('.hs-tooltip-content')
+        const placement = $tooltipEl.getAttribute('data-hs-tooltip-placement')
+        const strategy = $tooltipEl.getAttribute('data-hs-tooltip-strategy')
+
+        createPopper($tooltipToggleEl, $tooltipContentEl, {
+            placement: placement || 'top',
+            strategy: strategy || 'fixed',
+            modifiers: [
+                {
+                    name: 'offset',
+                    options: {
+                        offset: [0, 5]
+                    }
+                }
+            ]
+        })
+
+        this.show($tooltipEl)
+
+        const handleMouseoverOnTooltip = (e) => {
+            setTimeout(() => {
+                this.hide($tooltipEl)
+                $tooltipEl.removeEventListener('click', handleMouseoverOnTooltip, true)
+                $tooltipEl.removeEventListener('blur', handleMouseoverOnTooltip, true)
+            })
+        }
+
+        $tooltipEl.addEventListener('blur', handleMouseoverOnTooltip, true)
+        $tooltipEl.addEventListener('click', handleMouseoverOnTooltip, true)
     }
 
     show ($tooltipEl) {

@@ -1,0 +1,24 @@
+/*
+* Component
+* @version: 1.0.0
+* @author: HtmlStream
+* @license: Licensed under MIT (https://preline.co/docs/license.html)
+* Copyright 2022 Htmlstream
+*/
+
+/*
+* HSDropdown
+* @version: 1.0.0
+* @author: HtmlStream
+* @requires: @popperjs/core ^2.11.2
+* @license: Licensed under MIT (https://preline.co/docs/license.html)
+* Copyright 2022 Htmlstream
+*/
+
+/*
+* Util
+* @version: 1.0.0
+* @author: HtmlStream
+* @license: Licensed under MIT (https://preline.co/docs/license.html)
+* Copyright 2022 Htmlstream
+*/

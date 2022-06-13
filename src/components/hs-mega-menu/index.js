@@ -1,3 +1,11 @@
+/*
+* HSMegaMenu
+* @version: 1.0.0
+* @author: HtmlStream
+* @license: Licensed under MIT (https://preline.co/docs/license.html)
+* Copyright 2022 Htmlstream
+*/
+
 import Component from '../../core/Component'
 import MenuSearchHistory from '../../core/utils/MenuSearchHistory'
 
@@ -95,6 +103,11 @@ class HSMegaMenu extends Component {
 
             $menuEl.style.right = null
             $menuEl.style.left = null
+
+            $megaMenuEl.querySelectorAll('.hs-mega-menu-content.block').forEach($megaMenuEl => {
+                $megaMenuEl.classList.remove('block')
+                $megaMenuEl.classList.add('hidden')
+            })
         })
 
         this._fireEvent('close', $megaMenuEl)

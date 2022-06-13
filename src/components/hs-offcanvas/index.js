@@ -1,5 +1,12 @@
+/*
+* HSOffcanvas
+* @version: 1.0.0
+* @author: HtmlStream
+* @license: Licensed under MIT (https://preline.co/docs/license.html)
+* Copyright 2022 Htmlstream
+*/
+
 import Component from '../../core/Component'
-import log from "tailwindcss/lib/util/log";
 
 class HSOffcanvas extends Component {
     constructor () {

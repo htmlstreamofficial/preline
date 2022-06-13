@@ -1,7 +1,31 @@
+/*
+* HSDropdown
+* @version: 1.0.0
+* @author: HtmlStream
+* @requires: @popperjs/core ^2.11.2
+* @license: Licensed under MIT (https://preline.co/docs/license.html)
+* Copyright 2022 Htmlstream
+*/
+
 import { createPopper } from '@popperjs/core'
 import Component from '../../core/Component'
 import MenuSearchHistory from '../../core/utils/MenuSearchHistory'
 
+const isIOS = () => {
+    if (/iPad|iPhone|iPod/.test(navigator.platform)) {
+        return true;
+    } else {
+        return navigator.maxTouchPoints &&
+          navigator.maxTouchPoints > 2 &&
+          /MacIntel/.test(navigator.platform);
+    }
+}
+
+const isIpadOS = () => {
+    return navigator.maxTouchPoints &&
+      navigator.maxTouchPoints > 2 &&
+      /MacIntel/.test(navigator.platform);
+}
 
 class HSDropdown extends Component {
     constructor () {
@@ -68,7 +92,7 @@ class HSDropdown extends Component {
             const $dropdownEl = $targetEl.closest(this.selector)
             const $menuEl = $targetEl.closest('.hs-dropdown-menu')
 
-            if ($dropdownEl && $dropdownEl.getAttribute('data-hs-dropdown-trigger') === 'hover' && !$dropdownEl.classList.contains('open')) this._hover($targetEl)
+            if ($dropdownEl && $dropdownEl.getAttribute('data-hs-dropdown-trigger') === 'hover' && !$dropdownEl.classList.contains('open') && !isIOS() && !isIpadOS()) this._hover($targetEl)
         })
 
         document.addEventListener('keydown', this._keyboardSupport.bind(this))

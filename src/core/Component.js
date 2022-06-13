@@ -1,3 +1,11 @@
+/*
+* Component
+* @version: 1.0.0
+* @author: HtmlStream
+* @license: Licensed under MIT (https://preline.co/docs/license.html)
+* Copyright 2022 Htmlstream
+*/
+
 export default class Component {
     constructor (selector, config) {
         this.$collection = []
@@ -19,7 +27,6 @@ export default class Component {
             cancelable: true,
             composed: false
         })
-
         element.dispatchEvent(event)
     }
 

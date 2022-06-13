@@ -1,6 +1,14 @@
+/*
+* Index
+* @version: 1.0.0
+* @author: HtmlStream
+* @license: Licensed under MIT (https://preline.co/docs/license.html)
+* Copyright 2022 Htmlstream
+*/
+
 import "./components/hs-dropdown"
 import "./components/hs-tooltip"
-import "./components/hs-accoriond"
+import "./components/hs-accorion"
 import "./components/hs-tabs"
 import "./components/hs-modal"
 import "./components/hs-offcanvas"

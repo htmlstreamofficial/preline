@@ -1,3 +1,11 @@
+/*
+* Util
+* @version: 1.0.0
+* @author: HtmlStream
+* @license: Licensed under MIT (https://preline.co/docs/license.html)
+* Copyright 2022 Htmlstream
+*/
+
 export default {
     historyIndex: -1,
 

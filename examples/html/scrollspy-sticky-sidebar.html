@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required Meta Tags Always Come First -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="This example is a quick exercise to illustrate how scrollspy works with fixed sidebar using Tailwind CSS. It will automatically update navigation or list group components based on scroll position to indicate which link is currently active in the viewport.">
+
+  <meta name="twitter:site" content="@preline">
+  <meta name="twitter:creator" content="@htmlstream">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Scrollspy: Sticky Sidebar using Tailwind CSS">
+  <meta name="twitter:description" content="This example is a quick exercise to illustrate how scrollspy works with fixed sidebar using Tailwind CSS. It will automatically update navigation or list group components based on scroll position to indicate which link is currently active in the viewport.">
+  <meta name="twitter:image" content="https://preline.co/preline-logo.svg">
+
+  <meta property="og:url" content="https://preline.co/">
+  <meta property="og:site_name" content="Preline">
+  <meta property="og:title" content="Scrollspy: Sticky Sidebar using Tailwind CSS">
+  <meta property="og:description" content="This example is a quick exercise to illustrate how scrollspy works with fixed sidebar using Tailwind CSS. It will automatically update navigation or list group components based on scroll position to indicate which link is currently active in the viewport.">
+  <meta property="og:image" content="https://preline.co/preline-logo.svg">
+
+  <!-- Title -->
+  <title>Scrollspy: Sticky Sidebar using Tailwind CSS</title>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../favicon.ico">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Link your Tailwind CSS file -->
+  <link rel="stylesheet" href="your_file.css">
+
+  <!-- Algolia Search -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
+  <!-- Algolia Search Override Style -->
+  <link rel="stylesheet" href="../../assets/css/algolia.min.css">
+</head>
+
+<body class="dark:bg-slate-900">
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <div class="max-w-[90rem] mx-auto">
+    <!-- Sidebar Toggle -->
+    <div class="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 md:px-8 lg:hidden dark:bg-slate-900 dark:border-gray-700">
+      <div class="max-w-3xl mx-auto py-2">
+        <!-- Navigation Toggle -->
+        <button type="button" class="flex justify-between gap-x-2 items-center w-full text-gray-500 hover:text-gray-600" data-hs-sidebar="#docs-sidebar" aria-controls="docs-sidebar" aria-label="Toggle navigation">
+          <span class="text-sm">Toggle Navigation</span>
+          <svg class="w-5 h-5" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+          </svg>
+        </button>
+        <!-- End Navigation Toggle -->
+      </div>
+    </div>
+    <!-- End Sidebar Toggle -->
+
+    <!-- Sidebar -->
+    <div id="docs-sidebar" class="hs-sidebar hs-sidebar-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 left-0 bottom-0 z-[60] w-80 bg-white border-r border-gray-200 py-10 px-8 overflow-y-auto scrollbar-y lg:block lg:translate-x-0 lg:top-0 lg:right-auto lg:bottom-0 lg:left-[max(0px,calc(50%-45rem))] lg:z-10 dark:scrollbar-y dark:bg-slate-900">
+      <!-- Navigation Toggle -->
+      <button type="button" class="ml-auto flex justify-end lg:hidden text-gray-500 hover:text-gray-600" data-hs-sidebar="#docs-sidebar" aria-controls="docs-sidebar" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle Navigation</span>
+        <svg class="w-5 h-5" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+        </svg>
+      </button>
+      <!-- End Navigation Toggle -->
+
+      <!-- Nav -->
+      <nav id="sidebar-nav" class="relative space-y-8">
+        <h5 class="mb-3 text-sm font-semibold text-slate-900 dark:text-slate-200">Navbar Links</h5>
+        <ul class="ml-0.5 space-y-2 border-l-2 border-slate-100 dark:border-slate-800" data-hs-scrollspy="#scrollspy">
+          <li><a class="block py-1 pl-4 -ml-px border-l-2 border-transparent text-sm text-slate-700 hover:border-slate-400 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300 hs-scrollspy-active:font-medium hs-scrollspy-active:text-blue-600 dark:hs-scrollspy-active:text-blue-400 active" href="#first">First</a></li>
+          <li><a class="block py-1 pl-4 -ml-px border-l-2 border-transparent text-sm text-slate-700 hover:border-slate-400 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300 hs-scrollspy-active:font-medium hs-scrollspy-active:text-blue-600 dark:hs-scrollspy-active:text-blue-400" href="#second">Second</a></li>
+          <li><a class="block py-1 pl-4 -ml-px border-l-2 border-transparent text-sm text-slate-700 hover:border-slate-400 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300 hs-scrollspy-active:font-medium hs-scrollspy-active:text-blue-600 dark:hs-scrollspy-active:text-blue-400" href="#third">Third</a></li>
+          <li><a class="block py-1 pl-4 -ml-px border-l-2 border-transparent text-sm text-slate-700 hover:border-slate-400 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300 hs-scrollspy-active:font-medium hs-scrollspy-active:text-blue-600 dark:hs-scrollspy-active:text-blue-400" href="#fourth">Fourth</a></li>
+          <li><a class="block py-1 pl-4 -ml-px border-l-2 border-transparent text-sm text-slate-700 hover:border-slate-400 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300 hs-scrollspy-active:font-medium hs-scrollspy-active:text-blue-600 dark:hs-scrollspy-active:text-blue-400" href="#fifth">Fifth</a></li>
+          <li><a class="block py-1 pl-4 -ml-px border-l-2 border-transparent text-sm text-slate-700 hover:border-slate-400 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300 hs-scrollspy-active:font-medium hs-scrollspy-active:text-blue-600 dark:hs-scrollspy-active:text-blue-400" href="#sixth">Sixth</a></li>
+        </ul>
+      </nav>
+      <!-- Nav -->
+    </div>
+    <!-- End Sidebar -->
+
+    <!-- Content -->
+    <div class="w-full px-4 sm:px-6 md:px-8 lg:pl-[22rem]">
+      <div class="max-w-3xl mx-auto xl:max-w-none py-10 xl:ml-0 xl:mr-64 xl:pr-16">
+        <!-- Page Heading -->
+        <header class="max-w-3xl">
+          <p class="mb-2 text-sm font-semibold text-blue-600">Starter Pages &amp; Examples</p>
+          <h1 class="block text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white">Scrollspy: Sticky Sidebar using Tailwind CSS</h1>
+          <p class="mt-2 text-lg text-gray-800 dark:text-gray-400">This example is a quick exercise to illustrate how scrollspy works with fixed sidebar using Tailwind CSS. It will automatically update navigation or list group components based on scroll position to indicate which link is currently active in the viewport.</p>
+          <div class="mt-5 flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
+            <a class="w-full sm:w-auto inline-flex justify-center items-center gap-x-3 text-center bg-blue-600 hover:bg-blue-700 border border-transparent text-white text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white transition py-3 px-4 dark:focus:ring-offset-gray-800" href="https://github.com/htmlstreamofficial/preline/tree/main/examples" target="_blank">
+              <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+              </svg>
+              Get the source code
+            </a>
+            <a class="w-full sm:w-auto inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold text-blue-500 hover:text-blue-700 focus:outline-none focus:ring-2 ring-offset-white focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm py-3 px-4 dark:ring-offset-slate-900" href="../../examples.html">
+              <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M11.2792 1.64001L5.63273 7.28646C5.43747 7.48172 5.43747 7.79831 5.63273 7.99357L11.2792 13.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              Back to examples
+            </a>
+          </div>
+        </header>
+        <!-- End Page Heading -->
+
+        <!-- Content -->
+        <div class="mt-16">
+          <div id="scrollspy" class="space-y-10 md:space-y-16">
+            <div id="first" class="scroll-mt-24 min-h-[25rem]">
+              <h2 class="text-lg font-semibold text-gray-800 dark:text-white">First section</h2>
+            </div>
+
+            <div id="second" class="scroll-mt-24 min-h-[25rem]">
+              <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Second section</h2>
+            </div>
+
+            <div id="third" class="scroll-mt-24 min-h-[25rem]">
+              <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Third section</h2>
+            </div>
+
+            <div id="fourth" class="scroll-mt-24 min-h-[25rem]">
+              <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Fourth section</h2>
+            </div>
+
+            <div id="fifth" class="scroll-mt-24 min-h-[25rem]">
+              <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Fifth section</h2>
+            </div>
+
+            <div id="sixth" class="scroll-mt-24 min-h-[25rem]">
+              <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Sixth section</h2>
+            </div>
+          </div>
+        </div>
+        <!-- End Content -->
+      </div>
+    </div>
+    <!-- End Content -->
+  </div>
+  <!-- ========== END MAIN CONTENT ========== -->
+
+  <!-- JS Implementing Plugins -->
+  <script src="./node_modules/preline/dist/hs-ui.bundle.js"></script>
+</body>
+</html>

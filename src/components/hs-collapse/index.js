@@ -1,3 +1,11 @@
+/*
+* HSCollapse
+* @version: 1.0.0
+* @author: HtmlStream
+* @license: Licensed under MIT (https://preline.co/docs/license.html)
+* Copyright 2022 Htmlstream
+*/
+
 import Component from '../../core/Component'
 
 class HSCollapse extends Component {
@@ -16,18 +24,6 @@ class HSCollapse extends Component {
 
                 this.toggle(collapseEls)
             }
-        })
-
-
-        document.querySelectorAll('[data-hs-collapse-auto-close]').forEach($collapseToggleEl => {
-            document.querySelectorAll($collapseToggleEl.getAttribute('data-hs-collapse')).forEach($collapseEl => {
-                $collapseEl.addEventListener('click', evt => {
-                    if (evt.target.closest('.hs-dropdown-toggle')
-                        || evt.target.closest('.hs-mega-menu-toggle')
-                    ) return
-                    this.hide($collapseEl)
-                })
-            })
         })
     }
 
@@ -81,6 +77,11 @@ class HSCollapse extends Component {
 
             this._fireEvent('hide', $collapseEl)
             this._dispatch('hide.hs.collapse', $collapseEl, $collapseEl)
+
+            $collapseEl.querySelectorAll('.hs-mega-menu-content.block').forEach($megaMenuEl => {
+                $megaMenuEl.classList.remove('block')
+                $megaMenuEl.classList.add('hidden')
+            })
         })
 
         document.querySelectorAll(this.selector).forEach($toggleEl => {
