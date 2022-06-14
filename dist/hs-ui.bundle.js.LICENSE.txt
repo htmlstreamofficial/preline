@@ -40,6 +40,14 @@
 */
 
 /*
+* HSModal
+* @version: 1.0.0
+* @author: HtmlStream
+* @license: Htmlstream Libraries (https://preline.co/docs/license.html)
+* Copyright 2022 Htmlstream
+*/
+
+/*
 * HSOffcanvas
 * @version: 1.0.0
 * @author: HtmlStream
@@ -88,7 +96,7 @@
 */
 
 /*
-* HSTabs
+* HSTooltips
 * @version: 1.0.0
 * @author: HtmlStream
 * @requires: @popperjs/core ^2.11.2

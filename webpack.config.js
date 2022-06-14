@@ -5,7 +5,7 @@ module.exports = {
     watch: true,
     entry: {
         'hs-ui.bundle': './src/index.js',
-        'components/hs-accoriond/hs-accoriond': './src/components/hs-accoriond/index.js',
+        'components/hs-accordion/hs-accordion': './src/components/hs-accordion/index.js',
         'components/hs-collapse/hs-collapse': './src/components/hs-collapse/index.js',
         'components/hs-dropdown/hs-dropdown': './src/components/hs-dropdown/index.js',
         'components/hs-mega-menu/hs-mega-menu': './src/components/hs-mega-menu/index.js',
@@ -20,7 +20,10 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].js'
+        filename: '[name].js',
+        library: {
+            type: 'umd'
+        }
     },
     module: {
         rules: [

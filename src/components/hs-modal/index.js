@@ -1,3 +1,12 @@
+/*
+* HSModal
+* @version: 1.0.0
+* @author: HtmlStream
+* @license: Htmlstream Libraries (https://preline.co/docs/license.html)
+* Copyright 2022 Htmlstream
+*/
+
+
 import Component from '../../core/Component'
 
 class HSModal extends Component {

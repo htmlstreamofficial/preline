@@ -8,7 +8,7 @@
 
 import "./components/hs-dropdown"
 import "./components/hs-tooltip"
-import "./components/hs-accorion"
+import "./components/hs-accordion"
 import "./components/hs-tabs"
 import "./components/hs-modal"
 import "./components/hs-offcanvas"

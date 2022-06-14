@@ -1,5 +1,5 @@
 /*
-* HSTabs
+* HSTooltips
 * @version: 1.0.0
 * @author: HtmlStream
 * @requires: @popperjs/core ^2.11.2

@@ -24,6 +24,8 @@ class HSScrollspy extends Component {
             const $scrollableEl = $scrollspyEl.getAttribute('data-hs-scrollspy-scrollable-parent') ? document.querySelector($scrollspyEl.getAttribute('data-hs-scrollspy-scrollable-parent')) : document
 
             Array.from(sections).forEach($sectionEl => {
+                if (!$sectionEl.getAttribute('id')) return
+
                 $scrollableEl.addEventListener('scroll', ev => this._update({
                     $scrollspyEl,
                     $scrollspyContentEl,
@@ -50,21 +52,15 @@ class HSScrollspy extends Component {
         const offsetScrollableParent = ev.target === document ? 0 : parseInt(ev.target.getBoundingClientRect().top)
         const topOffset = (parseInt($sectionEl.getBoundingClientRect().top) - userOffset) - offsetScrollableParent
         const height = $sectionEl.offsetHeight
-        let $relatedLinkEl = null
 
         if (topOffset <= 0 && (topOffset + height) > 0) {
             if (this.activeSection === $sectionEl) return
 
-            if ($scrollspyEl.getAttribute('id')) {
-                $relatedLinkEl = $scrollspyEl.querySelector(`[href="#${$sectionEl.getAttribute('id')}"]`)
-            }
-
             links.forEach($el => {
                 $el.classList.remove('active')
-                if ($relatedLinkEl) return
-                $relatedLinkEl = $sectionEl.querySelector($el.getAttribute('href')) ? $el : null
             })
 
+            const $relatedLinkEl = $scrollspyEl.querySelector(`[href="#${$sectionEl.getAttribute('id')}"]`)
             if ($relatedLinkEl) {
                 $relatedLinkEl.classList.add('active')
 
