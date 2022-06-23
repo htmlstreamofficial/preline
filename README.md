@@ -31,12 +31,15 @@ First, you need to make sure that you have a working <a href="https://tailwindcs
 2. Include Preline UI as a plugin in the <code>tailwind.config.js</code> file
 
 <pre><code>module.exports = {
+  content: [
+    'node_modules/preline/dist/*.js'
+  ],
   plugins: [
     require('preline/plugin')
-  ]
+  ],
 }</code></pre>
 
-3. Include the JavaScript <code><script></code> that powers the interactive elements near the end of your <code><body></code> tag:
+3. Include the JavaScript <code><script></code> that powers the interactive elements near the end of your <code>&lt;body&gt;</code> tag:
 
 <pre><code><script src="./node_modules/preline/dist/hs-ui.bundle.js"></script></code></pre>
 
@@ -49,10 +52,6 @@ For full documentation of the Preline options, visit <a href="https://preline.co
 For help, discussion about best practices, or any other conversation that would benefit from being searchable:
 
 <a href="https://github.com/htmlstreamofficial/preline/discussions">Discuss Preline UI on GitHub</a>
-
-## Support
-
-Support for Preline UI is available through the Preline <a href="https://preline.co/contactus.html">contact form</a>.
 
 ## License
 
