@@ -1,6 +1,6 @@
 /*
 * HSScrollspy
-* @version: 1.0.0
+* @version: 1.2.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
@@ -20,7 +20,6 @@ class HSScrollspy extends Component {
             const $scrollspyContentEl = document.querySelector($scrollspyEl.getAttribute('data-hs-scrollspy'))
             const links = $scrollspyEl.querySelectorAll('[href]')
             const sections = $scrollspyContentEl.children
-            const globalOffset = parseInt($scrollspyEl.getAttribute('data-hs-scrollspy-offset') || 0)
             const $scrollableEl = $scrollspyEl.getAttribute('data-hs-scrollspy-scrollable-parent') ? document.querySelector($scrollspyEl.getAttribute('data-hs-scrollspy-scrollable-parent')) : document
 
             Array.from(sections).forEach($sectionEl => {
@@ -31,7 +30,6 @@ class HSScrollspy extends Component {
                     $scrollspyContentEl,
                     links,
                     $sectionEl,
-                    globalOffset,
                     sections,
                     ev
                 }))
@@ -41,18 +39,19 @@ class HSScrollspy extends Component {
                 $link.addEventListener('click', e => {
                     e.preventDefault()
                     if ($link.getAttribute('href') === 'javascript:;') return
-                    this._scrollTo({$scrollspyEl, $scrollableEl, $link, globalOffset})
+                    this._scrollTo({$scrollspyEl, $scrollableEl, $link})
                 })
             })
         })
     }
 
-    _update({ev, $scrollspyEl, sections, links, $sectionEl, globalOffset}) {
-        const userOffset = $sectionEl.getAttribute('data-hs-scrollspy-offset') || globalOffset
+    _update({ev, $scrollspyEl, sections, links, $sectionEl}) {
+        const globalOffset = parseInt(this.getClassProperty($scrollspyEl, '--scrollspy-offset', '0'))
+        const userOffset = this.getClassProperty($sectionEl, '--scrollspy-offset') || globalOffset
         const offsetScrollableParent = ev.target === document ? 0 : parseInt(ev.target.getBoundingClientRect().top)
         const topOffset = (parseInt($sectionEl.getBoundingClientRect().top) - userOffset) - offsetScrollableParent
         const height = $sectionEl.offsetHeight
-
+        console.log($scrollspyEl)
         if (topOffset <= 0 && (topOffset + height) > 0) {
             if (this.activeSection === $sectionEl) return
 
@@ -75,9 +74,10 @@ class HSScrollspy extends Component {
         }
     }
 
-    _scrollTo({$scrollspyEl, $scrollableEl, $link, globalOffset}) {
+    _scrollTo({$scrollspyEl, $scrollableEl, $link}) {
         const $sectionEl = document.querySelector($link.getAttribute('href'))
-        const userOffset = $sectionEl.getAttribute('data-hs-scrollspy-offset') || globalOffset
+        const globalOffset = parseInt(this.getClassProperty($scrollspyEl, '--scrollspy-offset', '0'))
+        const userOffset = this.getClassProperty($sectionEl, '--scrollspy-offset') || globalOffset
         const offsetScrollableParent = $scrollableEl === document ? 0 : $scrollableEl.offsetTop
         const topOffset = ($sectionEl.offsetTop - userOffset) - offsetScrollableParent
         const $viewEl = $scrollableEl === document ? window : $scrollableEl

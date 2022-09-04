@@ -1,6 +1,6 @@
 /*
 * Component
-* @version: 1.0.0
+* @version: 1.2.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
@@ -45,5 +45,11 @@ export default class Component {
         } else {
             callback()
         }
+    }
+
+    getClassProperty ($element, propertyName, defaultValue = '') {
+        const value = (window.getComputedStyle($element).getPropertyValue(propertyName) || defaultValue).replace(' ', '')
+
+        return value
     }
 }

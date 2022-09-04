@@ -1,13 +1,18 @@
 {
   "name": "preline",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Preline UI is an open-source set of prebuilt UI components based on the utility-first Tailwind CSS framework.",
-  "main": "dist/hs-ui.bundle.js",
+  "main": "dist/preline.js",
   "repository": "https://github.com/htmlstreamofficial/preline.git",
   "keywords": [
     "preline",
     "html",
     "css",
+    "next",
+    "nuxt",
+    "vue",
+    "react",
+    "angular",
     "javascript",
     "tailwind",
     "tailwind components",
@@ -19,7 +24,9 @@
     "tailwind css react",
     "tailwind css vue",
     "tailwind css angular",
-    "tailwind css laravel"
+    "tailwind css laravel",
+    "tailwindcss plugin",
+    "tailwindcss plugins"
   ],
   "author": "Htmlstream",
   "license": "MIT",

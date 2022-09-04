@@ -1,15 +1,15 @@
 /*
 * Component
-* @version: 1.0.0
+* @version: 1.2.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
 */
 
 /*
-* HSSideabr
-* @version: 1.0.0
+* HSOverlay
+* @version: 1.2.0
 * @author: HtmlStream
-* @license: Licensed under MIT (https://preline.co/docs/license.html)
+* @license: Htmlstream Libraries (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
 */

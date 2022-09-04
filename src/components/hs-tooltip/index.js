@@ -1,6 +1,6 @@
 /*
 * HSTooltips
-* @version: 1.0.0
+* @version: 1.2.0
 * @author: HtmlStream
 * @requires: @popperjs/core ^2.11.2
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
@@ -19,23 +19,25 @@ class HSTooltip extends Component {
         document.addEventListener('click', e => {
             const $targetEl = e.target
             const $tooltipEl = $targetEl.closest(this.selector)
-
-            if ($tooltipEl && $tooltipEl.getAttribute('data-hs-tooltip-trigger') === 'focus') this._focus($tooltipEl)
-            if ($tooltipEl && $tooltipEl.getAttribute('data-hs-tooltip-trigger') === 'click') this._click($tooltipEl)
+            
+            if ($tooltipEl && this.getClassProperty($tooltipEl, '--trigger') === 'focus') this._focus($tooltipEl)
+            if ($tooltipEl && this.getClassProperty($tooltipEl, '--trigger') === 'click') this._click($tooltipEl)
         })
 
         document.addEventListener('mousemove', e => {
             const $targetEl = e.target
             const $tooltipEl = $targetEl.closest(this.selector)
 
-            if ($tooltipEl && $tooltipEl.getAttribute('data-hs-tooltip-trigger') !== 'focus' && $tooltipEl.getAttribute('data-hs-tooltip-trigger') !== 'click') this._hover($tooltipEl)
+            if ($tooltipEl && this.getClassProperty($tooltipEl, '--trigger') !== 'focus' && this.getClassProperty($tooltipEl, '--trigger') !== 'click') this._hover($tooltipEl)
         })
     }
 
     _hover ($tooltipEl) {
+        if ($tooltipEl.classList.contains('show')) return
+
         const $tooltipToggleEl = $tooltipEl.querySelector('.hs-tooltip-toggle')
         const $tooltipContentEl = $tooltipEl.querySelector('.hs-tooltip-content')
-        const placement = $tooltipEl.getAttribute('data-hs-tooltip-placement')
+        const placement = this.getClassProperty($tooltipEl, '--placement')
 
         createPopper($tooltipToggleEl, $tooltipContentEl, {
             placement: placement || 'top',
@@ -52,7 +54,8 @@ class HSTooltip extends Component {
 
         this.show($tooltipEl)
 
-        const handleMouseoverOnTooltip = () => {
+        const handleMouseoverOnTooltip = (e) => {
+            if (e.toElement.closest(this.selector)) return
             this.hide($tooltipEl)
             $tooltipEl.removeEventListener('mouseleave', handleMouseoverOnTooltip, true)
         }
@@ -64,8 +67,8 @@ class HSTooltip extends Component {
     _focus ($tooltipEl) {
         const $tooltipToggleEl = $tooltipEl.querySelector('.hs-tooltip-toggle')
         const $tooltipContentEl = $tooltipEl.querySelector('.hs-tooltip-content')
-        const placement = $tooltipEl.getAttribute('data-hs-tooltip-placement')
-        const strategy = $tooltipEl.getAttribute('data-hs-tooltip-strategy')
+        const placement = this.getClassProperty($tooltipEl, '--placement')
+        const strategy = this.getClassProperty($tooltipEl, '--strategy')
 
         createPopper($tooltipToggleEl, $tooltipContentEl, {
             placement: placement || 'top',
@@ -96,8 +99,8 @@ class HSTooltip extends Component {
 
         const $tooltipToggleEl = $tooltipEl.querySelector('.hs-tooltip-toggle')
         const $tooltipContentEl = $tooltipEl.querySelector('.hs-tooltip-content')
-        const placement = $tooltipEl.getAttribute('data-hs-tooltip-placement')
-        const strategy = $tooltipEl.getAttribute('data-hs-tooltip-strategy')
+        const placement = this.getClassProperty($tooltipEl, '--placement')
+        const strategy = this.getClassProperty($tooltipEl, '--strategy')
 
         createPopper($tooltipToggleEl, $tooltipContentEl, {
             placement: placement || 'top',

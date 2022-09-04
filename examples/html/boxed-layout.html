@@ -6,25 +6,25 @@
   <meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="https://preline.co/">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="This example is a quick exercise to illustrate how left aligned navbar works using Tailwind CSS.">
+  <meta name="description" content="This is a boxed layout example using Tailwind CSS.">
 
   <meta name="twitter:site" content="@preline">
   <meta name="twitter:creator" content="@htmlstream">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Left Aligned Header using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
-  <meta name="twitter:description" content="This example is a quick exercise to illustrate how left aligned navbar works using Tailwind CSS.">
+  <meta name="twitter:title" content="Boxed Layout using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
+  <meta name="twitter:description" content="This is a boxed layout example using Tailwind CSS.">
   <meta name="twitter:image" content="@@autopath/assets/img/og-image.png">
 
   <meta property="og:url" content="https://preline.co/">
   <meta property="og:locale" content="en_US">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Preline">
-  <meta property="og:title" content="Left Aligned Header using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
-  <meta property="og:description" content="This example is a quick exercise to illustrate how left aligned navbar works using Tailwind CSS.">
+  <meta property="og:title" content="Boxed Layout using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
+  <meta property="og:description" content="This is a boxed layout example using Tailwind CSS.">
   <meta property="og:image" content="@@autopath/assets/img/og-image.png">
 
   <!-- Title -->
-  <title>Left Aligned Header using Tailwind CSS | Preline UI, crafted with Tailwind CSS</title>
+  <title>Boxed Layout using Tailwind CSS | Preline UI, crafted with Tailwind CSS</title>
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="@@autopath/favicon.ico">
@@ -35,12 +35,12 @@
   @@if (previewMode === true) {<!-- Link your Tailwind CSS file --><link rel="stylesheet" href="your_file.css">}@@if (previewMode === false) {<!-- CSS HS --><link rel="stylesheet" href="@@autopath/assets/css/main.css">}
 </head>
 
-<body class="dark:bg-slate-900 min-h-[75rem]">
+<body class="bg-gray-50 dark:bg-slate-900">
   <script src="@@autopath/assets/js/hs.theme-appearance.js"></script>
 
   <!-- ========== HEADER ========== -->
-  <header class="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-white border-b border-gray-200 text-sm py-3 sm:py-0 dark:bg-gray-800 dark:border-gray-700">
-    <nav class="relative max-w-7xl w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8" aria-label="Global">
+  <header class="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full text-sm">
+    <nav class="relative max-w-7xl w-full mx-auto bg-white border-b border-gray-200 py-3 px-4 sm:py-0 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8 xl:border-x dark:bg-gray-800 dark:border-gray-700" aria-label="Global">
       <div class="flex items-center justify-between">
         <a class="flex-none text-xl font-semibold dark:text-white" href="#" aria-label="Brand">Brand</a>
         <div class="sm:hidden">
@@ -55,13 +55,13 @@
         </div>
       </div>
       <div id="navbar-collapse-with-animation" class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:block">
-        <div class="flex flex-col gap-y-4 gap-x-0 mt-5 sm:flex-row sm:items-center sm:gap-y-0 sm:gap-x-7 sm:mt-0 sm:pl-7">
+        <div class="flex flex-col gap-y-4 gap-x-0 mt-5 sm:flex-row sm:items-center sm:justify-end sm:gap-y-0 sm:gap-x-7 sm:mt-0 sm:pl-7">
           <a class="font-medium text-blue-600 sm:py-6 dark:text-blue-500" href="#" aria-current="page">Landing</a>
           <a class="font-medium text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500" href="#">Account</a>
           <a class="font-medium text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500" href="#">Work</a>
           <a class="font-medium text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500" href="#">Blog</a>
 
-          <div class="hs-dropdown [--strategy:static] sm:[--strategy:fixed] [--adaptive:none] sm:[--trigger:hover] sm:py-4">
+          <div class="hs-dropdown [--strategy:static] sm:[--strategy:absolute] [--adaptive:none] sm:[--trigger:hover]">
             <button type="button" class="flex items-center w-full text-gray-500 hover:text-gray-400 font-medium dark:text-gray-400 dark:hover:text-gray-500 ">
               Dropdown
               <svg class="ml-2 w-2.5 h-2.5 text-gray-600" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -103,14 +103,12 @@
             </div>
           </div>
           
-          <div class="flex items-center gap-x-2 sm:ml-auto">
-            <a class="flex items-center gap-x-2 font-medium text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500" href="#">
-              <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-              </svg>
-              Log in
-            </a>
-          </div>
+          <a class="flex items-center gap-x-2 font-medium text-gray-500 hover:text-blue-600 sm:border-l sm:border-gray-300 sm:my-6 sm:pl-6 dark:border-gray-700 dark:text-gray-400 dark:hover:text-blue-500" href="#">
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+            </svg>
+            Log in
+          </a>
         </div>
       </div>
     </nav>
@@ -119,12 +117,12 @@
   
   <!-- ========== MAIN CONTENT ========== -->
   <main id="content" role="main">
-    <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto min-h-screen bg-white border-x-gray-200 py-10 px-4 sm:px-6 lg:px-8 xl:border-x dark:bg-gray-800 dark:border-x-gray-700">
       <!-- Page Heading -->
       <header class="max-w-3xl">
         <p class="mb-2 text-sm font-semibold text-blue-600">Starter Pages &amp; Examples</p>
-        <h1 class="block text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white">Left Aligned Header using Tailwind CSS</h1>
-        <p class="mt-2 text-lg text-gray-800 dark:text-gray-400">This example is a quick exercise to illustrate how left aligned navbar works using Tailwind CSS.</p>
+        <h1 class="block text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white">Boxed Layout using Tailwind CSS</h1>
+        <p class="mt-2 text-lg text-gray-800 dark:text-gray-400">This is a boxed layout example using Tailwind CSS.</p>
         <div class="mt-5 flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
           <a class="w-full sm:w-auto inline-flex justify-center items-center gap-x-3 text-center bg-blue-600 hover:bg-blue-700 border border-transparent text-white text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white transition py-3 px-4 dark:focus:ring-offset-gray-800" href="https://github.com/htmlstreamofficial/preline/tree/main/examples" target="_blank">
             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">

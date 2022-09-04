@@ -10,21 +10,15 @@
 const plugin = require("tailwindcss/plugin")
 
 module.exports = plugin(function ({addVariant, e}) {
-    addVariant('hs-dropdown-open', ({modifySelectors, separator}) => {
-        modifySelectors(({className}) => {
-            return `.hs-dropdown.open .${e(`hs-dropdown-open${separator}${className}`)}`
-        })
-    })
-
-    addVariant('swiper-slide-thumb-active', [
+    addVariant('hs-dropdown-open', [
         ({modifySelectors, separator}) => {
             modifySelectors(({className}) => {
-                return `.swiper-slide-thumb-active.${e(`swiper-slide-thumb-active${separator}${className}`)}`
+                return `.hs-dropdown.open > .${e(`hs-dropdown-open${separator}${className}`)}`
             })
         },
         ({modifySelectors, separator}) => {
             modifySelectors(({className}) => {
-                return `.swiper-slide-thumb-active .${e(`swiper-slide-thumb-active${separator}${className}`)}`
+                return `.hs-dropdown.open > .hs-dropdown-menu > .${e(`hs-dropdown-open${separator}${className}`)}`
             })
         }
     ])
@@ -118,6 +112,19 @@ module.exports = plugin(function ({addVariant, e}) {
         }
     ])
 
+    addVariant('hs-overlay-open', [
+        ({modifySelectors, separator}) => {
+            modifySelectors(({className}) => {
+                return `.open.${e(`hs-overlay-open${separator}${className}`)}`
+            })
+        },
+        ({modifySelectors, separator}) => {
+            modifySelectors(({className}) => {
+                return `.open .${e(`hs-overlay-open${separator}${className}`)}`
+            })
+        }
+    ])
+
     addVariant('hs-modal-open', [
         ({modifySelectors, separator}) => {
             modifySelectors(({className}) => {
@@ -164,12 +171,6 @@ module.exports = plugin(function ({addVariant, e}) {
     addVariant('hs-auto-mode-active', ({modifySelectors, separator}) => {
         modifySelectors(({className}) => {
             return `.auto .${e(`hs-auto-mode-active${separator}${className}`)}`
-        })
-    })
-
-    addVariant('hs-go-to-active', ({modifySelectors, separator}) => {
-        modifySelectors(({className}) => {
-            return `.active.${e(`hs-go-to-active${separator}${className}`)}`
         })
     })
 

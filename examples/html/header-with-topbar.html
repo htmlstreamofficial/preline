@@ -6,25 +6,25 @@
   <meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="https://preline.co/">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="This example is a quick exercise to illustrate how left aligned navbar works using Tailwind CSS.">
+  <meta name="description" content="This is a base navbar example with topbar using Tailwind CSS.">
 
   <meta name="twitter:site" content="@preline">
   <meta name="twitter:creator" content="@htmlstream">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Left Aligned Header using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
-  <meta name="twitter:description" content="This example is a quick exercise to illustrate how left aligned navbar works using Tailwind CSS.">
+  <meta name="twitter:title" content="Header with Topbar using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
+  <meta name="twitter:description" content="This is a base navbar example with topbar using Tailwind CSS.">
   <meta name="twitter:image" content="@@autopath/assets/img/og-image.png">
 
   <meta property="og:url" content="https://preline.co/">
   <meta property="og:locale" content="en_US">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Preline">
-  <meta property="og:title" content="Left Aligned Header using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
-  <meta property="og:description" content="This example is a quick exercise to illustrate how left aligned navbar works using Tailwind CSS.">
+  <meta property="og:title" content="Header with Topbar using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
+  <meta property="og:description" content="This is a base navbar example with topbar using Tailwind CSS.">
   <meta property="og:image" content="@@autopath/assets/img/og-image.png">
 
   <!-- Title -->
-  <title>Left Aligned Header using Tailwind CSS | Preline UI, crafted with Tailwind CSS</title>
+  <title>Header with Topbar using Tailwind CSS | Preline UI, crafted with Tailwind CSS</title>
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="@@autopath/favicon.ico">
@@ -39,7 +39,22 @@
   <script src="@@autopath/assets/js/hs.theme-appearance.js"></script>
 
   <!-- ========== HEADER ========== -->
-  <header class="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-white border-b border-gray-200 text-sm py-3 sm:py-0 dark:bg-gray-800 dark:border-gray-700">
+  <header class="flex flex-wrap sm:justify-start sm:flex-col z-50 w-full bg-white border-b border-gray-200 text-sm pb-2 sm:pb-0 dark:bg-gray-800 dark:border-gray-700">
+    <!-- Topbar -->
+    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-end gap-x-5 w-full py-2 sm:pt-2 sm:pb-0">
+        <a class="inline-flex justify-center items-center gap-2 font-medium text-slate-600 hover:text-slate-500 text-sm dark:text-slate-400 dark:hover:text-slate-300" href="#">
+          <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z"/>
+          </svg>
+          English (US)
+        </a>
+        <a class="inline-flex justify-center items-center gap-2 font-medium text-slate-600 hover:text-slate-500 text-sm dark:text-slate-400 dark:hover:text-slate-300" href="#">Sign In</a>
+        <a class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-md border-2 border-gray-200 font-semibold text-blue-600 hover:bg-blue-50 hover:border-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:hover:bg-blue-600/[.3] dark:border-slate-700 dark:hover:border-blue-500 dark:hover:text-blue-500" href="#">Get started</a>
+      </div>  
+    </div>
+    <!-- End Topbar -->
+
     <nav class="relative max-w-7xl w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8" aria-label="Global">
       <div class="flex items-center justify-between">
         <a class="flex-none text-xl font-semibold dark:text-white" href="#" aria-label="Brand">Brand</a>
@@ -55,14 +70,14 @@
         </div>
       </div>
       <div id="navbar-collapse-with-animation" class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:block">
-        <div class="flex flex-col gap-y-4 gap-x-0 mt-5 sm:flex-row sm:items-center sm:gap-y-0 sm:gap-x-7 sm:mt-0 sm:pl-7">
-          <a class="font-medium text-blue-600 sm:py-6 dark:text-blue-500" href="#" aria-current="page">Landing</a>
-          <a class="font-medium text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500" href="#">Account</a>
-          <a class="font-medium text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500" href="#">Work</a>
-          <a class="font-medium text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500" href="#">Blog</a>
+        <div class="flex flex-col gap-y-4 gap-x-0 mt-5 sm:flex-row sm:items-center sm:justify-end sm:gap-y-0 sm:gap-x-7 sm:mt-0 sm:pl-7">
+          <a class="font-medium sm:py-6 text-blue-600" href="#" aria-current="page">Landing</a>
+          <a class="font-medium text-gray-800 hover:text-gray-500 sm:py-6 dark:text-gray-200 dark:hover:text-gray-400" href="#">Account</a>
+          <a class="font-medium text-gray-800 hover:text-gray-500 sm:py-6 dark:text-gray-200 dark:hover:text-gray-400" href="#">Work</a>
+          <a class="font-medium text-gray-800 hover:text-gray-500 sm:py-6 dark:text-gray-200 dark:hover:text-gray-400" href="#">Blog</a>
 
           <div class="hs-dropdown [--strategy:static] sm:[--strategy:fixed] [--adaptive:none] sm:[--trigger:hover] sm:py-4">
-            <button type="button" class="flex items-center w-full text-gray-500 hover:text-gray-400 font-medium dark:text-gray-400 dark:hover:text-gray-500 ">
+            <button type="button" class="flex items-center w-full text-gray-800 hover:text-gray-500 font-medium dark:text-gray-200 dark:hover:text-gray-400">
               Dropdown
               <svg class="ml-2 w-2.5 h-2.5 text-gray-600" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2 5L8.16086 10.6869C8.35239 10.8637 8.64761 10.8637 8.83914 10.6869L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
@@ -102,15 +117,6 @@
               </a>
             </div>
           </div>
-          
-          <div class="flex items-center gap-x-2 sm:ml-auto">
-            <a class="flex items-center gap-x-2 font-medium text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500" href="#">
-              <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-              </svg>
-              Log in
-            </a>
-          </div>
         </div>
       </div>
     </nav>
@@ -123,8 +129,8 @@
       <!-- Page Heading -->
       <header class="max-w-3xl">
         <p class="mb-2 text-sm font-semibold text-blue-600">Starter Pages &amp; Examples</p>
-        <h1 class="block text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white">Left Aligned Header using Tailwind CSS</h1>
-        <p class="mt-2 text-lg text-gray-800 dark:text-gray-400">This example is a quick exercise to illustrate how left aligned navbar works using Tailwind CSS.</p>
+        <h1 class="block text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white">Header with Topbar using Tailwind CSS</h1>
+        <p class="mt-2 text-lg text-gray-800 dark:text-gray-400">This is a base navbar example with topbar using Tailwind CSS.</p>
         <div class="mt-5 flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
           <a class="w-full sm:w-auto inline-flex justify-center items-center gap-x-3 text-center bg-blue-600 hover:bg-blue-700 border border-transparent text-white text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white transition py-3 px-4 dark:focus:ring-offset-gray-800" href="https://github.com/htmlstreamofficial/preline/tree/main/examples" target="_blank">
             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">

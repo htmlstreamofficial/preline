@@ -1,6 +1,6 @@
 /*
 * HSSmoothScroll
-* @version: 1.0.0
+* @version: 1.2.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
@@ -15,14 +15,16 @@ class HSSmoothScroll extends Component {
 
     init () {
         document.querySelectorAll(this.selector)
-            .forEach(this.scroll)
+            .forEach(this.scroll.bind(this))
     }
 
     scroll ($scrollEl) {
-        const $targetEl = $scrollEl.querySelector($scrollEl.getAttribute('data-hs-smooth-scroll-to'))
+        if (!this.getClassProperty($scrollEl, '--target')) return
+
+        const $targetEl = $scrollEl.querySelector(this.getClassProperty($scrollEl, '--target'))
         if (!$targetEl) return
 
-        const topOffset = $scrollEl.getAttribute('data-hs-smooth-scroll-offset') || 0
+        const topOffset = this.getClassProperty($scrollEl, '--scroll-offset') || 0
         const top = $targetEl.getBoundingClientRect().top - topOffset
 
         $scrollEl.scrollTo({

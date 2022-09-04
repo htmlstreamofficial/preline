@@ -1,6 +1,6 @@
 /*
 * HSTabs
-* @version: 1.0.0
+* @version: 1.2.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
@@ -42,7 +42,7 @@ class HSTabs extends Component {
         const $tabToggleEls = [...$tabToggleEl.parentElement.children]
         const $tabEls = [...$tabEl.parentElement.children]
         const $tabNavWithSelectEl = $tabToggleEl.closest('[hs-data-tab-select]')
-        const $selectEl = $tabNavWithSelectEl ? document.querySelector($tabNavWithSelectEl.getAttribute('hs-data-tab-select')) : null
+        const $selectEl = $tabNavWithSelectEl ? document.querySelector($tabNavWithSelectEl.getAttribute('data-hs-tab')) : null
 
         $tabToggleEls.forEach($tab => $tab.classList.remove('active'))
         $tabEls.forEach($tab => $tab.classList.add('hidden'))

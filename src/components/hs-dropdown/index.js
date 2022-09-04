@@ -1,6 +1,6 @@
 /*
 * HSDropdown
-* @version: 1.0.0
+* @version: 1.2.0
 * @author: HtmlStream
 * @requires: @popperjs/core ^2.11.2
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
@@ -45,26 +45,31 @@ class HSDropdown extends Component {
             'left-top': 'left-start',
             'left-bottom': 'left-end'
         }
-        this.absoluteStrategyModifiers = [
-            {
-                name: 'applyStyles',
-                fn: (data) => {
-                    data.state.elements.popper.style.position = data.state.styles.popper.position
-                    data.state.elements.popper.style.transform = data.state.styles.popper.transform
-                    data.state.elements.popper.style.top = null
-                    data.state.elements.popper.style.bottom = null
-                    data.state.elements.popper.style.left = null
-                    data.state.elements.popper.style.right = null
-                    data.state.elements.popper.style.margin = 0
-                }
-            },
-            {
-                name: 'computeStyles',
-                options: {
-                    adaptive: false
+        this.absoluteStrategyModifiers = ($dropdownEl) => {
+            return [
+                {
+                    name: 'applyStyles',
+                    fn: (data) => {
+                        const strategy = (window.getComputedStyle($dropdownEl).getPropertyValue('--strategy') || 'absolute').replace(' ', '')
+                        const adaptive = (window.getComputedStyle($dropdownEl).getPropertyValue('--adaptive') || 'adaptive').replace(' ', '')
+
+                        data.state.elements.popper.style.position = strategy
+                        data.state.elements.popper.style.transform = adaptive === 'adaptive' ? data.state.styles.popper.transform : null
+                        data.state.elements.popper.style.top = null
+                        data.state.elements.popper.style.bottom = null
+                        data.state.elements.popper.style.left = null
+                        data.state.elements.popper.style.right = null
+                        data.state.elements.popper.style.margin = 0
+                    }
                 },
-            }
-        ]
+                {
+                    name: 'computeStyles',
+                    options: {
+                        adaptive: false
+                    },
+                }
+            ]
+        }
         this._history = MenuSearchHistory
     }
 
@@ -74,12 +79,11 @@ class HSDropdown extends Component {
             const $dropdownEl = $targetEl.closest(this.selector)
             const $menuEl = $targetEl.closest('.hs-dropdown-menu')
 
-
-            if (!$dropdownEl || !$dropdownEl.classList.contains('open')) this._closeOthers()
+            if (!$dropdownEl || !$dropdownEl.classList.contains('open')) this._closeOthers($dropdownEl)
 
             if ($menuEl) {
-                const autoClose = $dropdownEl.getAttribute('data-hs-dropdown-auto-close')
-                if (autoClose == 'false' || autoClose == 'inside') return
+                const autoClose = (window.getComputedStyle($dropdownEl).getPropertyValue('--auto-close') || '').replace(' ', '')
+                if ((autoClose == 'false' || autoClose == 'inside') && !$dropdownEl.parentElement.closest(this.selector)) return
             }
 
             if ($dropdownEl) {
@@ -92,17 +96,31 @@ class HSDropdown extends Component {
             const $dropdownEl = $targetEl.closest(this.selector)
             const $menuEl = $targetEl.closest('.hs-dropdown-menu')
 
-            if ($dropdownEl && $dropdownEl.getAttribute('data-hs-dropdown-trigger') === 'hover' && !$dropdownEl.classList.contains('open') && !isIOS() && !isIpadOS()) this._hover($targetEl)
+            if ($dropdownEl) {
+                const trigger = (window.getComputedStyle($dropdownEl).getPropertyValue('--trigger') || 'click').replace(' ', '')
+                if (trigger !== 'hover') return
+
+                if (!$dropdownEl || !$dropdownEl.classList.contains('open')) this._closeOthers($dropdownEl)
+                if (trigger === 'hover' && !$dropdownEl.classList.contains('open') && !isIOS() && !isIpadOS()) this._hover($targetEl)
+            }
         })
 
         document.addEventListener('keydown', this._keyboardSupport.bind(this))
+
+        window.addEventListener('resize', () => {
+            const dropdownEls = document.querySelectorAll('.hs-dropdown.open')
+            dropdownEls.forEach($dropdownEl => {
+                this.close($dropdownEl, true)
+            })
+        })
     }
 
-    _closeOthers () {
+    _closeOthers ($currentDropdownEl = null) {
         const $collection = document.querySelectorAll(`${this.selector}.open`)
         $collection.forEach($dropdownEl => {
-            const autoClose = $dropdownEl.getAttribute('data-hs-dropdown-auto-close')
+            if ($currentDropdownEl && $currentDropdownEl.closest('.hs-dropdown.open') === $dropdownEl) return
 
+            const autoClose = (window.getComputedStyle($dropdownEl).getPropertyValue('--auto-close') || '').replace(' ', '')
             if (autoClose == 'false' || autoClose == 'outside') return
 
             this.close($dropdownEl)
@@ -115,7 +133,7 @@ class HSDropdown extends Component {
         this.open($dropdownEl)
 
         const handleMousmove = (e) => {
-            if (!e.target.closest(this.selector)) {
+            if (!e.target.closest(this.selector) || e.target.closest(this.selector) === $dropdownEl.parentElement.closest(this.selector)) {
                 this.close($dropdownEl)
                 document.removeEventListener('mousemove', handleMousmove, true)
             }
@@ -124,46 +142,73 @@ class HSDropdown extends Component {
         document.addEventListener('mousemove', handleMousmove, true)
     }
 
-    close ($dropdownEl) {
+    close ($dropdownEl, noAnimation = false) {
         const $menuEl = $dropdownEl.querySelector('.hs-dropdown-menu')
 
-        $menuEl.style.margin = null
-
-        $dropdownEl.classList.remove('open')
-
-        this.afterTransition($dropdownEl.querySelector('[data-hs-dropdown-transition]') || $menuEl, () => {
+        const destroy = () => {
             if ($dropdownEl.classList.contains('open')) return
             $menuEl.classList.remove('block')
             $menuEl.classList.add('hidden')
             $menuEl.style.inset = null
             $menuEl.style.position = null
-        })
+
+            if ($dropdownEl._popper) {
+                $dropdownEl._popper.destroy()
+            }
+        }
+
+        if (!noAnimation) {
+            this.afterTransition($dropdownEl.querySelector('[data-hs-dropdown-transition]') || $menuEl, () => {
+                destroy()
+            })
+        }
+
+        $menuEl.style.margin = null
+        $dropdownEl.classList.remove('open')
+
+        if (noAnimation) {
+            destroy()
+        }
 
         this._fireEvent('close', $dropdownEl)
         this._dispatch('close.hs.dropdown', $dropdownEl, $dropdownEl)
+
+        const dropdownEls = $menuEl.querySelectorAll('.hs-dropdown.open')
+        dropdownEls.forEach($dropdownEl => {
+            this.close($dropdownEl, true)
+        })
     }
 
     open ($dropdownEl) {
         const $menuEl = $dropdownEl.querySelector('.hs-dropdown-menu')
-        const placement = $dropdownEl.getAttribute('data-hs-dropdown-placement')
-        const strategy = $dropdownEl.getAttribute('data-hs-dropdown-strategy') || 'fixed'
-        const offset = $dropdownEl.getAttribute('data-hs-dropdown-offset') || 10
+        const placement = (window.getComputedStyle($dropdownEl).getPropertyValue('--placement') || '').replace(' ', '')
+        const strategy = (window.getComputedStyle($dropdownEl).getPropertyValue('--strategy') || 'fixed').replace(' ', '')
+        const adaptive = (window.getComputedStyle($dropdownEl).getPropertyValue('--adaptive') || 'adaptive').replace(' ', '')
+        const offset = parseInt((window.getComputedStyle($dropdownEl).getPropertyValue('--offset') || '10').replace(' ', ''))
 
-        createPopper($dropdownEl, $menuEl, {
-            placement: this.positions[placement] || 'bottom-start',
-            strategy: strategy,
-            modifiers: [
-                ...(strategy === 'absolute'
-                ? this.absoluteStrategyModifiers
-                : []),
-                {
-                    name: 'offset',
-                    options: {
-                        offset: [0, offset]
+        if (strategy !== 'static') {
+            if ($dropdownEl._popper) {
+                $dropdownEl._popper.destroy()
+            }
+
+            const $popper = createPopper($dropdownEl, $menuEl, {
+                placement: this.positions[placement] || 'bottom-start',
+                strategy: strategy,
+                modifiers: [
+                    ...(strategy !== 'fixed'
+                      ? this.absoluteStrategyModifiers($dropdownEl)
+                      : []),
+                    {
+                        name: 'offset',
+                        options: {
+                            offset: [0, offset]
+                        }
                     }
-                }
-            ]
-        })
+                ]
+            })
+
+            $dropdownEl._popper = $popper
+        }
 
         $menuEl.style.margin = null
         $menuEl.classList.add('block')
