@@ -41,7 +41,7 @@ First, you need to make sure that you have a working <a href="https://tailwindcs
 
 3. Include the JavaScript <code><script></code> that powers the interactive elements near the end of your <code>&lt;body&gt;</code> tag:
 
-<pre><code><script src="./node_modules/preline/dist/hs-ui.bundle.js"></script></code></pre>
+<pre><code><script src="./node_modules/preline/dist/preline.js"></script></code></pre>
 
 ## Documentation
 
