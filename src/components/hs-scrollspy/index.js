@@ -51,7 +51,7 @@ class HSScrollspy extends Component {
         const offsetScrollableParent = ev.target === document ? 0 : parseInt(ev.target.getBoundingClientRect().top)
         const topOffset = (parseInt($sectionEl.getBoundingClientRect().top) - userOffset) - offsetScrollableParent
         const height = $sectionEl.offsetHeight
-        console.log($scrollspyEl)
+        
         if (topOffset <= 0 && (topOffset + height) > 0) {
             if (this.activeSection === $sectionEl) return
 
