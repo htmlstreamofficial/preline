@@ -1,6 +1,6 @@
 /*
 * HSScrollspy
-* @version: 1.2.0
+* @version: 1.3.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
@@ -51,7 +51,7 @@ class HSScrollspy extends Component {
         const offsetScrollableParent = ev.target === document ? 0 : parseInt(ev.target.getBoundingClientRect().top)
         const topOffset = (parseInt($sectionEl.getBoundingClientRect().top) - userOffset) - offsetScrollableParent
         const height = $sectionEl.offsetHeight
-        
+
         if (topOffset <= 0 && (topOffset + height) > 0) {
             if (this.activeSection === $sectionEl) return
 

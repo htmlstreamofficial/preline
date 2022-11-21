@@ -32,8 +32,8 @@
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS HS -->
-  <link rel="stylesheet" href="../../assets/css/main.min.css">
+  <!-- Link your Tailwind CSS file -->
+  <link rel="stylesheet" href="your_file.css">
 </head>
 
 <body class="dark:bg-slate-900">
@@ -82,7 +82,7 @@
 
           <div class="hs-dropdown relative inline-flex" data-hs-dropdown-placement="bottom-right">
             <button id="hs-dropdown-with-header" type="button" class="hs-dropdown-toggle inline-flex flex-shrink-0 justify-center items-center gap-2 h-[2.375rem] w-[2.375rem] rounded-full font-medium bg-white text-gray-700 align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-white transition-all text-xs dark:bg-gray-800 dark:hover:bg-slate-800 dark:text-gray-400 dark:hover:text-white dark:focus:ring-gray-700 dark:focus:ring-offset-gray-800">
-              <img class="inline-block h-[2.375rem] w-[2.375rem] rounded-full ring-2 ring-white dark:ring-gray-800" src="../../docs/assets/img/100x100/img4.jpg" alt="Image Description">
+              <img class="inline-block h-[2.375rem] w-[2.375rem] rounded-full ring-2 ring-white dark:ring-gray-800" src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80" alt="Image Description">
             </button>
 
             <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-[15rem] z-10 bg-white shadow-md rounded-lg p-2 dark:bg-gray-800 dark:border dark:border-gray-700" aria-labelledby="hs-dropdown-with-header">
@@ -204,15 +204,6 @@
   <!-- ========== END SECONDARY CONTENT ========== -->
 
   <!-- JS Implementing Plugins -->
-
-  <script src="../../assets/vendor/hs-ui/preline.js"></script>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B73TDMXKF5"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-B73TDMXKF5');
-  </script>
+  <script src="../../assets/vendor/preline/dist/preline.js"></script>
 </body>
 </html>

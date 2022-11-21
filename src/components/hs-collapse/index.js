@@ -1,6 +1,6 @@
 /*
 * HSCollapse
-* @version: 1.2.0
+* @version: 1.3.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream

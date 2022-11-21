@@ -32,8 +32,8 @@
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS HS -->
-  <link rel="stylesheet" href="../../assets/css/main.min.css">
+  <!-- Link your Tailwind CSS file -->
+  <link rel="stylesheet" href="your_file.css">
 </head>
 
 <body class="dark:bg-slate-900">
@@ -61,15 +61,15 @@
           <a class="text-sm text-gray-700 leading-6 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-500 hs-scrollspy-active:text-blue-600 dark:hs-scrollspy-active:text-blue-400" href="#account">Account</a>
           <a class="text-sm text-gray-700 leading-6 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-500 hs-scrollspy-active:text-blue-600 dark:hs-scrollspy-active:text-blue-400" href="#work">Work</a>
 
-          <div data-hs-scrollspy-group class="hs-mega-menu" data-hs-dropdown-placement="bottom-right">
-            <a id="hs-mega-menu-basic-dr" class="hs-mega-menu-toggle group hs-scrollspy-active:text-blue-600 mb-3 sm:mb-0 dark:hs-scrollspy-active:text-blue-400 inline-flex justify-center items-center gap-2 text-sm text-gray-700 leading-6 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-500 hs-scrollspy-active:text-blue-600 dark:hs-scrollspy-active:text-blue-400" href="javascript:;">
+          <div data-hs-scrollspy-group class="hs-dropdown [--strategy:static] sm:[--strategy:fixed] [--adaptive:none] sm:[--trigger:hover]">
+            <a id="hs-dropdown-default" class="flex items-center text-sm text-gray-700 leading-6 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-500 hs-scrollspy-active:text-blue-600 dark:hs-scrollspy-active:text-blue-400" href="javascript:;">
               Dropdown
               <svg class="ml-2 w-2.5 h-2.5 text-gray-600" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2 5L8.16086 10.6869C8.35239 10.8637 8.64761 10.8637 8.83914 10.6869L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
               </svg>
             </a>
 
-            <div class="hs-mega-menu-content hs-mega-menu-open:opacity-100 transition duration-[0.1ms] opacity-0 top-full right-0 hidden z-10 rounded-md before:absolute before:-top-5 before:left-0 before:w-full before:h-5 w-full bg-white p-2 sm:w-48 sm:transition-all sm:absolute sm:top-[45px] sm:shadow-md sm:duration-300 dark:bg-gray-800" aria-labelledby="hs-mega-menu-basic-dr">
+            <div class="hs-dropdown-menu transition-[opacity,margin] duration-[0.1ms] sm:duration-[150ms] hs-dropdown-open:opacity-100 opacity-0 sm:w-48 hidden z-10 bg-white sm:shadow-md rounded-lg py-2 sm:px-2 dark:bg-gray-800 sm:dark:border dark:border-gray-700 dark:divide-gray-700 before:absolute top-full sm:border before:-top-5 before:left-0 before:w-full before:h-5">
               <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-md text-sm text-gray-700 leading-6 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-500 hs-scrollspy-active:text-blue-600 dark:hs-scrollspy-active:text-blue-400" href="#one">
                 First
               </a>
@@ -142,7 +142,7 @@
   <!-- ========== END MAIN CONTENT ========== -->
 
   <!-- JS Implementing Plugins -->
-  <script src="../../assets/vendor/hs-ui/dist/preline.js"></script>
+  <script src="../../assets/vendor/preline/dist/preline.js"></script>
 
   <!-- JS Plugins Init. -->
   <script>

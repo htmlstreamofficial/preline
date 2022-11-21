@@ -1,6 +1,6 @@
 /*
 * Component
-* @version: 1.2.0
+* @version: 1.3.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
@@ -8,7 +8,7 @@
 
 /*
 * HSAccordion
-* @version: 1.2.0
+* @version: 1.3.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
@@ -16,7 +16,7 @@
 
 /*
 * HSCollapse
-* @version: 1.2.0
+* @version: 1.3.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
@@ -24,7 +24,7 @@
 
 /*
 * HSDropdown
-* @version: 1.2.0
+* @version: 1.3.0
 * @author: HtmlStream
 * @requires: @popperjs/core ^2.11.2
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
@@ -33,7 +33,7 @@
 
 /*
 * HSOverlay
-* @version: 1.2.0
+* @version: 1.3.0
 * @author: HtmlStream
 * @license: Htmlstream Libraries (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
@@ -41,7 +41,7 @@
 
 /*
 * HSRemoveElement
-* @version: 1.2.0
+* @version: 1.3.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
@@ -49,15 +49,7 @@
 
 /*
 * HSScrollspy
-* @version: 1.2.0
-* @author: HtmlStream
-* @license: Licensed under MIT (https://preline.co/docs/license.html)
-* Copyright 2022 Htmlstream
-*/
-
-/*
-* HSSmoothScroll
-* @version: 1.2.0
+* @version: 1.3.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
@@ -65,7 +57,7 @@
 
 /*
 * HSTabs
-* @version: 1.2.0
+* @version: 1.3.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream
@@ -73,7 +65,7 @@
 
 /*
 * HSTooltips
-* @version: 1.2.0
+* @version: 1.3.0
 * @author: HtmlStream
 * @requires: @popperjs/core ^2.11.2
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
@@ -82,7 +74,7 @@
 
 /*
 * Util
-* @version: 1.2.0
+* @version: 1.3.0
 * @author: HtmlStream
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
 * Copyright 2022 Htmlstream

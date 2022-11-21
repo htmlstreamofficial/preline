@@ -1,6 +1,6 @@
 /*
 * Plugin
-* @version: 1.2.0
+* @version: 1.3.0
 * @author: HtmlStream
 * @requires: tailwindcss ^3.1.2
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
@@ -19,29 +19,6 @@ module.exports = plugin(function ({addVariant, e}) {
         ({modifySelectors, separator}) => {
             modifySelectors(({className}) => {
                 return `.hs-dropdown.open > .hs-dropdown-menu > .${e(`hs-dropdown-open${separator}${className}`)}`
-            })
-        }
-    ])
-
-    addVariant('hs-mega-menu-open', [
-        ({modifySelectors, separator}) => {
-            modifySelectors(({className}) => {
-                return `.hs-mega-menu.open.${e(`hs-mega-menu-open${separator}${className}`)}`
-            })
-        },
-        ({modifySelectors, separator}) => {
-            modifySelectors(({className}) => {
-                return `.hs-mega-menu.open > .hs-mega-menu-toggle .${e(`hs-mega-menu-open${separator}${className}`)}`
-            })
-        },
-        ({modifySelectors, separator}) => {
-            modifySelectors(({className}) => {
-                return `.hs-mega-menu.open > .hs-mega-menu-toggle.${e(`hs-mega-menu-open${separator}${className}`)}`
-            })
-        },
-        ({modifySelectors, separator}) => {
-            modifySelectors(({className}) => {
-                return `.hs-mega-menu.open > .hs-mega-menu-content.${e(`hs-mega-menu-open${separator}${className}`)}`
             })
         }
     ])
@@ -121,43 +98,6 @@ module.exports = plugin(function ({addVariant, e}) {
         ({modifySelectors, separator}) => {
             modifySelectors(({className}) => {
                 return `.open .${e(`hs-overlay-open${separator}${className}`)}`
-            })
-        }
-    ])
-
-    addVariant('hs-modal-open', [
-        ({modifySelectors, separator}) => {
-            modifySelectors(({className}) => {
-                return `.open.${e(`hs-modal-open${separator}${className}`)}`
-            })
-        },
-        ({modifySelectors, separator}) => {
-            modifySelectors(({className}) => {
-                return `.open .${e(`hs-modal-open${separator}${className}`)}`
-            })
-        }
-    ])
-
-    addVariant('hs-offcanvas-open', ({modifySelectors, separator}) => {
-        modifySelectors(({className}) => {
-            return `.show.${e(`hs-offcanvas-open${separator}${className}`)}`
-        })
-    })
-
-    addVariant('hs-sidebar-open', [
-        ({modifySelectors, separator}) => {
-            modifySelectors(({className}) => {
-                return `.show.${e(`hs-sidebar-open${separator}${className}`)}`
-            })
-        },
-        ({modifySelectors, separator}) => {
-            modifySelectors(({className}) => {
-                return `.sidebar-open .${e(`hs-sidebar-open${separator}${className}`)}`
-            })
-        },
-        ({modifySelectors, separator}) => {
-            modifySelectors(({className}) => {
-                return `.sidebar-open.${e(`hs-sidebar-open${separator}${className}`)}`
             })
         }
     ])

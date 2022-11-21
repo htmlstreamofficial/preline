@@ -11,7 +11,7 @@
   <meta name="twitter:site" content="@preline">
   <meta name="twitter:creator" content="@htmlstream">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Application Layout: Sidebar &amp; Header using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
+  <meta name="twitter:title" content="Application Layout: Sidebar Dark using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
   <meta name="twitter:description" content="This is a simple application layout with sidebar and header examples using Tailwind CSS.">
   <meta name="twitter:image" content="../../assets/img/og-image.png">
 
@@ -19,12 +19,12 @@
   <meta property="og:locale" content="en_US">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Preline">
-  <meta property="og:title" content="Application Layout: Sidebar &amp; Header using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
+  <meta property="og:title" content="Application Layout: Sidebar Dark using Tailwind CSS | Preline UI, crafted with Tailwind CSS">
   <meta property="og:description" content="This is a simple application layout with sidebar and header examples using Tailwind CSS.">
   <meta property="og:image" content="../../assets/img/og-image.png">
 
   <!-- Title -->
-  <title>Application Layout: Sidebar &amp; Header using Tailwind CSS | Preline UI, crafted with Tailwind CSS</title>
+  <title>Application Layout: Sidebar Dark using Tailwind CSS | Preline UI, crafted with Tailwind CSS</title>
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="../../favicon.ico">
@@ -32,8 +32,8 @@
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS HS -->
-  <link rel="stylesheet" href="../../assets/css/main.min.css">
+  <!-- Link your Tailwind CSS file -->
+  <link rel="stylesheet" href="your_file.css">
 
   <!-- Algolia Search -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
@@ -49,7 +49,7 @@
   <div class="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 md:px-8 lg:hidden dark:bg-gray-800 dark:border-gray-700">
     <div class="flex items-center py-4">
       <!-- Navigation Toggle -->
-      <button type="button" class="text-gray-500 hover:text-gray-600" data-hs-sidebar="#docs-sidebar" aria-controls="docs-sidebar" aria-label="Toggle navigation">
+      <button type="button" class="text-gray-500 hover:text-gray-600" data-hs-overlay="#application-sidebar-dark" aria-controls="application-sidebar-dark" aria-label="Toggle navigation">
         <span class="sr-only">Toggle Navigation</span>
         <svg class="w-5 h-5" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
@@ -75,7 +75,7 @@
   <!-- End Sidebar Toggle -->
 
   <!-- Sidebar -->
-  <div id="docs-sidebar" class="hs-sidebar hs-sidebar-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 left-0 bottom-0 z-[60] w-64 bg-gray-900 border-r border-gray-800 pt-7 pb-10 overflow-y-auto scrollbar-y lg:block lg:translate-x-0 lg:right-auto lg:bottom-0">
+  <div id="application-sidebar-dark" class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 left-0 bottom-0 z-[60] w-64 bg-gray-900 border-r border-gray-800 pt-7 pb-10 overflow-y-auto scrollbar-y lg:block lg:translate-x-0 lg:right-auto lg:bottom-0">
     <div class="px-6">
       <a class="flex-none text-xl font-semibold text-white" href="#" aria-label="Brand">Brand</a>
     </div>
@@ -108,7 +108,7 @@
             </svg>
           </a>
 
-          <div id="users-accordion" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
+          <div id="users-accordion-child" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
             <ul class="hs-accordion-group pl-3 pt-2" data-hs-accordion-always-open>
               <li class="hs-accordion" id="users-accordion-sub-1">
                 <a class="hs-accordion-toggle flex items-center gap-x-3.5 py-2 px-2.5 hs-accordion-active:text-white hs-accordion-active:hover:bg-transparent text-sm text-gray-400 rounded-md hover:bg-gray-800 hover:text-white" href="javascript:;">
@@ -123,7 +123,7 @@
                   </svg>
                 </a>
 
-                <div id="users-accordion-sub-1" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
+                <div id="users-accordion-sub-1-child" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
                   <ul class="pt-2 pl-2">
                     <li>
                       <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-400 rounded-md hover:bg-gray-800 hover:text-white" href="javascript:;">
@@ -156,7 +156,7 @@
                   </svg>
                 </a>
 
-                <div id="users-accordion-sub-2" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden pl-2">
+                <div id="users-accordion-sub-2-child" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden pl-2">
                   <ul class="pt-2 pl-2">
                     <li>
                       <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-400 rounded-md hover:bg-gray-800 hover:text-white" href="javascript:;">
@@ -197,7 +197,7 @@
             </svg>
           </a>
 
-          <div id="account-accordion" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
+          <div id="account-accordion-child" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
             <ul class="pt-2 pl-2">
               <li>
                 <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-400 rounded-md hover:bg-gray-800 hover:text-white" href="javascript:;">
@@ -235,7 +235,7 @@
             </svg>
           </a>
 
-          <div id="projects-accordion" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
+          <div id="projects-accordion-child" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
             <ul class="pt-2 pl-2">
               <li>
                 <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-400 rounded-md hover:bg-gray-800 hover:text-white" href="javascript:;">
@@ -279,7 +279,7 @@
     <!-- Page Heading -->
     <header>
       <p class="mb-2 text-sm font-semibold text-blue-600">Starter Pages &amp; Examples</p>
-      <h1 class="block text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white">Application Layout: Sidebar &amp; Header using Tailwind CSS</h1>
+      <h1 class="block text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white">Application Layout: Sidebar Dark using Tailwind CSS</h1>
       <p class="mt-2 text-lg text-gray-800 dark:text-gray-400">This is a simple application layout with sidebar and header examples using Tailwind CSS.</p>
       <div class="mt-5 flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
         <a class="w-full sm:w-auto inline-flex justify-center items-center gap-x-3 text-center bg-blue-600 hover:bg-blue-700 border border-transparent text-white text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white transition py-3 px-4 dark:focus:ring-offset-gray-800" href="https://github.com/htmlstreamofficial/preline/tree/main/examples" target="_blank">
@@ -302,15 +302,6 @@
   <!-- ========== END MAIN CONTENT ========== -->
 
   <!-- JS Implementing Plugins -->
-
-  <script src="../../assets/vendor/hs-ui/preline.js"></script>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B73TDMXKF5"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-B73TDMXKF5');
-  </script>
+  <script src="./assets/vendor/preline/dist/preline.js"></script>
 </body>
 </html>
