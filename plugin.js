@@ -102,6 +102,19 @@ module.exports = plugin(function ({addVariant, e}) {
         }
     ])
 
+    addVariant('hs-overlay-backdrop-open', [
+        ({modifySelectors, separator}) => {
+            modifySelectors(({className}) => {
+                return `.hs-overlay-backdrop.${e(`hs-overlay-backdrop-open${separator}${className}`)}`
+            })
+        },
+        ({modifySelectors, separator}) => {
+            modifySelectors(({className}) => {
+                return `.hs-overlay-backdrop .${e(`hs-overlay-backdrop-open${separator}${className}`)}`
+            })
+        }
+    ])
+
     addVariant('hs-dark-mode-active', ({modifySelectors, separator}) => {
         modifySelectors(({className}) => {
             return `.dark .${e(`hs-dark-mode-active${separator}${className}`)}`
