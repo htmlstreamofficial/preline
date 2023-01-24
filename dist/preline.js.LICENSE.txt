@@ -1,81 +1,81 @@
 /*
-* Component
-* @version: 1.3.0
-* @author: HtmlStream
-* @license: Licensed under MIT (https://preline.co/docs/license.html)
-* Copyright 2022 Htmlstream
-*/
+ * Component
+ * @version: 1.3.0
+ * @author: HtmlStream
+ * @license: Licensed under MIT (https://preline.co/docs/license.html)
+ * Copyright 2023 Htmlstream
+ */
 
 /*
-* HSAccordion
-* @version: 1.3.0
-* @author: HtmlStream
-* @license: Licensed under MIT (https://preline.co/docs/license.html)
-* Copyright 2022 Htmlstream
-*/
+ * HSAccordion
+ * @version: 1.3.0
+ * @author: HtmlStream
+ * @license: Licensed under MIT (https://preline.co/docs/license.html)
+ * Copyright 2023 Htmlstream
+ */
 
 /*
-* HSCollapse
-* @version: 1.3.0
-* @author: HtmlStream
-* @license: Licensed under MIT (https://preline.co/docs/license.html)
-* Copyright 2022 Htmlstream
-*/
+ * HSCollapse
+ * @version: 1.3.0
+ * @author: HtmlStream
+ * @license: Licensed under MIT (https://preline.co/docs/license.html)
+ * Copyright 2023 Htmlstream
+ */
 
 /*
-* HSDropdown
-* @version: 1.3.0
-* @author: HtmlStream
-* @requires: @popperjs/core ^2.11.2
-* @license: Licensed under MIT (https://preline.co/docs/license.html)
-* Copyright 2022 Htmlstream
-*/
+ * HSDropdown
+ * @version: 1.3.0
+ * @author: HtmlStream
+ * @requires: @popperjs/core ^2.11.2
+ * @license: Licensed under MIT (https://preline.co/docs/license.html)
+ * Copyright 2023 Htmlstream
+ */
 
 /*
-* HSOverlay
-* @version: 1.3.0
-* @author: HtmlStream
-* @license: Htmlstream Libraries (https://preline.co/docs/license.html)
-* Copyright 2022 Htmlstream
-*/
+ * HSOverlay
+ * @version: 1.3.0
+ * @author: HtmlStream
+ * @license: Htmlstream Libraries (https://preline.co/docs/license.html)
+ * Copyright 2023 Htmlstream
+ */
 
 /*
-* HSRemoveElement
-* @version: 1.3.0
-* @author: HtmlStream
-* @license: Licensed under MIT (https://preline.co/docs/license.html)
-* Copyright 2022 Htmlstream
-*/
+ * HSRemoveElement
+ * @version: 1.3.0
+ * @author: HtmlStream
+ * @license: Licensed under MIT (https://preline.co/docs/license.html)
+ * Copyright 2023 Htmlstream
+ */
 
 /*
-* HSScrollspy
-* @version: 1.3.0
-* @author: HtmlStream
-* @license: Licensed under MIT (https://preline.co/docs/license.html)
-* Copyright 2022 Htmlstream
-*/
+ * HSScrollspy
+ * @version: 1.3.0
+ * @author: HtmlStream
+ * @license: Licensed under MIT (https://preline.co/docs/license.html)
+ * Copyright 2023 Htmlstream
+ */
 
 /*
-* HSTabs
-* @version: 1.3.0
-* @author: HtmlStream
-* @license: Licensed under MIT (https://preline.co/docs/license.html)
-* Copyright 2022 Htmlstream
-*/
+ * HSTabs
+ * @version: 1.3.0
+ * @author: HtmlStream
+ * @license: Licensed under MIT (https://preline.co/docs/license.html)
+ * Copyright 2023 Htmlstream
+ */
+
+/*
+ * Util
+ * @version: 1.3.0
+ * @author: HtmlStream
+ * @license: Licensed under MIT (https://preline.co/docs/license.html)
+ * Copyright 2023 Htmlstream
+ */
 
 /*
 * HSTooltips
-* @version: 1.3.0
+* @version: 1.4.0
 * @author: HtmlStream
 * @requires: @popperjs/core ^2.11.2
 * @license: Licensed under MIT (https://preline.co/docs/license.html)
-* Copyright 2022 Htmlstream
-*/
-
-/*
-* Util
-* @version: 1.3.0
-* @author: HtmlStream
-* @license: Licensed under MIT (https://preline.co/docs/license.html)
-* Copyright 2022 Htmlstream
+* Copyright 2023 Htmlstream
 */

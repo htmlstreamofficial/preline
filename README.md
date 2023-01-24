@@ -45,7 +45,7 @@ First, you need to make sure that you have a working <a href="https://tailwindcs
 
 ## Documentation
 
-For full documentation of the Preline options, visit <a href="https://preline.co/">preline.co</a>. The site also contains information on the wide variety of <a href="https://preline.co/docs/plugins.html">plugins</a> that are available for TailwindCSS projects.
+For full documentation of the Preline options, visit <a href="https://preline.co/">preline.co</a>. The site also contains information on the wide variety of <a href="https://preline.co/plugins.html">plugins</a> that are available for TailwindCSS projects.
 
 ## Community
 
