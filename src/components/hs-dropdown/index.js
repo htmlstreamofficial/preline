@@ -98,8 +98,8 @@ class HSDropdown extends Component {
 
     document.addEventListener('mousemove', (e) => {
       const $targetEl = e.target;
+      if (!$targetEl) return;
       const $dropdownEl = $targetEl.closest(this.selector);
-      const $menuEl = $targetEl.closest('.hs-dropdown-menu');
 
       if ($dropdownEl) {
         const trigger = (window.getComputedStyle($dropdownEl).getPropertyValue('--trigger') || 'click').replace(

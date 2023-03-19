@@ -26,6 +26,7 @@ class HSTooltip extends Component {
 
     document.addEventListener('mousemove', (e) => {
       const $targetEl = e.target;
+      if (!$targetEl) return;
       const $tooltipEl = $targetEl.closest(this.selector);
 
       if (
