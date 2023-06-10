@@ -49,25 +49,18 @@ For full documentation of the Preline options, visit <a href="https://preline.co
 
 ## Community
 
-For help, discussion about best practices, or any other conversation that would benefit from being searchable:
-
-<a href="https://github.com/htmlstreamofficial/preline/discussions">Discuss Preline UI on GitHub</a>
+For help, discussion about best practices, or any other conversation that would benefit from being searchable use [GitHub Discussions](https://github.com/htmlstreamofficial/preline/discussions)
 
 ## License
 
-Preline UI is Open Source project and licensed under MIT for better Web.
+Preline UI is Open Source project and licensed under [MIT](https://preline.co/docs/license.html).
 
-Learn more <a href="https://preline.co/docs/license.html">here</a>.
+Preline UI Figma is free for both commercial and personal projects, learn more [here](https://preline.co/license.html).
+  
+All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by Preline UI, nor vice versa.
 
 ## A product of Htmlstream
 
-Preline Ui is built by the team that has customers in the background such us Stanford University, The University of Maryland, University of Victoria and many more Governments, Corporate Agencies.
+Preline UI is built and maintend by [Htmlstream](https://htmlstream.com) team. Over the last decade at Htmlstream, our journey has involved crafting UI Components and Templates. This process has allowed us to understand and explore a range of strategies for developing versatile UI designs that can adapt to a variety of needs.
 
-Our soical network profiles:
-
-<ul>
-  <li><a href="https://twitter.com/Htmlstream">Twitter</a></li>
-  <li><a href="https://www.facebook.com/Htmlstream/">Facebook</a></li>
-  <li><a href="https://dribbble.com/Htmlstream">Dribbble</a></li>
-  <li><a href="https://www.instagram.com/htmlstream/">Instagram</a></li>
-</ul>
+Share about Preline on [Twitter](https://twitter.com/prelineUI) and keep an eye on [Dribbble](https://dribbble.com/Htmlstream) for teasers of our upcoming UIs.

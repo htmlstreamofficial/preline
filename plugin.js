@@ -79,12 +79,12 @@ module.exports = plugin(function ({ addVariant, e }) {
   addVariant('hs-tab-active', [
     ({ modifySelectors, separator }) => {
       modifySelectors(({ className }) => {
-        return `.active.${e(`hs-tab-active${separator}${className}`)}`;
+        return `[data-hs-tab].active.${e(`hs-tab-active${separator}${className}`)}`;
       });
     },
     ({ modifySelectors, separator }) => {
       modifySelectors(({ className }) => {
-        return `.active .${e(`hs-tab-active${separator}${className}`)}`;
+        return `[data-hs-tab].active .${e(`hs-tab-active${separator}${className}`)}`;
       });
     },
   ]);
@@ -98,6 +98,19 @@ module.exports = plugin(function ({ addVariant, e }) {
     ({ modifySelectors, separator }) => {
       modifySelectors(({ className }) => {
         return `.open .${e(`hs-overlay-open${separator}${className}`)}`;
+      });
+    },
+  ]);
+
+  addVariant('hs-overlay-backdrop-open', [
+    ({ modifySelectors, separator }) => {
+      modifySelectors(({ className }) => {
+        return `.hs-overlay-backdrop.${e(`hs-overlay-backdrop-open${separator}${className}`)}`;
+      });
+    },
+    ({ modifySelectors, separator }) => {
+      modifySelectors(({ className }) => {
+        return `.hs-overlay-backdrop .${e(`hs-overlay-backdrop-open${separator}${className}`)}`;
       });
     },
   ]);
