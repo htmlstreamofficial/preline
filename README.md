@@ -39,9 +39,72 @@ First, you need to make sure that you have a working <a href="https://tailwindcs
   ],
 }</code></pre>
 
-3. Include the JavaScript <code><script></code> that powers the interactive elements near the end of your <code>&lt;body&gt;</code> tag:
+3. Include the JavaScript <code>&lt;script&gt;</code> that powers the interactive elements near the end of your <code>&lt;body&gt;</code> tag:
 
 <pre><code><script src="./node_modules/preline/dist/preline.js"></script></code></pre>
+
+### Use with NextJS and TypeScript
+
+1. See [The NextJS example](/examples/nextjs-typescript/) for a complete example
+
+2. Add Preline UI to the <code>packages.json</code>
+
+<pre><code>npm i preline</code></pre>
+
+3. Add Preline UI to the <code>tailwind.config.js</code>
+
+<pre><code>module.exports = {
+  content: [
+    ...
+    'node_modules/preline/dist/*.js',
+  ],
+  plugins: [
+    ...
+    require('preline/plugin'),
+  ],
+}</code></pre>
+
+4. To support TypeScript, add a file called <code>preline.d.ts</code> to your project containing the single line below:
+
+<pre><code>
+declare module 'preline';
+</code></pre>
+
+5. Add a <code>prelineLoader.tsx</code> component to your project to load Preline JavaScript client-side
+
+<pre><code>'use client'
+
+import { useEffect } from 'react'
+
+export default function PrelineLoader() {
+  useEffect(() => {
+    import('preline');
+  }, []);
+  
+  return <></>;
+}</code></pre>
+
+6. Reference the <code>PrelineLoader</code> component in your <code>layout.tsx</code>
+
+<pre><code>
+...
+import PrelineLoader from './prelineLoader'
+...
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <PrelineLoader />
+        {children}
+      </body>
+    </html>
+  )
+}</code></pre>
+
 
 ## Documentation
 
