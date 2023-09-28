@@ -153,7 +153,7 @@ class HSOverlay extends Component {
     if (backdropSelector) {
       $backdropEl = document.querySelector(backdropSelector).cloneNode(true);
       $backdropEl.classList.remove('hidden');
-      backdropClasses = $backdropEl.classList;
+      backdropClasses = $backdropEl.classList.toString();
       $backdropEl.classList = '';
     }
 
