@@ -1,0 +1,3 @@
+export interface IScrollspy {
+	options?: {};
+}

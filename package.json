@@ -1,54 +1,58 @@
 {
-  "name": "preline",
-  "version": "1.9.0",
-  "description": "Preline UI is an open-source set of prebuilt UI components based on the utility-first Tailwind CSS framework.",
-  "main": "dist/preline.js",
-  "repository": "https://github.com/htmlstreamofficial/preline.git",
-  "homepage": "https://preline.co",
-  "keywords": [
-    "preline",
-    "html",
-    "css",
-    "javascript",
-    "tailwind",
-    "tailwind examples",
-    "tailwind components",
-    "tailwind components library",
-    "tailwind elements",
-    "tailwind library",
-    "tailwind sections",
-    "tailwind css",
-    "tailwind ui",
-    "tailwind css react",
-    "tailwind css nextjs",
-    "tailwind css vue",
-    "tailwind css nuxtjs",
-    "tailwind css angular",
-    "tailwind css astro",
-    "tailwind css solidjs",
-    "tailwind css qwik",
-    "tailwind css svelte",
-    "tailwind css remix",
-    "tailwind css laravel"
-  ],
-  "author": "Htmlstream",
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.17.5",
-    "@babel/preset-env": "^7.16.11",
-    "babel-loader": "^8.2.3",
-    "source-map-loader": "^3.0.1",
-    "webpack": "^5.69.1",
-    "webpack-cli": "^4.9.2"
-  },
-  "dependencies": {
-    "@popperjs/core": "^2.11.2"
-  }
+	"name": "preline",
+	"version": "2.0.0",
+	"description": "Preline UI is an open-source set of prebuilt UI components based on the utility-first Tailwind CSS framework.",
+	"main": "dist/preline.js",
+	"repository": "https://github.com/htmlstreamofficial/preline.git",
+	"homepage": "https://preline.co",
+	"keywords": [
+		"preline",
+		"html",
+		"css",
+		"javascript",
+		"typescript",
+		"tailwind",
+		"tailwind examples",
+		"tailwind components",
+		"tailwind components library",
+		"tailwind elements",
+		"tailwind library",
+		"tailwind sections",
+		"tailwind css",
+		"tailwind ui",
+		"tailwind css react",
+		"tailwind css next",
+		"tailwind css nextjs",
+		"tailwind css vue",
+		"tailwind css nuxtjs",
+		"tailwind css angular",
+		"tailwind css astro",
+		"tailwind css solidjs",
+		"tailwind css qwik",
+		"tailwind css svelte",
+		"tailwind css remix",
+		"tailwind css laravel"
+	],
+	"author": "HtmlStream",
+	"license": "MIT",
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"watch": "webpack --config-name regular",
+		"obfuscate": "webpack --config-name obfuscate",
+		"pretty": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\""
+	},
+	"devDependencies": {
+		"javascript-obfuscator": "^4.0.2",
+		"prettier": "^3.0.0",
+		"source-map-loader": "^4.0.1",
+		"ts-loader": "^9.4.2",
+		"typescript": "^5.0.2",
+		"webpack-cli": "^5.0.1",
+		"webpack-obfuscator": "^3.5.1"
+	},
+	"dependencies": {
+		"@popperjs/core": "^2.11.2"
+	}
 }

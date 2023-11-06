@@ -1,6 +1,6 @@
-<img src="https://preline.co/hero-image-2.jpg" alt="Hero Image" width="100%" height="auto">
+[![Hero Image](https://preline.co/hero-image-2.jpg)](https://preline.co)
 
-<img src="https://preline.co/preline-logo.svg" alt="Logo" width="200" height="auto">
+<a href="https://preline.co"><img src="https://preline.co/preline-logo.svg" alt="Logo" width="200" height="auto"></a>
 
 Preline UI is an open-source set of prebuilt UI components based on the utility-first Tailwind CSS framework.
 
@@ -63,4 +63,4 @@ All brand icons are trademarks of their respective owners. The use of these trad
 
 Preline UI is built and maintend by [Htmlstream](https://htmlstream.com) team. Over the last decade at Htmlstream, our journey has involved crafting UI Components and Templates. This process has allowed us to understand and explore a range of strategies for developing versatile UI designs that can adapt to a variety of needs.
 
-Share about Preline on [Twitter](https://twitter.com/prelineUI) and keep an eye on [Dribbble](https://dribbble.com/Htmlstream) for teasers of our upcoming UIs.
+Share your thoughts about Preline on [Twitter](https://twitter.com/prelineUI) or leave supportive review on [ProductHunt](https://www.producthunt.com/products/preline-ui/reviews).

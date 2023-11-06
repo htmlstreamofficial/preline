@@ -1,0 +1,359 @@
+/*
+ * HSStrongPassword
+ * @version: 2.0.0
+ * @author: HTMLStream
+ * @license: Licensed under MIT (https://preline.co/docs/license.html)
+ * Copyright 2023 HTMLStream
+ */
+
+import { IStrongPasswordOptions, IStrongPassword } from './interfaces';
+
+import HSBasePlugin from '../base-plugin';
+
+class HSStrongPassword
+	extends HSBasePlugin<IStrongPasswordOptions>
+	implements IStrongPassword {
+	private readonly target: string | HTMLInputElement | null;
+	private readonly hints: string | HTMLElement | null;
+	private readonly stripClasses: string | null;
+	private readonly minLength: number;
+	private readonly mode: string;
+	private readonly popoverSpace: number;
+	private readonly checksExclude: string[] | null;
+	private readonly specialCharactersSet: string | null;
+	
+	public isOpened: boolean = false;
+	private strength: number = 0;
+	private passedRules: Set<string> = new Set<string>();
+	private weakness: HTMLElement | null;
+	private rules: HTMLElement[] | null;
+	private availableChecks: string[] | null;
+	
+	constructor(el: HTMLElement, options?: IStrongPasswordOptions) {
+		super(el, options);
+		
+		const data = el.getAttribute('data-hs-strong-password');
+		const dataOptions: IStrongPasswordOptions = data ? JSON.parse(data) : {};
+		const concatOptions = {
+			...dataOptions,
+			...options,
+		};
+		
+		this.target = concatOptions?.target
+			? typeof concatOptions?.target === 'string'
+				? (document.querySelector(concatOptions.target) as HTMLInputElement)
+				: concatOptions.target
+			: null;
+		this.hints = concatOptions?.hints
+			? typeof concatOptions?.hints === 'string'
+				? (document.querySelector(concatOptions.hints) as HTMLElement)
+				: concatOptions.hints
+			: null;
+		this.stripClasses = concatOptions?.stripClasses || null;
+		this.minLength = concatOptions?.minLength || 6;
+		this.mode = concatOptions?.mode || 'default';
+		this.popoverSpace = concatOptions?.popoverSpace || 10;
+		this.checksExclude = concatOptions?.checksExclude || [];
+		this.availableChecks = [
+			'lowercase',
+			'uppercase',
+			'numbers',
+			'special-characters',
+			'min-length',
+		].filter((el) => !this.checksExclude.includes(el));
+		this.specialCharactersSet =
+			concatOptions?.specialCharactersSet ||
+			'!"#$%&\'()*+,-./:;<=>?@[\\\\\\]^_`{|}~';
+		
+		if (this.target) this.init();
+	}
+	
+	private init() {
+		this.createCollection(window.$hsStrongPasswordCollection, this);
+		
+		if (this.availableChecks.length) this.build();
+	}
+	
+	private build() {
+		this.buildStrips();
+		if (this.hints) this.buildHints();
+		
+		this.setStrength((this.target as HTMLInputElement).value);
+		
+		(this.target as HTMLInputElement).addEventListener(
+			'input',
+			(evt: InputEvent) => {
+				this.setStrength((evt.target as HTMLInputElement).value);
+			},
+		);
+	}
+	
+	private buildStrips() {
+		if (this.stripClasses) {
+			for (let i = 0; i < this.availableChecks.length; i++) {
+				const newStrip = this.htmlToElement('<div></div>');
+				this.classToClassList(this.stripClasses, newStrip);
+				
+				this.el.append(newStrip);
+			}
+		}
+	}
+	
+	private buildHints() {
+		this.weakness =
+			(this.hints as HTMLElement).querySelector(
+				'[data-hs-strong-password-hints-weakness-text]',
+			) || null;
+		this.rules =
+			Array.from(
+				(this.hints as HTMLElement).querySelectorAll(
+					'[data-hs-strong-password-hints-rule-text]',
+				),
+			) || null;
+		
+		this.rules.forEach((rule) => {
+			const ruleValue = rule.getAttribute(
+				'data-hs-strong-password-hints-rule-text',
+			);
+			
+			if (this.checksExclude?.includes(ruleValue)) rule.remove();
+		});
+		
+		if (this.weakness) this.buildWeakness();
+		if (this.rules) this.buildRules();
+		if (this.mode === 'popover') {
+			(this.target as HTMLInputElement).addEventListener('focus', () => {
+				this.isOpened = true;
+				(this.hints as HTMLElement).classList.remove('hidden');
+				(this.hints as HTMLElement).classList.add('block');
+				
+				this.recalculateDirection();
+			});
+			
+			(this.target as HTMLInputElement).addEventListener('blur', () => {
+				this.isOpened = false;
+				(this.hints as HTMLElement).classList.remove(
+					'block',
+					'bottom-full',
+					'top-full',
+				);
+				(this.hints as HTMLElement).classList.add('hidden');
+				(this.hints as HTMLElement).style.marginTop = '';
+				(this.hints as HTMLElement).style.marginBottom = '';
+			});
+		}
+	}
+	
+	private buildWeakness() {
+		this.checkStrength((this.target as HTMLInputElement).value);
+		this.setWeaknessText();
+		
+		(this.target as HTMLInputElement).addEventListener('input', () =>
+			setTimeout(() => this.setWeaknessText()),
+		);
+	}
+	
+	private buildRules() {
+		this.setRulesText();
+		
+		(this.target as HTMLInputElement).addEventListener('input', () =>
+			setTimeout(() => this.setRulesText()),
+		);
+	}
+	
+	private setWeaknessText() {
+		const weaknessText = this.weakness.getAttribute(
+			'data-hs-strong-password-hints-weakness-text',
+		);
+		const weaknessTextToJson = JSON.parse(weaknessText as string);
+		
+		this.weakness.textContent = weaknessTextToJson[this.strength];
+	}
+	
+	private setRulesText() {
+		this.rules.forEach((rule) => {
+			const ruleValue = rule.getAttribute(
+				'data-hs-strong-password-hints-rule-text',
+			);
+			
+			this.checkIfPassed(rule, this.passedRules.has(ruleValue));
+		});
+	}
+	
+	private togglePopover() {
+		const popover = this.el.querySelector('.popover');
+		
+		if (popover) popover.classList.toggle('show');
+	}
+	
+	private checkStrength(val: string): { strength: number; rules: Set<string> } {
+		const passedRules = new Set<string>();
+		const regexps = {
+			lowercase: /[a-z]+/,
+			uppercase: /[A-Z]+/,
+			numbers: /[0-9]+/,
+			'special-characters': new RegExp(`[${this.specialCharactersSet}]`),
+		};
+		let strength = 0;
+		
+		if (
+			this.availableChecks.includes('lowercase') &&
+			val.match(regexps['lowercase'])
+		) {
+			strength += 1;
+			passedRules.add('lowercase');
+		}
+		if (
+			this.availableChecks.includes('uppercase') &&
+			val.match(regexps['uppercase'])
+		) {
+			strength += 1;
+			passedRules.add('uppercase');
+		}
+		if (
+			this.availableChecks.includes('numbers') &&
+			val.match(regexps['numbers'])
+		) {
+			strength += 1;
+			passedRules.add('numbers');
+		}
+		if (
+			this.availableChecks.includes('special-characters') &&
+			val.match(regexps['special-characters'])
+		) {
+			strength += 1;
+			passedRules.add('special-characters');
+		}
+		if (
+			this.availableChecks.includes('min-length') &&
+			val.length >= this.minLength
+		) {
+			strength += 1;
+			passedRules.add('min-length');
+		}
+		if (!val.length) {
+			strength = 0;
+		}
+		
+		if (strength === this.availableChecks.length)
+			this.el.classList.add('accepted');
+		else this.el.classList.remove('accepted');
+		
+		this.strength = strength;
+		this.passedRules = passedRules;
+		
+		return {
+			strength: this.strength,
+			rules: this.passedRules,
+		};
+	}
+	
+	private checkIfPassed(el: HTMLElement, isRulePassed = false) {
+		const check = el.querySelector('[data-check]');
+		const uncheck = el.querySelector('[data-uncheck]');
+		
+		if (isRulePassed) {
+			el.classList.add('active');
+			check.classList.remove('hidden');
+			uncheck.classList.add('hidden');
+		} else {
+			el.classList.remove('active');
+			check.classList.add('hidden');
+			uncheck.classList.remove('hidden');
+		}
+	}
+	
+	private setStrength(val: string) {
+		const { strength, rules } = this.checkStrength(val);
+		const payload = {
+			strength,
+			rules,
+		};
+		
+		this.hideStrips(strength);
+		
+		this.fireEvent('change', payload);
+		this.dispatch('change.hs.strongPassword', this.el, payload);
+	}
+	
+	private hideStrips(qty: number) {
+		Array.from(this.el.children).forEach((el: HTMLElement, i: number) => {
+			if (i < qty) el.classList.add('passed');
+			else el.classList.remove('passed');
+		});
+	}
+	
+	// Public methods
+	public recalculateDirection() {
+		if (
+			HSBasePlugin.isEnoughSpace(
+				this.hints as HTMLElement,
+				this.target as HTMLInputElement,
+				'bottom',
+				this.popoverSpace,
+			)
+		) {
+			(this.hints as HTMLElement).classList.remove('bottom-full');
+			(this.hints as HTMLElement).classList.add('top-full');
+			(this.hints as HTMLElement).style.marginBottom = '';
+			(this.hints as HTMLElement).style.marginTop = `${this.popoverSpace}px`;
+		} else {
+			(this.hints as HTMLElement).classList.remove('top-full');
+			(this.hints as HTMLElement).classList.add('bottom-full');
+			(this.hints as HTMLElement).style.marginTop = '';
+			(this.hints as HTMLElement).style.marginBottom = `${this.popoverSpace}px`;
+		}
+	}
+	
+	// Static methods
+	static getInstance(target: HTMLElement | string) {
+		const elInCollection = window.$hsStrongPasswordCollection.find(
+			(el) =>
+				el.element.el ===
+				(typeof target === 'string' ? document.querySelector(target) : target),
+		);
+		
+		return elInCollection ? elInCollection.element : null;
+	}
+}
+
+// Init all carousels
+declare global {
+	interface Window {
+		$hsStrongPasswordCollection: {
+			id: number;
+			element: HSStrongPassword;
+		}[];
+	}
+}
+
+window.addEventListener('load', () => {
+	if (!window.$hsStrongPasswordCollection)
+		window.$hsStrongPasswordCollection = [];
+	
+	document
+	.querySelectorAll('[data-hs-strong-password]:not(.--prevent-on-load-init)')
+	.forEach((el: HTMLElement) => {
+		const data = el.getAttribute('data-hs-strong-password');
+		const options: IStrongPasswordOptions = data ? JSON.parse(data) : {};
+		
+		new HSStrongPassword(el, options);
+	});
+	
+	// Uncomment for debug
+	// console.log('Strong password collection:', window.$hsStrongPasswordCollection);
+});
+
+document.addEventListener('scroll', () => {
+	if (!window.$hsStrongPasswordCollection) return false;
+	
+	const target = window.$hsStrongPasswordCollection.find(
+		(el) => el.element.isOpened,
+	);
+	
+	if (target) target.element.recalculateDirection();
+});
+
+module.exports.HSStrongPassword = HSStrongPassword;
+
+export default HSStrongPassword;

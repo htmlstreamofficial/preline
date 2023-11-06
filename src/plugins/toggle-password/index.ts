@@ -1,0 +1,182 @@
+/*
+ * HSTogglePassword
+ * @version: 2.0.0
+ * @author: HTMLStream
+ * @license: Licensed under MIT (https://preline.co/docs/license.html)
+ * Copyright 2023 HTMLStream
+ */
+
+import { ITogglePasswordOptions, ITogglePassword } from './interfaces';
+
+import HSBasePlugin from '../base-plugin';
+
+class HSTogglePassword
+	extends HSBasePlugin<ITogglePasswordOptions>
+	implements ITogglePassword {
+	private readonly target:
+		| string
+		| string[]
+		| HTMLInputElement
+		| HTMLInputElement[]
+		| null;
+	private isShown: boolean;
+	private isMultiple: boolean;
+	private eventType: string;
+	
+	constructor(el: HTMLElement, options?: ITogglePasswordOptions) {
+		super(el, options);
+		
+		const data = el.getAttribute('data-hs-toggle-password');
+		const dataOptions: ITogglePasswordOptions = data ? JSON.parse(data) : {};
+		const concatOptions = {
+			...dataOptions,
+			...options,
+		};
+		const targets: HTMLInputElement[] = [];
+		if (concatOptions?.target && typeof concatOptions?.target === 'string') {
+			const ids = concatOptions?.target.split(',');
+			ids.forEach((id) => {
+				targets.push(document.querySelector(id) as HTMLInputElement);
+			});
+		} else if (
+			concatOptions?.target &&
+			typeof concatOptions?.target === 'object'
+		) {
+			(concatOptions.target as string[]).forEach((el) =>
+				targets.push(document.querySelector(el)),
+			);
+		} else {
+			(concatOptions.target as HTMLInputElement[]).forEach((el) =>
+				targets.push(el),
+			);
+		}
+		
+		this.target = targets;
+		this.isShown = this.el.hasAttribute('type')
+			? (this.el as HTMLInputElement).checked
+			: false;
+		this.eventType = this.checkIfFormElement(this.el) ? 'change' : 'click';
+		this.isMultiple =
+			this.target.length > 1 &&
+			!!this.el.closest('[data-hs-toggle-password-group]');
+		
+		if (this.target) this.init();
+	}
+	
+	private init() {
+		this.createCollection(window.$hsTogglePasswordCollection, this);
+		
+		if (!this.isShown) {
+			this.hide();
+		} else {
+			this.show();
+		}
+		
+		this.el.addEventListener(this.eventType, () => {
+			if (this.isShown) {
+				this.hide();
+			} else {
+				this.show();
+			}
+			
+			this.fireEvent('toggle', this.target);
+			this.dispatch('toggle.hs.toggle-select', this.el, this.target);
+		});
+	}
+	
+	private getMultipleToggles(): HSTogglePassword[] {
+		const group = this.el.closest('[data-hs-toggle-password-group]');
+		const toggles = group.querySelectorAll('[data-hs-toggle-password]');
+		const togglesInCollection: HSTogglePassword[] = [];
+		
+		toggles.forEach((el: HTMLElement) => {
+			togglesInCollection.push(HSTogglePassword.getInstance(el) as HSTogglePassword);
+		});
+		
+		return togglesInCollection;
+	}
+	
+	// Public methods
+	public show() {
+		if (this.isMultiple) {
+			const toggles = this.getMultipleToggles();
+			
+			toggles.forEach((el: HSTogglePassword) =>
+				el ? (el.isShown = true) : false,
+			);
+			
+			this.el
+			.closest('[data-hs-toggle-password-group]')
+			.classList.add('active');
+		} else {
+			this.isShown = true;
+			
+			this.el.classList.add('active');
+		}
+		(this.target as HTMLInputElement[]).forEach((el) => {
+			(el as HTMLInputElement).type = 'text';
+		});
+	}
+	
+	public hide() {
+		if (this.isMultiple) {
+			const toggles = this.getMultipleToggles();
+			
+			toggles.forEach((el: HSTogglePassword) =>
+				el ? (el.isShown = false) : false,
+			);
+			
+			this.el
+			.closest('[data-hs-toggle-password-group]')
+			.classList.remove('active');
+		} else {
+			this.isShown = false;
+			
+			this.el.classList.remove('active');
+		}
+		(this.target as HTMLInputElement[]).forEach((el) => {
+			(el as HTMLInputElement).type = 'password';
+		});
+	}
+	
+	// Static methods
+	static getInstance(target: HTMLElement | string, isInstance?: boolean) {
+		const elInCollection = window.$hsTogglePasswordCollection.find(
+			(el) =>
+				el.element.el ===
+				(typeof target === 'string' ? document.querySelector(target) : target),
+		);
+		
+		return elInCollection
+			? isInstance
+				? elInCollection
+				: elInCollection.element
+			: null;
+	}
+}
+
+// Init all toggle password
+declare global {
+	interface Window {
+		$hsTogglePasswordCollection: {
+			id: number;
+			element: HSTogglePassword;
+		}[];
+	}
+}
+
+window.addEventListener('load', () => {
+	if (!window.$hsTogglePasswordCollection)
+		window.$hsTogglePasswordCollection = [];
+	
+	document
+	.querySelectorAll('[data-hs-toggle-password]:not(.--prevent-on-load-init)')
+	.forEach((el: HTMLInputElement) => new HSTogglePassword(el));
+	
+	// Uncomment for debug
+	// console.log('Toggle password collection:', window.$hsTogglePasswordCollection);
+});
+
+module.exports.HSTogglePassword = HSTogglePassword;
+
+export default HSTogglePassword;

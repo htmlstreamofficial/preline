@@ -1,0 +1,15 @@
+/*
+ * HSBasePlugin
+ * @version: 2.0.0
+ * @author: HTMLStream
+ * @license: Licensed under MIT (https://preline.co/docs/license.html)
+ * Copyright 2023 HTMLStream
+ */
+
+/*
+ * HSTooltip
+ * @version: 2.0.0
+ * @author: HTMLStream
+ * @license: Licensed under MIT (https://preline.co/docs/license.html)
+ * Copyright 2023 HTMLStream
+ */
