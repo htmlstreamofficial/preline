@@ -1,6 +1,6 @@
 /*
  * Plugin
- * @version: 2.0.0
+ * @version: 2.0.1
  * @author: HTMLStream
  * @requires: tailwindcss ^3.1.2
  * @license: Licensed under MIT (https://preline.co/docs/license.html)

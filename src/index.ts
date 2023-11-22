@@ -1,11 +1,9 @@
 const CopyMarkup = require('./plugins/copy-markup');
 
 const Accordion = require('./plugins/accordion');
-const BunchCheck = require('./plugins/bunch-check');
 const Carousel = require('./plugins/carousel');
 const Collapse = require('./plugins/collapse');
 const Dropdown = require('./plugins/dropdown');
-const InputMask = require('./plugins/input-mask');
 const InputNumber = require('./plugins/input-number');
 const Overlay = require('./plugins/overlay');
 const PinInput = require('./plugins/pin-input');
@@ -25,11 +23,9 @@ module.exports = {
 	HSCopyMarkup: CopyMarkup.HSCopyMarkup,
 	
 	HSAccordion: Accordion.HSAccordion,
-	HSBunchCheck: BunchCheck.HSBunchCheck,
 	HSCarousel: Carousel.HSCarousel,
 	HSCollapse: Collapse.HSCollapse,
 	HSDropdown: Dropdown.HSDropdown,
-	HSInputMask: InputMask.HSInputMask,
 	HSInputNumber: InputNumber.HSInputNumber,
 	HSOverlay: Overlay.HSOverlay,
 	HSPinInput: PinInput.HSPinInput,

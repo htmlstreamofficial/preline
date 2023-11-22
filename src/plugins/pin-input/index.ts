@@ -1,6 +1,6 @@
 /*
  * HSPinInput
- * @version: 2.0.0
+ * @version: 2.0.1
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
@@ -161,6 +161,21 @@ class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
 				: elInCollection.element
 			: null;
 	}
+
+	static autoInit() {
+		if (!window.$hsPinInputCollection) window.$hsPinInputCollection = [];
+
+		document
+			.querySelectorAll('[data-hs-pin-input]:not(.--prevent-on-load-init)')
+			.forEach((el: HTMLElement) => {
+				if (
+					!window.$hsPinInputCollection.find(
+						(elC) => (elC?.element?.el as HTMLElement) === el,
+					)
+				)
+					new HSPinInput(el);
+			});
+	}
 }
 
 // Init all toggle password
@@ -174,11 +189,7 @@ declare global {
 }
 
 window.addEventListener('load', () => {
-	if (!window.$hsPinInputCollection) window.$hsPinInputCollection = [];
-
-	document
-		.querySelectorAll('[data-hs-pin-input]:not(.--prevent-on-load-init)')
-		.forEach((el: HTMLElement) => new HSPinInput(el));
+	HSPinInput.autoInit();
 
 	// Uncomment for debug
 	// console.log('PIN input collection:', window.$hsPinInputCollection);

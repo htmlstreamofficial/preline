@@ -9,12 +9,10 @@ module.exports = [
     entry: {
       index: './src/index.ts',
       accordion: './src/plugins/accordion/index.ts',
-      'bunch-check': './src/plugins/bunch-check/index.ts',
       carousel: './src/plugins/carousel/index.ts',
       collapse: './src/plugins/collapse/index.ts',
       'copy-markup': './src/plugins/copy-markup/index.ts',
       dropdown: './src/plugins/dropdown/index.ts',
-      'input-mask': './src/plugins/input-mask/index.ts',
       'input-number': './src/plugins/input-number/index.ts',
       overlay: './src/plugins/overlay/index.ts',
       'pin-input': './src/plugins/pin-input/index.ts',

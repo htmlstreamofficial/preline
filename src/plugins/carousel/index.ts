@@ -1,6 +1,6 @@
 /*
  * HSCarousel
- * @version: 2.0.0
+ * @version: 2.0.1
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
@@ -26,23 +26,23 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	private readonly speed: number;
 	private readonly isInfiniteLoop: boolean;
 	private timer: any;
-	
+
 	// Touch events' help variables
 	private readonly touchX: {
 		start: number;
 		end: number;
 	};
-	
+
 	constructor(el: HTMLElement, options?: ICarouselOptions) {
 		super(el, options);
-		
+
 		const data = el.getAttribute('data-hs-carousel');
 		const dataOptions: ICarouselOptions = data ? JSON.parse(data) : {};
 		const concatOptions = {
 			...dataOptions,
 			...options,
 		};
-		
+
 		this.currentIndex = concatOptions.currentIndex || 0;
 		this.loadingClasses = concatOptions.loadingClasses
 			? `${concatOptions.loadingClasses}`.split(',')
@@ -71,19 +71,19 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		this.next = this.el.querySelector('.hs-carousel-next') || null;
 		this.dots = this.el.querySelectorAll('.hs-carousel-pagination > *') || null;
 		this.sliderWidth = this.inner.parentElement.clientWidth;
-		
+
 		// Touch events' help variables
 		this.touchX = {
 			start: 0,
 			end: 0,
 		};
-		
+
 		this.init();
 	}
-	
+
 	private init() {
 		this.createCollection(window.$hsCarouselCollection, this);
-		
+
 		if (this.inner) {
 			this.calculateWidth();
 			if (this.loadingClassesRemove) {
@@ -136,41 +136,41 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 				else this.inner.classList.add(...this.afterLoadingClassesAdd);
 			});
 		}
-		
+
 		this.el.classList.add('init');
-		
+
 		document.addEventListener('touchstart', (evt) => {
 			this.touchX.start = evt.changedTouches[0].screenX;
 		});
-		
+
 		document.addEventListener('touchend', (evt) => {
 			this.touchX.end = evt.changedTouches[0].screenX;
-			
+
 			this.detectDirection();
 		});
-		
+
 		this.observeResize();
 	}
-	
+
 	private observeResize() {
 		const resizeObserver = new ResizeObserver(() => this.recalculateWidth());
-		
+
 		resizeObserver.observe(document.querySelector('body'));
 	}
-	
+
 	private calculateWidth() {
 		// Set slider width
 		this.inner.style.width = `${this.sliderWidth * this.slides.length}px`;
 		this.inner.style.transform = `translate(-${
 			this.currentIndex * this.sliderWidth
 		}px, 0px)`;
-		
+
 		// Set width to each slide
 		this.slides.forEach((el) => {
 			el.style.width = `${this.sliderWidth}px`;
 		});
 	}
-	
+
 	private addCurrentClass() {
 		this.slides.forEach((el, i) => {
 			if (i === this.currentIndex) {
@@ -179,7 +179,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 				el.classList.remove('active');
 			}
 		});
-		
+
 		if (this.dots) {
 			this.dots.forEach((el, i) => {
 				if (i === this.currentIndex) {
@@ -190,10 +190,10 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			});
 		}
 	}
-	
+
 	private addDisabledClass() {
 		if (!this.prev || !this.next) return false;
-		
+
 		if (this.currentIndex === 0) {
 			this.next.classList.remove('disabled');
 			this.prev.classList.add('disabled');
@@ -205,84 +205,84 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			this.next.classList.remove('disabled');
 		}
 	}
-	
+
 	private autoPlay() {
 		this.setTimer();
 	}
-	
+
 	private setTimer() {
 		this.timer = setInterval(() => {
 			if (this.currentIndex === this.slides.length - 1) this.goTo(0);
 			else this.goToNext();
 		}, this.speed);
 	}
-	
+
 	private resetTimer() {
 		clearInterval(this.timer);
 	}
-	
+
 	private detectDirection() {
 		const { start, end } = this.touchX;
-		
+
 		if (end < start) this.goToNext();
 		if (end > start) this.goToPrev();
 	}
-	
+
 	// Public methods
 	public recalculateWidth() {
 		this.sliderWidth = this.inner.parentElement.clientWidth;
-		
+
 		this.calculateWidth();
 	}
-	
+
 	public goToPrev() {
 		if (this.currentIndex === 0 && this.isInfiniteLoop) {
 			this.currentIndex = this.slides.length - 1;
 			this.inner.style.transform = `translate(-${
 				this.currentIndex * this.sliderWidth
 			}px, 0px)`;
-			
+
 			this.addCurrentClass();
 		} else if (this.currentIndex !== 0) {
 			this.currentIndex -= 1;
 			this.inner.style.transform = `translate(-${
 				this.currentIndex * this.sliderWidth
 			}px, 0px)`;
-			
+
 			this.addCurrentClass();
 			this.addDisabledClass();
 		}
 	}
-	
+
 	public goToNext() {
 		if (this.currentIndex === this.slides.length - 1 && this.isInfiniteLoop) {
 			this.currentIndex = 0;
 			this.inner.style.transform = `translate(-${
 				this.currentIndex * this.sliderWidth
 			}px, 0px)`;
-			
+
 			this.addCurrentClass();
 		} else if (this.currentIndex < this.slides.length - 1) {
 			this.currentIndex += 1;
 			this.inner.style.transform = `translate(-${
 				this.currentIndex * this.sliderWidth
 			}px, 0px)`;
-			
+
 			this.addCurrentClass();
 			this.addDisabledClass();
 		}
 	}
-	
+
 	public goTo(i: number) {
 		this.currentIndex = i;
 		this.inner.style.transform = `translate(-${
 			this.currentIndex * this.sliderWidth
 		}px, 0px)`;
-		
+
 		this.addCurrentClass();
 		if (!this.isInfiniteLoop) this.addDisabledClass();
 	}
-	
+
 	// Static methods
 	static getInstance(target: HTMLElement | string, isInstance?: boolean) {
 		const elInCollection = window.$hsCarouselCollection.find(
@@ -290,12 +290,27 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 				el.element.el ===
 				(typeof target === 'string' ? document.querySelector(target) : target),
 		);
-		
+
 		return elInCollection
 			? isInstance
 				? elInCollection
 				: elInCollection.element
 			: null;
+	}
+
+	static autoInit() {
+		if (!window.$hsCarouselCollection) window.$hsCarouselCollection = [];
+
+		document
+			.querySelectorAll('[data-hs-carousel]:not(.--prevent-on-load-init)')
+			.forEach((el: HTMLElement) => {
+				if (
+					!window.$hsCarouselCollection.find(
+						(elC) => (elC?.element?.el as HTMLElement) === el,
+					)
+				)
+					new HSCarousel(el);
+			});
 	}
 }
 
@@ -310,19 +325,15 @@ declare global {
 }
 
 window.addEventListener('load', () => {
-	if (!window.$hsCarouselCollection) window.$hsCarouselCollection = [];
-	
-	document
-	.querySelectorAll('[data-hs-carousel]:not(.--prevent-on-load-init)')
-	.forEach((el: HTMLElement) => new HSCarousel(el));
-	
+	HSCarousel.autoInit();
+
 	// Uncomment for debug
 	// console.log('Carousel collection:', window.$hsCarouselCollection);
 });
 
 window.addEventListener('resize', () => {
 	if (!window.$hsCarouselCollection) return false;
-	
+
 	window.$hsCarouselCollection.forEach((el) => {
 		el.element.recalculateWidth();
 	});
