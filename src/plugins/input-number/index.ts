@@ -175,7 +175,7 @@ class HSInputNumber
 		if (!window.$hsInputNumberCollection) window.$hsInputNumberCollection = [];
 
 		document
-			.querySelectorAll('[data-hs-input-number]:not(.--prevent-on-load-init)')
+			.querySelectorAll('[data-hs-input-number]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsInputNumberCollection.find(

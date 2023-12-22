@@ -166,7 +166,7 @@ class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
 		if (!window.$hsPinInputCollection) window.$hsPinInputCollection = [];
 
 		document
-			.querySelectorAll('[data-hs-pin-input]:not(.--prevent-on-load-init)')
+			.querySelectorAll('[data-hs-pin-input]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsPinInputCollection.find(

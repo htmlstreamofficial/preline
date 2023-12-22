@@ -91,7 +91,7 @@ class HSStrongPassword
 
 	private buildStrips() {
 		this.el.innerHTML = '';
-		
+
 		if (this.stripClasses) {
 			for (let i = 0; i < this.availableChecks.length; i++) {
 				const newStrip = this.htmlToElement('<div></div>');
@@ -324,9 +324,7 @@ class HSStrongPassword
 			window.$hsStrongPasswordCollection = [];
 
 		document
-			.querySelectorAll(
-				'[data-hs-strong-password]:not(.--prevent-on-load-init)',
-			)
+			.querySelectorAll('[data-hs-strong-password]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsStrongPasswordCollection.find(

@@ -183,7 +183,7 @@ class HSSearchByJson
 			window.$hsSearchByJsonCollection = [];
 
 		document
-			.querySelectorAll('[data-hs-search-by-json]:not(.--prevent-on-load-init)')
+			.querySelectorAll('[data-hs-search-by-json]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLInputElement) => {
 				if (
 					!window.$hsSearchByJsonCollection.find(

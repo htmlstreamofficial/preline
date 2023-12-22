@@ -770,7 +770,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		if (!window.$hsStepperCollection) window.$hsStepperCollection = [];
 
 		document
-			.querySelectorAll('[data-hs-stepper]:not(.--prevent-on-load-init)')
+			.querySelectorAll('[data-hs-stepper]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsStepperCollection.find(

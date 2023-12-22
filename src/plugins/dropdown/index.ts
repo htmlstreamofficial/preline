@@ -242,7 +242,7 @@ class HSDropdown
 		if (!window.$hsDropdownCollection) window.$hsDropdownCollection = [];
 
 		document
-			.querySelectorAll('.hs-dropdown:not(.--prevent-on-load-init)')
+			.querySelectorAll('.hs-dropdown:not(.prevent-on-load-init)')
 			.forEach((el: IHTMLElementPopper) => {
 				if (
 					!window.$hsDropdownCollection.find(

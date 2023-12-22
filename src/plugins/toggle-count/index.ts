@@ -107,7 +107,7 @@ class HSToggleCount
 		if (!window.$hsToggleCountCollection) window.$hsToggleCountCollection = [];
 
 		document
-			.querySelectorAll('[data-hs-toggle-count]:not(.--prevent-on-load-init)')
+			.querySelectorAll('[data-hs-toggle-count]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsToggleCountCollection.find(

@@ -58,7 +58,7 @@ class HSRemoveElement
 			window.$hsRemoveElementCollection = [];
 
 		document
-			.querySelectorAll('[data-hs-remove-element]:not(.--prevent-on-load-init)')
+			.querySelectorAll('[data-hs-remove-element]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsRemoveElementCollection.find(

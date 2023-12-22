@@ -141,7 +141,7 @@ class HSAccordion extends HSBasePlugin<{}> implements IAccordion {
 		if (!window.$hsAccordionCollection) window.$hsAccordionCollection = [];
 
 		document
-			.querySelectorAll('.hs-accordion:not(.--prevent-on-load-init)')
+			.querySelectorAll('.hs-accordion:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsAccordionCollection.find(

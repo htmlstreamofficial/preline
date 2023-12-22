@@ -97,7 +97,7 @@ class HSThemeSwitch
 		if (!window.$hsThemeSwitchCollection) window.$hsThemeSwitchCollection = [];
 
 		document
-			.querySelectorAll('[data-hs-theme-switch]:not(.--prevent-on-load-init)')
+			.querySelectorAll('[data-hs-theme-switch]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsThemeSwitchCollection.find(
@@ -118,7 +118,7 @@ class HSThemeSwitch
 
 		document
 			.querySelectorAll(
-				'[data-hs-theme-click-value]:not(.--prevent-on-load-init)',
+				'[data-hs-theme-click-value]:not(.prevent-on-load-init)',
 			)
 			.forEach((el: HTMLElement) => {
 				const theme = el.getAttribute('data-hs-theme-click-value');

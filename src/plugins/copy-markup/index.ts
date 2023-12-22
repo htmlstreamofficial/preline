@@ -140,7 +140,7 @@ class HSCopyMarkup
 		if (!window.$hsCopyMarkupCollection) window.$hsCopyMarkupCollection = [];
 
 		document
-			.querySelectorAll('[data-hs-copy-markup]:not(.--prevent-on-load-init)')
+			.querySelectorAll('[data-hs-copy-markup]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsCopyMarkupCollection.find(

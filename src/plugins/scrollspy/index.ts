@@ -165,7 +165,7 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 		if (!window.$hsScrollspyCollection) window.$hsScrollspyCollection = [];
 
 		document
-			.querySelectorAll('[data-hs-scrollspy]:not(.--prevent-on-load-init)')
+			.querySelectorAll('[data-hs-scrollspy]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsScrollspyCollection.find(

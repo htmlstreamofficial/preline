@@ -108,7 +108,7 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 
 		document
 			.querySelectorAll(
-				'[role="tablist"]:not(select):not(.--prevent-on-load-init)',
+				'[role="tablist"]:not(select):not(.prevent-on-load-init)',
 			)
 			.forEach((el: HTMLElement) => {
 				if (

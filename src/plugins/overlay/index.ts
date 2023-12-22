@@ -285,7 +285,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		if (!window.$hsOverlayCollection) window.$hsOverlayCollection = [];
 
 		document
-			.querySelectorAll('[data-hs-overlay]:not(.--prevent-on-load-init)')
+			.querySelectorAll('[data-hs-overlay]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsOverlayCollection.find(
