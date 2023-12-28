@@ -1,14 +1,17 @@
 /*
  * HSCopyMarkup
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
 
+import { dispatch } from '../../utils';
+
 import { ICopyMarkupOptions, ICopyMarkup } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 class HSCopyMarkup
 	extends HSBasePlugin<ICopyMarkupOptions>
@@ -62,7 +65,7 @@ class HSCopyMarkup
 			this.el.setAttribute('disabled', 'disabled');
 
 		this.fireEvent('copy', copiedElement);
-		this.dispatch('copy.hs.copyMarkup', copiedElement, copiedElement);
+		dispatch('copy.hs.copyMarkup', copiedElement, copiedElement);
 	}
 
 	private addPredefinedItems() {
@@ -118,7 +121,7 @@ class HSCopyMarkup
 		target.remove();
 
 		this.fireEvent('delete', target);
-		this.dispatch('delete.hs.copyMarkup', target, target);
+		dispatch('delete.hs.copyMarkup', target, target);
 	}
 
 	// Static method
@@ -156,13 +159,10 @@ class HSCopyMarkup
 	}
 }
 
-// Init all carousels
 declare global {
 	interface Window {
-		$hsCopyMarkupCollection: {
-			id: number;
-			element: HSCopyMarkup;
-		}[];
+		HSCopyMarkup: Function;
+		$hsCopyMarkupCollection: ICollectionItem<HSCopyMarkup>[];
 	}
 }
 
@@ -173,6 +173,8 @@ window.addEventListener('load', () => {
 	// console.log('Copy markup collection:', window.$hsCopyMarkupCollection);
 });
 
-module.exports.HSCopyMarkup = HSCopyMarkup;
+if (typeof window !== 'undefined') {
+	window.HSCopyMarkup = HSCopyMarkup;
+}
 
 export default HSCopyMarkup;

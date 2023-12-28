@@ -1,6 +1,6 @@
 /*
  * HSToggleCount
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
@@ -9,6 +9,7 @@
 import { IToggleCountOptions, IToggleCount } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 class HSToggleCount
 	extends HSBasePlugin<IToggleCountOptions>
@@ -119,13 +120,10 @@ class HSToggleCount
 	}
 }
 
-// Init all toggle password
 declare global {
 	interface Window {
-		$hsToggleCountCollection: {
-			id: number;
-			element: HSToggleCount;
-		}[];
+		HSToggleCount: Function;
+		$hsToggleCountCollection: ICollectionItem<HSToggleCount>[];
 	}
 }
 
@@ -136,6 +134,8 @@ window.addEventListener('load', () => {
 	// console.log('Toggle count collection:', window.$hsToggleCountCollection);
 });
 
-module.exports.HSToggleCount = HSToggleCount;
+if (typeof window !== 'undefined') {
+	window.HSToggleCount = HSToggleCount;
+}
 
 export default HSToggleCount;

@@ -1,6 +1,6 @@
 /*
  * HSCarousel
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
@@ -9,6 +9,7 @@
 import { ICarousel, ICarouselOptions } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	private readonly inner: HTMLElement | null;
@@ -139,11 +140,11 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 
 		this.el.classList.add('init');
 
-		document.addEventListener('touchstart', (evt) => {
+		this.el.addEventListener('touchstart', (evt) => {
 			this.touchX.start = evt.changedTouches[0].screenX;
 		});
 
-		document.addEventListener('touchend', (evt) => {
+		this.el.addEventListener('touchend', (evt) => {
 			this.touchX.end = evt.changedTouches[0].screenX;
 
 			this.detectDirection();
@@ -314,13 +315,10 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	}
 }
 
-// Init all carousels
 declare global {
 	interface Window {
-		$hsCarouselCollection: {
-			id: number;
-			element: HSCarousel;
-		}[];
+		HSCarousel: Function;
+		$hsCarouselCollection: ICollectionItem<HSCarousel>[];
 	}
 }
 
@@ -339,6 +337,8 @@ window.addEventListener('resize', () => {
 	});
 });
 
-module.exports.HSCarousel = HSCarousel;
+if (typeof window !== 'undefined') {
+	window.HSCarousel = HSCarousel;
+}
 
 export default HSCarousel;

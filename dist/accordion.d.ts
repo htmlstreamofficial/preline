@@ -1,3 +1,4 @@
+
 export interface IAccordion {
 	options?: {};
 	show(): void;
@@ -13,22 +14,13 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	options: O;
 	events?: any;
 	constructor(el: E, options: O, events?: any);
-	isIOS(): boolean;
-	isIpadOS(): boolean;
 	createCollection(collection: any[], element: any): void;
 	fireEvent(evt: string, payload?: any): any;
-	dispatch(evt: string, element: any, payload?: any): void;
 	on(evt: string, cb: Function): void;
-	afterTransition(el: HTMLElement, callback: Function): void;
-	onTransitionEnd(el: HTMLElement, cb: Function): void;
-	getClassProperty(el: HTMLElement, prop: string, val?: string): string;
-	getClassPropertyAlt(el: HTMLElement, prop?: string, val?: string): string;
-	htmlToElement(html: string): HTMLElement;
-	classToClassList(classes: string, target: HTMLElement, splitter?: string): void;
-	debounce(func: Function, timeout?: number): (...args: any[]) => void;
-	checkIfFormElement(target: HTMLElement): boolean;
-	static isEnoughSpace(el: HTMLElement, toggle: HTMLElement, preferredPosition?: "top" | "bottom" | "auto", space?: number, wrapper?: HTMLElement | null): boolean;
-	static isParentOrElementHidden(element: any): any;
+}
+export interface ICollectionItem<T> {
+	id: string | number;
+	element: T;
 }
 declare class HSAccordion extends HSBasePlugin<{}> implements IAccordion {
 	private readonly toggle;
@@ -39,10 +31,7 @@ declare class HSAccordion extends HSBasePlugin<{}> implements IAccordion {
 	private init;
 	show(): boolean;
 	hide(): boolean;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | {
-		id: number;
-		element: HSAccordion;
-	};
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSAccordion>;
 	static show(target: HTMLElement): void;
 	static hide(target: HTMLElement): void;
 	static autoInit(): void;

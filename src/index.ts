@@ -1,43 +1,20 @@
-const CopyMarkup = require('./plugins/copy-markup');
-
-const Accordion = require('./plugins/accordion');
-const Carousel = require('./plugins/carousel');
-const Collapse = require('./plugins/collapse');
-const Dropdown = require('./plugins/dropdown');
-const InputNumber = require('./plugins/input-number');
-const Overlay = require('./plugins/overlay');
-const PinInput = require('./plugins/pin-input');
-const RemoveElement = require('./plugins/remove-element');
-const SearchByJson = require('./plugins/search-by-json');
-const Scrollspy = require('./plugins/scrollspy');
-const Select = require('./plugins/select');
-const Stepper = require('./plugins/stepper');
-const StrongPassword = require('./plugins/strong-password');
-const Tabs = require('./plugins/tabs');
-const ThemeSwitch = require('./plugins/theme-switch');
-const ToggleCount = require('./plugins/toggle-count');
-const TogglePassword = require('./plugins/toggle-password');
-const Tooltip = require('./plugins/tooltip');
-
-module.exports = {
-	HSCopyMarkup: CopyMarkup.HSCopyMarkup,
-	
-	HSAccordion: Accordion.HSAccordion,
-	HSCarousel: Carousel.HSCarousel,
-	HSCollapse: Collapse.HSCollapse,
-	HSDropdown: Dropdown.HSDropdown,
-	HSInputNumber: InputNumber.HSInputNumber,
-	HSOverlay: Overlay.HSOverlay,
-	HSPinInput: PinInput.HSPinInput,
-	HSRemoveElement: RemoveElement.HSRemoveElement,
-	HSSearchByJson: SearchByJson.HSSearchByJson,
-	HSScrollspy: Scrollspy.HSScrollspy,
-	HSSelect: Select.HSSelect,
-	HSStepper: Stepper.HSStepper,
-	HSStrongPassword: StrongPassword.HSStrongPassword,
-	HSTabs: Tabs.HSTabs,
-	HSThemeSwitch: ThemeSwitch.HSThemeSwitch,
-	HSToggleCount: ToggleCount.HSToggleCount,
-	HSTogglePassword: TogglePassword.HSTogglePassword,
-	HSTooltip: Tooltip.HSTooltip,
-};
+export { default as HSCopyMarkup } from './plugins/copy-markup';
+export { default as HSAccordion } from './plugins/accordion';
+export { default as HSCarousel } from './plugins/carousel';
+export { default as HSCollapse } from './plugins/collapse';
+export { default as HSDropdown } from './plugins/dropdown';
+export { default as HSInputNumber } from './plugins/input-number';
+export { default as HSOverlay } from './plugins/overlay';
+export { default as HSPinInput } from './plugins/pin-input';
+export { default as HSRemoveElement } from './plugins/remove-element';
+export { default as HSSearchByJson } from './plugins/search-by-json';
+export { default as HSScrollspy } from './plugins/scrollspy';
+export { default as HSSelect } from './plugins/select';
+export { default as HSStepper } from './plugins/stepper';
+export { default as HSStrongPassword } from './plugins/strong-password';
+export { default as HSTabs } from './plugins/tabs';
+export { default as HSThemeSwitch } from './plugins/theme-switch';
+export { default as HSToggleCount } from './plugins/toggle-count';
+export { default as HSTogglePassword } from './plugins/toggle-password';
+export { default as HSTooltip } from './plugins/tooltip';
+export { default as HSStaticMethods } from './static';

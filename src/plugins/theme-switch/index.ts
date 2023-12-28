@@ -1,14 +1,14 @@
 /*
  * HSThemeSwitch
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
-
 import { IThemeSwitchOptions, IThemeSwitch } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 class HSThemeSwitch
 	extends HSBasePlugin<IThemeSwitchOptions>
@@ -37,12 +37,7 @@ class HSThemeSwitch
 	private init() {
 		this.createCollection(window.$hsThemeSwitchCollection, this);
 
-		if (
-			!Array.from(document.querySelector('html').classList).some((cl) =>
-				this.themeSet.includes(cl),
-			)
-		)
-			this.setAppearance();
+		if (this.theme !== 'default') this.setAppearance();
 	}
 
 	private setResetStyles() {
@@ -131,13 +126,10 @@ class HSThemeSwitch
 	}
 }
 
-// Init all toggle password
 declare global {
 	interface Window {
-		$hsThemeSwitchCollection: {
-			id: number;
-			element: HSThemeSwitch;
-		}[];
+		HSThemeSwitch: Function;
+		$hsThemeSwitchCollection: ICollectionItem<HSThemeSwitch>[];
 	}
 }
 
@@ -149,14 +141,18 @@ window.addEventListener('load', () => {
 });
 
 if (window.$hsThemeSwitchCollection) {
-	window.addEventListener('on-hs-appearance-change', (evt) => {
-		window.$hsThemeSwitchCollection.forEach((el) => {
-			// @ts-ignore
-			(el.element.el as HTMLInputElement).checked = evt.detail === 'dark';
-		});
-	});
+	window.addEventListener(
+		'on-hs-appearance-change',
+		(evt: Event & { detail: string }) => {
+			window.$hsThemeSwitchCollection.forEach((el) => {
+				(el.element.el as HTMLInputElement).checked = evt.detail === 'dark';
+			});
+		},
+	);
 }
 
-module.exports.HSThemeSwitch = HSThemeSwitch;
+if (typeof window !== 'undefined') {
+	window.HSThemeSwitch = HSThemeSwitch;
+}
 
 export default HSThemeSwitch;

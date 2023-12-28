@@ -1,10 +1,12 @@
 /*
  * HSTogglePassword
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
+
+import { debounce, htmlToElement, classToClassList } from '../../utils';
 
 import {
 	ISearchByJsonOptions,
@@ -14,6 +16,7 @@ import {
 } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 class HSSearchByJson
 	extends HSBasePlugin<ISearchByJsonOptions, HTMLInputElement>
@@ -73,7 +76,7 @@ class HSSearchByJson
 
 		this.el.addEventListener(
 			'input',
-			this.debounce((evt: InputEvent) => {
+			debounce((evt: InputEvent) => {
 				this.val = (evt.target as HTMLInputElement).value;
 
 				if (this.val.length > this.minChars) {
@@ -112,9 +115,9 @@ class HSSearchByJson
 	}
 
 	private buildDropdown() {
-		this.dropdown = this.htmlToElement(this.dropdownTemplate);
+		this.dropdown = htmlToElement(this.dropdownTemplate);
 		if (this.dropdownClasses)
-			this.classToClassList(this.dropdownClasses, this.dropdown);
+			classToClassList(this.dropdownClasses, this.dropdown);
 
 		this.el.after(this.dropdown);
 	}
@@ -123,7 +126,7 @@ class HSSearchByJson
 		this.dropdown.innerHTML = '';
 
 		this.result.forEach((el) => {
-			const link = this.htmlToElement(
+			const link = htmlToElement(
 				`<a class="block" href="${el.url}" target="_blank"></a>`,
 			);
 			link.append(this.itemTemplate(el));
@@ -144,24 +147,24 @@ class HSSearchByJson
 		const templateByType = this.dropdownItemTemplatesByType
 			? this.dropdownItemTemplatesByType.find(
 					(template) => template.type === el.type,
-			  )
+				)
 			: null;
 		const template = templateByType
-			? this.htmlToElement(templateByType.markup)
-			: this.htmlToElement(this.dropdownItemTemplate);
+			? htmlToElement(templateByType.markup)
+			: htmlToElement(this.dropdownItemTemplate);
 		if (this.dropdownItemClasses)
-			this.classToClassList(this.dropdownItemClasses, template);
+			classToClassList(this.dropdownItemClasses, template);
 		const title: HTMLElement = template.querySelector('[data-title]');
-		if (title) title.append(this.htmlToElement(`<span>${newTitle}</span>`));
-		else template.append(this.htmlToElement(`<span>${newTitle}</span>`));
+		if (title) title.append(htmlToElement(`<span>${newTitle}</span>`));
+		else template.append(htmlToElement(`<span>${newTitle}</span>`));
 		const description: HTMLElement =
 			template.querySelector('[data-description]');
 		if (description)
-			description.append(this.htmlToElement(`<span>${newDescription}</span>`));
+			description.append(htmlToElement(`<span>${newDescription}</span>`));
 		else if (!templateByType) {
-			const br = this.htmlToElement('<br />');
+			const br = htmlToElement('<br />');
 			template.append(br);
-			template.append(this.htmlToElement(`<span>${newDescription}</span>`));
+			template.append(htmlToElement(`<span>${newDescription}</span>`));
 		}
 
 		return template;
@@ -195,13 +198,10 @@ class HSSearchByJson
 	}
 }
 
-// Init all toggle password
 declare global {
 	interface Window {
-		$hsSearchByJsonCollection: {
-			id: number;
-			element: HSSearchByJson;
-		}[];
+		HSSearchByJson: Function;
+		$hsSearchByJsonCollection: ICollectionItem<HSSearchByJson>[];
 	}
 }
 
@@ -212,6 +212,8 @@ window.addEventListener('load', () => {
 	// console.log('Search by JSON collection:', window.$hsSearchByJsonCollection);
 });
 
-module.exports.HSSearchByJson = HSSearchByJson;
+if (typeof window !== 'undefined') {
+	window.HSSearchByJson = HSSearchByJson;
+}
 
 export default HSSearchByJson;

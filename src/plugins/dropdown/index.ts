@@ -1,20 +1,29 @@
 /*
  * HSDropdown
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
 
-import { IDropdown, IHTMLElementPopper } from './interfaces';
-
-import HSBasePlugin from '../base-plugin';
-
-import { POSITIONS, DROPDOWN_ACCESSIBILITY_KEY_SET } from '../../constants';
+import {
+	getClassProperty,
+	getClassPropertyAlt,
+	isIOS,
+	isIpadOS,
+	dispatch,
+	afterTransition,
+	menuSearchHistory,
+} from '../../utils';
+import { IMenuSearchHistory } from '../../utils/interfaces';
 
 import { createPopper, PositioningStrategy } from '@popperjs/core';
-import { menuSearchHistory } from '../../utils';
-import { IMenuSearchHistory } from '../../utils/interfaces';
+
+import { IDropdown, IHTMLElementPopper } from './interfaces';
+import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
+
+import { POSITIONS, DROPDOWN_ACCESSIBILITY_KEY_SET } from '../../constants';
 
 class HSDropdown
 	extends HSBasePlugin<{}, IHTMLElementPopper>
@@ -34,8 +43,8 @@ class HSDropdown
 			this.el.querySelector(':scope > .hs-dropdown-toggle') ||
 			(this.el.children[0] as HTMLElement);
 		this.menu = this.el.querySelector(':scope > .hs-dropdown-menu');
-		this.eventMode = this.getClassProperty(this.el, '--trigger', 'click');
-		this.closeMode = this.getClassProperty(this.el, '--auto-close', 'true');
+		this.eventMode = getClassProperty(this.el, '--trigger', 'click');
+		this.closeMode = getClassProperty(this.el, '--auto-close', 'true');
 		this.animationInProcess = false;
 
 		if (this.toggle && this.menu) this.init();
@@ -48,14 +57,14 @@ class HSDropdown
 
 		this.toggle.addEventListener('click', () => this.onClickHandler());
 
-		if (!this.isIOS() && !this.isIpadOS()) {
+		if (!isIOS() && !isIpadOS()) {
 			this.el.addEventListener('mouseenter', () => this.onMouseEnterHandler());
 			this.el.addEventListener('mouseleave', () => this.onMouseLeaveHandler());
 		}
 	}
 
 	resizeHandler() {
-		this.eventMode = this.getClassProperty(this.el, '--trigger', 'click');
+		this.eventMode = getClassProperty(this.el, '--trigger', 'click');
 	}
 
 	private onClickHandler() {
@@ -193,7 +202,7 @@ class HSDropdown
 		});
 
 		this.fireEvent('open', this.el);
-		this.dispatch('open.hs.dropdown', this.el, this.el);
+		dispatch('open.hs.dropdown', this.el, this.el);
 	}
 
 	public close(isAnimated = true) {
@@ -206,7 +215,7 @@ class HSDropdown
 			const el: HTMLElement =
 				this.el.querySelector('[data-hs-dropdown-transition]') || this.menu;
 
-			this.afterTransition(el, () => this.destroyPopper());
+			afterTransition(el, () => this.destroyPopper());
 		} else this.destroyPopper();
 
 		this.menu.style.margin = null;
@@ -214,7 +223,7 @@ class HSDropdown
 		this.el.classList.remove('open');
 
 		this.fireEvent('close', this.el);
-		this.dispatch('close.hs.dropdown', this.el, this.el);
+		dispatch('close.hs.dropdown', this.el, this.el);
 	}
 
 	public forceClearState() {
@@ -405,12 +414,12 @@ class HSDropdown
 						menu.querySelectorAll(
 							'a:not([hidden]), .hs-dropdown > button:not([hidden])',
 						),
-				  ).reverse()
+					).reverse()
 				: Array.from(
 						menu.querySelectorAll(
 							'a:not([hidden]), .hs-dropdown > button:not([hidden])',
 						),
-				  );
+					);
 
 			const links = preparedLinks.filter(
 				(el: any) => !el.classList.contains('disabled'),
@@ -499,18 +508,16 @@ class HSDropdown
 						el.element.menu
 							.closest('.hs-dropdown')
 							.parentElement.closest('.hs-dropdown') === parent,
-			  )
+				)
 			: window.$hsDropdownCollection.filter((el) =>
 					el.element.el.classList.contains('open'),
-			  );
+				);
 
 		if (
 			evtTarget &&
 			evtTarget.closest('.hs-dropdown') &&
-			window.HSStaticMethods.getClassPropertyAlt(
-				evtTarget.closest('.hs-dropdown'),
-				'--auto-close',
-			) === 'inside'
+			getClassPropertyAlt(evtTarget.closest('.hs-dropdown'), '--auto-close') ===
+				'inside'
 		) {
 			currentlyOpened = currentlyOpened.filter(
 				(el) => el.element.el !== evtTarget.closest('.hs-dropdown'),
@@ -542,13 +549,10 @@ class HSDropdown
 	}
 }
 
-// Init all dropdowns
 declare global {
 	interface Window {
-		$hsDropdownCollection: {
-			id: number;
-			element: HSDropdown;
-		}[];
+		HSDropdown: Function;
+		$hsDropdownCollection: ICollectionItem<HSDropdown>[];
 	}
 }
 
@@ -565,6 +569,8 @@ window.addEventListener('resize', () => {
 	window.$hsDropdownCollection.forEach((el) => el.element.resizeHandler());
 });
 
-module.exports.HSDropdown = HSDropdown;
+if (typeof window !== 'undefined') {
+	window.HSDropdown = HSDropdown;
+}
 
 export default HSDropdown;

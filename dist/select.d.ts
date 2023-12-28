@@ -1,3 +1,13 @@
+
+export interface ISingleOptionOptions {
+	description: string;
+	icon: string;
+}
+export interface ISingleOption {
+	title: string;
+	val: string;
+	options?: ISingleOptionOptions | null;
+}
 export interface ISelectOptions {
 	value?: string | string[];
 	isOpened?: boolean;
@@ -24,18 +34,22 @@ export interface ISelectOptions {
 	searchClasses?: string;
 	searchWrapperClasses?: string;
 	searchPlaceholder?: string;
-	searchNoItemsText?: string;
-	searchNoItemsClasses?: string;
+	searchNoResultText?: string | null;
+	searchNoResultClasses?: string | null;
 	optionTemplate?: string;
 	optionTag?: string;
 	optionClasses?: string;
 	descriptionClasses?: string;
 	iconClasses?: string;
+	isAddTagOnEnter?: boolean;
 }
 export interface ISelect {
 	options?: ISelectOptions;
+	destroy(): void;
 	open(): void;
 	close(): void;
+	addOption(items: ISingleOption | ISingleOption[]): void;
+	removeOption(values: string | string[]): void;
 	recalculateDirection(): void;
 }
 export interface IBasePlugin<O, E> {
@@ -48,22 +62,13 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	options: O;
 	events?: any;
 	constructor(el: E, options: O, events?: any);
-	isIOS(): boolean;
-	isIpadOS(): boolean;
 	createCollection(collection: any[], element: any): void;
 	fireEvent(evt: string, payload?: any): any;
-	dispatch(evt: string, element: any, payload?: any): void;
 	on(evt: string, cb: Function): void;
-	afterTransition(el: HTMLElement, callback: Function): void;
-	onTransitionEnd(el: HTMLElement, cb: Function): void;
-	getClassProperty(el: HTMLElement, prop: string, val?: string): string;
-	getClassPropertyAlt(el: HTMLElement, prop?: string, val?: string): string;
-	htmlToElement(html: string): HTMLElement;
-	classToClassList(classes: string, target: HTMLElement, splitter?: string): void;
-	debounce(func: Function, timeout?: number): (...args: any[]) => void;
-	checkIfFormElement(target: HTMLElement): boolean;
-	static isEnoughSpace(el: HTMLElement, toggle: HTMLElement, preferredPosition?: "top" | "bottom" | "auto", space?: number, wrapper?: HTMLElement | null): boolean;
-	static isParentOrElementHidden(element: any): any;
+}
+export interface ICollectionItem<T> {
+	id: string | number;
+	element: T;
 }
 declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	value: string | string[] | null;
@@ -90,6 +95,8 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly searchPlaceholder;
 	private readonly searchClasses;
 	private readonly searchWrapperClasses;
+	private searchNoResultText;
+	private searchNoResultClasses;
 	private readonly optionTag;
 	private readonly optionTemplate;
 	private readonly optionClasses;
@@ -105,7 +112,9 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private dropdown;
 	private searchWrapper;
 	private search;
+	private searchNoResult;
 	private selectOptions;
+	private readonly isAddTagOnEnter;
 	constructor(el: HTMLElement, options?: ISelectOptions);
 	private init;
 	private build;
@@ -122,8 +131,12 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private buildDropdown;
 	private buildSearch;
 	private buildOption;
+	private destroyOption;
+	private buildOriginalOption;
+	private destroyOriginalOption;
 	private onSelectOption;
 	private addSelectOption;
+	private removeSelectOption;
 	private resetTagsInputField;
 	private clearSelections;
 	private setNewValue;
@@ -132,13 +145,15 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private selectMultipleItems;
 	private unselectMultipleItems;
 	private searchOptions;
+	private eraseToggleIcon;
+	private eraseToggleTitle;
+	destroy(): void;
 	open(): boolean;
 	close(): boolean;
+	addOption(items: ISingleOption | ISingleOption[]): void;
+	removeOption(values: string | string[]): void;
 	recalculateDirection(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSSelect | {
-		id: number;
-		element: HSSelect;
-	};
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSSelect | ICollectionItem<HSSelect>;
 	static autoInit(): void;
 	static close(target: HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;

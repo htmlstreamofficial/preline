@@ -1,14 +1,17 @@
 /*
  * HSTogglePassword
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
 
+import { isFormElement, dispatch } from '../../utils';
+
 import { ITogglePasswordOptions, ITogglePassword } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 class HSTogglePassword
 	extends HSBasePlugin<ITogglePasswordOptions>
@@ -56,7 +59,7 @@ class HSTogglePassword
 		this.isShown = this.el.hasAttribute('type')
 			? (this.el as HTMLInputElement).checked
 			: false;
-		this.eventType = this.checkIfFormElement(this.el) ? 'change' : 'click';
+		this.eventType = isFormElement(this.el) ? 'change' : 'click';
 		this.isMultiple =
 			this.target.length > 1 &&
 			!!this.el.closest('[data-hs-toggle-password-group]');
@@ -81,7 +84,7 @@ class HSTogglePassword
 			}
 
 			this.fireEvent('toggle', this.target);
-			this.dispatch('toggle.hs.toggle-select', this.el, this.target);
+			dispatch('toggle.hs.toggle-select', this.el, this.target);
 		});
 	}
 
@@ -176,13 +179,10 @@ class HSTogglePassword
 	}
 }
 
-// Init all toggle password
 declare global {
 	interface Window {
-		$hsTogglePasswordCollection: {
-			id: number;
-			element: HSTogglePassword;
-		}[];
+		HSTogglePassword: Function;
+		$hsTogglePasswordCollection: ICollectionItem<HSTogglePassword>[];
 	}
 }
 
@@ -193,6 +193,8 @@ window.addEventListener('load', () => {
 	// console.log('Toggle password collection:', window.$hsTogglePasswordCollection);
 });
 
-module.exports.HSTogglePassword = HSTogglePassword;
+if (typeof window !== 'undefined') {
+	window.HSTogglePassword = HSTogglePassword;
+}
 
 export default HSTogglePassword;

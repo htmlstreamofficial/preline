@@ -1,3 +1,4 @@
+
 export interface IStepperOptions {
 	currentIndex?: number;
 	isCompleted?: boolean;
@@ -22,22 +23,13 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	options: O;
 	events?: any;
 	constructor(el: E, options: O, events?: any);
-	isIOS(): boolean;
-	isIpadOS(): boolean;
 	createCollection(collection: any[], element: any): void;
 	fireEvent(evt: string, payload?: any): any;
-	dispatch(evt: string, element: any, payload?: any): void;
 	on(evt: string, cb: Function): void;
-	afterTransition(el: HTMLElement, callback: Function): void;
-	onTransitionEnd(el: HTMLElement, cb: Function): void;
-	getClassProperty(el: HTMLElement, prop: string, val?: string): string;
-	getClassPropertyAlt(el: HTMLElement, prop?: string, val?: string): string;
-	htmlToElement(html: string): HTMLElement;
-	classToClassList(classes: string, target: HTMLElement, splitter?: string): void;
-	debounce(func: Function, timeout?: number): (...args: any[]) => void;
-	checkIfFormElement(target: HTMLElement): boolean;
-	static isEnoughSpace(el: HTMLElement, toggle: HTMLElement, preferredPosition?: "top" | "bottom" | "auto", space?: number, wrapper?: HTMLElement | null): boolean;
-	static isParentOrElementHidden(element: any): any;
+}
+export interface ICollectionItem<T> {
+	id: string | number;
+	element: T;
 }
 declare class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	private currentIndex;
@@ -111,10 +103,7 @@ declare class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	disableButtons(): void;
 	enableButtons(): void;
 	setErrorNavItem(n?: number): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSStepper | {
-		id: string | number;
-		element: HSStepper;
-	};
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSStepper | ICollectionItem<HSStepper>;
 	static autoInit(): void;
 }
 

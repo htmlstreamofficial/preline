@@ -1,10 +1,12 @@
 /*
  * HSInputNumber
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
+
+import { dispatch } from '../../utils';
 
 import { IInputNumberOptions, IInputNumber } from './interfaces';
 
@@ -99,7 +101,7 @@ class HSInputNumber
 		}
 
 		this.fireEvent('change', payload);
-		this.dispatch('change.hs.inputNumber', this.el, payload);
+		dispatch('change.hs.inputNumber', this.el, payload);
 	}
 
 	private disableButtons(mode = 'all') {
@@ -187,9 +189,9 @@ class HSInputNumber
 	}
 }
 
-// Init all toggle password
 declare global {
 	interface Window {
+		HSInputNumber: Function;
 		$hsInputNumberCollection: {
 			id: number;
 			element: HSInputNumber;
@@ -204,6 +206,8 @@ window.addEventListener('load', () => {
 	// console.log('Input number collection:', window.$hsInputNumberCollection);
 });
 
-module.exports.HSInputNumber = HSInputNumber;
+if (typeof window !== 'undefined') {
+	window.HSInputNumber = HSInputNumber;
+}
 
 export default HSInputNumber;

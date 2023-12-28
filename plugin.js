@@ -1,6 +1,6 @@
 /*
  * Plugin
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @requires: tailwindcss ^3.1.2
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
@@ -394,6 +394,32 @@ module.exports = plugin(function ({ addVariant, e }) {
 				)}`;
 			});
 		}
+	]);
+
+	addVariant('hs-success', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.success .${e(`hs-success${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.success.${e(`hs-success${separator}${className}`)}`;
+			});
+		},
+	]);
+
+	addVariant('hs-error', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.error .${e(`hs-error${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.error.${e(`hs-error${separator}${className}`)}`;
+			});
+		},
 	]);
 
 	addVariant('hs-default-mode-active', ({ modifySelectors, separator }) => {

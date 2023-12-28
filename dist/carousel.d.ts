@@ -1,3 +1,4 @@
+
 export interface ICarouselOptions {
 	currentIndex: number;
 	loadingClasses?: string | string[];
@@ -22,22 +23,13 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	options: O;
 	events?: any;
 	constructor(el: E, options: O, events?: any);
-	isIOS(): boolean;
-	isIpadOS(): boolean;
 	createCollection(collection: any[], element: any): void;
 	fireEvent(evt: string, payload?: any): any;
-	dispatch(evt: string, element: any, payload?: any): void;
 	on(evt: string, cb: Function): void;
-	afterTransition(el: HTMLElement, callback: Function): void;
-	onTransitionEnd(el: HTMLElement, cb: Function): void;
-	getClassProperty(el: HTMLElement, prop: string, val?: string): string;
-	getClassPropertyAlt(el: HTMLElement, prop?: string, val?: string): string;
-	htmlToElement(html: string): HTMLElement;
-	classToClassList(classes: string, target: HTMLElement, splitter?: string): void;
-	debounce(func: Function, timeout?: number): (...args: any[]) => void;
-	checkIfFormElement(target: HTMLElement): boolean;
-	static isEnoughSpace(el: HTMLElement, toggle: HTMLElement, preferredPosition?: "top" | "bottom" | "auto", space?: number, wrapper?: HTMLElement | null): boolean;
-	static isParentOrElementHidden(element: any): any;
+}
+export interface ICollectionItem<T> {
+	id: string | number;
+	element: T;
 }
 declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	private readonly inner;
@@ -70,10 +62,7 @@ declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICaro
 	goToPrev(): void;
 	goToNext(): void;
 	goTo(i: number): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSCarousel | {
-		id: number;
-		element: HSCarousel;
-	};
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSCarousel | ICollectionItem<HSCarousel>;
 	static autoInit(): void;
 }
 

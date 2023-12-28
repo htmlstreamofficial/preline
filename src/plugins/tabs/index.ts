@@ -1,14 +1,17 @@
 /*
  * HSTabs
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
 
+import { dispatch } from '../../utils';
+
 import { ITabs } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 import { TABS_ACCESSIBILITY_KEY_SET } from '../../constants';
 
@@ -73,7 +76,7 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 			prev: this.prevContentId,
 			current: this.currentContentId,
 		});
-		this.dispatch('change.hs.tab', el, {
+		dispatch('change.hs.tab', el, {
 			el,
 			prev: this.prevContentId,
 			current: this.currentContentId,
@@ -228,13 +231,10 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 	}
 }
 
-// Init all tabs
 declare global {
 	interface Window {
-		$hsTabsCollection: {
-			id: number;
-			element: HSTabs;
-		}[];
+		HSTabs: Function;
+		$hsTabsCollection: ICollectionItem<HSTabs>[];
 	}
 }
 
@@ -245,6 +245,8 @@ window.addEventListener('load', () => {
 	// console.log('Tabs collection:', window.$hsTabsCollection);
 });
 
-module.exports.HSTabs = HSTabs;
+if (typeof window !== 'undefined') {
+	window.HSTabs = HSTabs;
+}
 
 export default HSTabs;

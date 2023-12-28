@@ -1,14 +1,17 @@
 /*
  * HSAccordion
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
 
+import { dispatch, afterTransition } from '../../utils';
+
 import { IAccordion } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 class HSAccordion extends HSBasePlugin<{}> implements IAccordion {
 	private readonly toggle: HTMLElement | null;
@@ -66,12 +69,12 @@ class HSAccordion extends HSBasePlugin<{}> implements IAccordion {
 			this.content.style.height = `${this.content.scrollHeight}px`;
 		});
 
-		this.afterTransition(this.content, () => {
+		afterTransition(this.content, () => {
 			this.content.style.display = 'block';
 			this.content.style.height = '';
 
 			this.fireEvent('open', this.el);
-			this.dispatch('open.hs.accordion', this.el, this.el);
+			dispatch('open.hs.accordion', this.el, this.el);
 		});
 	}
 
@@ -85,12 +88,12 @@ class HSAccordion extends HSBasePlugin<{}> implements IAccordion {
 			this.content.style.height = '0';
 		});
 
-		this.afterTransition(this.content, () => {
+		afterTransition(this.content, () => {
 			this.content.style.display = '';
 			this.content.style.height = '0';
 
 			this.fireEvent('close', this.el);
-			this.dispatch('close.hs.accordion', this.el, this.el);
+			dispatch('close.hs.accordion', this.el, this.el);
 		});
 	}
 
@@ -164,13 +167,10 @@ class HSAccordion extends HSBasePlugin<{}> implements IAccordion {
 	}
 }
 
-// Init all accordions
 declare global {
 	interface Window {
-		$hsAccordionCollection: {
-			id: number;
-			element: HSAccordion;
-		}[];
+		HSAccordion: Function;
+		$hsAccordionCollection: ICollectionItem<HSAccordion>[];
 	}
 }
 
@@ -181,6 +181,8 @@ window.addEventListener('load', () => {
 	// console.log('Accordion collection:', window.$hsAccordionCollection);
 });
 
-module.exports.HSAccordion = HSAccordion;
+if (typeof window !== 'undefined') {
+	window.HSAccordion = HSAccordion;
+}
 
 export default HSAccordion;

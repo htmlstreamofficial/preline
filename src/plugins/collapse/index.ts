@@ -1,14 +1,17 @@
 /*
  * HSCollapse
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
 
+import { dispatch, afterTransition } from '../../utils';
+
 import { ICollapse } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 	private readonly contentId: string | null;
@@ -62,11 +65,11 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 			this.content.style.height = `${this.content.scrollHeight}px`;
 		});
 
-		this.afterTransition(this.content, () => {
+		afterTransition(this.content, () => {
 			this.content.style.height = '';
 
 			this.fireEvent('open', this.el);
-			this.dispatch('open.hs.collapse', this.el, this.el);
+			dispatch('open.hs.collapse', this.el, this.el);
 
 			this.animationInProcess = false;
 		});
@@ -87,12 +90,12 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 
 		this.content.classList.remove('open');
 
-		this.afterTransition(this.content, () => {
+		afterTransition(this.content, () => {
 			this.content.classList.add('hidden');
 			this.content.style.height = '';
 
 			this.fireEvent('hide', this.el);
-			this.dispatch('hide.hs.collapse', this.el, this.el);
+			dispatch('hide.hs.collapse', this.el, this.el);
 
 			this.animationInProcess = false;
 		});
@@ -172,13 +175,10 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 	}
 }
 
-// Init all collapses
 declare global {
 	interface Window {
-		$hsCollapseCollection: {
-			id: number;
-			element: HSCollapse;
-		}[];
+		HSCollapse: Function;
+		$hsCollapseCollection: ICollectionItem<HSCollapse>[];
 	}
 }
 
@@ -189,6 +189,8 @@ window.addEventListener('load', () => {
 	// console.log('Collapse collection:', window.$hsCollapseCollection);
 });
 
-module.exports.HSCollapse = HSCollapse;
+if (typeof window !== 'undefined') {
+	window.HSCollapse = HSCollapse;
+}
 
 export default HSCollapse;

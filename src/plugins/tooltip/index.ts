@@ -1,18 +1,20 @@
 /*
  * HSTooltip
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
 
+import { createPopper, PositioningStrategy, Instance } from '@popperjs/core';
+import { getClassProperty, dispatch, afterTransition } from '../../utils';
+
 import { ITooltip } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 import { POSITIONS } from '../../constants';
-
-import { createPopper, PositioningStrategy, Instance } from '@popperjs/core';
 
 class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	private readonly toggle: HTMLElement | null;
@@ -29,14 +31,14 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 		if (this.el) {
 			this.toggle = this.el.querySelector('.hs-tooltip-toggle') || this.el;
 			this.content = this.el.querySelector('.hs-tooltip-content');
-			this.eventMode = this.getClassProperty(this.el, '--trigger') || 'hover';
-			this.preventPopper = this.getClassProperty(
+			this.eventMode = getClassProperty(this.el, '--trigger') || 'hover';
+			this.preventPopper = getClassProperty(
 				this.el,
 				'--prevent-popper',
 				'false',
 			);
-			this.placement = this.getClassProperty(this.el, '--placement');
-			this.strategy = this.getClassProperty(
+			this.placement = getClassProperty(this.el, '--placement');
+			this.strategy = getClassProperty(
 				this.el,
 				'--strategy',
 			) as PositioningStrategy;
@@ -136,7 +138,7 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 			this.el.classList.add('show');
 
 			this.fireEvent('show', this.el);
-			this.dispatch('show.hs.tooltip', this.el, this.el);
+			dispatch('show.hs.tooltip', this.el, this.el);
 		});
 	}
 
@@ -157,9 +159,9 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 		}
 
 		this.fireEvent('hide', this.el);
-		this.dispatch('hide.hs.tooltip', this.el, this.el);
+		dispatch('hide.hs.tooltip', this.el, this.el);
 
-		this.afterTransition(this.content, () => {
+		afterTransition(this.content, () => {
 			if (this.el.classList.contains('show')) return false;
 
 			this.content.classList.add('hidden');
@@ -238,13 +240,10 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	}
 }
 
-// Init all tooltips and popovers
 declare global {
 	interface Window {
-		$hsTooltipCollection: {
-			id: number;
-			element: HSTooltip;
-		}[];
+		HSTooltip: Function;
+		$hsTooltipCollection: ICollectionItem<HSTooltip>[];
 	}
 }
 
@@ -255,6 +254,8 @@ window.addEventListener('load', () => {
 	// console.log('Tooltip collection:', window.$hsTooltipCollection);
 });
 
-module.exports.HSTooltip = HSTooltip;
+if (typeof window !== 'undefined') {
+	window.HSTooltip = HSTooltip;
+}
 
 export default HSTooltip;

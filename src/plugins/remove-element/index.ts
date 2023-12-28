@@ -1,14 +1,17 @@
 /*
  * HSRemoveElement
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
 
+import { afterTransition } from '../../utils';
+
 import { IRemoveElementOptions, IRemoveElement } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 class HSRemoveElement
 	extends HSBasePlugin<IRemoveElementOptions>
@@ -47,7 +50,7 @@ class HSRemoveElement
 
 		this.removeTarget.classList.add(this.removeTargetAnimationClass);
 
-		this.afterTransition(this.removeTarget, () => {
+		afterTransition(this.removeTarget, () => {
 			this.removeTarget.remove();
 		});
 	}
@@ -70,13 +73,10 @@ class HSRemoveElement
 	}
 }
 
-// Init all remove elements
 declare global {
 	interface Window {
-		$hsRemoveElementCollection: {
-			id: number;
-			element: HSRemoveElement;
-		}[];
+		HSRemoveElement: Function;
+		$hsRemoveElementCollection: ICollectionItem<HSRemoveElement>[];
 	}
 }
 
@@ -87,6 +87,8 @@ window.addEventListener('load', () => {
 	// console.log('Remove element collection:', window.$hsRemoveElementCollection);
 });
 
-module.exports.HSRemoveElement = HSRemoveElement;
+if (typeof window !== 'undefined') {
+	window.HSRemoveElement = HSRemoveElement;
+}
 
 export default HSRemoveElement;

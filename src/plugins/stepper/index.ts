@@ -1,14 +1,17 @@
 /*
  * HSStepper
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
 
+import { dispatch } from '../../utils';
+
 import { IStepperOptions, IStepper, IStepperItem } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	private currentIndex: number | null;
@@ -142,7 +145,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		el.classList.add('active');
 
 		this.fireEvent('active', this.currentIndex);
-		this.dispatch('active.hs.stepper', this.el, this.currentIndex);
+		dispatch('active.hs.stepper', this.el, this.currentIndex);
 	}
 
 	private getNavItem(n = this.currentIndex) {
@@ -348,7 +351,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 			this.changeTextAndDisableCompleteButtonIfStepCompleted();
 
 		this.fireEvent('back', this.currentIndex);
-		this.dispatch('back.hs.stepper', this.el, this.currentIndex);
+		dispatch('back.hs.stepper', this.el, this.currentIndex);
 	}
 
 	private checkForTheFirstStep() {
@@ -379,7 +382,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 
 		this.nextBtn.addEventListener('click', () => {
 			this.fireEvent('beforeNext', this.currentIndex);
-			this.dispatch('beforeNext.hs.stepper', this.el, this.currentIndex);
+			dispatch('beforeNext.hs.stepper', this.el, this.currentIndex);
 
 			if (this.getNavItem(this.currentIndex)?.isProcessed) {
 				this.disableAll();
@@ -431,7 +434,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		this.showCompleteStepButton();
 
 		this.fireEvent('next', this.currentIndex);
-		this.dispatch('next.hs.stepper', this.el, this.currentIndex);
+		dispatch('next.hs.stepper', this.el, this.currentIndex);
 	}
 
 	private removeOptionalClasses() {
@@ -504,7 +507,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		this.handleNextButtonClick();
 
 		this.fireEvent('skip', this.currentIndex);
-		this.dispatch('skip.hs.stepper', this.el, this.currentIndex);
+		dispatch('skip.hs.stepper', this.el, this.currentIndex);
 	}
 
 	// complete
@@ -574,7 +577,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		this.setCompleteItem();
 
 		this.fireEvent('complete', this.currentIndex);
-		this.dispatch('complete.hs.stepper', this.el, this.currentIndex);
+		dispatch('complete.hs.stepper', this.el, this.currentIndex);
 
 		this.handleNextButtonClick(false);
 		this.showFinishButton();
@@ -649,7 +652,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		}
 
 		this.fireEvent('finish', this.currentIndex);
-		this.dispatch('finish.hs.stepper', this.el, this.currentIndex);
+		dispatch('finish.hs.stepper', this.el, this.currentIndex);
 	}
 
 	// reset
@@ -702,7 +705,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		this.isCompleted = false;
 
 		this.fireEvent('reset', this.currentIndex);
-		this.dispatch('reset.hs.stepper', this.el, this.currentIndex);
+		dispatch('reset.hs.stepper', this.el, this.currentIndex);
 	}
 
 	// Public methods
@@ -782,13 +785,10 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	}
 }
 
-// Init all steppers
 declare global {
 	interface Window {
-		$hsStepperCollection: {
-			id: string | number;
-			element: HSStepper;
-		}[];
+		HSStepper: Function;
+		$hsStepperCollection: ICollectionItem<HSStepper>[];
 	}
 }
 
@@ -799,6 +799,8 @@ window.addEventListener('load', () => {
 	// console.log('Stepper collection:', window.$hsStepperCollection);
 });
 
-module.exports.HSStepper = HSStepper;
+if (typeof window !== 'undefined') {
+	window.HSStepper = HSStepper;
+}
 
 export default HSStepper;

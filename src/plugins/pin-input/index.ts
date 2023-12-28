@@ -1,14 +1,17 @@
 /*
  * HSPinInput
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
 
+import { dispatch } from '../../utils';
+
 import { IPinInputOptions, IPinInput } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
 	private items: NodeListOf<HTMLElement> | null;
@@ -107,7 +110,7 @@ class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
 				const payload = { currentValue: this.currentValue };
 
 				this.fireEvent('completed', payload);
-				this.dispatch('completed.hs.pinInput', this.el, payload);
+				dispatch('completed.hs.pinInput', this.el, payload);
 			}
 
 			this.toggleCompleted();
@@ -178,13 +181,10 @@ class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
 	}
 }
 
-// Init all toggle password
 declare global {
 	interface Window {
-		$hsPinInputCollection: {
-			id: number;
-			element: HSPinInput;
-		}[];
+		HSPinInput: Function;
+		$hsPinInputCollection: ICollectionItem<HSPinInput>[];
 	}
 }
 
@@ -195,6 +195,8 @@ window.addEventListener('load', () => {
 	// console.log('PIN input collection:', window.$hsPinInputCollection);
 });
 
-module.exports.HSPinInput = HSPinInput;
+if (typeof window !== 'undefined') {
+	window.HSPinInput = HSPinInput;
+}
 
 export default HSPinInput;

@@ -1,14 +1,17 @@
 /*
  * HSScrollspy
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
 
+import { getClassProperty, dispatch } from '../../utils';
+
 import { IScrollspy } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 	private activeSection: HTMLElement | null;
@@ -68,17 +71,16 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 
 	private update(evt: Event, section: HTMLElement) {
 		const globalOffset = parseInt(
-			this.getClassProperty(this.el, '--scrollspy-offset', '0'),
+			getClassProperty(this.el, '--scrollspy-offset', '0'),
 		);
 		const userOffset =
-			parseInt(this.getClassProperty(section, '--scrollspy-offset')) ||
-			globalOffset;
+			parseInt(getClassProperty(section, '--scrollspy-offset')) || globalOffset;
 		const scrollableParentOffset =
 			evt.target === document
 				? 0
 				: parseInt(
 						String((evt.target as HTMLElement).getBoundingClientRect().top),
-				  );
+					);
 		const topOffset =
 			parseInt(String(section.getBoundingClientRect().top)) -
 			userOffset -
@@ -116,11 +118,10 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 		const targetId = link.getAttribute('href');
 		const target: HTMLElement = document.querySelector(targetId);
 		const globalOffset = parseInt(
-			this.getClassProperty(this.el, '--scrollspy-offset', '0'),
+			getClassProperty(this.el, '--scrollspy-offset', '0'),
 		);
 		const userOffset =
-			parseInt(this.getClassProperty(target, '--scrollspy-offset')) ||
-			globalOffset;
+			parseInt(getClassProperty(target, '--scrollspy-offset')) || globalOffset;
 		const scrollableParentOffset =
 			this.scrollable === document
 				? 0
@@ -140,7 +141,7 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 		};
 
 		const beforeScroll = this.fireEvent('beforeScroll', this.el);
-		this.dispatch('beforeScroll.hs.scrollspy', this.el, this.el);
+		dispatch('beforeScroll.hs.scrollspy', this.el, this.el);
 
 		if (beforeScroll instanceof Promise) beforeScroll.then(() => scrollFn());
 		else scrollFn();
@@ -177,13 +178,10 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 	}
 }
 
-// Init all scrollspy
 declare global {
 	interface Window {
-		$hsScrollspyCollection: {
-			id: number;
-			element: HSScrollspy;
-		}[];
+		HSScrollspy: Function;
+		$hsScrollspyCollection: ICollectionItem<HSScrollspy>[];
 	}
 }
 
@@ -194,6 +192,8 @@ window.addEventListener('load', () => {
 	// console.log('Scrollspy collection:', window.$hsScrollspyCollection);
 });
 
-module.exports.HSScrollspy = HSScrollspy;
+if (typeof window !== 'undefined') {
+	window.HSScrollspy = HSScrollspy;
+}
 
 export default HSScrollspy;

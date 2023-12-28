@@ -1,8 +1,8 @@
 {
 	"name": "preline",
-	"version": "2.0.1",
+	"version": "2.0.3",
 	"description": "Preline UI is an open-source set of prebuilt UI components based on the utility-first Tailwind CSS framework.",
-	"main": "dist/preline.js",
+	"main": "index.js",
 	"repository": "https://github.com/htmlstreamofficial/preline.git",
 	"homepage": "https://preline.co",
 	"keywords": [
@@ -39,18 +39,18 @@
 		"access": "public"
 	},
 	"scripts": {
-		"watch": "webpack --config-name regular",
-		"obfuscate": "webpack --config-name obfuscate",
-		"pretty": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\""
+		"watch": "webpack",
+		"pretty": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
+		"generate-dts": "node node-scripts/generate-dts.js"
 	},
 	"devDependencies": {
-		"javascript-obfuscator": "^4.0.2",
+		"dts-bundle-generator": "^9.0.0",
 		"prettier": "^3.0.0",
 		"source-map-loader": "^4.0.1",
+		"terser-webpack-plugin": "^5.3.9",
 		"ts-loader": "^9.4.2",
 		"typescript": "^5.0.2",
-		"webpack-cli": "^5.0.1",
-		"webpack-obfuscator": "^3.5.1"
+		"webpack-cli": "^5.0.1"
 	},
 	"dependencies": {
 		"@popperjs/core": "^2.11.2"

@@ -1,14 +1,22 @@
 /*
  * HSStrongPassword
- * @version: 2.0.1
+ * @version: 2.0.3
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
 
+import {
+	isEnoughSpace,
+	dispatch,
+	htmlToElement,
+	classToClassList,
+} from '../../utils';
+
 import { IStrongPasswordOptions, IStrongPassword } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 class HSStrongPassword
 	extends HSBasePlugin<IStrongPasswordOptions>
@@ -91,11 +99,11 @@ class HSStrongPassword
 
 	private buildStrips() {
 		this.el.innerHTML = '';
-		
+
 		if (this.stripClasses) {
 			for (let i = 0; i < this.availableChecks.length; i++) {
-				const newStrip = this.htmlToElement('<div></div>');
-				this.classToClassList(this.stripClasses, newStrip);
+				const newStrip = htmlToElement('<div></div>');
+				classToClassList(this.stripClasses, newStrip);
 
 				this.el.append(newStrip);
 			}
@@ -276,7 +284,7 @@ class HSStrongPassword
 		this.hideStrips(strength);
 
 		this.fireEvent('change', payload);
-		this.dispatch('change.hs.strongPassword', this.el, payload);
+		dispatch('change.hs.strongPassword', this.el, payload);
 	}
 
 	private hideStrips(qty: number) {
@@ -289,7 +297,7 @@ class HSStrongPassword
 	// Public methods
 	public recalculateDirection() {
 		if (
-			HSBasePlugin.isEnoughSpace(
+			isEnoughSpace(
 				this.hints as HTMLElement,
 				this.target as HTMLInputElement,
 				'bottom',
@@ -342,13 +350,10 @@ class HSStrongPassword
 	}
 }
 
-// Init all carousels
 declare global {
 	interface Window {
-		$hsStrongPasswordCollection: {
-			id: number;
-			element: HSStrongPassword;
-		}[];
+		HSStrongPassword: Function;
+		$hsStrongPasswordCollection: ICollectionItem<HSStrongPassword>[];
 	}
 }
 
@@ -369,6 +374,8 @@ document.addEventListener('scroll', () => {
 	if (target) target.element.recalculateDirection();
 });
 
-module.exports.HSStrongPassword = HSStrongPassword;
+if (typeof window !== 'undefined') {
+	window.HSStrongPassword = HSStrongPassword;
+}
 
 export default HSStrongPassword;

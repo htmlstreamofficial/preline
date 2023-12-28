@@ -47,3 +47,14 @@ export const SELECT_ACCESSIBILITY_KEY_SET = [
 	'Enter',
 	'Tab',
 ];
+
+export const COMBO_BOX_ACCESSIBILITY_KEY_SET = [
+	'ArrowUp',
+	'ArrowLeft',
+	'ArrowDown',
+	'ArrowRight',
+	'Home',
+	'End',
+	'Escape',
+	'Enter',
+];
