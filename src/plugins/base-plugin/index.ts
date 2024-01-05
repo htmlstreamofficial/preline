@@ -22,6 +22,7 @@ export default class HSBasePlugin<O, E = HTMLElement>
 	}
 
 	public createCollection(collection: any[], element: any) {
+		if (!collection) collection = [];
 		collection.push({
 			id: element?.el?.id || collection.length + 1,
 			element,
