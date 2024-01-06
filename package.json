@@ -2,8 +2,8 @@
 	"name": "preline",
 	"version": "2.0.3",
 	"description": "Preline UI is an open-source set of prebuilt UI components based on the utility-first Tailwind CSS framework.",
-	"main": "src/index.ts",
-	"type": "module",
+	"main": "index.js",
+	"module": "./src/index.ts",
 	"repository": "https://github.com/htmlstreamofficial/preline.git",
 	"homepage": "https://preline.co",
 	"keywords": [
@@ -48,6 +48,7 @@
 		"dts-bundle-generator": "^9.0.0",
 		"prettier": "^3.0.0",
 		"source-map-loader": "^4.0.1",
+		"tailwindcss": "^3.4.1",
 		"terser-webpack-plugin": "^5.3.9",
 		"ts-loader": "^9.4.2",
 		"typescript": "^5.0.2",
