@@ -124,7 +124,7 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 		if (!window.$hsCollapseCollection) window.$hsCollapseCollection = [];
 
 		document
-			.querySelectorAll('.hs-collapse-toggle:not(.--prevent-on-load-init)')
+			.querySelectorAll('.hs-collapse-toggle:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsCollapseCollection.find(

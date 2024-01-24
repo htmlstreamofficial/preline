@@ -332,9 +332,7 @@ class HSStrongPassword
 			window.$hsStrongPasswordCollection = [];
 
 		document
-			.querySelectorAll(
-				'[data-hs-strong-password]:not(.--prevent-on-load-init)',
-			)
+			.querySelectorAll('[data-hs-strong-password]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsStrongPasswordCollection.find(

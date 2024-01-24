@@ -303,7 +303,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		if (!window.$hsCarouselCollection) window.$hsCarouselCollection = [];
 
 		document
-			.querySelectorAll('[data-hs-carousel]:not(.--prevent-on-load-init)')
+			.querySelectorAll('[data-hs-carousel]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsCarouselCollection.find(

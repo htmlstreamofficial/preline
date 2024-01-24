@@ -878,7 +878,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		if (!window.$hsSelectCollection) window.$hsSelectCollection = [];
 
 		document
-			.querySelectorAll('[data-hs-select]:not(.--prevent-on-load-init)')
+			.querySelectorAll('[data-hs-select]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsSelectCollection.find(

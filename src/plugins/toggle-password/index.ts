@@ -165,9 +165,7 @@ class HSTogglePassword
 			window.$hsTogglePasswordCollection = [];
 
 		document
-			.querySelectorAll(
-				'[data-hs-toggle-password]:not(.--prevent-on-load-init)',
-			)
+			.querySelectorAll('[data-hs-toggle-password]:not(.prevent-on-load-init)')
 			.forEach((el: HTMLInputElement) => {
 				if (
 					!window.$hsTogglePasswordCollection.find(
