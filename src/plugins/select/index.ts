@@ -335,6 +335,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			this.unselectMultipleItems();
 			this.setTagsItems();
 			this.selectMultipleItems();
+			this.fireEvent('change', this.value);
 		});
 
 		this.tagsItems.append(newItem);
@@ -363,8 +364,10 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 	private buildTagsInput() {
 		this.tagsInput = document.createElement('input');
-		(this.tagsInput as HTMLInputElement).placeholder = this.placeholder;
 
+		if (!this.value.length)
+			(this.tagsInput as HTMLInputElement).placeholder = this.placeholder;
+		
 		if (this.tagsInputClasses)
 			classToClassList(this.tagsInputClasses, this.tagsInput);
 
