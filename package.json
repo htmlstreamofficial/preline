@@ -41,7 +41,7 @@
 	"scripts": {
 		"watch": "webpack",
 		"pretty": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
-		"generate-dts": "node node-scripts/generate-dts.js"
+		"generate-dts": "dts-bundle-generator --config dts-config.js"
 	},
 	"devDependencies": {
 		"dts-bundle-generator": "^9.0.0",
