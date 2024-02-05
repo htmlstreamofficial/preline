@@ -351,7 +351,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			(this.value as string[]).forEach((val) => {
 				this.buildTagsItem(val);
 			});
-
+			(this.tagsInput as HTMLInputElement).placeholder = '';
 			(this.tagsInput as HTMLInputElement).readOnly = true;
 		}
 
