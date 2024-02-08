@@ -24,6 +24,7 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	private popperInstance: Instance;
 	private readonly placement: string;
 	private readonly strategy: PositioningStrategy;
+	private static currentTooltip: HSTooltip | null = null;
 
 	constructor(el: HTMLElement, options?: {}, events?: {}) {
 		super(el, options, events);
@@ -51,14 +52,17 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 		this.createCollection(window.$hsTooltipCollection, this);
 
 		if (this.eventMode === 'click') {
-			this.toggle.addEventListener('click', () => this.click());
+			this.toggle.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent immediate closing of popover
+                this.click();
+            });	
 		} else if (this.eventMode === 'focus') {
 			this.toggle.addEventListener('click', () => this.focus());
 		} else if (this.eventMode === 'hover') {
 			this.toggle.addEventListener('mouseenter', () => this.enter());
 			this.toggle.addEventListener('mouseleave', () => this.leave());
 		}
-
+		this.toggle.addEventListener('click', this.handleOutsideClick); // Add an event listener to the document to close the popover
 		if (this.preventPopper === 'false') this.buildPopper();
 	}
 
@@ -71,22 +75,54 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	}
 
 	private click() {
-		if (this.el.classList.contains('show')) return false;
+		// Close the current tooltip if one is open
+		if (HSTooltip.currentTooltip && HSTooltip.currentTooltip !== this) {
+			HSTooltip.currentTooltip.hide();
+		}
 
-		this.show();
+		// Toggle the visibility of the current tooltip
+		if (this.el.classList.contains('show')) {
+			// If already open, hide it
+			this.hide();
+			HSTooltip.currentTooltip = null; // Clear the current tooltip reference
+		} else {
+			// Otherwise, show it
+			this.show();
 
-		const handle = () => {
-			setTimeout(() => {
-				this.hide();
+			const handle = () => {
+				setTimeout(() => {
+					this.hide();
+					document.body.removeEventListener('click', handle); // Remove the event listener
+					document.body.removeEventListener('blur', handle);  // Remove the event listener
+				});
+			};
 
-				this.toggle.removeEventListener('click', handle, true);
-				this.toggle.removeEventListener('blur', handle, true);
+			document.body.addEventListener('click', handle);
+			document.body.addEventListener('blur', handle); 
+
+			// Add an event listener to the tooltip content to prevent closing when clicked inside
+			// With this when click inside content it will not close
+			// If you want to close it when click inside content you can remove this part
+			// The link or button inside content will work as expected
+			this.content?.addEventListener('click', (event) => {
+				event.stopPropagation(); // Prevent the click event from bubbling up
 			});
-		};
+			
 
-		this.toggle.addEventListener('click', handle, true);
-		this.toggle.addEventListener('blur', handle, true);
+			// Update the current tooltip reference
+			HSTooltip.currentTooltip = this;
+		}
 	}
+	
+	/**
+	 * Handles outside click events to hide the popover if clicked outside.
+	 * Used to ensure the popover is hidden when clicking outside of it.
+	 */
+	private handleOutsideClick = (event: MouseEvent) => {
+        if (!this.el.contains(event.target as Node)) {
+            this.hide();
+        }
+    };
 
 	private focus() {
 		this.show();
