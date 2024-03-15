@@ -85,8 +85,8 @@ class HSInputNumber
 
 	private changeValue(event = 'none', step = 1) {
 		const payload = { inputValue: this.inputValue };
-		const minInputValue = this.minInputValue || Number.MIN_SAFE_INTEGER;
-		const maxInputValue = this.maxInputValue || Number.MAX_SAFE_INTEGER;
+		const minInputValue = this.minInputValue ?? Number.MIN_SAFE_INTEGER;
+		const maxInputValue = this.maxInputValue ?? Number.MAX_SAFE_INTEGER;
 		this.inputValue = isNaN(this.inputValue) ? 0 : this.inputValue;
 
 		switch (event) {
