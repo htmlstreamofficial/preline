@@ -20,6 +20,8 @@ class HSInputNumber
 	private readonly increment: HTMLElement | null;
 	private readonly decrement: HTMLElement | null;
 	private inputValue: number | null;
+	private readonly minInputValue: number | null;
+	private readonly maxInputValue: number | null;
 
 	constructor(el: HTMLElement, options?: IInputNumberOptions) {
 		super(el, options);
@@ -29,7 +31,15 @@ class HSInputNumber
 			this.el.querySelector('[data-hs-input-number-increment]') || null;
 		this.decrement =
 			this.el.querySelector('[data-hs-input-number-decrement]') || null;
-		this.inputValue = this.input ? parseInt(this.input.value) : 0;
+
+		this.inputValue = 0;
+		this.minInputValue = null;
+		this.maxInputValue = null;
+		if (this.input) {
+			this.inputValue = !isNaN(parseInt(this.input.value)) ? parseInt(this.input.value) : 0;
+			this.minInputValue = ('hsInputNumberMin' in this.input.dataset) ? parseInt(this.input.dataset.hsInputNumberMin) : null;
+			this.maxInputValue = ('hsInputNumberMax' in this.input.dataset) ? parseInt(this.input.dataset.hsInputNumberMax) : null;
+		}
 
 		this.init();
 	}
@@ -45,9 +55,9 @@ class HSInputNumber
 		if (this.increment) this.buildIncrement();
 		if (this.decrement) this.buildDecrement();
 
-		if (this.inputValue <= 0) {
-			this.inputValue = 0;
-			this.input.value = '0';
+		if (this.minInputValue && this.inputValue <= this.minInputValue) {
+			this.inputValue = this.minInputValue;
+			this.input.value = this.minInputValue.toString();
 
 			this.changeValue();
 		}
@@ -61,43 +71,58 @@ class HSInputNumber
 
 	private buildIncrement() {
 		this.increment.addEventListener('click', () => {
-			this.changeValue('increment');
+			const step = ('hsInputNumberStep' in this.increment.dataset) ? parseInt(this.increment.dataset.hsInputNumberStep) : 1;
+			this.changeValue('increment', step);
 		});
 	}
 
 	private buildDecrement() {
 		this.decrement.addEventListener('click', () => {
-			this.changeValue('decrement');
+			const step = ('hsInputNumberStep' in this.decrement.dataset) ? parseInt(this.decrement.dataset.hsInputNumberStep) : 1;
+			this.changeValue('decrement', step);
 		});
 	}
 
-	private changeValue(event = 'none') {
+	private changeValue(event = 'none', step = 1) {
 		const payload = { inputValue: this.inputValue };
+		const minInputValue = this.minInputValue || Number.MIN_SAFE_INTEGER;
+		const maxInputValue = this.maxInputValue || Number.MAX_SAFE_INTEGER;
+		this.inputValue = isNaN(this.inputValue) ? 0 : this.inputValue;
 
 		switch (event) {
 			case 'increment':
-				this.inputValue += 1;
+				const incrementedResult = this.inputValue + step;
+				this.inputValue = incrementedResult >= minInputValue && incrementedResult <= maxInputValue ? incrementedResult : maxInputValue;
 				this.input.value = this.inputValue.toString();
 				break;
 			case 'decrement':
-				this.inputValue -= this.inputValue <= 0 ? 0 : 1;
+				const decrementedResult = this.inputValue - step;
+				this.inputValue = decrementedResult >= minInputValue && decrementedResult <= maxInputValue ? decrementedResult : minInputValue;
 				this.input.value = this.inputValue.toString();
 				break;
 			default:
-				this.inputValue =
-					parseInt(this.input.value) <= 0 ? 0 : parseInt(this.input.value);
-				if (this.inputValue <= 0) this.input.value = this.inputValue.toString();
+				const defaultResult = isNaN(parseInt(this.input.value)) ? 0 : parseInt(this.input.value);
+				this.inputValue = defaultResult >= maxInputValue ? maxInputValue : defaultResult <= minInputValue ? minInputValue : defaultResult;
+				if (this.inputValue <= minInputValue) this.input.value = this.inputValue.toString();
 				break;
 		}
 
 		payload.inputValue = this.inputValue;
 
-		if (this.inputValue === 0) {
+		if (this.inputValue === minInputValue) {
 			this.el.classList.add('disabled');
 			if (this.decrement) this.disableButtons('decrement');
 		} else {
 			this.el.classList.remove('disabled');
 			if (this.decrement) this.enableButtons('decrement');
+		}
+
+		if (this.inputValue === maxInputValue) {
+			this.el.classList.add('disabled');
+			if (this.increment) this.disableButtons('increment');
+		} else {
+			this.el.classList.remove('disabled');
+			if (this.increment) this.enableButtons('increment');
 		}
 
 		this.fireEvent('change', payload);
