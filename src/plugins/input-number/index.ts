@@ -22,6 +22,7 @@ class HSInputNumber
 	private inputValue: number | null;
 	private readonly minInputValue: number | null;
 	private readonly maxInputValue: number | null;
+	private readonly step: number;
 
 	constructor(el: HTMLElement, options?: IInputNumberOptions) {
 		super(el, options);
@@ -33,13 +34,20 @@ class HSInputNumber
 			this.el.querySelector('[data-hs-input-number-decrement]') || null;
 
 		this.inputValue = 0;
-		this.minInputValue = null;
-		this.maxInputValue = null;
 		if (this.input) {
 			this.inputValue = !isNaN(parseInt(this.input.value)) ? parseInt(this.input.value) : 0;
-			this.minInputValue = ('hsInputNumberMin' in this.input.dataset) ? parseInt(this.input.dataset.hsInputNumberMin) : null;
-			this.maxInputValue = ('hsInputNumberMax' in this.input.dataset) ? parseInt(this.input.dataset.hsInputNumberMax) : null;
 		}
+
+		const data = this.el.dataset.hsInputNumber;
+		const dataOptions: IInputNumberOptions = data ? JSON.parse(data) : { step: 1 };
+		const concatOptions = {
+			...dataOptions,
+			...options
+		};
+
+		this.minInputValue = ('min' in concatOptions) ? concatOptions.min : null;
+		this.maxInputValue = ('max' in concatOptions) ? concatOptions.max : null;
+		this.step = ('step' in concatOptions && concatOptions.step > 0) ? concatOptions.step : 1;
 
 		this.init();
 	}
@@ -71,32 +79,31 @@ class HSInputNumber
 
 	private buildIncrement() {
 		this.increment.addEventListener('click', () => {
-			const step = ('hsInputNumberStep' in this.increment.dataset) ? parseInt(this.increment.dataset.hsInputNumberStep) : 1;
-			this.changeValue('increment', step);
+			this.changeValue('increment');
 		});
 	}
 
 	private buildDecrement() {
 		this.decrement.addEventListener('click', () => {
-			const step = ('hsInputNumberStep' in this.decrement.dataset) ? parseInt(this.decrement.dataset.hsInputNumberStep) : 1;
-			this.changeValue('decrement', step);
+			this.changeValue('decrement');
 		});
 	}
 
-	private changeValue(event = 'none', step = 1) {
+	private changeValue(event = 'none') {
 		const payload = { inputValue: this.inputValue };
 		const minInputValue = this.minInputValue ?? Number.MIN_SAFE_INTEGER;
 		const maxInputValue = this.maxInputValue ?? Number.MAX_SAFE_INTEGER;
+
 		this.inputValue = isNaN(this.inputValue) ? 0 : this.inputValue;
 
 		switch (event) {
 			case 'increment':
-				const incrementedResult = this.inputValue + step;
+				const incrementedResult = this.inputValue + this.step;
 				this.inputValue = incrementedResult >= minInputValue && incrementedResult <= maxInputValue ? incrementedResult : maxInputValue;
 				this.input.value = this.inputValue.toString();
 				break;
 			case 'decrement':
-				const decrementedResult = this.inputValue - step;
+				const decrementedResult = this.inputValue - this.step;
 				this.inputValue = decrementedResult >= minInputValue && decrementedResult <= maxInputValue ? decrementedResult : minInputValue;
 				this.input.value = this.inputValue.toString();
 				break;
