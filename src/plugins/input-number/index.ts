@@ -45,7 +45,7 @@ class HSInputNumber
 			...options
 		};
 
-		this.minInputValue = ('min' in concatOptions) ? concatOptions.min : null;
+		this.minInputValue = ('min' in concatOptions) ? concatOptions.min : 0;
 		this.maxInputValue = ('max' in concatOptions) ? concatOptions.max : null;
 		this.step = ('step' in concatOptions && concatOptions.step > 0) ? concatOptions.step : 1;
 
