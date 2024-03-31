@@ -39,7 +39,7 @@ class HSInputNumber
 		}
 
 		const data = this.el.dataset.hsInputNumber;
-		const dataOptions: IInputNumberOptions = data ? JSON.parse(data) : { step: 1 };
+		const dataOptions: IInputNumberOptions = data ? JSON.parse(data) : {};
 		const concatOptions = {
 			...dataOptions,
 			...options
