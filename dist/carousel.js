@@ -1,7 +1,7 @@
 !function(t,e){if("object"==typeof exports&&"object"==typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var s=e();for(var i in s)("object"==typeof exports?exports:t)[i]=s[i]}}(self,(()=>(()=>{"use strict";var t={737:(t,e)=>{
 /*
  * HSBasePlugin
- * @version: 2.0.3
+ * @version: 2.1.0
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
@@ -9,7 +9,7 @@
 Object.defineProperty(e,"__esModule",{value:!0});var s=function(){function t(t,e,s){this.el=t,this.options=e,this.events=s,this.el=t,this.options=e,this.events={}}return t.prototype.createCollection=function(t,e){var s;t.push({id:(null===(s=null==e?void 0:e.el)||void 0===s?void 0:s.id)||t.length+1,element:e})},t.prototype.fireEvent=function(t,e){if(void 0===e&&(e=null),this.events.hasOwnProperty(t))return this.events[t](e)},t.prototype.on=function(t,e){this.events[t]=e},t}();e.default=s},629:function(t,e,s){
 /*
  * HSCarousel
- * @version: 2.0.3
+ * @version: 2.1.0
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream

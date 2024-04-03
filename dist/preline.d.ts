@@ -1,4 +1,5 @@
 
+
 export interface ICopyMarkupOptions {
 	targetSelector: string;
 	wrapperSelector: string;
@@ -131,6 +132,112 @@ export declare class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 	static hide(target: HTMLElement): void;
 	static on(evt: string, target: HTMLElement, cb: Function): void;
 }
+export interface IComboBoxOptions {
+	gap?: number;
+	viewport?: string | HTMLElement | null;
+	preventVisibility?: boolean;
+	apiUrl?: string | null;
+	apiDataPart?: string | null;
+	apiQuery?: string | null;
+	apiSearchQuery?: string | null;
+	apiHeaders?: {};
+	apiGroupField?: string | null;
+	outputItemTemplate?: string | null;
+	outputEmptyTemplate?: string | null;
+	outputLoaderTemplate?: string | null;
+	groupingType?: "default" | "tabs" | null;
+	groupingTitleTemplate?: string | null;
+	tabsWrapperTemplate?: string | null;
+	preventSelection?: boolean;
+	isOpenOnFocus?: boolean;
+}
+export interface IComboBox {
+	options?: IComboBoxOptions;
+	open(): void;
+	close(): void;
+	recalculateDirection(): void;
+}
+export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
+	gap: number;
+	viewport: string | HTMLElement | null;
+	preventVisibility: boolean;
+	apiUrl: string | null;
+	apiDataPart: string | null;
+	apiQuery: string | null;
+	apiSearchQuery: string | null;
+	apiHeaders: {};
+	apiGroupField: string | null;
+	outputItemTemplate: string | null;
+	outputEmptyTemplate: string | null;
+	outputLoaderTemplate: string | null;
+	groupingType: "default" | "tabs" | null;
+	groupingTitleTemplate: string | null;
+	tabsWrapperTemplate: string | null;
+	preventSelection: boolean;
+	isOpenOnFocus: boolean;
+	private readonly input;
+	private readonly output;
+	private readonly itemsWrapper;
+	private items;
+	private tabs;
+	private readonly toggle;
+	private outputPlaceholder;
+	private outputLoader;
+	private value;
+	private selected;
+	private groups;
+	private selectedGroup;
+	isOpened: boolean;
+	isCurrent: boolean;
+	private animationInProcess;
+	constructor(el: HTMLElement, options?: IComboBoxOptions);
+	private init;
+	private build;
+	private setResultAndRender;
+	private buildInput;
+	private buildItems;
+	private setResults;
+	private isItemExists;
+	private isTextExists;
+	private isTextExistsAny;
+	private valuesBySelector;
+	private buildOutputLoader;
+	private destroyOutputLoader;
+	private itemsFromJson;
+	private jsonItemsRender;
+	private setGroups;
+	setCurrent(): void;
+	private setApiGroups;
+	private sortItems;
+	private itemRender;
+	private plainRender;
+	private groupTabsRender;
+	private groupDefaultRender;
+	private itemsFromHtml;
+	private buildToggle;
+	private setSelectedByValue;
+	private setValue;
+	private setItemsVisibility;
+	private hasVisibleItems;
+	private appendItemsToWrapper;
+	private buildOutputPlaceholder;
+	private destroyOutputPlaceholder;
+	private resultItems;
+	private setValueAndOpen;
+	open(val?: string): boolean;
+	private setValueAndClear;
+	close(val?: string | null): boolean;
+	recalculateDirection(): void;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSComboBox | ICollectionItem<HSComboBox>;
+	static autoInit(): void;
+	static close(target: HTMLElement | string): void;
+	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;
+	static accessibility(evt: KeyboardEvent): void;
+	static onEscape(): void;
+	static onArrow(isArrowUp?: boolean): boolean;
+	static onStartEnd(isStart?: boolean): boolean;
+	static onEnter(evt: Event): void;
+}
 export interface IDropdown {
 	options?: {};
 	open(): void;
@@ -172,6 +279,9 @@ export declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementPopper> imp
 	static on(evt: string, target: HTMLElement, cb: Function): void;
 }
 export interface IInputNumberOptions {
+	min?: number;
+	max?: number;
+	step?: number;
 }
 export interface IInputNumber {
 	options?: IInputNumberOptions;
@@ -181,6 +291,9 @@ export declare class HSInputNumber extends HSBasePlugin<IInputNumberOptions> imp
 	private readonly increment;
 	private readonly decrement;
 	private inputValue;
+	private readonly minInputValue;
+	private readonly maxInputValue;
+	private readonly step;
 	constructor(el: HTMLElement, options?: IInputNumberOptions);
 	private init;
 	private build;
@@ -214,10 +327,13 @@ export declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private autoHide;
 	private readonly overlayId;
 	overlay: HTMLElement | null;
-	isCloseWhenClickInside: string;
-	isTabAccessibilityLimited: string;
-	hasAutofocus: string;
-	hasAbilityToCloseOnBackdropClick: string;
+	isCloseWhenClickInside: boolean;
+	isTabAccessibilityLimited: boolean;
+	isLayoutAffect: boolean;
+	hasAutofocus: boolean;
+	hasAbilityToCloseOnBackdropClick: boolean;
+	openedBreakpoint: number | null;
+	autoClose: number | null;
 	constructor(el: HTMLElement, options?: IOverlayOptions, events?: {});
 	private init;
 	private hideAuto;
@@ -226,11 +342,12 @@ export declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private destroyBackdrop;
 	private focusElement;
 	open(): false | Promise<void>;
-	close(): Promise<unknown>;
+	close(forceClose?: boolean): Promise<unknown>;
 	static getInstance(target: HTMLElement, isInstance?: boolean): HTMLElement | ICollectionItem<HSOverlay>;
 	static autoInit(): void;
 	static open(target: HTMLElement): void;
 	static close(target: HTMLElement): void;
+	static setOpened(breakpoint: number, el: ICollectionItem<HSOverlay>): void;
 	static accessibility(evt: KeyboardEvent): boolean;
 	static onEscape(target: ICollectionItem<HSOverlay>): void;
 	static onTab(target: ICollectionItem<HSOverlay>, focusableElements: HTMLElement[]): boolean;
@@ -353,13 +470,14 @@ export interface ISelectOptions {
 	isOpened?: boolean;
 	placeholder?: string;
 	hasSearch?: boolean;
+	preventSearchFocus?: boolean;
 	mode?: string;
 	viewport?: string;
+	wrapperClasses?: string;
 	toggleTag?: string;
 	toggleClasses?: string;
 	toggleCountText?: string;
 	toggleCountTextMinItems?: number;
-	tagsClasses?: string;
 	tagsItemTemplate?: string;
 	tagsItemClasses?: string;
 	tagsInputClasses?: string;
@@ -370,6 +488,7 @@ export interface ISelectOptions {
 		bottom?: string;
 	};
 	dropdownSpace: number;
+	extraMarkup?: string | string[] | null;
 	searchWrapperTemplate?: string;
 	searchClasses?: string;
 	searchWrapperClasses?: string;
@@ -396,16 +515,18 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	value: string | string[] | null;
 	private readonly placeholder;
 	private readonly hasSearch;
+	private readonly preventSearchFocus;
 	private readonly mode;
 	private readonly viewport;
 	isOpened: boolean | null;
 	isMultiple: boolean | null;
 	isDisabled: boolean | null;
+	selectedItems: string[];
 	private readonly toggleTag;
 	private readonly toggleClasses;
 	private readonly toggleCountText;
 	private readonly toggleCountTextMinItems;
-	private readonly tagsClasses;
+	private readonly wrapperClasses;
 	private readonly tagsItemTemplate;
 	private readonly tagsItemClasses;
 	private readonly tagsInputClasses;
@@ -428,24 +549,25 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private wrapper;
 	private toggle;
 	private toggleTextWrapper;
-	private tags;
-	private tagsItems;
 	private tagsInput;
 	private dropdown;
 	private searchWrapper;
 	private search;
 	private searchNoResult;
 	private selectOptions;
+	private extraMarkup;
 	private readonly isAddTagOnEnter;
+	private tagsInputHelper;
 	constructor(el: HTMLElement, options?: ISelectOptions);
 	private init;
 	private build;
 	private buildWrapper;
+	private buildExtraMarkup;
 	private buildToggle;
 	private setToggleIcon;
 	private setToggleTitle;
 	private buildTags;
-	private buildTagsItems;
+	private reassignTagsInputPlaceholder;
 	private buildTagsItem;
 	private getItemByValue;
 	private setTagsItems;
@@ -456,6 +578,9 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private destroyOption;
 	private buildOriginalOption;
 	private destroyOriginalOption;
+	private buildTagsInputHelper;
+	private calculateInputWidth;
+	private adjustInputWidth;
 	private onSelectOption;
 	private addSelectOption;
 	private removeSelectOption;
@@ -660,6 +785,8 @@ export declare class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> imp
 	constructor(el: HTMLElement, options?: IThemeSwitchOptions);
 	private init;
 	private setResetStyles;
+	private addSystemThemeObserver;
+	private removeSystemThemeObserver;
 	setAppearance(theme?: string, isSaveToLocalStorage?: boolean, isSetDispatchEvent?: boolean): void;
 	static getInstance(target: HTMLElement | string): HSThemeSwitch;
 	static autoInit(): void;

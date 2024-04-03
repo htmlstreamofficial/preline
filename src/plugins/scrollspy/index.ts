@@ -1,6 +1,6 @@
 /*
  * HSScrollspy
- * @version: 2.0.3
+ * @version: 2.1.0
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream

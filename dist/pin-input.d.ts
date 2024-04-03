@@ -1,10 +1,5 @@
 
-export interface IPinInputOptions {
-	availableCharsRE?: RegExp;
-}
-export interface IPinInput {
-	options?: IPinInputOptions;
-}
+
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -22,6 +17,12 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
+}
+export interface IPinInputOptions {
+	availableCharsRE?: RegExp;
+}
+export interface IPinInput {
+	options?: IPinInputOptions;
 }
 declare class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
 	private items;

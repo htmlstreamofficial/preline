@@ -1,18 +1,5 @@
 
-export interface ICarouselOptions {
-	currentIndex: number;
-	loadingClasses?: string | string[];
-	isAutoPlay?: boolean;
-	speed?: number;
-	isInfiniteLoop?: boolean;
-}
-export interface ICarousel {
-	options?: ICarouselOptions;
-	recalculateWidth(): void;
-	goToPrev(): void;
-	goToNext(): void;
-	goTo(i: number): void;
-}
+
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -30,6 +17,20 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
+}
+export interface ICarouselOptions {
+	currentIndex: number;
+	loadingClasses?: string | string[];
+	isAutoPlay?: boolean;
+	speed?: number;
+	isInfiniteLoop?: boolean;
+}
+export interface ICarousel {
+	options?: ICarouselOptions;
+	recalculateWidth(): void;
+	goToPrev(): void;
+	goToNext(): void;
+	goTo(i: number): void;
 }
 declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	private readonly inner;

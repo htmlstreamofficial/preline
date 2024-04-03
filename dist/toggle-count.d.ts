@@ -1,15 +1,5 @@
 
-export interface IToggleCountOptions {
-	target: string | HTMLInputElement;
-	min: number;
-	max: number;
-	duration: number;
-}
-export interface IToggleCount {
-	options?: IToggleCountOptions;
-	countUp(): void;
-	countDown(): void;
-}
+
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -27,6 +17,17 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
+}
+export interface IToggleCountOptions {
+	target: string | HTMLInputElement;
+	min: number;
+	max: number;
+	duration: number;
+}
+export interface IToggleCount {
+	options?: IToggleCountOptions;
+	countUp(): void;
+	countDown(): void;
 }
 declare class HSToggleCount extends HSBasePlugin<IToggleCountOptions> implements IToggleCount {
 	private readonly target;

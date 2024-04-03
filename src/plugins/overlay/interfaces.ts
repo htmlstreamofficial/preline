@@ -6,8 +6,8 @@ export interface IOverlayOptions {
 
 export interface IOverlay {
 	options?: IOverlayOptions;
-	
+
 	open(): void;
-	
+
 	close(): void;
 }

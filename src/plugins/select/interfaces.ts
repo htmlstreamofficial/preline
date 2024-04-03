@@ -14,16 +14,18 @@ export interface ISelectOptions {
 	isOpened?: boolean;
 	placeholder?: string;
 	hasSearch?: boolean;
+	preventSearchFocus?: boolean;
 	mode?: string;
 
 	viewport?: string;
+
+	wrapperClasses?: string;
 
 	toggleTag?: string;
 	toggleClasses?: string;
 	toggleCountText?: string;
 	toggleCountTextMinItems?: number;
 
-	tagsClasses?: string;
 	tagsItemTemplate?: string;
 	tagsItemClasses?: string;
 	tagsInputClasses?: string;
@@ -35,6 +37,8 @@ export interface ISelectOptions {
 		bottom?: string;
 	};
 	dropdownSpace: number;
+
+	extraMarkup?: string | string[] | null;
 
 	searchWrapperTemplate?: string;
 	searchClasses?: string;

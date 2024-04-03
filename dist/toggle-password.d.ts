@@ -1,12 +1,5 @@
 
-export interface ITogglePasswordOptions {
-	target: string | string[] | HTMLInputElement | HTMLInputElement[];
-}
-export interface ITogglePassword {
-	options?: ITogglePasswordOptions;
-	show(): void;
-	hide(): void;
-}
+
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -24,6 +17,14 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
+}
+export interface ITogglePasswordOptions {
+	target: string | string[] | HTMLInputElement | HTMLInputElement[];
+}
+export interface ITogglePassword {
+	options?: ITogglePasswordOptions;
+	show(): void;
+	hide(): void;
 }
 declare class HSTogglePassword extends HSBasePlugin<ITogglePasswordOptions> implements ITogglePassword {
 	private readonly target;

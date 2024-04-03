@@ -4,6 +4,7 @@ import HSCopyMarkup from '../plugins/copy-markup';
 import HSAccordion from '../plugins/accordion';
 import HSCarousel from '../plugins/carousel';
 import HSCollapse from '../plugins/collapse';
+import HSComboBox from '../plugins/combobox';
 import HSDropdown from '../plugins/dropdown';
 import HSInputNumber from '../plugins/input-number';
 import HSOverlay from '../plugins/overlay';
@@ -23,6 +24,7 @@ export const COLLECTIONS: ISpaCollectionItem[] = [
 	{ key: 'accordion', fn: HSAccordion },
 	{ key: 'carousel', fn: HSCarousel },
 	{ key: 'collapse', fn: HSCollapse },
+	{ key: 'combobox', fn: HSComboBox },
 	{ key: 'dropdown', fn: HSDropdown },
 	{ key: 'input-number', fn: HSInputNumber },
 	{ key: 'overlay', fn: HSOverlay },

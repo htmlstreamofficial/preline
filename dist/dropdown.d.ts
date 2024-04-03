@@ -1,13 +1,5 @@
 
-export interface IDropdown {
-	options?: {};
-	open(): void;
-	close(isAnimated: boolean): void;
-	forceClearState(): void;
-}
-export interface IHTMLElementPopper extends HTMLElement {
-	_popper: any;
-}
+
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -25,6 +17,15 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
+}
+export interface IDropdown {
+	options?: {};
+	open(): void;
+	close(isAnimated: boolean): void;
+	forceClearState(): void;
+}
+export interface IHTMLElementPopper extends HTMLElement {
+	_popper: any;
 }
 declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementPopper> implements IDropdown {
 	private static history;

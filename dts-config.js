@@ -4,9 +4,7 @@ const pluginsDir = './src/plugins';
 const distDir = './dist';
 const excludePlugins = ['base-plugin'];
 
-const outputConfig = {
-	noBanner: true,
-};
+const outputConfig = { noBanner: true };
 
 const config = {
 	compilationOptions: {

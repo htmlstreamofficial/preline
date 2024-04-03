@@ -1,6 +1,6 @@
 /*
  * HSInputNumber
- * @version: 2.0.3
+ * @version: 2.1.0
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
@@ -33,21 +33,27 @@ class HSInputNumber
 		this.decrement =
 			this.el.querySelector('[data-hs-input-number-decrement]') || null;
 
-		this.inputValue = 0;
 		if (this.input) {
-			this.inputValue = !isNaN(parseInt(this.input.value)) ? parseInt(this.input.value) : 0;
+			this.inputValue = !isNaN(parseInt(this.input.value))
+				? parseInt(this.input.value)
+				: 0;
 		}
 
 		const data = this.el.dataset.hsInputNumber;
-		const dataOptions: IInputNumberOptions = data ? JSON.parse(data) : {};
+		const dataOptions: IInputNumberOptions = data
+			? JSON.parse(data)
+			: { step: 1 };
 		const concatOptions = {
 			...dataOptions,
-			...options
+			...options,
 		};
 
-		this.minInputValue = ('min' in concatOptions) ? concatOptions.min : 0;
-		this.maxInputValue = ('max' in concatOptions) ? concatOptions.max : null;
-		this.step = ('step' in concatOptions && concatOptions.step > 0) ? concatOptions.step : 1;
+		this.minInputValue = 'min' in concatOptions ? concatOptions.min : 0;
+		this.maxInputValue = 'max' in concatOptions ? concatOptions.max : null;
+		this.step =
+			'step' in concatOptions && concatOptions.step > 0
+				? concatOptions.step
+				: 1;
 
 		this.init();
 	}
@@ -63,12 +69,12 @@ class HSInputNumber
 		if (this.increment) this.buildIncrement();
 		if (this.decrement) this.buildDecrement();
 
-		if (this.minInputValue && this.inputValue <= this.minInputValue) {
-			this.inputValue = this.minInputValue;
-			this.input.value = this.minInputValue.toString();
-
-			this.changeValue();
+		if (this.inputValue <= 0 && this.minInputValue === 0) {
+			this.inputValue = 0;
+			this.input.value = '0';
 		}
+
+		if (this.inputValue <= 0 || this.minInputValue < 0) this.changeValue();
 
 		if (this.input.hasAttribute('disabled')) this.disableButtons();
 	}
@@ -99,18 +105,34 @@ class HSInputNumber
 		switch (event) {
 			case 'increment':
 				const incrementedResult = this.inputValue + this.step;
-				this.inputValue = incrementedResult >= minInputValue && incrementedResult <= maxInputValue ? incrementedResult : maxInputValue;
+				this.inputValue =
+					incrementedResult >= minInputValue &&
+					incrementedResult <= maxInputValue
+						? incrementedResult
+						: maxInputValue;
 				this.input.value = this.inputValue.toString();
 				break;
 			case 'decrement':
 				const decrementedResult = this.inputValue - this.step;
-				this.inputValue = decrementedResult >= minInputValue && decrementedResult <= maxInputValue ? decrementedResult : minInputValue;
+				this.inputValue =
+					decrementedResult >= minInputValue &&
+					decrementedResult <= maxInputValue
+						? decrementedResult
+						: minInputValue;
 				this.input.value = this.inputValue.toString();
 				break;
 			default:
-				const defaultResult = isNaN(parseInt(this.input.value)) ? 0 : parseInt(this.input.value);
-				this.inputValue = defaultResult >= maxInputValue ? maxInputValue : defaultResult <= minInputValue ? minInputValue : defaultResult;
-				if (this.inputValue <= minInputValue) this.input.value = this.inputValue.toString();
+				const defaultResult = isNaN(parseInt(this.input.value))
+					? 0
+					: parseInt(this.input.value);
+				this.inputValue =
+					defaultResult >= maxInputValue
+						? maxInputValue
+						: defaultResult <= minInputValue
+							? minInputValue
+							: defaultResult;
+				if (this.inputValue <= minInputValue)
+					this.input.value = this.inputValue.toString();
 				break;
 		}
 
@@ -123,7 +145,6 @@ class HSInputNumber
 			this.el.classList.remove('disabled');
 			if (this.decrement) this.enableButtons('decrement');
 		}
-
 		if (this.inputValue === maxInputValue) {
 			this.el.classList.add('disabled');
 			if (this.increment) this.disableButtons('increment');

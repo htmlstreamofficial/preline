@@ -1,12 +1,13 @@
 /*
  * HSOverlay
- * @version: 2.0.3
+ * @version: 2.1.0
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
  */
 
 import {
+	stringToBoolean,
 	getClassProperty,
 	isParentOrElementHidden,
 	dispatch,
@@ -15,6 +16,7 @@ import {
 
 import { IOverlayOptions, IOverlay } from './interfaces';
 import { ICollectionItem } from '../../interfaces';
+import { BREAKPOINTS } from '../../constants';
 
 import HSBasePlugin from '../base-plugin';
 
@@ -28,10 +30,13 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly overlayId: string | null;
 
 	public overlay: HTMLElement | null;
-	public isCloseWhenClickInside: string;
-	public isTabAccessibilityLimited: string;
-	public hasAutofocus: string;
-	public hasAbilityToCloseOnBackdropClick: string;
+	public isCloseWhenClickInside: boolean;
+	public isTabAccessibilityLimited: boolean;
+	public isLayoutAffect: boolean;
+	public hasAutofocus: boolean;
+	public hasAbilityToCloseOnBackdropClick: boolean;
+	public openedBreakpoint: number | null;
+	public autoClose: number | null;
 
 	constructor(el: HTMLElement, options?: IOverlayOptions, events?: {}) {
 		super(el, options, events);
@@ -54,16 +59,39 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		this.overlayId = this.el.getAttribute('data-hs-overlay');
 		this.overlay = document.querySelector(this.overlayId);
 		if (this.overlay) {
-			this.isCloseWhenClickInside =
+			this.isCloseWhenClickInside = stringToBoolean(
 				getClassProperty(this.overlay, '--close-when-click-inside', 'false') ||
-				'false';
-			this.isTabAccessibilityLimited =
+					'false',
+			);
+			this.isTabAccessibilityLimited = stringToBoolean(
 				getClassProperty(this.overlay, '--tab-accessibility-limited', 'true') ||
-				'true';
-			this.hasAutofocus =
-				getClassProperty(this.overlay, '--has-autofocus', 'true') || 'true';
-			this.hasAbilityToCloseOnBackdropClick =
-				this.overlay.getAttribute('data-hs-overlay-keyboard') || 'true';
+					'true',
+			);
+			this.isLayoutAffect = stringToBoolean(
+				getClassProperty(this.overlay, '--is-layout-affect', 'false') ||
+					'false',
+			);
+			this.hasAutofocus = stringToBoolean(
+				getClassProperty(this.overlay, '--has-autofocus', 'true') || 'true',
+			);
+			this.hasAbilityToCloseOnBackdropClick = stringToBoolean(
+				this.overlay.getAttribute('data-hs-overlay-keyboard') || 'true',
+			);
+
+			const autoCloseBreakpoint = getClassProperty(
+				this.overlay,
+				'--auto-close',
+			);
+			this.autoClose =
+				!isNaN(+autoCloseBreakpoint) && isFinite(+autoCloseBreakpoint)
+					? +autoCloseBreakpoint
+					: BREAKPOINTS[autoCloseBreakpoint] || null;
+
+			const openedBreakpoint = getClassProperty(this.overlay, '--opened');
+			this.openedBreakpoint =
+				(!isNaN(+openedBreakpoint) && isFinite(+openedBreakpoint)
+					? +openedBreakpoint
+					: BREAKPOINTS[openedBreakpoint]) || null;
 		}
 
 		if (this.overlay) this.init();
@@ -72,20 +100,26 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private init() {
 		this.createCollection(window.$hsOverlayCollection, this);
 
+		if (this.isLayoutAffect && this.openedBreakpoint) {
+			const instance = HSOverlay.getInstance(this.el, true);
+
+			HSOverlay.setOpened(
+				this.openedBreakpoint,
+				instance as ICollectionItem<HSOverlay>,
+			);
+		}
+
 		this.el.addEventListener('click', () => {
-			if (this.overlay.classList.contains(this.hiddenClass)) {
-				this.open();
-			} else {
-				this.close();
-			}
+			if (this.overlay.classList.contains('opened')) this.close();
+			else this.open();
 		});
 
 		this.overlay.addEventListener('click', (evt) => {
 			if (
 				(evt.target as HTMLElement).id &&
 				`#${(evt.target as HTMLElement).id}` === this.overlayId &&
-				this.isCloseWhenClickInside === 'true' &&
-				this.hasAbilityToCloseOnBackdropClick === 'true'
+				this.isCloseWhenClickInside &&
+				this.hasAbilityToCloseOnBackdropClick
 			) {
 				this.close();
 			}
@@ -202,7 +236,9 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		if (!this.overlay) return false;
 
 		const currentlyOpened = window.$hsOverlayCollection.find(
-			(el) => el.element.overlay === document.querySelector('.hs-overlay.open'),
+			(el) =>
+				el.element.overlay === document.querySelector('.hs-overlay.open') &&
+				!el.element.isLayoutAffect,
 		);
 		const disabledScroll =
 			getClassProperty(this.overlay, '--body-scroll', 'false') !== 'true';
@@ -230,39 +266,51 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		this.overlay.setAttribute('tabindex', '-1');
 
 		setTimeout(() => {
-			if (this.overlay.classList.contains(this.hiddenClass)) return false;
+			if (this.overlay.classList.contains('opened')) return false;
 
-			this.overlay.classList.add('open');
+			this.overlay.classList.add('open', 'opened');
+			if (this.isLayoutAffect)
+				document.body.classList.add('hs-overlay-body-open');
 
 			this.fireEvent('open', this.el);
 			dispatch('open.hs.overlay', this.el, this.el);
 
-			if (this.hasAutofocus === 'true') this.focusElement();
+			if (this.hasAutofocus) this.focusElement();
 		}, 50);
 	}
 
-	public close() {
+	public close(forceClose = false) {
+		if (this.isLayoutAffect)
+			document.body.classList.remove('hs-overlay-body-open');
+
+		const closeFn = (cb: Function) => {
+			if (this.overlay.classList.contains('open')) return false;
+
+			this.overlay.classList.add(this.hiddenClass);
+
+			this.destroyBackdrop();
+
+			this.fireEvent('close', this.el);
+			dispatch('close.hs.overlay', this.el, this.el);
+
+			if (!document.querySelector('.hs-overlay.opened'))
+				document.body.style.overflow = '';
+
+			cb(this.overlay);
+		};
+
 		return new Promise((resolve) => {
 			if (!this.overlay) return false;
 
-			this.overlay.classList.remove('open');
+			this.overlay.classList.remove('open', 'opened');
 			this.overlay.removeAttribute('aria-overlay');
 			this.overlay.removeAttribute('tabindex');
 
-			afterTransition(this.overlay, () => {
-				if (this.overlay.classList.contains('open')) return false;
-
-				this.overlay.classList.add(this.hiddenClass);
-
-				this.destroyBackdrop();
-
-				this.fireEvent('close', this.el);
-				dispatch('close.hs.overlay', this.el, this.el);
-
-				document.body.style.overflow = '';
-
-				resolve(this.overlay);
-			});
+			if (forceClose) closeFn(resolve);
+			else
+				afterTransition(this.overlay, () => {
+					closeFn(resolve);
+				});
 		});
 	}
 
@@ -352,6 +400,13 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			elInCollection.element.close();
 	}
 
+	static setOpened(breakpoint: number, el: ICollectionItem<HSOverlay>) {
+		if (document.body.clientWidth >= breakpoint) {
+			document.body.classList.add('hs-overlay-body-open');
+			el.element.overlay.classList.add('opened');
+		} else el.element.close(true);
+	}
+
 	// Accessibility methods
 	static accessibility(evt: KeyboardEvent) {
 		const targets = window.$hsOverlayCollection.filter((el) =>
@@ -370,7 +425,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 		if (
 			basicCheck &&
-			target.element.isTabAccessibilityLimited === 'false' &&
+			!target.element.isTabAccessibilityLimited &&
 			evt.code === 'Tab'
 		)
 			return false;
@@ -386,7 +441,8 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	}
 
 	static onEscape(target: ICollectionItem<HSOverlay>) {
-		if (target) target.element.close();
+		if (target && target.element.hasAbilityToCloseOnBackdropClick)
+			target.element.close();
 	}
 
 	static onTab(
@@ -433,11 +489,49 @@ declare global {
 	}
 }
 
+const autoCloseResizeFn = () => {
+	if (
+		!window.$hsOverlayCollection.length ||
+		!window.$hsOverlayCollection.find((el) => el.element.autoClose)
+	)
+		return false;
+
+	const overlays = window.$hsOverlayCollection.filter(
+		(el) => el.element.autoClose,
+	);
+
+	overlays.forEach((overlay) => {
+		if (document.body.clientWidth >= overlay.element.autoClose)
+			overlay.element.close(true);
+	});
+};
+
+const setOpenedResizeFn = () => {
+	if (
+		!window.$hsOverlayCollection.length ||
+		!window.$hsOverlayCollection.find((el) => el.element.openedBreakpoint)
+	)
+		return false;
+
+	const overlays = window.$hsOverlayCollection.filter(
+		(el) => el.element.openedBreakpoint,
+	);
+
+	overlays.forEach((overlay) => {
+		HSOverlay.setOpened(overlay.element.openedBreakpoint, overlay);
+	});
+};
+
 window.addEventListener('load', () => {
 	HSOverlay.autoInit();
 
 	// Uncomment for debug
 	// console.log('Overlay collection:', window.$hsOverlayCollection);
+});
+
+window.addEventListener('resize', () => {
+	autoCloseResizeFn();
+	setOpenedResizeFn();
 });
 
 if (typeof window !== 'undefined') {

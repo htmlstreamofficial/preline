@@ -1,18 +1,5 @@
 
-export interface IStrongPasswordOptions {
-	target: string | HTMLInputElement;
-	hints?: string;
-	stripClasses?: string;
-	minLength?: number;
-	mode?: string;
-	popoverSpace?: number;
-	checksExclude?: string[];
-	specialCharactersSet?: string;
-}
-export interface IStrongPassword {
-	options?: IStrongPasswordOptions;
-	recalculateDirection(): void;
-}
+
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -26,6 +13,20 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	createCollection(collection: any[], element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
+}
+export interface IStrongPasswordOptions {
+	target: string | HTMLInputElement;
+	hints?: string;
+	stripClasses?: string;
+	minLength?: number;
+	mode?: string;
+	popoverSpace?: number;
+	checksExclude?: string[];
+	specialCharactersSet?: string;
+}
+export interface IStrongPassword {
+	options?: IStrongPasswordOptions;
+	recalculateDirection(): void;
 }
 declare class HSStrongPassword extends HSBasePlugin<IStrongPasswordOptions> implements IStrongPassword {
 	private readonly target;

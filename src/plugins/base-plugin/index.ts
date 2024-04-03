@@ -1,6 +1,6 @@
 /*
  * HSBasePlugin
- * @version: 2.0.3
+ * @version: 2.1.0
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
@@ -22,7 +22,6 @@ export default class HSBasePlugin<O, E = HTMLElement>
 	}
 
 	public createCollection(collection: any[], element: any) {
-		if (!collection) collection = [];
 		collection.push({
 			id: element?.el?.id || collection.length + 1,
 			element,

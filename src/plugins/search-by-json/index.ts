@@ -1,6 +1,6 @@
 /*
  * HSTogglePassword
- * @version: 2.0.3
+ * @version: 2.1.0
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
@@ -92,8 +92,6 @@ class HSSearchByJson
 				}
 
 				this.buildItems();
-
-				console.log('result:', this.result);
 			}),
 		);
 	}
@@ -162,7 +160,7 @@ class HSSearchByJson
 		if (description)
 			description.append(htmlToElement(`<span>${newDescription}</span>`));
 		else if (!templateByType) {
-			const br = htmlToElement('<br />');
+			const br = htmlToElement('<br>');
 			template.append(br);
 			template.append(htmlToElement(`<span>${newDescription}</span>`));
 		}

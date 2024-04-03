@@ -1,7 +1,5 @@
 
-export interface IScrollspy {
-	options?: {};
-}
+
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -19,6 +17,9 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
+}
+export interface IScrollspy {
+	options?: {};
 }
 declare class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 	private activeSection;

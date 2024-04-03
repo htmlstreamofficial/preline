@@ -1,6 +1,6 @@
 /*
  * HSThemeSwitch
- * @version: 2.0.3
+ * @version: 2.1.0
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
@@ -29,7 +29,7 @@ class HSThemeSwitch
 
 		this.theme =
 			concatOptions?.theme || localStorage.getItem('hs_theme') || 'default';
-		this.themeSet = ['dark', 'light', 'default'];
+		this.themeSet = ['light', 'dark', 'default'];
 
 		this.init();
 	}
@@ -51,14 +51,27 @@ class HSThemeSwitch
 		return style;
 	}
 
+	private addSystemThemeObserver() {
+		window
+			.matchMedia('(prefers-color-scheme: dark)')
+			.addEventListener('change', ({ matches }) => {
+				if (matches) this.setAppearance('dark', false);
+				else this.setAppearance('default', false);
+			});
+	}
+
+	private removeSystemThemeObserver() {
+		window.matchMedia('(prefers-color-scheme: dark)').removeEventListener;
+	}
+
 	// Public methods
 	public setAppearance(
 		theme = this.theme,
 		isSaveToLocalStorage = true,
 		isSetDispatchEvent = true,
 	) {
-		const resetStyles = this.setResetStyles();
 		const html = document.querySelector('html');
+		const resetStyles = this.setResetStyles();
 
 		if (isSaveToLocalStorage) localStorage.setItem('hs_theme', theme);
 		if (theme === 'auto')
@@ -66,7 +79,7 @@ class HSThemeSwitch
 				? 'dark'
 				: 'default';
 
-		html.classList.remove('dark', 'default', 'auto');
+		html.classList.remove('light', 'dark', 'default', 'auto');
 		html.classList.add(theme);
 
 		setTimeout(() => resetStyles.remove());
@@ -91,6 +104,12 @@ class HSThemeSwitch
 	static autoInit() {
 		if (!window.$hsThemeSwitchCollection) window.$hsThemeSwitchCollection = [];
 
+		const toggleObserveSystemTheme = (el: HSThemeSwitch) => {
+			if (localStorage.getItem('hs_theme') === 'auto')
+				el.addSystemThemeObserver();
+			else el.removeSystemThemeObserver();
+		};
+
 		document
 			.querySelectorAll('[data-hs-theme-switch]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
@@ -103,10 +122,15 @@ class HSThemeSwitch
 					(switchTheme.el as HTMLInputElement).checked =
 						switchTheme.theme === 'dark';
 
+					toggleObserveSystemTheme(switchTheme);
+
 					switchTheme.el.addEventListener('change', (evt) => {
-						switchTheme.setAppearance(
-							(evt.target as HTMLInputElement).checked ? 'dark' : 'default',
-						);
+						const theme = (evt.target as HTMLInputElement).checked
+							? 'dark'
+							: 'default';
+						switchTheme.setAppearance(theme);
+
+						toggleObserveSystemTheme(switchTheme);
 					});
 				}
 			});
@@ -119,9 +143,13 @@ class HSThemeSwitch
 				const theme = el.getAttribute('data-hs-theme-click-value');
 				const switchTheme = new HSThemeSwitch(el);
 
-				switchTheme.el.addEventListener('click', () =>
-					switchTheme.setAppearance(theme),
-				);
+				toggleObserveSystemTheme(switchTheme);
+
+				switchTheme.el.addEventListener('click', () => {
+					switchTheme.setAppearance(theme);
+
+					toggleObserveSystemTheme(switchTheme);
+				});
 			});
 	}
 }
