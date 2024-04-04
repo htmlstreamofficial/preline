@@ -1,6 +1,6 @@
 /*
  * Plugin
- * @version: 2.0.3
+ * @version: 2.1.0
  * @author: HTMLStream
  * @requires: tailwindcss ^3.1.2
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
@@ -129,6 +129,23 @@ module.exports = plugin(function ({ addVariant, e }) {
 		},
 	]);
 
+	addVariant('hs-overlay-layout-open', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.hs-overlay-body-open.${e(
+					`hs-overlay-layout-open${separator}${className}`,
+				)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.hs-overlay-body-open .${e(
+					`hs-overlay-layout-open${separator}${className}`,
+				)}`;
+			});
+		},
+	]);
+
 	addVariant('hs-overlay-backdrop-open', [
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
@@ -204,6 +221,19 @@ module.exports = plugin(function ({ addVariant, e }) {
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
 				return `.disabled .${e(`hs-select-disabled${separator}${className}`)}`;
+			});
+		},
+	]);
+
+	addVariant('hs-select-active', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.active.${e(`hs-select-active${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.active .${e(`hs-select-active${separator}${className}`)}`;
 			});
 		},
 	]);
@@ -384,6 +414,40 @@ module.exports = plugin(function ({ addVariant, e }) {
 				)}`;
 			});
 		}
+	]);
+
+	addVariant('hs-combo-box-active', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.active .${e(`hs-combo-box-active${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.active.${e(`hs-combo-box-active${separator}${className}`)}`;
+			});
+		},
+	]);
+
+	addVariant('hs-combo-box-selected', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.selected .${e(`hs-combo-box-selected${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.selected.${e(`hs-combo-box-selected${separator}${className}`)}`;
+			});
+		},
+	]);
+
+	addVariant('hs-combo-box-tab-active', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.active.${e(`hs-combo-box-tab-active${separator}${className}`)}`;
+			});
+		},
 	]);
 
 	addVariant('hs-apexcharts-tooltip-dark', [

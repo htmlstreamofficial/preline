@@ -2,6 +2,7 @@ export { default as HSCopyMarkup } from './plugins/copy-markup';
 export { default as HSAccordion } from './plugins/accordion';
 export { default as HSCarousel } from './plugins/carousel';
 export { default as HSCollapse } from './plugins/collapse';
+export { default as HSComboBox } from './plugins/combobox';
 export { default as HSDropdown } from './plugins/dropdown';
 export { default as HSInputNumber } from './plugins/input-number';
 export { default as HSOverlay } from './plugins/overlay';

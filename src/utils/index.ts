@@ -1,3 +1,7 @@
+const stringToBoolean = (string: string): boolean => {
+	return string === 'true' ? true : false;
+};
+
 const getClassProperty = (el: HTMLElement, prop: string, val = '') => {
 	return (window.getComputedStyle(el).getPropertyValue(prop) || val).replace(
 		' ',
@@ -20,6 +24,24 @@ const getClassPropertyAlt = (
 
 	return targetClass.match(/:(.*)]/) ? targetClass.match(/:(.*)]/)[1] : val;
 };
+
+// const getClassPropertyAlt = (
+// 	el: HTMLElement,
+// 	prop: string,
+// 	val: string = '',
+// ): string => {
+// 	let targetClass = '';
+
+// 	el.classList.forEach((className) => {
+// 		if (className.includes(prop)) {
+// 			targetClass = className;
+// 		}
+// 	});
+
+// 	const match = targetClass.match(/:(.*)/);
+
+// 	return match ? match[1] : val;
+// };
 
 const isIOS = () => {
 	if (/iPad|iPhone|iPod/.test(navigator.platform)) {
@@ -116,15 +138,12 @@ const afterTransition = (el: HTMLElement, callback: Function) => {
 
 		el.removeEventListener('transitionend', handleEvent, true);
 	};
-
-	if (
+	const hasTransition =
 		window.getComputedStyle(el, null).getPropertyValue('transition') !==
-		'all 0s ease 0s'
-	) {
-		el.addEventListener('transitionend', handleEvent, true);
-	} else {
-		callback();
-	}
+		(navigator.userAgent.includes('Firefox') ? 'all' : 'all 0s ease 0s');
+
+	if (hasTransition) el.addEventListener('transitionend', handleEvent, true);
+	else callback();
 };
 
 const htmlToElement = (html: string): HTMLElement => {
@@ -139,9 +158,12 @@ const classToClassList = (
 	classes: string,
 	target: HTMLElement,
 	splitter = ' ',
+	action: 'add' | 'remove' = 'add',
 ) => {
 	const classesToArray = classes.split(splitter);
-	classesToArray.forEach((cl) => target.classList.add(cl));
+	classesToArray.forEach((cl) =>
+		action === 'add' ? target.classList.add(cl) : target.classList.remove(cl),
+	);
 };
 
 const menuSearchHistory = {
@@ -161,6 +183,7 @@ const menuSearchHistory = {
 };
 
 export {
+	stringToBoolean,
 	getClassProperty,
 	getClassPropertyAlt,
 	isIOS,

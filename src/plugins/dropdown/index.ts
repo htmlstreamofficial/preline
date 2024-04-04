@@ -1,6 +1,6 @@
 /*
  * HSDropdown
- * @version: 2.0.3
+ * @version: 2.1.0
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
@@ -327,8 +327,6 @@ class HSDropdown
 			!evt.metaKey &&
 			!target.element.menu.querySelector('input:focus')
 		) {
-			console.log('Key code:', evt.code);
-
 			switch (evt.code) {
 				case 'Escape':
 					if (!target.element.menu.querySelector('.hs-select.active')) {

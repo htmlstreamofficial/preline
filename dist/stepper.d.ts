@@ -1,18 +1,5 @@
 
-export interface IStepperOptions {
-	currentIndex?: number;
-	isCompleted?: boolean;
-	mode?: string;
-}
-export interface IStepper {
-	options?: IStepperOptions;
-	setProcessedNavItem(n?: number): void;
-	unsetProcessedNavItem(n?: number): void;
-	goToNext(): void;
-	disableButtons(): void;
-	enableButtons(): void;
-	setErrorNavItem(n?: number): void;
-}
+
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -30,6 +17,20 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
+}
+export interface IStepperOptions {
+	currentIndex?: number;
+	isCompleted?: boolean;
+	mode?: string;
+}
+export interface IStepper {
+	options?: IStepperOptions;
+	setProcessedNavItem(n?: number): void;
+	unsetProcessedNavItem(n?: number): void;
+	goToNext(): void;
+	disableButtons(): void;
+	enableButtons(): void;
+	setErrorNavItem(n?: number): void;
 }
 declare class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	private currentIndex;

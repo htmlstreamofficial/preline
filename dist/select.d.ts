@@ -1,4 +1,23 @@
 
+
+export interface IBasePlugin<O, E> {
+	el: E;
+	options?: O;
+	events?: {};
+}
+declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
+	el: E;
+	options: O;
+	events?: any;
+	constructor(el: E, options: O, events?: any);
+	createCollection(collection: any[], element: any): void;
+	fireEvent(evt: string, payload?: any): any;
+	on(evt: string, cb: Function): void;
+}
+export interface ICollectionItem<T> {
+	id: string | number;
+	element: T;
+}
 export interface ISingleOptionOptions {
 	description: string;
 	icon: string;
@@ -13,13 +32,14 @@ export interface ISelectOptions {
 	isOpened?: boolean;
 	placeholder?: string;
 	hasSearch?: boolean;
+	preventSearchFocus?: boolean;
 	mode?: string;
 	viewport?: string;
+	wrapperClasses?: string;
 	toggleTag?: string;
 	toggleClasses?: string;
 	toggleCountText?: string;
 	toggleCountTextMinItems?: number;
-	tagsClasses?: string;
 	tagsItemTemplate?: string;
 	tagsItemClasses?: string;
 	tagsInputClasses?: string;
@@ -30,6 +50,7 @@ export interface ISelectOptions {
 		bottom?: string;
 	};
 	dropdownSpace: number;
+	extraMarkup?: string | string[] | null;
 	searchWrapperTemplate?: string;
 	searchClasses?: string;
 	searchWrapperClasses?: string;
@@ -52,38 +73,22 @@ export interface ISelect {
 	removeOption(values: string | string[]): void;
 	recalculateDirection(): void;
 }
-export interface IBasePlugin<O, E> {
-	el: E;
-	options?: O;
-	events?: {};
-}
-declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
-	el: E;
-	options: O;
-	events?: any;
-	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
-	fireEvent(evt: string, payload?: any): any;
-	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
 declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	value: string | string[] | null;
 	private readonly placeholder;
 	private readonly hasSearch;
+	private readonly preventSearchFocus;
 	private readonly mode;
 	private readonly viewport;
 	isOpened: boolean | null;
 	isMultiple: boolean | null;
 	isDisabled: boolean | null;
+	selectedItems: string[];
 	private readonly toggleTag;
 	private readonly toggleClasses;
 	private readonly toggleCountText;
 	private readonly toggleCountTextMinItems;
-	private readonly tagsClasses;
+	private readonly wrapperClasses;
 	private readonly tagsItemTemplate;
 	private readonly tagsItemClasses;
 	private readonly tagsInputClasses;
@@ -106,24 +111,25 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private wrapper;
 	private toggle;
 	private toggleTextWrapper;
-	private tags;
-	private tagsItems;
 	private tagsInput;
 	private dropdown;
 	private searchWrapper;
 	private search;
 	private searchNoResult;
 	private selectOptions;
+	private extraMarkup;
 	private readonly isAddTagOnEnter;
+	private tagsInputHelper;
 	constructor(el: HTMLElement, options?: ISelectOptions);
 	private init;
 	private build;
 	private buildWrapper;
+	private buildExtraMarkup;
 	private buildToggle;
 	private setToggleIcon;
 	private setToggleTitle;
 	private buildTags;
-	private buildTagsItems;
+	private reassignTagsInputPlaceholder;
 	private buildTagsItem;
 	private getItemByValue;
 	private setTagsItems;
@@ -134,6 +140,9 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private destroyOption;
 	private buildOriginalOption;
 	private destroyOriginalOption;
+	private buildTagsInputHelper;
+	private calculateInputWidth;
+	private adjustInputWidth;
 	private onSelectOption;
 	private addSelectOption;
 	private removeSelectOption;

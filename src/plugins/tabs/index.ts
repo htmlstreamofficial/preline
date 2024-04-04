@@ -1,6 +1,6 @@
 /*
  * HSTabs
- * @version: 2.0.3
+ * @version: 2.1.0
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
@@ -156,8 +156,6 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 				.getAttribute('data-hs-tabs-vertical');
 
 			evt.preventDefault();
-
-			console.log('Key code:', evt.code);
 
 			switch (evt.code) {
 				case isVertical === 'true' ? 'ArrowUp' : 'ArrowLeft':

@@ -1,6 +1,6 @@
 /*
  * HSCollapse
- * @version: 2.0.3
+ * @version: 2.1.0
  * @author: HTMLStream
  * @license: Licensed under MIT (https://preline.co/docs/license.html)
  * Copyright 2023 HTMLStream
@@ -63,6 +63,9 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 		this.content.style.height = '0';
 		setTimeout(() => {
 			this.content.style.height = `${this.content.scrollHeight}px`;
+
+			this.fireEvent('beforeOpen', this.el);
+			dispatch('beforeOpen.hs.collapse', this.el, this.el);
 		});
 
 		afterTransition(this.content, () => {

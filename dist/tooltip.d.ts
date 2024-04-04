@@ -1,9 +1,5 @@
 
-export interface ITooltip {
-	options?: {};
-	show(): void;
-	hide(): void;
-}
+
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -21,6 +17,11 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
+}
+export interface ITooltip {
+	options?: {};
+	show(): void;
+	hide(): void;
 }
 declare class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	private readonly toggle;

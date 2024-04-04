@@ -4,11 +4,13 @@ const TerserPlugin = require('terser-webpack-plugin');
 module.exports = {
 	mode: 'production',
 	watch: true,
+	stats: 'minimal',
 	entry: {
 		index: './src/index.ts',
 		accordion: './src/plugins/accordion/index.ts',
 		carousel: './src/plugins/carousel/index.ts',
 		collapse: './src/plugins/collapse/index.ts',
+		combobox: './src/plugins/combobox/index.ts',
 		'copy-markup': './src/plugins/copy-markup/index.ts',
 		dropdown: './src/plugins/dropdown/index.ts',
 		'input-number': './src/plugins/input-number/index.ts',

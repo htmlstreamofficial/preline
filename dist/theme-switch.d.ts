@@ -1,11 +1,5 @@
 
-export interface IThemeSwitchOptions {
-	theme?: "dark" | "light" | "default";
-}
-export interface IThemeSwitch {
-	options?: IThemeSwitchOptions;
-	setAppearance(theme: string, isSaveToLocalStorage: boolean, isSetDispatchEvent: boolean): void;
-}
+
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -20,12 +14,21 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
 }
+export interface IThemeSwitchOptions {
+	theme?: "dark" | "light" | "default";
+}
+export interface IThemeSwitch {
+	options?: IThemeSwitchOptions;
+	setAppearance(theme: string, isSaveToLocalStorage: boolean, isSetDispatchEvent: boolean): void;
+}
 declare class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements IThemeSwitch {
 	theme: string;
 	private readonly themeSet;
 	constructor(el: HTMLElement, options?: IThemeSwitchOptions);
 	private init;
 	private setResetStyles;
+	private addSystemThemeObserver;
+	private removeSystemThemeObserver;
 	setAppearance(theme?: string, isSaveToLocalStorage?: boolean, isSetDispatchEvent?: boolean): void;
 	static getInstance(target: HTMLElement | string): HSThemeSwitch;
 	static autoInit(): void;
