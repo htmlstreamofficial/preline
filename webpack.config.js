@@ -39,6 +39,9 @@ module.exports = {
 		filename: '[name].js',
 		library: { type: 'umd' },
 	},
+	externals: {
+		jquery: 'jQuery',
+	},
 	optimization: {
 		minimize: true,
 		minimizer: [
@@ -46,5 +49,5 @@ module.exports = {
 				extractComments: false,
 			}),
 		],
-	},
+	}
 };

@@ -58,7 +58,21 @@ module.exports = plugin(function ({ addVariant, e }) {
 		},
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
+				return `.hs-accordion.active > .${e(
+					`hs-accordion-active${separator}${className}`,
+				)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
 				return `.hs-accordion.active > .hs-accordion-toggle .${e(
+					`hs-accordion-active${separator}${className}`,
+				)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.hs-accordion.active > .hs-accordion-heading > .hs-accordion-toggle .${e(
 					`hs-accordion-active${separator}${className}`,
 				)}`;
 			});
@@ -70,7 +84,22 @@ module.exports = plugin(function ({ addVariant, e }) {
 				)}`;
 			});
 		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.hs-accordion.active > .hs-accordion-heading > .hs-accordion-toggle.${e(
+					`hs-accordion-active${separator}${className}`,
+				)}`;
+			});
+		},
 	]);
+
+	addVariant('hs-accordion-selected', ({ modifySelectors, separator }) => {
+		modifySelectors(({ className }) => {
+			return `.hs-accordion .selected.${e(
+				`hs-accordion-selected${separator}${className}`,
+			)}`;
+		});
+	});
 
 	addVariant('hs-collapse-open', [
 		({ modifySelectors, separator }) => {
@@ -106,12 +135,16 @@ module.exports = plugin(function ({ addVariant, e }) {
 	addVariant('hs-tab-active', [
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
-				return `[data-hs-tab].active.${e(`hs-tab-active${separator}${className}`)}`;
+				return `[data-hs-tab].active.${e(
+					`hs-tab-active${separator}${className}`,
+				)}`;
 			});
 		},
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
-				return `[data-hs-tab].active .${e(`hs-tab-active${separator}${className}`)}`;
+				return `[data-hs-tab].active .${e(
+					`hs-tab-active${separator}${className}`,
+				)}`;
 			});
 		},
 	]);
@@ -241,12 +274,16 @@ module.exports = plugin(function ({ addVariant, e }) {
 	addVariant('hs-input-number-disabled', [
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
-				return `.disabled.${e(`hs-input-number-disabled${separator}${className}`)}`;
+				return `.disabled.${e(
+					`hs-input-number-disabled${separator}${className}`,
+				)}`;
 			});
 		},
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
-				return `.disabled .${e(`hs-input-number-disabled${separator}${className}`)}`;
+				return `.disabled .${e(
+					`hs-input-number-disabled${separator}${className}`,
+				)}`;
 			});
 		},
 	]);
@@ -314,12 +351,16 @@ module.exports = plugin(function ({ addVariant, e }) {
 	addVariant('hs-stepper-completed', [
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
-				return `.completed.${e(`hs-stepper-completed${separator}${className}`)}`;
+				return `.completed.${e(
+					`hs-stepper-completed${separator}${className}`,
+				)}`;
 			});
 		},
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
-				return `.completed .${e(`hs-stepper-completed${separator}${className}`)}`;
+				return `.completed .${e(
+					`hs-stepper-completed${separator}${className}`,
+				)}`;
 			});
 		},
 	]);
@@ -340,12 +381,16 @@ module.exports = plugin(function ({ addVariant, e }) {
 	addVariant('hs-stepper-processed', [
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
-				return `.processed.${e(`hs-stepper-processed${separator}${className}`)}`;
+				return `.processed.${e(
+					`hs-stepper-processed${separator}${className}`,
+				)}`;
 			});
 		},
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
-				return `.processed .${e(`hs-stepper-processed${separator}${className}`)}`;
+				return `.processed .${e(
+					`hs-stepper-processed${separator}${className}`,
+				)}`;
 			});
 		},
 	]);
@@ -413,7 +458,7 @@ module.exports = plugin(function ({ addVariant, e }) {
 					`hs-strong-password-active${separator}${className}`,
 				)}`;
 			});
-		}
+		},
 	]);
 
 	addVariant('hs-combo-box-active', [
@@ -432,12 +477,16 @@ module.exports = plugin(function ({ addVariant, e }) {
 	addVariant('hs-combo-box-selected', [
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
-				return `.selected .${e(`hs-combo-box-selected${separator}${className}`)}`;
+				return `.selected .${e(
+					`hs-combo-box-selected${separator}${className}`,
+				)}`;
 			});
 		},
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
-				return `.selected.${e(`hs-combo-box-selected${separator}${className}`)}`;
+				return `.selected.${e(
+					`hs-combo-box-selected${separator}${className}`,
+				)}`;
 			});
 		},
 	]);
@@ -445,7 +494,9 @@ module.exports = plugin(function ({ addVariant, e }) {
 	addVariant('hs-combo-box-tab-active', [
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
-				return `.active.${e(`hs-combo-box-tab-active${separator}${className}`)}`;
+				return `.active.${e(
+					`hs-combo-box-tab-active${separator}${className}`,
+				)}`;
 			});
 		},
 	]);
@@ -457,7 +508,7 @@ module.exports = plugin(function ({ addVariant, e }) {
 					`hs-apexcharts-tooltip-dark${separator}${className}`,
 				)}`;
 			});
-		}
+		},
 	]);
 
 	addVariant('hs-success', [
@@ -486,6 +537,7 @@ module.exports = plugin(function ({ addVariant, e }) {
 		},
 	]);
 
+	// Modes
 	addVariant('hs-default-mode-active', ({ modifySelectors, separator }) => {
 		modifySelectors(({ className }) => {
 			return `.default .${e(`hs-default-mode-active${separator}${className}`)}`;

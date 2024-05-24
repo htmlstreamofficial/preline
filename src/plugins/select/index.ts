@@ -59,8 +59,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly searchPlaceholder: string | null;
 	private readonly searchClasses: string | null;
 	private readonly searchWrapperClasses: string | null;
-	private searchNoResultText: string | null;
-	private searchNoResultClasses: string | null;
+	private readonly searchNoResultText: string | null;
+	private readonly searchNoResultClasses: string | null;
 	private readonly optionTag: string | null;
 	private readonly optionTemplate: string | null;
 	private readonly optionClasses: string | null;
@@ -126,12 +126,13 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			concatOptions?.searchWrapperClasses || 'bg-white p-2 sticky top-0';
 		this.searchClasses =
 			concatOptions?.searchClasses ||
-			'block w-[calc(100%-2rem)] text-sm border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 py-2 px-3 my-2 mx-4';
+			'block w-[calc(100%-2rem)] text-sm border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 py-2 px-3 my-2 mx-4';
 		this.searchPlaceholder = concatOptions?.searchPlaceholder || 'Search...';
 		this.searchNoResultText =
-			concatOptions?.searchNoResultText || 'No options found...';
+			concatOptions?.searchNoResultText || 'No results found';
 		this.searchNoResultClasses =
-			concatOptions?.searchNoResultClasses || 'px-4 text-sm';
+			concatOptions?.searchNoResultClasses ||
+			'px-4 text-sm text-gray-800 dark:text-neutral-200';
 		this.optionTemplate = concatOptions?.optionTemplate || null;
 		this.optionTag = concatOptions?.optionTag || null;
 		this.optionClasses = concatOptions?.optionClasses || null;
@@ -670,6 +671,14 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 		if (this.isOpened && this.mode === 'tags' && this.tagsInput)
 			this.tagsInput.focus();
+
+		this.triggerChangeEventForNativeSelect();
+	}
+
+	private triggerChangeEventForNativeSelect() {
+		(this.el as HTMLSelectElement).value = `${this.value}`;
+		const selectChangeEvent = new Event('change', { bubbles: true });
+		(this.el as HTMLSelectElement).dispatchEvent(selectChangeEvent);
 	}
 
 	private addSelectOption(
@@ -791,7 +800,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		options.forEach((el) => {
 			const optionVal = el.getAttribute('data-title-value').toLocaleLowerCase();
 
-			if (!optionVal.includes(val.toLocaleLowerCase())) el.classList.add('hidden');
+			if (!optionVal.includes(val.toLocaleLowerCase()))
+				el.classList.add('hidden');
 			else {
 				el.classList.remove('hidden');
 				hasItems = true;

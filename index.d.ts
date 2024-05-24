@@ -44,17 +44,26 @@ export declare class HSCopyMarkup extends HSBasePlugin<ICopyMarkupOptions> imple
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSCopyMarkup | ICollectionItem<HSCopyMarkup>;
 	static autoInit(): void;
 }
+export interface IAccordionTreeViewStaticOptions {
+}
+export interface IAccordionTreeView {
+	el: HTMLElement | null;
+	options?: IAccordionTreeViewStaticOptions;
+}
+export interface IAccordionOptions {
+}
 export interface IAccordion {
-	options?: {};
+	options?: IAccordionOptions;
 	show(): void;
 	hide(): void;
 }
-export declare class HSAccordion extends HSBasePlugin<{}> implements IAccordion {
+export declare class HSAccordion extends HSBasePlugin<IAccordionOptions> implements IAccordion {
 	private readonly toggle;
 	content: HTMLElement | null;
 	private readonly group;
 	private readonly isAlwaysOpened;
-	constructor(el: HTMLElement, options?: {}, events?: {});
+	static selectable: IAccordionTreeView[];
+	constructor(el: HTMLElement, options?: IAccordionOptions, events?: {});
 	private init;
 	show(): boolean;
 	hide(): boolean;
@@ -62,6 +71,8 @@ export declare class HSAccordion extends HSBasePlugin<{}> implements IAccordion 
 	static show(target: HTMLElement): void;
 	static hide(target: HTMLElement): void;
 	static autoInit(): void;
+	static treeView(): boolean;
+	static toggleSelected(root: IAccordionTreeView, item: HTMLElement): void;
 	static on(evt: string, target: HTMLElement, cb: Function): void;
 }
 export interface ICarouselOptions {
@@ -149,6 +160,7 @@ export interface IComboBoxOptions {
 	groupingTitleTemplate?: string | null;
 	tabsWrapperTemplate?: string | null;
 	preventSelection?: boolean;
+	preventAutoPosition?: boolean;
 	isOpenOnFocus?: boolean;
 }
 export interface IComboBox {
@@ -174,6 +186,7 @@ export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implement
 	groupingTitleTemplate: string | null;
 	tabsWrapperTemplate: string | null;
 	preventSelection: boolean;
+	preventAutoPosition: boolean;
 	isOpenOnFocus: boolean;
 	private readonly input;
 	private readonly output;
@@ -181,6 +194,8 @@ export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implement
 	private items;
 	private tabs;
 	private readonly toggle;
+	private readonly toggleClose;
+	private readonly toggleOpen;
 	private outputPlaceholder;
 	private outputLoader;
 	private value;
@@ -190,7 +205,7 @@ export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implement
 	isOpened: boolean;
 	isCurrent: boolean;
 	private animationInProcess;
-	constructor(el: HTMLElement, options?: IComboBoxOptions);
+	constructor(el: HTMLElement, options?: IComboBoxOptions, events?: {});
 	private init;
 	private build;
 	private setResultAndRender;
@@ -215,6 +230,8 @@ export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implement
 	private groupDefaultRender;
 	private itemsFromHtml;
 	private buildToggle;
+	private buildToggleClose;
+	private buildToggleOpen;
 	private setSelectedByValue;
 	private setValue;
 	private setItemsVisibility;
@@ -232,6 +249,8 @@ export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implement
 	static autoInit(): void;
 	static close(target: HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;
+	private static getPreparedItems;
+	private static setHighlighted;
 	static accessibility(evt: KeyboardEvent): void;
 	static onEscape(): void;
 	static onArrow(isArrowUp?: boolean): boolean;
@@ -250,6 +269,7 @@ export interface IHTMLElementPopper extends HTMLElement {
 export declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementPopper> implements IDropdown {
 	private static history;
 	private readonly toggle;
+	private readonly closers;
 	menu: HTMLElement | null;
 	private eventMode;
 	private readonly closeMode;
@@ -257,6 +277,7 @@ export declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementPopper> imp
 	constructor(el: IHTMLElementPopper, options?: {}, events?: {});
 	private init;
 	resizeHandler(): void;
+	private buildClosers;
 	private onClickHandler;
 	private onMouseEnterHandler;
 	private onMouseLeaveHandler;
@@ -313,6 +334,7 @@ export interface IOverlayOptions {
 	hiddenClass?: string | null;
 	isClosePrev?: boolean;
 	backdropClasses?: string | null;
+	backdropExtraClasses?: string | null;
 }
 export interface IOverlay {
 	options?: IOverlayOptions;
@@ -323,6 +345,7 @@ export declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly hiddenClass;
 	private readonly isClosePrev;
 	private readonly backdropClasses;
+	private readonly backdropExtraClasses;
 	private openNextOverlay;
 	private autoHide;
 	private readonly overlayId;
@@ -538,8 +561,8 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private readonly searchPlaceholder;
 	private readonly searchClasses;
 	private readonly searchWrapperClasses;
-	private searchNoResultText;
-	private searchNoResultClasses;
+	private readonly searchNoResultText;
+	private readonly searchNoResultClasses;
 	private readonly optionTag;
 	private readonly optionTemplate;
 	private readonly optionClasses;
@@ -582,6 +605,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private calculateInputWidth;
 	private adjustInputWidth;
 	private onSelectOption;
+	private triggerChangeEventForNativeSelect;
 	private addSelectOption;
 	private removeSelectOption;
 	private resetTagsInputField;

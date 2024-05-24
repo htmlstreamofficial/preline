@@ -9,6 +9,7 @@
 import {
 	isEnoughSpace,
 	debounce,
+	dispatch,
 	afterTransition,
 	htmlToElement,
 	isParentOrElementHidden,
@@ -38,6 +39,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	groupingTitleTemplate: string | null;
 	tabsWrapperTemplate: string | null;
 	preventSelection: boolean;
+	preventAutoPosition: boolean;
 	isOpenOnFocus: boolean;
 
 	private readonly input: HTMLInputElement | null;
@@ -46,6 +48,8 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	private items: HTMLElement[] | [];
 	private tabs: HTMLElement[] | [];
 	private readonly toggle: HTMLElement | null;
+	private readonly toggleClose: HTMLElement | null;
+	private readonly toggleOpen: HTMLElement | null;
 	private outputPlaceholder: HTMLElement | null;
 	private outputLoader: HTMLElement | null;
 
@@ -58,8 +62,8 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	isCurrent: boolean;
 	private animationInProcess: boolean;
 
-	constructor(el: HTMLElement, options?: IComboBoxOptions) {
-		super(el, options);
+	constructor(el: HTMLElement, options?: IComboBoxOptions, events?: {}) {
+		super(el, options, events);
 
 		// Data parameters
 		const data = el.getAttribute('data-hs-combo-box');
@@ -83,22 +87,22 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 		this.apiGroupField = concatOptions?.apiGroupField ?? null;
 		this.outputItemTemplate =
 			concatOptions?.outputItemTemplate ??
-			`<div class="cursor-pointer py-2 px-4 w-full text-sm text-gray-800 hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100 dark:bg-slate-900 dark:hover:bg-slate-800 dark:text-gray-200 dark:focus:bg-slate-800" data-hs-combo-box-output-item>
-			<div class="flex justify-between items-center w-full">
-				<span data-hs-combo-box-search-text></span>
-				<span class="hidden hs-combo-box-selected:block">
-					<svg class="flex-shrink-0 size-3.5 text-blue-600 dark:text-blue-500" xmlns="http:.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<polyline points="20 6 9 17 4 12"></polyline>
-					</svg>
-				</span>
-			</div>
-		</div>`;
+			`<div class="cursor-pointer py-2 px-4 w-full text-sm text-gray-800 hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800" data-hs-combo-box-output-item>
+				<div class="flex justify-between items-center w-full">
+					<span data-hs-combo-box-search-text></span>
+					<span class="hidden hs-combo-box-selected:block">
+						<svg class="flex-shrink-0 size-3.5 text-blue-600 dark:text-blue-500" xmlns="http:.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<polyline points="20 6 9 17 4 12"></polyline>
+						</svg>
+					</span>
+				</div>
+			</div>`;
 		this.outputEmptyTemplate =
 			concatOptions?.outputEmptyTemplate ??
-			`<div class="py-2 px-4 w-full text-sm text-gray-800 rounded-lg dark:bg-slate-900 dark:text-gray-200">Nothing found...</div>`;
+			`<div class="py-2 px-4 w-full text-sm text-gray-800 rounded-lg dark:bg-neutral-900 dark:text-neutral-200">Nothing found...</div>`;
 		this.outputLoaderTemplate =
 			concatOptions?.outputLoaderTemplate ??
-			`<div class="flex justify-center items-center py-2 px-4 text-sm text-gray-800 rounded-lg bg-white dark:bg-slate-900 dark:text-gray-200">
+			`<div class="flex justify-center items-center py-2 px-4 text-sm text-gray-800 rounded-lg bg-white dark:bg-neutral-900 dark:text-neutral-200">
 				<div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
 					<span class="sr-only">Loading...</span>
 				</div>
@@ -113,6 +117,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 			concatOptions?.tabsWrapperTemplate ??
 			`<div class="overflow-x-auto p-4"></div>`;
 		this.preventSelection = concatOptions?.preventSelection ?? false;
+		this.preventAutoPosition = concatOptions?.preventAutoPosition ?? false;
 		this.isOpenOnFocus = concatOptions?.isOpenOnFocus ?? false;
 
 		// Internal parameters
@@ -125,6 +130,9 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 			[];
 		this.tabs = [];
 		this.toggle = this.el.querySelector('[data-hs-combo-box-toggle]') ?? null;
+		this.toggleClose =
+			this.el.querySelector('[data-hs-combo-box-close]') ?? null;
+		this.toggleOpen = this.el.querySelector('[data-hs-combo-box-open]') ?? null;
 		this.outputPlaceholder = null;
 
 		this.selected = this.value =
@@ -151,9 +159,11 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 		if (this.preventVisibility) {
 			this.isOpened = true;
 
-			this.recalculateDirection();
+			if (!this.preventAutoPosition) this.recalculateDirection();
 		}
 		if (this.toggle) this.buildToggle();
+		if (this.toggleClose) this.buildToggleClose();
+		if (this.toggleOpen) this.buildToggleOpen();
 	}
 
 	private setResultAndRender(value = '') {
@@ -570,6 +580,14 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 		});
 	}
 
+	private buildToggleClose() {
+		this.toggleClose.addEventListener('click', () => this.close());
+	}
+
+	private buildToggleOpen() {
+		this.toggleOpen.addEventListener('click', () => this.open());
+	}
+
 	private setSelectedByValue(val: string[]) {
 		this.items.forEach((el) => {
 			if (this.isTextExists(el, val))
@@ -582,6 +600,9 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 		this.selected = val;
 		this.value = val;
 		this.input.value = val;
+
+		this.fireEvent('select', this.el);
+		dispatch('select.hs.combobox', this.el, this.value);
 	}
 
 	private setItemsVisibility() {
@@ -688,7 +709,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 		this.animationInProcess = true;
 
 		this.output.style.display = 'block';
-		this.recalculateDirection();
+		if (!this.preventAutoPosition) this.recalculateDirection();
 
 		setTimeout(() => {
 			this.el.classList.add('active');
@@ -718,9 +739,11 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 		this.animationInProcess = true;
 
 		this.el.classList.remove('active');
-		this.output.classList.remove('bottom-full', 'top-full');
-		this.output.style.marginTop = '';
-		this.output.style.marginBottom = '';
+		if (!this.preventAutoPosition) {
+			this.output.classList.remove('bottom-full', 'top-full');
+			this.output.style.marginTop = '';
+			this.output.style.marginBottom = '';
+		}
 
 		afterTransition(this.output, () => {
 			this.output.style.display = 'none';
@@ -969,21 +992,28 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	static onEnter(evt: Event) {
 		const target = evt.target;
 		const opened = window.$hsComboBoxCollection.find(
-			// ::TEST !el.element.preventVisibility && el.element.isOpened
-			(el) => !isParentOrElementHidden(el.element.el) && el.element.isOpened,
+			(el) =>
+				!isParentOrElementHidden(el.element.el) &&
+				(evt.target as HTMLElement).closest('[data-hs-combo-box]') ===
+					el.element.el,
 		);
-		const link: HTMLAnchorElement = opened.element.el.querySelector('a');
+
+		const link: HTMLAnchorElement = opened.element.el.querySelector(
+			'.hs-combo-box-output-item-highlighted a',
+		);
 
 		if ((target as HTMLElement).hasAttribute('data-hs-combo-box-input')) {
 			opened.element.close();
 			(target as HTMLInputElement).blur();
 		} else {
-			if (!opened.element.preventSelection)
+			if (!opened.element.preventSelection) {
 				opened.element.setSelectedByValue(
 					opened.element.valuesBySelector(evt.target as HTMLElement),
 				);
-			if (opened.element.preventSelection && link)
+			}
+			if (opened.element.preventSelection && link) {
 				window.location.assign(link.getAttribute('href'));
+			}
 			opened.element.close(
 				!opened.element.preventSelection
 					? (evt.target as HTMLElement)
@@ -1014,7 +1044,8 @@ document.addEventListener('scroll', () => {
 
 	const target = window.$hsComboBoxCollection.find((el) => el.element.isOpened);
 
-	if (target) target.element.recalculateDirection();
+	if (target && !target.element.preventAutoPosition)
+		target.element.recalculateDirection();
 });
 
 if (typeof window !== 'undefined') {

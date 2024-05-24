@@ -18,17 +18,26 @@ export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
 }
+export interface IAccordionTreeViewStaticOptions {
+}
+export interface IAccordionTreeView {
+	el: HTMLElement | null;
+	options?: IAccordionTreeViewStaticOptions;
+}
+export interface IAccordionOptions {
+}
 export interface IAccordion {
-	options?: {};
+	options?: IAccordionOptions;
 	show(): void;
 	hide(): void;
 }
-declare class HSAccordion extends HSBasePlugin<{}> implements IAccordion {
+declare class HSAccordion extends HSBasePlugin<IAccordionOptions> implements IAccordion {
 	private readonly toggle;
 	content: HTMLElement | null;
 	private readonly group;
 	private readonly isAlwaysOpened;
-	constructor(el: HTMLElement, options?: {}, events?: {});
+	static selectable: IAccordionTreeView[];
+	constructor(el: HTMLElement, options?: IAccordionOptions, events?: {});
 	private init;
 	show(): boolean;
 	hide(): boolean;
@@ -36,6 +45,8 @@ declare class HSAccordion extends HSBasePlugin<{}> implements IAccordion {
 	static show(target: HTMLElement): void;
 	static hide(target: HTMLElement): void;
 	static autoInit(): void;
+	static treeView(): boolean;
+	static toggleSelected(root: IAccordionTreeView, item: HTMLElement): void;
 	static on(evt: string, target: HTMLElement, cb: Function): void;
 }
 

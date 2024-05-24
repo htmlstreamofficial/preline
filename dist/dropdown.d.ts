@@ -30,6 +30,7 @@ export interface IHTMLElementPopper extends HTMLElement {
 declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementPopper> implements IDropdown {
 	private static history;
 	private readonly toggle;
+	private readonly closers;
 	menu: HTMLElement | null;
 	private eventMode;
 	private readonly closeMode;
@@ -37,6 +38,7 @@ declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementPopper> implements
 	constructor(el: IHTMLElementPopper, options?: {}, events?: {});
 	private init;
 	resizeHandler(): void;
+	private buildClosers;
 	private onClickHandler;
 	private onMouseEnterHandler;
 	private onMouseLeaveHandler;

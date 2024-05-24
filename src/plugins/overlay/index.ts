@@ -24,6 +24,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly hiddenClass: string | null;
 	private readonly isClosePrev: boolean;
 	private readonly backdropClasses: string | null;
+	private readonly backdropExtraClasses: string | null;
 
 	private openNextOverlay: boolean;
 	private autoHide: ReturnType<typeof setTimeout> | null;
@@ -52,7 +53,8 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		this.isClosePrev = concatOptions?.isClosePrev ?? true;
 		this.backdropClasses =
 			concatOptions?.backdropClasses ??
-			'transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 hs-overlay-backdrop';
+			'hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900';
+		this.backdropExtraClasses = concatOptions?.backdropExtraClasses ?? '';
 
 		this.openNextOverlay = false;
 		this.autoHide = null;
@@ -152,7 +154,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		const backdropId =
 			this.overlay.getAttribute('data-hs-overlay-backdrop-container') || false;
 		let backdrop: HTMLElement | Node = document.createElement('div');
-		let backdropClasses = this.backdropClasses;
+		let backdropClasses = `${this.backdropClasses} ${this.backdropExtraClasses}`;
 		const closeOnBackdrop =
 			getClassProperty(this.overlay, '--overlay-backdrop', 'true') !== 'static';
 		const disableBackdrop =
@@ -235,11 +237,13 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	public open() {
 		if (!this.overlay) return false;
 
+		const openedOverlays = document.querySelectorAll('.hs-overlay.open');
 		const currentlyOpened = window.$hsOverlayCollection.find(
 			(el) =>
-				el.element.overlay === document.querySelector('.hs-overlay.open') &&
+				Array.from(openedOverlays).includes(el.element.overlay) &&
 				!el.element.isLayoutAffect,
 		);
+
 		const disabledScroll =
 			getClassProperty(this.overlay, '--body-scroll', 'false') !== 'true';
 

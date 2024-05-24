@@ -35,6 +35,7 @@ export interface IComboBoxOptions {
 	groupingTitleTemplate?: string | null;
 	tabsWrapperTemplate?: string | null;
 	preventSelection?: boolean;
+	preventAutoPosition?: boolean;
 	isOpenOnFocus?: boolean;
 }
 export interface IComboBox {
@@ -60,6 +61,7 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	groupingTitleTemplate: string | null;
 	tabsWrapperTemplate: string | null;
 	preventSelection: boolean;
+	preventAutoPosition: boolean;
 	isOpenOnFocus: boolean;
 	private readonly input;
 	private readonly output;
@@ -67,6 +69,8 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	private items;
 	private tabs;
 	private readonly toggle;
+	private readonly toggleClose;
+	private readonly toggleOpen;
 	private outputPlaceholder;
 	private outputLoader;
 	private value;
@@ -76,7 +80,7 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	isOpened: boolean;
 	isCurrent: boolean;
 	private animationInProcess;
-	constructor(el: HTMLElement, options?: IComboBoxOptions);
+	constructor(el: HTMLElement, options?: IComboBoxOptions, events?: {});
 	private init;
 	private build;
 	private setResultAndRender;
@@ -101,6 +105,8 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	private groupDefaultRender;
 	private itemsFromHtml;
 	private buildToggle;
+	private buildToggleClose;
+	private buildToggleOpen;
 	private setSelectedByValue;
 	private setValue;
 	private setItemsVisibility;
@@ -118,6 +124,8 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	static autoInit(): void;
 	static close(target: HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;
+	private static getPreparedItems;
+	private static setHighlighted;
 	static accessibility(evt: KeyboardEvent): void;
 	static onEscape(): void;
 	static onArrow(isArrowUp?: boolean): boolean;

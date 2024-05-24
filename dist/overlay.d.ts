@@ -22,6 +22,7 @@ export interface IOverlayOptions {
 	hiddenClass?: string | null;
 	isClosePrev?: boolean;
 	backdropClasses?: string | null;
+	backdropExtraClasses?: string | null;
 }
 export interface IOverlay {
 	options?: IOverlayOptions;
@@ -32,6 +33,7 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly hiddenClass;
 	private readonly isClosePrev;
 	private readonly backdropClasses;
+	private readonly backdropExtraClasses;
 	private openNextOverlay;
 	private autoHide;
 	private readonly overlayId;

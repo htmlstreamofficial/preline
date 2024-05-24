@@ -15,6 +15,7 @@ export interface IComboBoxOptions {
 	groupingTitleTemplate?: string | null;
 	tabsWrapperTemplate?: string | null;
 	preventSelection?: boolean;
+	preventAutoPosition?: boolean;
 	isOpenOnFocus?: boolean;
 }
 

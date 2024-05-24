@@ -100,8 +100,8 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly searchPlaceholder;
 	private readonly searchClasses;
 	private readonly searchWrapperClasses;
-	private searchNoResultText;
-	private searchNoResultClasses;
+	private readonly searchNoResultText;
+	private readonly searchNoResultClasses;
 	private readonly optionTag;
 	private readonly optionTemplate;
 	private readonly optionClasses;
@@ -144,6 +144,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private calculateInputWidth;
 	private adjustInputWidth;
 	private onSelectOption;
+	private triggerChangeEventForNativeSelect;
 	private addSelectOption;
 	private removeSelectOption;
 	private resetTagsInputField;

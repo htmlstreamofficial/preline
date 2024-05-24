@@ -31,6 +31,7 @@ class HSDropdown
 {
 	private static history: IMenuSearchHistory;
 	private readonly toggle: HTMLElement | null;
+	private readonly closers: HTMLElement[] | null;
 	public menu: HTMLElement | null;
 	private eventMode: string;
 	private readonly closeMode: string;
@@ -41,7 +42,12 @@ class HSDropdown
 
 		this.toggle =
 			this.el.querySelector(':scope > .hs-dropdown-toggle') ||
+			this.el.querySelector(
+				':scope > .hs-dropdown-toggle-wrapper > .hs-dropdown-toggle',
+			) ||
 			(this.el.children[0] as HTMLElement);
+		this.closers =
+			Array.from(this.el.querySelectorAll(':scope .hs-dropdown-close')) || null;
 		this.menu = this.el.querySelector(':scope > .hs-dropdown-menu');
 		this.eventMode = getClassProperty(this.el, '--trigger', 'click');
 		this.closeMode = getClassProperty(this.el, '--auto-close', 'true');
@@ -54,8 +60,9 @@ class HSDropdown
 		this.createCollection(window.$hsDropdownCollection, this);
 
 		if ((this.toggle as HTMLButtonElement).disabled) return false;
+		this.toggle.addEventListener('click', (evt) => this.onClickHandler(evt));
 
-		this.toggle.addEventListener('click', () => this.onClickHandler());
+		if (this.closers) this.buildClosers();
 
 		if (!isIOS() && !isIpadOS()) {
 			this.el.addEventListener('mouseenter', () => this.onMouseEnterHandler());
@@ -67,7 +74,13 @@ class HSDropdown
 		this.eventMode = getClassProperty(this.el, '--trigger', 'click');
 	}
 
-	private onClickHandler() {
+	private buildClosers() {
+		this.closers.forEach((el: HTMLButtonElement) => {
+			el.addEventListener('click', () => this.close());
+		});
+	}
+
+	private onClickHandler(evt: Event) {
 		if (
 			this.el.classList.contains('open') &&
 			!this.menu.classList.contains('hidden')
@@ -315,7 +328,7 @@ class HSDropdown
 	static accessibility(evt: KeyboardEvent) {
 		this.history = menuSearchHistory;
 
-		const target = window.$hsDropdownCollection.find((el) =>
+		const target: ICollectionItem<HSDropdown> | null = window.$hsDropdownCollection.find((el) =>
 			el.element.el.classList.contains('open'),
 		);
 
@@ -325,7 +338,8 @@ class HSDropdown
 				(evt.code.length === 4 &&
 					evt.code[evt.code.length - 1].match(/^[A-Z]*$/))) &&
 			!evt.metaKey &&
-			!target.element.menu.querySelector('input:focus')
+			!target.element.menu.querySelector('input:focus') &&
+			!target.element.menu.querySelector('textarea:focus')
 		) {
 			switch (evt.code) {
 				case 'Escape':
