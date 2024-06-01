@@ -1,0 +1,33 @@
+name: Feature Request
+description: Suggest a new feature or enhancement.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Feature Request
+
+        Please provide a detailed description of the feature you would like to see. Include as much detail as possible to help us understand your request.
+  - type: input
+    id: feature-summary
+    attributes:
+      label: "Summary"
+      description: "Provide a brief summary of the feature."
+      placeholder: "A short summary of the feature."
+    validations:
+      required: true
+  - type: textarea
+    id: detailed-description
+    attributes:
+      label: "Detailed Description"
+      description: "Describe the feature in detail, including why it would be useful and how it should work."
+      placeholder: "Provide a detailed description of the feature."
+    validations:
+      required: true
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: "Use Cases"
+      description: "Describe specific use cases or scenarios where this feature would be beneficial."
+      placeholder: "Provide specific use cases or scenarios."
+    validations:
+      required: true

@@ -1,77 +1,51 @@
-name: Bug Report
-description: Use this template to report a bug.
-title: "[Bug]: "
-labels: ["bug"]
+name: Report a bug
+description: Please provide a clear and concise description of the problem.
 body:
   - type: markdown
     attributes:
       value: |
         ## Bug Report
 
-        Please provide a clear and concise description of the problem.
-
+        Thanks for taking the time to fill out this bug report!
   - type: input
     id: summary
     attributes:
-      label: Summary
-      description: Provide a general summary of the issue.
-      placeholder: A short summary of the bug.
-      value: ""
+      label: "Summary"
+      description: "Provide a general summary of the issue."
+      placeholder: "A short summary of the bug."
+    validations:
       required: true
-
   - type: textarea
     id: steps-to-reproduce
     attributes:
-      label: Steps to Reproduce
-      description: Describe the steps to reproduce the issue.
+      label: "Steps to Reproduce"
+      description: "Describe the steps to reproduce the issue."
       placeholder: "1. Go to...\n2. Click on...\n3. Scroll down to...\n4. See error..."
-      value: ""
+    validations:
       required: true
-
   - type: input
     id: demo-link
     attributes:
-      label: Demo Link
-      description: |
-        Provide a link to a demo on [CodeSandbox](https://codesandbox.io/) or [StackBlitz](https://stackblitz.com/) that reproduces the issue.
-        You can fork from an existing [Preline](https://preline.co/docs/frameworks.html) demo if needed.
-      placeholder: URL to the demo
-      value: ""
+      label: "Demo Link"
+      description: "Provide a link to a demo on [CodeSandbox](https://codesandbox.io/) or [StackBlitz](https://stackblitz.com/) that reproduces the issue.\nYou can fork from an existing [Preline](https://preline.co/docs/frameworks.html) demo if needed."
+      placeholder: "URL to the demo"
+    validations:
       required: true
-
   - type: textarea
     id: expected-behavior
     attributes:
-      label: Expected Behavior
-      description: Describe what you expected to happen.
-      placeholder: Describe the expected behavior.
-      value: ""
-      required: false
-
+      label: "Expected Behavior"
+      description: "Describe what you expected to happen."
+      placeholder: "Describe the expected behavior."
   - type: textarea
     id: actual-behavior
     attributes:
-      label: Actual Behavior
-      description: Describe what actually happened.
-      placeholder: Describe the actual behavior.
-      value: ""
-      required: false
-
-  - type: input
-    id: environment
-    attributes:
-      label: Environment
-      description: Specify the environment where the issue occurred (e.g., browser, OS, etc.).
-      placeholder: Browser, OS, etc.
-      value: ""
-      required: false
-
+      label: "Actual Behavior"
+      description: "Describe what actually happened."
+      placeholder: "Describe the actual behavior."
   - type: textarea
     id: screenshots
     attributes:
-      label: Screenshots
-      description: |
-        Attach any screenshots that may help explain the problem. You can upload your screenshots to an image hosting service or drag and drop them directly into a GitHub comment, and then provide the link here.
-      placeholder: URL to screenshots
-      value: ""
-      required: false
+      label: "Screenshots"
+      description: "Attach any screenshots that may help explain the problem. You can upload your screenshots to an image hosting service or drag and drop them directly into a GitHub comment, and then provide the link here."
+      placeholder: "URL to screenshots"
