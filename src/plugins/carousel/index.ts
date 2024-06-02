@@ -24,6 +24,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	private readonly loadingClassesAdd: string | string[];
 	private readonly afterLoadingClassesAdd: string | string[];
 	private readonly isAutoPlay: boolean;
+	private readonly isRTL: boolean;
 	private readonly speed: number;
 	private readonly isInfiniteLoop: boolean;
 	private timer: any;
@@ -61,6 +62,8 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			typeof concatOptions.isAutoPlay !== 'undefined'
 				? concatOptions.isAutoPlay
 				: false;
+		this.isRTL =
+			typeof concatOptions.isRTL !== 'undefined' ? concatOptions.isRTL : false;
 		this.speed = concatOptions.speed || 4000;
 		this.isInfiniteLoop =
 			typeof concatOptions.isInfiniteLoop !== 'undefined'
@@ -162,9 +165,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	private calculateWidth() {
 		// Set slider width
 		this.inner.style.width = `${this.sliderWidth * this.slides.length}px`;
-		this.inner.style.transform = `translate(-${
-			this.currentIndex * this.sliderWidth
-		}px, 0px)`;
+		this.inner.style.transform = this.calculateTransform();
 
 		// Set width to each slide
 		this.slides.forEach((el) => {
@@ -236,19 +237,21 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		this.calculateWidth();
 	}
 
+	private calculateTransform(): string {
+		let value = this.currentIndex * this.sliderWidth;
+		return this.isRTL
+			? `translate(${value}px, 0px)`
+			: `translate(-${value}px, 0px)`;
+	}
 	public goToPrev() {
 		if (this.currentIndex === 0 && this.isInfiniteLoop) {
 			this.currentIndex = this.slides.length - 1;
-			this.inner.style.transform = `translate(-${
-				this.currentIndex * this.sliderWidth
-			}px, 0px)`;
+			this.inner.style.transform = this.calculateTransform();
 
 			this.addCurrentClass();
 		} else if (this.currentIndex !== 0) {
 			this.currentIndex -= 1;
-			this.inner.style.transform = `translate(-${
-				this.currentIndex * this.sliderWidth
-			}px, 0px)`;
+			this.inner.style.transform = this.calculateTransform();
 
 			this.addCurrentClass();
 			this.addDisabledClass();
@@ -258,16 +261,12 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	public goToNext() {
 		if (this.currentIndex === this.slides.length - 1 && this.isInfiniteLoop) {
 			this.currentIndex = 0;
-			this.inner.style.transform = `translate(-${
-				this.currentIndex * this.sliderWidth
-			}px, 0px)`;
+			this.inner.style.transform = this.calculateTransform();
 
 			this.addCurrentClass();
 		} else if (this.currentIndex < this.slides.length - 1) {
 			this.currentIndex += 1;
-			this.inner.style.transform = `translate(-${
-				this.currentIndex * this.sliderWidth
-			}px, 0px)`;
+			this.inner.style.transform = this.calculateTransform();
 
 			this.addCurrentClass();
 			this.addDisabledClass();
@@ -276,9 +275,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 
 	public goTo(i: number) {
 		this.currentIndex = i;
-		this.inner.style.transform = `translate(-${
-			this.currentIndex * this.sliderWidth
-		}px, 0px)`;
+		this.inner.style.transform = this.calculateTransform();
 
 		this.addCurrentClass();
 		if (!this.isInfiniteLoop) this.addDisabledClass();
