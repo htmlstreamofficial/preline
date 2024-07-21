@@ -364,6 +364,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			this.selectMultipleItems();
 
 			newItem.remove();
+			this.fireEvent('change', this.value);
+			dispatch('change.hs.select', this.el, this.value);
 		});
 
 		this.wrapper.append(newItem);
