@@ -1,5 +1,3 @@
-
-
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -32,6 +30,8 @@ declare class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements
 	private readonly step;
 	constructor(el: HTMLElement, options?: IInputNumberOptions);
 	private init;
+	private checkIsNumberAndConvert;
+	private cleanAndExtractNumber;
 	private build;
 	private buildInput;
 	private buildIncrement;

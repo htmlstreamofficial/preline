@@ -1,9 +1,9 @@
 /*
  * HSRemoveElement
- * @version: 2.1.0
- * @author: HTMLStream
- * @license: Licensed under MIT (https://preline.co/docs/license.html)
- * Copyright 2023 HTMLStream
+ * @version: 2.4.0
+ * @author: Preline Labs Ltd.
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
  */
 
 import { afterTransition } from '../../utils';

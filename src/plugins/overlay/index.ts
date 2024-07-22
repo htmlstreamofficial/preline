@@ -1,9 +1,9 @@
 /*
  * HSOverlay
- * @version: 2.1.0
- * @author: HTMLStream
- * @license: Licensed under MIT (https://preline.co/docs/license.html)
- * Copyright 2023 HTMLStream
+ * @version: 2.4.0
+ * @author: Preline Labs Ltd.
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
  */
 
 import {
@@ -22,9 +22,11 @@ import HSBasePlugin from '../base-plugin';
 
 class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly hiddenClass: string | null;
+	private readonly emulateScrollbarSpace: boolean;
 	private readonly isClosePrev: boolean;
 	private readonly backdropClasses: string | null;
 	private readonly backdropExtraClasses: string | null;
+	private readonly animationTarget: HTMLElement | null;
 
 	private openNextOverlay: boolean;
 	private autoHide: ReturnType<typeof setTimeout> | null;
@@ -50,6 +52,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		};
 
 		this.hiddenClass = concatOptions?.hiddenClass || 'hidden';
+		this.emulateScrollbarSpace = concatOptions?.emulateScrollbarSpace || false;
 		this.isClosePrev = concatOptions?.isClosePrev ?? true;
 		this.backdropClasses =
 			concatOptions?.backdropClasses ??
@@ -96,6 +99,10 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 					: BREAKPOINTS[openedBreakpoint]) || null;
 		}
 
+		this.animationTarget =
+			this?.overlay?.querySelector('.hs-overlay-animation-target') ||
+			this.overlay;
+
 		if (this.overlay) this.init();
 	}
 
@@ -109,6 +116,12 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 				this.openedBreakpoint,
 				instance as ICollectionItem<HSOverlay>,
 			);
+		}
+
+		if (this?.el?.ariaExpanded) {
+			if (this.overlay.classList.contains('opened'))
+				this.el.ariaExpanded = 'true';
+			else this.el.ariaExpanded = 'false';
 		}
 
 		this.el.addEventListener('click', () => {
@@ -233,6 +246,20 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		else input.focus();
 	}
 
+	private getScrollbarSize() {
+		let div = document.createElement('div');
+		div.style.overflow = 'scroll';
+		div.style.width = '100px';
+		div.style.height = '100px';
+		document.body.appendChild(div);
+
+		let scrollbarSize = div.offsetWidth - div.clientWidth;
+
+		document.body.removeChild(div);
+
+		return scrollbarSize;
+	}
+
 	// Public methods
 	public open() {
 		if (!this.overlay) return false;
@@ -243,7 +270,9 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 				Array.from(openedOverlays).includes(el.element.overlay) &&
 				!el.element.isLayoutAffect,
 		);
-
+		const toggles = document.querySelectorAll(
+			`[data-hs-overlay="#${this.overlay.id}"]`,
+		);
 		const disabledScroll =
 			getClassProperty(this.overlay, '--body-scroll', 'false') !== 'true';
 
@@ -259,12 +288,17 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 		if (disabledScroll) {
 			document.body.style.overflow = 'hidden';
+			if (this.emulateScrollbarSpace)
+				document.body.style.paddingRight = `${this.getScrollbarSize()}px`;
 		}
 
 		this.buildBackdrop();
 		this.checkTimer();
 		this.hideAuto();
 
+		toggles.forEach((toggle) => {
+			if (toggle.ariaExpanded) toggle.ariaExpanded = 'true';
+		});
 		this.overlay.classList.remove(this.hiddenClass);
 		this.overlay.setAttribute('aria-overlay', 'true');
 		this.overlay.setAttribute('tabindex', '-1');
@@ -289,7 +323,13 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 		const closeFn = (cb: Function) => {
 			if (this.overlay.classList.contains('open')) return false;
+			const toggles = document.querySelectorAll(
+				`[data-hs-overlay="#${this.overlay.id}"]`,
+			);
 
+			toggles.forEach((toggle) => {
+				if (toggle.ariaExpanded) toggle.ariaExpanded = 'false';
+			});
 			this.overlay.classList.add(this.hiddenClass);
 
 			this.destroyBackdrop();
@@ -297,8 +337,10 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			this.fireEvent('close', this.el);
 			dispatch('close.hs.overlay', this.el, this.el);
 
-			if (!document.querySelector('.hs-overlay.opened'))
+			if (!document.querySelector('.hs-overlay.opened')) {
 				document.body.style.overflow = '';
+				if (this.emulateScrollbarSpace) document.body.style.paddingRight = '';
+			}
 
 			cb(this.overlay);
 		};
@@ -311,10 +353,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			this.overlay.removeAttribute('tabindex');
 
 			if (forceClose) closeFn(resolve);
-			else
-				afterTransition(this.overlay, () => {
-					closeFn(resolve);
-				});
+			else afterTransition(this.animationTarget, () => closeFn(resolve));
 		});
 	}
 
@@ -513,16 +552,49 @@ const autoCloseResizeFn = () => {
 const setOpenedResizeFn = () => {
 	if (
 		!window.$hsOverlayCollection.length ||
-		!window.$hsOverlayCollection.find((el) => el.element.openedBreakpoint)
+		!window.$hsOverlayCollection.find((el) => el.element.autoClose)
 	)
 		return false;
 
 	const overlays = window.$hsOverlayCollection.filter(
-		(el) => el.element.openedBreakpoint,
+		(el) => el.element.autoClose,
 	);
 
 	overlays.forEach((overlay) => {
-		HSOverlay.setOpened(overlay.element.openedBreakpoint, overlay);
+		if (document.body.clientWidth >= overlay.element.autoClose)
+			overlay.element.close(true);
+	});
+};
+
+const setBackdropZIndexResizeFn = () => {
+	if (
+		!window.$hsOverlayCollection.length ||
+		!window.$hsOverlayCollection.find((el) =>
+			el.element.overlay.classList.contains('opened'),
+		)
+	)
+		return false;
+
+	const overlays = window.$hsOverlayCollection.filter((el) =>
+		el.element.overlay.classList.contains('opened'),
+	);
+
+	overlays.forEach((overlay) => {
+		const overlayZIndex = parseInt(
+			window
+				.getComputedStyle(overlay.element.overlay)
+				.getPropertyValue('z-index'),
+		);
+		const backdrop: HTMLElement = document.querySelector(
+			`#${overlay.element.overlay.id}-backdrop`,
+		);
+		const backdropZIndex = parseInt(
+			window.getComputedStyle(backdrop).getPropertyValue('z-index'),
+		);
+		if (overlayZIndex === backdropZIndex + 1) return false;
+
+		if ('style' in backdrop) backdrop.style.zIndex = `${overlayZIndex - 1}`;
+		document.body.classList.add('hs-overlay-body-open');
 	});
 };
 
@@ -536,6 +608,7 @@ window.addEventListener('load', () => {
 window.addEventListener('resize', () => {
 	autoCloseResizeFn();
 	setOpenedResizeFn();
+	setBackdropZIndexResizeFn();
 });
 
 if (typeof window !== 'undefined') {

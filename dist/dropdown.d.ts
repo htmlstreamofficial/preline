@@ -1,5 +1,3 @@
-
-
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -33,11 +31,13 @@ declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementPopper> implements
 	private readonly closers;
 	menu: HTMLElement | null;
 	private eventMode;
-	private readonly closeMode;
+	private closeMode;
 	private animationInProcess;
 	constructor(el: IHTMLElementPopper, options?: {}, events?: {});
 	private init;
 	resizeHandler(): void;
+	private buildToggle;
+	private buildMenu;
 	private buildClosers;
 	private onClickHandler;
 	private onMouseEnterHandler;

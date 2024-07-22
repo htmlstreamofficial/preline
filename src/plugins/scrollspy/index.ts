@@ -1,9 +1,9 @@
 /*
  * HSScrollspy
- * @version: 2.1.0
- * @author: HTMLStream
- * @license: Licensed under MIT (https://preline.co/docs/license.html)
- * Copyright 2023 HTMLStream
+ * @version: 2.4.0
+ * @author: Preline Labs Ltd.
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
  */
 
 import { getClassProperty, dispatch } from '../../utils';
@@ -29,7 +29,6 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 		this.contentId = this.el.getAttribute('data-hs-scrollspy');
 		this.content = document.querySelector(this.contentId);
 		this.links = this.el.querySelectorAll('[href]');
-		// this.sections = this.content.children;
 		this.sections = [];
 		this.scrollableId = this.el.getAttribute(
 			'data-hs-scrollspy-scrollable-parent',

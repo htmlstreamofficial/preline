@@ -1,9 +1,9 @@
 /*
  * HSCollapse
- * @version: 2.1.0
- * @author: HTMLStream
- * @license: Licensed under MIT (https://preline.co/docs/license.html)
- * Copyright 2023 HTMLStream
+ * @version: 2.4.0
+ * @author: Preline Labs Ltd.
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
  */
 
 import { dispatch, afterTransition } from '../../utils';
@@ -31,6 +31,11 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 	private init() {
 		this.createCollection(window.$hsCollapseCollection, this);
 
+		if (this?.el?.ariaExpanded) {
+			if (this.el.classList.contains('open')) this.el.ariaExpanded = 'true';
+			else this.el.ariaExpanded = 'false';
+		}
+
 		this.el.addEventListener('click', () => {
 			if (this.content.classList.contains('open')) {
 				this.hide();
@@ -57,6 +62,7 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 		this.animationInProcess = true;
 
 		this.el.classList.add('open');
+		if (this?.el?.ariaExpanded) this.el.ariaExpanded = 'true';
 		this.content.classList.add('open');
 		this.content.classList.remove('hidden');
 
@@ -85,6 +91,7 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 		this.animationInProcess = true;
 
 		this.el.classList.remove('open');
+		if (this?.el?.ariaExpanded) this.el.ariaExpanded = 'false';
 
 		this.content.style.height = `${this.content.scrollHeight}px`;
 		setTimeout(() => {

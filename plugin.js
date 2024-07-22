@@ -1,10 +1,10 @@
 /*
  * Plugin
- * @version: 2.1.0
- * @author: HTMLStream
- * @requires: tailwindcss ^3.1.2
- * @license: Licensed under MIT (https://preline.co/docs/license.html)
- * Copyright 2023 HTMLStream
+ * @version: 2.4.0
+ * @author: Preline Labs Ltd.
+ * @requires: tailwindcss ^3.4.1
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
  */
 
 const plugin = require('tailwindcss/plugin');
@@ -20,7 +20,7 @@ module.exports = plugin(function ({ addVariant, e }) {
 		},
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
-				return `.hs-dropdown.open .hs-dropdown-toggle .${e(
+				return `.hs-dropdown.open > .hs-dropdown-toggle .${e(
 					`hs-dropdown-open${separator}${className}`,
 				)}`;
 			});
@@ -474,6 +474,19 @@ module.exports = plugin(function ({ addVariant, e }) {
 		},
 	]);
 
+	addVariant('hs-combo-box-has-value', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.has-value .${e(`hs-combo-box-has-value${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.has-value.${e(`hs-combo-box-has-value${separator}${className}`)}`;
+			});
+		},
+	]);
+
 	addVariant('hs-combo-box-selected', [
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
@@ -533,6 +546,33 @@ module.exports = plugin(function ({ addVariant, e }) {
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
 				return `.error.${e(`hs-error${separator}${className}`)}`;
+			});
+		},
+	]);
+
+	// Datatables.net
+	addVariant('hs-datatable-ordering-asc', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.dt-ordering-asc .${e(`hs-datatable-ordering-asc${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.dt-ordering-asc.${e(`hs-datatable-ordering-asc${separator}${className}`)}`;
+			});
+		},
+	]);
+
+	addVariant('hs-datatable-ordering-desc', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.dt-ordering-desc .${e(`hs-datatable-ordering-desc${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.dt-ordering-desc.${e(`hs-datatable-ordering-desc${separator}${className}`)}`;
 			});
 		},
 	]);

@@ -1,5 +1,3 @@
-
-
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -25,6 +23,8 @@ export interface ISingleOptionOptions {
 export interface ISingleOption {
 	title: string;
 	val: string;
+	disabled?: boolean;
+	selected?: boolean;
 	options?: ISingleOptionOptions | null;
 }
 export interface ISelectOptions {
@@ -38,8 +38,13 @@ export interface ISelectOptions {
 	wrapperClasses?: string;
 	toggleTag?: string;
 	toggleClasses?: string;
+	toggleSeparators?: {
+		items?: string;
+		betweenItemsAndCounter?: string;
+	};
 	toggleCountText?: string;
 	toggleCountTextMinItems?: number;
+	toggleCountTextMode?: string;
 	tagsItemTemplate?: string;
 	tagsItemClasses?: string;
 	tagsInputClasses?: string;
@@ -86,8 +91,10 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	selectedItems: string[];
 	private readonly toggleTag;
 	private readonly toggleClasses;
+	private readonly toggleSeparators;
 	private readonly toggleCountText;
 	private readonly toggleCountTextMinItems;
+	private readonly toggleCountTextMode;
 	private readonly wrapperClasses;
 	private readonly tagsItemTemplate;
 	private readonly tagsItemClasses;
@@ -121,6 +128,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly isAddTagOnEnter;
 	private tagsInputHelper;
 	constructor(el: HTMLElement, options?: ISelectOptions);
+	setValue(val: string | string[]): void;
 	private init;
 	private build;
 	private buildWrapper;
@@ -165,6 +173,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	recalculateDirection(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSSelect | ICollectionItem<HSSelect>;
 	static autoInit(): void;
+	static open(target: HTMLElement | string): void;
 	static close(target: HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;
 	static accessibility(evt: KeyboardEvent): void;

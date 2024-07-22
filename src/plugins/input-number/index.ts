@@ -1,9 +1,9 @@
 /*
  * HSInputNumber
- * @version: 2.1.0
- * @author: HTMLStream
- * @license: Licensed under MIT (https://preline.co/docs/license.html)
- * Copyright 2023 HTMLStream
+ * @version: 2.4.0
+ * @author: Preline Labs Ltd.
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
  */
 
 import { dispatch } from '../../utils';
@@ -33,11 +33,7 @@ class HSInputNumber
 		this.decrement =
 			this.el.querySelector('[data-hs-input-number-decrement]') || null;
 
-		if (this.input) {
-			this.inputValue = !isNaN(parseInt(this.input.value))
-				? parseInt(this.input.value)
-				: 0;
-		}
+		if (this.input) this.checkIsNumberAndConvert();
 
 		const data = this.el.dataset.hsInputNumber;
 		const dataOptions: IInputNumberOptions = data
@@ -62,6 +58,37 @@ class HSInputNumber
 		this.createCollection(window.$hsInputNumberCollection, this);
 
 		if (this.input && this.increment) this.build();
+	}
+
+	private checkIsNumberAndConvert() {
+		const value = this.input.value.trim();
+		const cleanedValue = this.cleanAndExtractNumber(value);
+
+		if (cleanedValue !== null) {
+			this.inputValue = cleanedValue;
+			this.input.value = cleanedValue.toString();
+		} else {
+			this.inputValue = 0;
+			this.input.value = '0';
+		}
+	}
+
+	private cleanAndExtractNumber(value: string): number | null {
+		const cleanedArray: string[] = [];
+		let decimalFound = false;
+
+		value.split('').forEach((char) => {
+			if (char >= '0' && char <= '9') cleanedArray.push(char);
+			else if (char === '.' && !decimalFound) {
+				cleanedArray.push(char);
+				decimalFound = true;
+			}
+		});
+
+		const cleanedValue = cleanedArray.join('');
+		const number = parseFloat(cleanedValue);
+
+		return isNaN(number) ? null : number;
 	}
 
 	private build() {

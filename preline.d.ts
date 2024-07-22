@@ -1,5 +1,3 @@
-
-
 export interface ICopyMarkupOptions {
 	targetSelector: string;
 	wrapperSelector: string;
@@ -119,6 +117,7 @@ export declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implement
 	private resetTimer;
 	private detectDirection;
 	recalculateWidth(): void;
+	private calculateTransform;
 	goToPrev(): void;
 	goToNext(): void;
 	goTo(i: number): void;
@@ -274,11 +273,13 @@ export declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementPopper> imp
 	private readonly closers;
 	menu: HTMLElement | null;
 	private eventMode;
-	private readonly closeMode;
+	private closeMode;
 	private animationInProcess;
 	constructor(el: IHTMLElementPopper, options?: {}, events?: {});
 	private init;
 	resizeHandler(): void;
+	private buildToggle;
+	private buildMenu;
 	private buildClosers;
 	private onClickHandler;
 	private onMouseEnterHandler;
@@ -319,6 +320,8 @@ export declare class HSInputNumber extends HSBasePlugin<IInputNumberOptions> imp
 	private readonly step;
 	constructor(el: HTMLElement, options?: IInputNumberOptions);
 	private init;
+	private checkIsNumberAndConvert;
+	private cleanAndExtractNumber;
 	private build;
 	private buildInput;
 	private buildIncrement;
@@ -334,6 +337,7 @@ export declare class HSInputNumber extends HSBasePlugin<IInputNumberOptions> imp
 }
 export interface IOverlayOptions {
 	hiddenClass?: string | null;
+	emulateScrollbarSpace?: boolean;
 	isClosePrev?: boolean;
 	backdropClasses?: string | null;
 	backdropExtraClasses?: string | null;
@@ -345,9 +349,11 @@ export interface IOverlay {
 }
 export declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly hiddenClass;
+	private readonly emulateScrollbarSpace;
 	private readonly isClosePrev;
 	private readonly backdropClasses;
 	private readonly backdropExtraClasses;
+	private readonly animationTarget;
 	private openNextOverlay;
 	private autoHide;
 	private readonly overlayId;
@@ -366,6 +372,7 @@ export declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private buildBackdrop;
 	private destroyBackdrop;
 	private focusElement;
+	private getScrollbarSize;
 	open(): false | Promise<void>;
 	close(forceClose?: boolean): Promise<unknown>;
 	static getInstance(target: HTMLElement, isInstance?: boolean): HTMLElement | ICollectionItem<HSOverlay>;
@@ -421,48 +428,6 @@ export declare class HSRemoveElement extends HSBasePlugin<IRemoveElementOptions>
 	private remove;
 	static autoInit(): void;
 }
-export interface ISearchItemTemplate {
-	type: string;
-	markup: string;
-}
-export interface ISearchByJsonOptions {
-	jsonUrl: string;
-	minChars?: number;
-	dropdownTemplate?: string;
-	dropdownClasses?: string;
-	dropdownItemTemplate?: string;
-	dropdownItemTemplatesByType?: ISearchItemTemplate[];
-	dropdownItemClasses?: string;
-	highlightedTextTagName?: string;
-	highlightedTextClasses?: string;
-}
-export interface ISearchByJson {
-	options?: ISearchByJsonOptions;
-}
-export declare class HSSearchByJson extends HSBasePlugin<ISearchByJsonOptions, HTMLInputElement> implements ISearchByJson {
-	private readonly jsonUrl;
-	private readonly minChars;
-	private json;
-	private result;
-	private val;
-	private readonly dropdownTemplate;
-	private readonly dropdownClasses;
-	private readonly dropdownItemTemplate;
-	private readonly dropdownItemTemplatesByType;
-	private readonly dropdownItemClasses;
-	private readonly highlightedTextTagName;
-	private readonly highlightedTextClasses;
-	private dropdown;
-	constructor(el: HTMLInputElement, options?: ISearchByJsonOptions);
-	private init;
-	private fetchData;
-	private searchData;
-	private buildDropdown;
-	private buildItems;
-	private itemTemplate;
-	static getInstance(target: HTMLElement | string): HSSearchByJson;
-	static autoInit(): void;
-}
 export interface IScrollspy {
 	options?: {};
 }
@@ -488,6 +453,8 @@ export interface ISingleOptionOptions {
 export interface ISingleOption {
 	title: string;
 	val: string;
+	disabled?: boolean;
+	selected?: boolean;
 	options?: ISingleOptionOptions | null;
 }
 export interface ISelectOptions {
@@ -501,8 +468,13 @@ export interface ISelectOptions {
 	wrapperClasses?: string;
 	toggleTag?: string;
 	toggleClasses?: string;
+	toggleSeparators?: {
+		items?: string;
+		betweenItemsAndCounter?: string;
+	};
 	toggleCountText?: string;
 	toggleCountTextMinItems?: number;
+	toggleCountTextMode?: string;
 	tagsItemTemplate?: string;
 	tagsItemClasses?: string;
 	tagsInputClasses?: string;
@@ -549,8 +521,10 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	selectedItems: string[];
 	private readonly toggleTag;
 	private readonly toggleClasses;
+	private readonly toggleSeparators;
 	private readonly toggleCountText;
 	private readonly toggleCountTextMinItems;
+	private readonly toggleCountTextMode;
 	private readonly wrapperClasses;
 	private readonly tagsItemTemplate;
 	private readonly tagsItemClasses;
@@ -584,6 +558,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private readonly isAddTagOnEnter;
 	private tagsInputHelper;
 	constructor(el: HTMLElement, options?: ISelectOptions);
+	setValue(val: string | string[]): void;
 	private init;
 	private build;
 	private buildWrapper;
@@ -628,6 +603,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	recalculateDirection(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSSelect | ICollectionItem<HSSelect>;
 	static autoInit(): void;
+	static open(target: HTMLElement | string): void;
 	static close(target: HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;
 	static accessibility(evt: KeyboardEvent): void;
@@ -896,7 +872,15 @@ export interface IStaticMethods {
 	getClassProperty(el: HTMLElement, prop?: string, val?: string): string;
 	afterTransition(el: HTMLElement, cb: Function): void;
 	autoInit(collection?: string | string[]): void;
+	cleanCollection(collection?: string | string[]): void;
 }
 export declare const HSStaticMethods: IStaticMethods;
+declare let HSDataTableModule: any;
+declare let HSFileUploadModule: any;
+
+export {
+	HSDataTableModule as HSDataTable,
+	HSFileUploadModule as HSFileUpload,
+};
 
 export {};

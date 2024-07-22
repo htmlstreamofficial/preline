@@ -1,6 +1,6 @@
 {
 	"name": "preline",
-	"version": "2.1.0",
+	"version": "2.4.0",
 	"description": "Preline UI is an open-source set of prebuilt UI components based on the utility-first Tailwind CSS framework.",
 	"main": "index.js",
 	"module": "./src/index.ts",
@@ -34,8 +34,8 @@
 		"tailwind css remix",
 		"tailwind css laravel"
 	],
-	"author": "HtmlStream",
-	"license": "MIT",
+	"author": "Preline Labs Ltd.",
+	"license": "Licensed under MIT and Preline UI Fair Use License",
 	"publishConfig": {
 		"access": "public"
 	},
@@ -45,6 +45,8 @@
 		"generate-dts": "dts-bundle-generator --config dts-config.js"
 	},
 	"devDependencies": {
+		"@types/datatables.net": "^1.12.0",
+		"@types/dropzone": "^5.7.8",
 		"dts-bundle-generator": "^9.0.0",
 		"prettier": "^3.0.0",
 		"source-map-loader": "^4.0.1",

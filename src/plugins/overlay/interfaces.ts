@@ -1,5 +1,6 @@
 export interface IOverlayOptions {
 	hiddenClass?: string | null;
+	emulateScrollbarSpace?: boolean;
 	isClosePrev?: boolean;
 	backdropClasses?: string | null;
 	backdropExtraClasses?: string | null;

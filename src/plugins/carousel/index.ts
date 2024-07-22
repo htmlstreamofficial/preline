@@ -1,9 +1,9 @@
 /*
  * HSCarousel
- * @version: 2.1.0
- * @author: HTMLStream
- * @license: Licensed under MIT (https://preline.co/docs/license.html)
- * Copyright 2023 HTMLStream
+ * @version: 2.4.0
+ * @author: Preline Labs Ltd.
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
  */
 
 import { ICarousel, ICarouselOptions } from './interfaces';
@@ -62,13 +62,13 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			typeof concatOptions.isAutoPlay !== 'undefined'
 				? concatOptions.isAutoPlay
 				: false;
-		this.isRTL =
-			typeof concatOptions.isRTL !== 'undefined' ? concatOptions.isRTL : false;
 		this.speed = concatOptions.speed || 4000;
 		this.isInfiniteLoop =
 			typeof concatOptions.isInfiniteLoop !== 'undefined'
 				? concatOptions.isInfiniteLoop
 				: true;
+		this.isRTL =
+			typeof concatOptions.isRTL !== 'undefined' ? concatOptions.isRTL : false;
 		this.inner = this.el.querySelector('.hs-carousel-body') || null;
 		this.slides = this.el.querySelectorAll('.hs-carousel-slide') || [];
 		this.prev = this.el.querySelector('.hs-carousel-prev') || null;
@@ -243,6 +243,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			? `translate(${value}px, 0px)`
 			: `translate(-${value}px, 0px)`;
 	}
+
 	public goToPrev() {
 		if (this.currentIndex === 0 && this.isInfiniteLoop) {
 			this.currentIndex = this.slides.length - 1;

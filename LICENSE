@@ -1,6 +1,10 @@
+@Author: Preline Labs Ltd.
+@Website: https://preline.co
+@License: Preline UI is free for both personal and commercial projects, released under dual license terms "MIT" and "Preline UI Fair Use License", and copyrighted 2024 by Preline Labs Ltd.
+
 MIT License
 
-Copyright (c) 2023 Html Stream
+Copyright (c) 2024 Preline Labs Ltd.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +23,29 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+Preline UI Fair Use License
+
+1. Usage Restrictions:
+- Competing Products: The Software shall not be used to create any product or service that directly competes with Preline UI. A competing product is defined as any software or service that replicates the primary functionalities of Preline UI.
+- Misuse and Abuse: The Software shall not be used for any activities that are deemed harmful, abusive, or intended to deceive end-users. This includes, but is not limited to, creating malware, engaging in fraudulent activities, or infringing on the rights of others.
+
+2. Commercial Derivative Works:
+Users are permitted to create and sell derivative works such as templates, themes, and page builders, provided that:
+- The derivative works must not be marketed as competing products.
+- Proper attribution must be given to the original author, including the name "Preline UI" and a link to the original repository.
+- A clear distinction must be made between the original work and the derivative work, ensuring that users understand the source of each.
+
+3. Distribution and Sublicensing:
+Redistribution of the Software in its original or modified form is allowed under the MIT License, with the following additional conditions:
+- Redistributions must include this Fair Use License in addition to the MIT License.
+- Redistributions must not remove or alter any licensing information or notices.
+- Must include clear attribution with a link to the original repository.
+
+4. Termination:
+The author reserves the right to terminate the rights granted under this Fair Use License if the user fails to comply with the terms. Upon termination, the user must cease all use and distribution of the Software, and destroy all copies in their possession.
+
+5. Enforcement and Compliance:
+- Users who believe that the terms of this Fair Use License have been violated are encouraged to report the violation to the author.
+- The author reserves the right to take legal action to enforce compliance with this Fair Use License.

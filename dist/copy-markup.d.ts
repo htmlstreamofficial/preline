@@ -1,5 +1,3 @@
-
-
 export interface ICopyMarkupOptions {
 	targetSelector: string;
 	wrapperSelector: string;

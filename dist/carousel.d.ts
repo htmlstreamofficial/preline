@@ -1,5 +1,3 @@
-
-
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -24,6 +22,7 @@ export interface ICarouselOptions {
 	isAutoPlay?: boolean;
 	speed?: number;
 	isInfiniteLoop?: boolean;
+	isRTL?: boolean;
 }
 export interface ICarousel {
 	options?: ICarouselOptions;
@@ -45,6 +44,7 @@ declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICaro
 	private readonly loadingClassesAdd;
 	private readonly afterLoadingClassesAdd;
 	private readonly isAutoPlay;
+	private readonly isRTL;
 	private readonly speed;
 	private readonly isInfiniteLoop;
 	private timer;
@@ -60,6 +60,7 @@ declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICaro
 	private resetTimer;
 	private detectDirection;
 	recalculateWidth(): void;
+	private calculateTransform;
 	goToPrev(): void;
 	goToNext(): void;
 	goTo(i: number): void;

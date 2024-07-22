@@ -6,6 +6,8 @@ export interface ISingleOptionOptions {
 export interface ISingleOption {
 	title: string;
 	val: string;
+	disabled?: boolean;
+	selected?: boolean;
 	options?: ISingleOptionOptions | null;
 }
 
@@ -23,8 +25,13 @@ export interface ISelectOptions {
 
 	toggleTag?: string;
 	toggleClasses?: string;
+	toggleSeparators?: {
+		items?: string;
+		betweenItemsAndCounter?: string;
+	};
 	toggleCountText?: string;
 	toggleCountTextMinItems?: number;
+	toggleCountTextMode?: string;
 
 	tagsItemTemplate?: string;
 	tagsItemClasses?: string;

@@ -3,4 +3,5 @@ export interface ISpaCollectionItem {
 	fn: {
 		autoInit: () => void;
 	};
+	collection: string;
 }

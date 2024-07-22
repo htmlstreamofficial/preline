@@ -1,9 +1,9 @@
 /*
  * HSSelect
- * @version: 2.1.0
- * @author: HTMLStream
- * @license: Licensed under MIT (https://preline.co/docs/license.html)
- * Copyright 2023 HTMLStream
+ * @version: 2.4.0
+ * @author: Preline Labs Ltd.
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
  */
 
 import {
@@ -42,8 +42,13 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 	private readonly toggleTag: string | null;
 	private readonly toggleClasses: string | null;
+	private readonly toggleSeparators: {
+		items?: string;
+		betweenItemsAndCounter?: string;
+	} | null;
 	private readonly toggleCountText: string | null;
 	private readonly toggleCountTextMinItems: number | null;
+	private readonly toggleCountTextMode: string | null;
 	private readonly wrapperClasses: string | null;
 	private readonly tagsItemTemplate: string | null;
 	private readonly tagsItemClasses: string | null;
@@ -93,6 +98,10 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			...dataOptions,
 			...options,
 		};
+		const defaultToggleSeparators = {
+			items: ', ',
+			betweenItemsAndCounter: 'and',
+		};
 
 		this.value =
 			concatOptions?.value || (this.el as HTMLSelectElement).value || null;
@@ -111,8 +120,15 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		this.wrapperClasses = concatOptions?.wrapperClasses || null;
 		this.toggleTag = concatOptions?.toggleTag || null;
 		this.toggleClasses = concatOptions?.toggleClasses || null;
+		this.toggleSeparators =
+			{
+				...defaultToggleSeparators,
+				...concatOptions?.toggleSeparators,
+			} ?? defaultToggleSeparators;
 		this.toggleCountText = concatOptions?.toggleCountText || null;
 		this.toggleCountTextMinItems = concatOptions?.toggleCountTextMinItems || 1;
+		this.toggleCountTextMode =
+			concatOptions?.toggleCountTextMode || 'countAfterLimit';
 		this.tagsItemTemplate = concatOptions?.tagsItemTemplate || null;
 		this.tagsItemClasses = concatOptions?.tagsItemClasses || null;
 		this.tagsInputClasses = concatOptions?.tagsInputClasses || null;
@@ -149,6 +165,27 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		this.init();
 	}
 
+	public setValue(val: string | string[]) {
+		this.value = val;
+
+		this.clearSelections();
+
+		if (Array.isArray(val)) {
+			this.toggleTextWrapper.innerHTML = this.value.length
+				? this.stringFromValue()
+				: this.placeholder;
+			this.unselectMultipleItems();
+			this.selectMultipleItems();
+		} else {
+			this.setToggleTitle();
+
+			if (this.toggle.querySelector('[data-icon]')) this.setToggleIcon();
+			if (this.toggle.querySelector('[data-title]')) this.setToggleTitle();
+
+			this.selectSingleItem();
+		}
+	}
+
 	private init() {
 		this.createCollection(window.$hsSelectCollection, this);
 
@@ -169,6 +206,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 						{
 							title: el.textContent,
 							val: el.value,
+							disabled: el.disabled,
 							options: data !== 'undefined' ? JSON.parse(data) : null,
 						},
 					];
@@ -176,14 +214,14 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		}
 
 		if (this.isMultiple) {
-			const selectedOptions = Array.from(
-				(this.el as HTMLSelectElement).options,
-			).filter((el) => el.selected);
+			const selectedOptions = Array.from(this.el.children).filter(
+				(el: HTMLOptionElement) => el.selected,
+			);
 
 			if (selectedOptions) {
 				const values: string[] = [];
 
-				selectedOptions.forEach((el) => {
+				selectedOptions.forEach((el: HTMLOptionElement) => {
 					values.push(el.value);
 				});
 
@@ -254,6 +292,11 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		if (this.isDisabled) this.toggle.classList.add('disabled');
 		if (this.wrapper) this.wrapper.append(this.toggle);
 
+		if (this.toggle?.ariaExpanded) {
+			if (this.isOpened) this.toggle.ariaExpanded = 'true';
+			else this.toggle.ariaExpanded = 'false';
+		}
+
 		this.toggle.addEventListener('click', () => {
 			if (this.isDisabled) return false;
 
@@ -292,6 +335,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	}
 
 	private buildTags() {
+		if (this.isDisabled) this.wrapper.classList.add('disabled');
 		this.buildTagsInput();
 		this.setTagsItems();
 	}
@@ -433,6 +477,10 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		this.dropdown.setAttribute('data-hs-select-dropdown', '');
 
 		this.dropdown.classList.add('absolute', 'top-full');
+		this.dropdown.role = 'listbox';
+		this.dropdown.tabIndex = -1;
+		this.dropdown.ariaOrientation = 'vertical';
+
 		if (!this.isOpened) this.dropdown.classList.add('hidden');
 
 		if (this.dropdownClasses)
@@ -441,7 +489,14 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		if (this.dropdown && this.hasSearch) this.buildSearch();
 		if (this.selectOptions)
 			this.selectOptions.forEach((props: ISingleOption, i) =>
-				this.buildOption(props.title, props.val, props.options, `${i}`),
+				this.buildOption(
+					props.title,
+					props.val,
+					props.disabled,
+					props.selected,
+					props.options,
+					`${i}`,
+				),
 			);
 	}
 
@@ -474,6 +529,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private buildOption(
 		title: string,
 		val: string,
+		disabled: boolean = false,
+		selected: boolean = false,
 		options?: ISingleOptionOptions,
 		index: string = '1',
 	) {
@@ -487,6 +544,12 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		option.setAttribute('data-title-value', title);
 		option.setAttribute('tabIndex', index);
 		option.classList.add('cursor-pointer');
+		if (disabled) option.classList.add('disabled');
+		if (selected) {
+			// @ts-ignore
+			if (this.isMultiple) this.value = [...this.value, val];
+			else this.value = val;
+		}
 		if (this.optionTemplate) {
 			template = htmlToElement(this.optionTemplate);
 
@@ -501,7 +564,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		if (options) {
 			if (options.icon) {
 				const img = htmlToElement(options.icon);
-				img.classList.add('mw-full');
+				img.classList.add('max-w-full');
 
 				if (template) {
 					iconWrapper = template.querySelector('[data-icon]');
@@ -536,16 +599,19 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		) {
 			template.querySelector('[data-icon]').classList.add('hidden');
 		}
+
 		if (
 			this.value &&
 			(this.isMultiple ? this.value.includes(val) : this.value === val)
 		)
 			option.classList.add('selected');
 
-		option.addEventListener('click', () => this.onSelectOption(val));
+		if (!disabled)
+			option.addEventListener('click', () => this.onSelectOption(val));
 
 		if (this.optionClasses) classToClassList(this.optionClasses, option);
 		if (this.dropdown) this.dropdown.append(option);
+		if (selected) this.setNewValue();
 	}
 
 	private destroyOption(val: string) {
@@ -559,10 +625,14 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private buildOriginalOption(
 		title: string,
 		val: string,
+		disabled?: boolean,
+		selected?: boolean,
 		options?: ISingleOptionOptions,
 	) {
 		const option = htmlToElement('<option></option>');
 		option.setAttribute('value', val);
+		if (disabled) option.setAttribute('disabled', 'disabled');
+		if (selected) option.setAttribute('selected', 'selected');
 		option.setAttribute('data-hs-select-option', JSON.stringify(options));
 		option.innerText = title;
 
@@ -676,7 +746,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	}
 
 	private triggerChangeEventForNativeSelect() {
-		(this.el as HTMLSelectElement).value = `${this.value}`;
+		// TODO:: test for bugs after comment the line below
+		// (this.el as HTMLSelectElement).value = `${this.value}`;
 		const selectChangeEvent = new Event('change', { bubbles: true });
 		(this.el as HTMLSelectElement).dispatchEvent(selectChangeEvent);
 	}
@@ -684,6 +755,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private addSelectOption(
 		title: string,
 		val: string,
+		disabled?: boolean,
+		selected?: boolean,
 		options?: ISingleOptionOptions,
 	) {
 		this.selectOptions = [
@@ -691,12 +764,14 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			{
 				title,
 				val,
+				disabled,
+				selected,
 				options,
 			},
 		];
 	}
 
-	private removeSelectOption(val: string) {
+	private removeSelectOption(val: string, isArray = false) {
 		const hasOption = !!this.selectOptions.some(
 			(el: ISingleOption) => el.val === val,
 		);
@@ -706,6 +781,14 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		this.selectOptions = this.selectOptions.filter(
 			(el: ISingleOption) => el.val !== val,
 		);
+
+		console.log(isArray);
+
+		this.value = isArray
+			? (this.value as string[]).filter((item: string) => item !== val)
+			: val;
+
+		console.log(this.value);
 	}
 
 	private resetTagsInputField() {
@@ -729,6 +812,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		if (this.mode === 'tags') {
 			this.setTagsItems();
 		} else {
+			console.log();
+
 			if (this.value.length)
 				this.toggleTextWrapper.innerHTML = this.stringFromValue();
 			else this.toggleTextWrapper.innerHTML = this.placeholder;
@@ -737,6 +822,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 	private stringFromValue() {
 		const value: string[] = [];
+		let title = '';
 
 		this.selectOptions.forEach((el: ISingleOption) => {
 			if (this.isMultiple) {
@@ -746,11 +832,23 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			}
 		});
 
-		return this.toggleCountText &&
+		if (
+			this.toggleCountText &&
 			this.toggleCountText !== '' &&
 			value.length >= this.toggleCountTextMinItems
-			? `${value.length} ${this.toggleCountText}`
-			: value.join(', ');
+		) {
+			if (this.toggleCountTextMode === 'nItemsAndCount') {
+				const nItems = value.slice(0, this.toggleCountTextMinItems - 1);
+
+				title = `${nItems.join(this.toggleSeparators.items)} ${this.toggleSeparators.betweenItemsAndCounter} ${value.length - nItems.length} ${this.toggleCountText}`;
+			} else {
+				title = `${value.length} ${this.toggleCountText}`;
+			}
+		} else {
+			title = value.join(this.toggleSeparators.items);
+		}
+
+		return title;
 	}
 
 	private selectSingleItem() {
@@ -763,7 +861,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			(el) =>
 				this.value === (el as HTMLOptionElement).getAttribute('data-value'),
 		);
-		selectedItem.classList.add('selected');
+
+		if (selectedItem) selectedItem.classList.add('selected');
 	}
 
 	private selectMultipleItems() {
@@ -842,6 +941,10 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	}
 
 	public open() {
+		const currentlyOpened =
+			window?.$hsSelectCollection?.find((el) => el.element.isOpened) || null;
+
+		if (currentlyOpened) currentlyOpened.element.close();
 		if (this.animationInProcess) return false;
 
 		this.animationInProcess = true;
@@ -851,6 +954,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		this.recalculateDirection();
 
 		setTimeout(() => {
+			if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'true';
 			this.wrapper.classList.add('active');
 			this.dropdown.classList.add('opened');
 			if (this.hasSearch && !this.preventSearchFocus) this.search.focus();
@@ -866,6 +970,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 		this.animationInProcess = true;
 
+		if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'false';
 		this.wrapper.classList.remove('active');
 		this.dropdown.classList.remove('opened', 'bottom-full', 'top-full');
 		if (this.dropdownDirectionClasses?.bottom)
@@ -895,15 +1000,17 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	public addOption(items: ISingleOption | ISingleOption[]) {
 		let i = `${this.selectOptions.length}`;
 		const addOption = (option: ISingleOption) => {
-			const { title, val, options } = option;
+			const { title, val, disabled, selected, options } = option;
 			const hasOption = !!this.selectOptions.some(
 				(el: ISingleOption) => el.val === val,
 			);
 
 			if (!hasOption) {
-				this.addSelectOption(title, val, options);
-				this.buildOption(title, val, options, i);
-				this.buildOriginalOption(title, val, options);
+				this.addSelectOption(title, val, disabled, selected, options);
+				this.buildOption(title, val, disabled, selected, options, i);
+				this.buildOriginalOption(title, val, disabled, selected, options);
+
+				if (selected && !this.isMultiple) this.onSelectOption(val);
 			}
 		};
 
@@ -917,13 +1024,13 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	}
 
 	public removeOption(values: string | string[]) {
-		const removeOption = (val: string) => {
+		const removeOption = (val: string, isArray = false) => {
 			const hasOption = !!this.selectOptions.some(
 				(el: ISingleOption) => el.val === val,
 			);
 
 			if (hasOption) {
-				this.removeSelectOption(val);
+				this.removeSelectOption(val, isArray);
 				this.destroyOption(val);
 				this.destroyOriginalOption(val);
 
@@ -938,11 +1045,13 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 		if (Array.isArray(values)) {
 			values.forEach((val) => {
-				removeOption(val);
+				removeOption(val, this.isMultiple);
 			});
 		} else {
-			removeOption(values);
+			removeOption(values, this.isMultiple);
 		}
+
+		this.setNewValue();
 	}
 
 	public recalculateDirection() {
@@ -1021,6 +1130,17 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		}
 	}
 
+	static open(target: HTMLElement | string) {
+		const elInCollection = window.$hsSelectCollection.find(
+			(el) =>
+				el.element.el ===
+				(typeof target === 'string' ? document.querySelector(target) : target),
+		);
+
+		if (elInCollection && !elInCollection.element.isOpened)
+			elInCollection.element.open();
+	}
+
 	static close(target: HTMLElement | string) {
 		const elInCollection = window.$hsSelectCollection.find(
 			(el) =>
@@ -1062,22 +1182,27 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 					break;
 				case 'ArrowUp':
 					evt.preventDefault();
+					evt.stopImmediatePropagation();
 					this.onArrow();
 					break;
 				case 'ArrowDown':
 					evt.preventDefault();
+					evt.stopImmediatePropagation();
 					this.onArrow(false);
 					break;
 				case 'Tab':
 					evt.preventDefault();
+					evt.stopImmediatePropagation();
 					this.onTab(evt.shiftKey);
 					break;
 				case 'Home':
 					evt.preventDefault();
+					evt.stopImmediatePropagation();
 					this.onStartEnd();
 					break;
 				case 'End':
 					evt.preventDefault();
+					evt.stopImmediatePropagation();
 					this.onStartEnd(false);
 					break;
 				case 'Enter':
@@ -1112,7 +1237,9 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			const options = preparedOptions.filter(
 				(el: any) => !el.classList.contains('disabled'),
 			);
-			const current = dropdown.querySelector('.hs-select-option-highlighted');
+			const current =
+				dropdown.querySelector('.hs-select-option-highlighted') ||
+				dropdown.querySelector('.selected');
 			if (!current) options[0].classList.add('hs-select-option-highlighted');
 			let currentInd = options.findIndex((el: any) => el === current);
 
@@ -1142,7 +1269,9 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			const options = preparedOptions.filter(
 				(el: any) => !el.classList.contains('disabled'),
 			);
-			const current = dropdown.querySelector('.hs-select-option-highlighted');
+			const current =
+				dropdown.querySelector('.hs-select-option-highlighted') ||
+				dropdown.querySelector('.selected');
 			if (!current) options[0].classList.add('hs-select-option-highlighted');
 			let currentInd = options.findIndex((el: any) => el === current);
 

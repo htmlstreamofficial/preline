@@ -1,9 +1,9 @@
 /*
  * HSTabs
- * @version: 2.1.0
- * @author: HTMLStream
- * @license: Licensed under MIT (https://preline.co/docs/license.html)
- * Copyright 2023 HTMLStream
+ * @version: 2.4.0
+ * @author: Preline Labs Ltd.
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
  */
 
 import { dispatch } from '../../utils';
@@ -30,7 +30,7 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 		super(el, options, events);
 
 		this.toggles = this.el.querySelectorAll('[data-hs-tab]');
-		this.extraToggleId = this.el.getAttribute('hs-data-tab-select');
+		this.extraToggleId = this.el.getAttribute('data-hs-tab-select');
 		this.extraToggle = document.querySelector(this.extraToggleId);
 		this.current = Array.from(this.toggles).find((el) =>
 			el.classList.contains('active'),
@@ -65,9 +65,11 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 		this.currentContentId = this.current.getAttribute('data-hs-tab');
 		this.currentContent = document.querySelector(this.currentContentId);
 
+		if (this?.prev?.ariaSelected) this.prev.ariaSelected = 'false';
 		this.prev.classList.remove('active');
 		this.prevContent.classList.add('hidden');
 
+		if (this?.current?.ariaSelected) this.current.ariaSelected = 'true';
 		this.current.classList.add('active');
 		this.currentContent.classList.remove('hidden');
 

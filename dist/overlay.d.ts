@@ -1,5 +1,3 @@
-
-
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -20,6 +18,7 @@ export interface ICollectionItem<T> {
 }
 export interface IOverlayOptions {
 	hiddenClass?: string | null;
+	emulateScrollbarSpace?: boolean;
 	isClosePrev?: boolean;
 	backdropClasses?: string | null;
 	backdropExtraClasses?: string | null;
@@ -31,9 +30,11 @@ export interface IOverlay {
 }
 declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly hiddenClass;
+	private readonly emulateScrollbarSpace;
 	private readonly isClosePrev;
 	private readonly backdropClasses;
 	private readonly backdropExtraClasses;
+	private readonly animationTarget;
 	private openNextOverlay;
 	private autoHide;
 	private readonly overlayId;
@@ -52,6 +53,7 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private buildBackdrop;
 	private destroyBackdrop;
 	private focusElement;
+	private getScrollbarSize;
 	open(): false | Promise<void>;
 	close(forceClose?: boolean): Promise<unknown>;
 	static getInstance(target: HTMLElement, isInstance?: boolean): HTMLElement | ICollectionItem<HSOverlay>;

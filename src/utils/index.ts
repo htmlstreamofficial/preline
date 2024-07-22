@@ -25,23 +25,28 @@ const getClassPropertyAlt = (
 	return targetClass.match(/:(.*)]/) ? targetClass.match(/:(.*)]/)[1] : val;
 };
 
-// const getClassPropertyAlt = (
-// 	el: HTMLElement,
-// 	prop: string,
-// 	val: string = '',
-// ): string => {
-// 	let targetClass = '';
+const getZIndex = (el: HTMLElement) => {
+	const computedStyle = window.getComputedStyle(el);
+	const zIndex = computedStyle.getPropertyValue('z-index');
 
-// 	el.classList.forEach((className) => {
-// 		if (className.includes(prop)) {
-// 			targetClass = className;
-// 		}
-// 	});
+	return zIndex;
+};
 
-// 	const match = targetClass.match(/:(.*)/);
+function getHighestZIndex(arr: HTMLElement[]) {
+	let highestZIndex = Number.NEGATIVE_INFINITY;
 
-// 	return match ? match[1] : val;
-// };
+	arr.forEach((el) => {
+		let zIndex: string | number = getZIndex(el);
+
+		if (zIndex !== 'auto') {
+			zIndex = parseInt(zIndex, 10);
+
+			if (zIndex > highestZIndex) highestZIndex = zIndex;
+		}
+	});
+
+	return highestZIndex;
+}
 
 const isIOS = () => {
 	if (/iPad|iPhone|iPod/.test(navigator.platform)) {
@@ -186,6 +191,8 @@ export {
 	stringToBoolean,
 	getClassProperty,
 	getClassPropertyAlt,
+	getZIndex,
+	getHighestZIndex,
 	isIOS,
 	isIpadOS,
 	isEnoughSpace,

@@ -1,9 +1,9 @@
 /*
  * HSAccordion
- * @version: 2.1.0
- * @author: HTMLStream
- * @license: Licensed under MIT (https://preline.co/docs/license.html)
- * Copyright 2023 HTMLStream
+ * @version: 2.4.0
+ * @author: Preline Labs Ltd.
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
  */
 
 import { dispatch, afterTransition } from '../../utils';
@@ -75,6 +75,7 @@ class HSAccordion
 		if (this.el.classList.contains('active')) return false;
 
 		this.el.classList.add('active');
+		if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'true';
 
 		this.content.style.display = 'block';
 		this.content.style.height = '0';
@@ -95,6 +96,7 @@ class HSAccordion
 		if (!this.el.classList.contains('active')) return false;
 
 		this.el.classList.remove('active');
+		if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'false';
 
 		this.content.style.height = `${this.content.scrollHeight}px`;
 		setTimeout(() => {

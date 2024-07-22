@@ -1,9 +1,9 @@
 /*
  * HSComboBox
- * @version: 2.1.0
- * @author: HTMLStream
- * @license: Licensed under MIT (https://preline.co/docs/license.html)
- * Copyright 2023 HTMLStream
+ * @version: 2.4.0
+ * @author: Preline Labs Ltd.
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
  */
 
 import {
@@ -91,7 +91,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 				<div class="flex justify-between items-center w-full">
 					<span data-hs-combo-box-search-text></span>
 					<span class="hidden hs-combo-box-selected:block">
-						<svg class="flex-shrink-0 size-3.5 text-blue-600 dark:text-blue-500" xmlns="http:.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<svg class="shrink-0 size-3.5 text-blue-600 dark:text-blue-500" xmlns="http:.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 							<polyline points="20 6 9 17 4 12"></polyline>
 						</svg>
 					</span>
@@ -157,7 +157,8 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 		if (this.groupingType) this.setGroups();
 		this.buildItems();
 		if (this.preventVisibility) {
-			this.isOpened = true;
+			// TODO:: test the plugin while the line below is commented.
+			// this.isOpened = true;
 
 			if (!this.preventAutoPosition) this.recalculateDirection();
 		}
@@ -167,7 +168,10 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	}
 
 	private setResultAndRender(value = '') {
-		this.setResults(value);
+		// TODO:: test the plugin with below code added.
+		let _value = this.preventVisibility ? this.input.value : value;
+
+		this.setResults(_value);
 
 		if (this.apiSearchQuery) this.itemsFromJson();
 	}
@@ -186,12 +190,18 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 			'input',
 			debounce((evt: InputEvent) => {
 				this.setResultAndRender((evt.target as HTMLInputElement).value);
+				if (this.input.value !== '') this.el.classList.add('has-value');
+				else this.el.classList.remove('has-value');
 				if (!this.isOpened) this.open();
 			}),
 		);
 	}
 
 	private buildItems() {
+		this.output.role = 'listbox';
+		this.output.tabIndex = -1;
+		this.output.ariaOrientation = 'vertical';
+
 		if (this.apiUrl) this.itemsFromJson();
 		else {
 			if (this.itemsWrapper) this.itemsWrapper.innerHTML = '';
@@ -210,13 +220,29 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	}
 
 	private isItemExists(obj: never): boolean {
-		return this.items.some((el: HTMLElement) =>
-			Array.from(el.querySelectorAll('[data-hs-combo-box-search-text]')).some(
-				(elI: HTMLElement) =>
-					elI.getAttribute('data-hs-combo-box-search-text') ===
-					obj[elI.getAttribute('data-hs-combo-box-output-item-field')],
-			),
-		);
+		return this.items.some((el: HTMLElement) => {
+			const groupField =
+				el.getAttribute('data-hs-combo-box-output-item-group-field') ?? null;
+			const params =
+				JSON.parse(el.getAttribute('data-hs-combo-box-output-item')) ?? null;
+			let group = null;
+
+			if (groupField && params?.group?.name) group = obj[groupField];
+
+			return Array.from(
+				el.querySelectorAll('[data-hs-combo-box-search-text]'),
+			).some((elI: HTMLElement) => {
+				const equality =
+					params?.group?.name && group
+						? group === params.group.name &&
+							elI.getAttribute('data-hs-combo-box-search-text') ===
+								obj[elI.getAttribute('data-hs-combo-box-output-item-field')]
+						: elI.getAttribute('data-hs-combo-box-search-text') ===
+							obj[elI.getAttribute('data-hs-combo-box-output-item-field')];
+
+				return equality;
+			});
+		});
 	}
 
 	private isTextExists(el: HTMLElement, val: string[]): boolean {
@@ -347,14 +373,25 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 
 	private jsonItemsRender(items: any) {
 		items.forEach((item: never, index: number) => {
-			if (this.isItemExists(item)) return false;
+			// TODO:: test without checking below
+			// if (this.isItemExists(item)) return false;
 
 			const newItem = htmlToElement(this.outputItemTemplate);
 			newItem
+				.querySelectorAll('[data-hs-combo-box-output-item-field]')
+				.forEach((el) => {
+					const value =
+						item[el.getAttribute('data-hs-combo-box-output-item-field')];
+					const hideIfEmpty = el.hasAttribute(
+						'data-hs-combo-box-output-item-hide-if-empty',
+					);
+
+					el.textContent = value ?? '';
+					if (!value && hideIfEmpty) (el as HTMLElement).style.display = 'none';
+				});
+			newItem
 				.querySelectorAll('[data-hs-combo-box-search-text]')
 				.forEach((el) => {
-					el.textContent =
-						item[el.getAttribute('data-hs-combo-box-output-item-field')] ?? '';
 					el.setAttribute(
 						'data-hs-combo-box-search-text',
 						item[el.getAttribute('data-hs-combo-box-output-item-field')] ?? '',
@@ -574,6 +611,14 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	}
 
 	private buildToggle() {
+		if (this.isOpened) {
+			if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'true';
+			if (this?.input?.ariaExpanded) this.input.ariaExpanded = 'true';
+		} else {
+			if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'false';
+			if (this?.input?.ariaExpanded) this.input.ariaExpanded = 'false';
+		}
+
 		this.toggle.addEventListener('click', () => {
 			if (this.isOpened) this.close();
 			else this.open(this.toggle.getAttribute('data-hs-combo-box-toggle'));
@@ -712,6 +757,8 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 		if (!this.preventAutoPosition) this.recalculateDirection();
 
 		setTimeout(() => {
+			if (this?.input?.ariaExpanded) this.input.ariaExpanded = 'true';
+			if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'true';
 			this.el.classList.add('active');
 
 			this.animationInProcess = false;
@@ -733,11 +780,16 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 		if (this.preventVisibility) {
 			this.setValueAndClear(val);
 
+			if (this.input.value !== '') this.el.classList.add('has-value');
+			else this.el.classList.remove('has-value');
+
 			return false;
 		}
 
 		this.animationInProcess = true;
 
+		if (this?.input?.ariaExpanded) this.input.ariaExpanded = 'false';
+		if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'false';
 		this.el.classList.remove('active');
 		if (!this.preventAutoPosition) {
 			this.output.classList.remove('bottom-full', 'top-full');
@@ -752,6 +804,9 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 
 			this.animationInProcess = false;
 		});
+
+		if (this.input.value !== '') this.el.classList.add('has-value');
+		else this.el.classList.remove('has-value');
 
 		this.isOpened = false;
 	}
@@ -889,8 +944,8 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	}
 
 	static accessibility(evt: KeyboardEvent) {
-		const target = window.$hsComboBoxCollection.find(
-			(el) => el.element.isOpened,
+		const target = window.$hsComboBoxCollection.find((el) =>
+			el.element.preventVisibility ? el.element.isCurrent : el.element.isOpened,
 		);
 
 		if (
@@ -905,18 +960,22 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 					break;
 				case 'ArrowUp':
 					evt.preventDefault();
+					evt.stopImmediatePropagation();
 					this.onArrow();
 					break;
 				case 'ArrowDown':
 					evt.preventDefault();
+					evt.stopImmediatePropagation();
 					this.onArrow(false);
 					break;
 				case 'Home':
 					evt.preventDefault();
+					evt.stopImmediatePropagation();
 					this.onStartEnd();
 					break;
 				case 'End':
 					evt.preventDefault();
+					evt.stopImmediatePropagation();
 					this.onStartEnd(false);
 					break;
 				case 'Enter':

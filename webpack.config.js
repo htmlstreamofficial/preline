@@ -12,7 +12,9 @@ module.exports = {
 		collapse: './src/plugins/collapse/index.ts',
 		combobox: './src/plugins/combobox/index.ts',
 		'copy-markup': './src/plugins/copy-markup/index.ts',
+		datatable: './src/plugins/datatable/index.ts',
 		dropdown: './src/plugins/dropdown/index.ts',
+		'file-upload': './src/plugins/file-upload/index.ts',
 		'input-number': './src/plugins/input-number/index.ts',
 		overlay: './src/plugins/overlay/index.ts',
 		'pin-input': './src/plugins/pin-input/index.ts',
@@ -41,6 +43,9 @@ module.exports = {
 	},
 	externals: {
 		jquery: 'jQuery',
+		lodash: '_',
+		'datatable.net-dt': 'DataTable',
+		dropzone: 'Dropzone',
 	},
 	optimization: {
 		minimize: true,
@@ -49,5 +54,5 @@ module.exports = {
 				extractComments: false,
 			}),
 		],
-	}
+	},
 };

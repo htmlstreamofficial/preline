@@ -1,9 +1,9 @@
 /*
  * HSDropdown
- * @version: 2.1.0
- * @author: HTMLStream
- * @license: Licensed under MIT (https://preline.co/docs/license.html)
- * Copyright 2023 HTMLStream
+ * @version: 2.4.0
+ * @author: Preline Labs Ltd.
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
  */
 
 import {
@@ -34,7 +34,7 @@ class HSDropdown
 	private readonly closers: HTMLElement[] | null;
 	public menu: HTMLElement | null;
 	private eventMode: string;
-	private readonly closeMode: string;
+	private closeMode: string;
 	private animationInProcess: boolean;
 
 	constructor(el: IHTMLElementPopper, options?: {}, events?: {}) {
@@ -60,8 +60,9 @@ class HSDropdown
 		this.createCollection(window.$hsDropdownCollection, this);
 
 		if ((this.toggle as HTMLButtonElement).disabled) return false;
-		this.toggle.addEventListener('click', (evt) => this.onClickHandler(evt));
 
+		if (this.toggle) this.buildToggle();
+		if (this.menu) this.buildMenu();
 		if (this.closers) this.buildClosers();
 
 		if (!isIOS() && !isIpadOS()) {
@@ -72,6 +73,20 @@ class HSDropdown
 
 	resizeHandler() {
 		this.eventMode = getClassProperty(this.el, '--trigger', 'click');
+		this.closeMode = getClassProperty(this.el, '--auto-close', 'true');
+	}
+
+	private buildToggle() {
+		if (this?.toggle?.ariaExpanded) {
+			if (this.el.classList.contains('open')) this.toggle.ariaExpanded = 'true';
+			else this.toggle.ariaExpanded = 'false';
+		}
+
+		this.toggle.addEventListener('click', (evt) => this.onClickHandler(evt));
+	}
+
+	private buildMenu() {
+		this.menu.role = 'menu';
 	}
 
 	private buildClosers() {
@@ -151,12 +166,6 @@ class HSDropdown
 					data.state.elements.popper.style.margin = 0;
 				},
 			},
-			{
-				name: 'computeStyles',
-				options: {
-					adaptive: false,
-				},
-			},
 		];
 	}
 
@@ -182,6 +191,10 @@ class HSDropdown
 				window.getComputedStyle(this.el).getPropertyValue('--offset') || '10'
 			).replace(' ', ''),
 		);
+		const gpuAcceleration = (
+			window.getComputedStyle(this.el).getPropertyValue('--gpu-acceleration') ||
+			'true'
+		).replace(' ', '');
 
 		if (strategy !== ('static' as PositioningStrategy)) {
 			this.el._popper = createPopper(this.el, this.menu, {
@@ -199,6 +212,13 @@ class HSDropdown
 							offset: [0, offset],
 						},
 					},
+					{
+						name: 'computeStyles',
+						options: {
+							adaptive: strategy !== 'fixed' ? false : true,
+							gpuAcceleration: gpuAcceleration === 'true' ? true : false,
+						},
+					},
 				],
 			});
 		}
@@ -209,6 +229,7 @@ class HSDropdown
 		this.menu.classList.add('block');
 
 		setTimeout(() => {
+			if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'true';
 			this.el.classList.add('open');
 
 			this.animationInProcess = false;
@@ -222,6 +243,16 @@ class HSDropdown
 		if (this.animationInProcess || !this.el.classList.contains('open'))
 			return false;
 
+		const clearAfterClose = () => {
+			this.menu.style.margin = null;
+
+			if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'false';
+			this.el.classList.remove('open');
+
+			this.fireEvent('close', this.el);
+			dispatch('close.hs.dropdown', this.el, this.el);
+		};
+
 		this.animationInProcess = true;
 
 		if (isAnimated) {
@@ -231,12 +262,7 @@ class HSDropdown
 			afterTransition(el, () => this.destroyPopper());
 		} else this.destroyPopper();
 
-		this.menu.style.margin = null;
-
-		this.el.classList.remove('open');
-
-		this.fireEvent('close', this.el);
-		dispatch('close.hs.dropdown', this.el, this.el);
+		clearAfterClose();
 	}
 
 	public forceClearState() {
@@ -328,9 +354,10 @@ class HSDropdown
 	static accessibility(evt: KeyboardEvent) {
 		this.history = menuSearchHistory;
 
-		const target: ICollectionItem<HSDropdown> | null = window.$hsDropdownCollection.find((el) =>
-			el.element.el.classList.contains('open'),
-		);
+		const target: ICollectionItem<HSDropdown> | null =
+			window.$hsDropdownCollection.find((el) =>
+				el.element.el.classList.contains('open'),
+			);
 
 		if (
 			target &&
@@ -358,18 +385,22 @@ class HSDropdown
 					break;
 				case 'ArrowUp':
 					evt.preventDefault();
+					evt.stopImmediatePropagation();
 					this.onArrow();
 					break;
 				case 'ArrowDown':
 					evt.preventDefault();
+					evt.stopImmediatePropagation();
 					this.onArrow(false);
 					break;
 				case 'Home':
 					evt.preventDefault();
+					evt.stopImmediatePropagation();
 					this.onStartEnd();
 					break;
 				case 'End':
 					evt.preventDefault();
+					evt.stopImmediatePropagation();
 					this.onStartEnd(false);
 					break;
 				default:
