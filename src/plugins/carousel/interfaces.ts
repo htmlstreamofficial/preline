@@ -4,6 +4,7 @@ export interface ICarouselOptions {
 	isAutoPlay?: boolean;
 	speed?: number;
 	isInfiniteLoop?: boolean;
+	isRTL?: boolean;
 }
 
 export interface ICarousel {

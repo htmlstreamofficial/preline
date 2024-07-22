@@ -81,6 +81,7 @@ export interface ICarouselOptions {
 	isAutoPlay?: boolean;
 	speed?: number;
 	isInfiniteLoop?: boolean;
+	isRTL?: boolean;
 }
 export interface ICarousel {
 	options?: ICarouselOptions;
@@ -102,6 +103,7 @@ export declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implement
 	private readonly loadingClassesAdd;
 	private readonly afterLoadingClassesAdd;
 	private readonly isAutoPlay;
+	private readonly isRTL;
 	private readonly speed;
 	private readonly isInfiniteLoop;
 	private timer;
