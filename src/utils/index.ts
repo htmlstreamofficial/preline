@@ -143,9 +143,16 @@ const afterTransition = (el: HTMLElement, callback: Function) => {
 
 		el.removeEventListener('transitionend', handleEvent, true);
 	};
+
+	const computedStyle = window.getComputedStyle(el);
+	const transitionDuration = computedStyle.getPropertyValue(
+		'transition-duration',
+	);
+	const transitionProperty = computedStyle.getPropertyValue(
+		'transition-property',
+	);
 	const hasTransition =
-		window.getComputedStyle(el, null).getPropertyValue('transition') !==
-		(navigator.userAgent.includes('Firefox') ? 'all' : 'all 0s ease 0s');
+		transitionProperty !== 'none' && parseFloat(transitionDuration) > 0;
 
 	if (hasTransition) el.addEventListener('transitionend', handleEvent, true);
 	else callback();
