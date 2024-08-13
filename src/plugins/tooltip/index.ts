@@ -183,10 +183,10 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | null = null) {
 		if (!window.$hsTooltipCollection) window.$hsTooltipCollection = [];
 
-		document.querySelectorAll('.hs-tooltip').forEach((el: HTMLElement) => {
+		(target || document).querySelectorAll('.hs-tooltip').forEach((el: HTMLElement) => {
 			if (
 				!window.$hsTooltipCollection.find(
 					(elC) => (elC?.element?.el as HTMLElement) === el,

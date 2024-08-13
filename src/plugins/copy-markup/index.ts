@@ -139,10 +139,10 @@ class HSCopyMarkup
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | null = null) {
 		if (!window.$hsCopyMarkupCollection) window.$hsCopyMarkupCollection = [];
 
-		document
+		(target || document)
 			.querySelectorAll('[data-hs-copy-markup]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (

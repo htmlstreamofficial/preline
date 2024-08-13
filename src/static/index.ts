@@ -62,14 +62,14 @@ declare global {
 const HSStaticMethods: IStaticMethods = {
 	getClassProperty,
 	afterTransition,
-	autoInit(collection: string | string[] = 'all') {
+	autoInit(collection: string | string[] = 'all', target: HTMLElement | null = null) {
 		if (collection === 'all') {
 			COLLECTIONS.forEach(({ fn }) => {
-				fn?.autoInit();
+				fn?.autoInit(target);
 			});
 		} else {
 			COLLECTIONS.forEach(({ key, fn }) => {
-				if (collection.includes(key)) fn?.autoInit();
+				if (collection.includes(key)) fn?.autoInit(target);
 			});
 		}
 	},

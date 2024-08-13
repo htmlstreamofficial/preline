@@ -286,22 +286,10 @@ class HSDropdown
 			: null;
 	}
 
-	static autoInit() {
-		if (!window.$hsDropdownCollection) window.$hsDropdownCollection = [];
-
-		document
-			.querySelectorAll('.hs-dropdown:not(.--prevent-on-load-init)')
-			.forEach((el: IHTMLElementPopper) => {
-				if (
-					!window.$hsDropdownCollection.find(
-						(elC) => (elC?.element?.el as HTMLElement) === el,
-					)
-				)
-					new HSDropdown(el);
-			});
-
-		if (window.$hsDropdownCollection) {
-			document.addEventListener('keydown', (evt) =>
+	static autoInit(target: HTMLElement | null = null) {
+		if (!window.$hsDropdownCollection) {
+            window.$hsDropdownCollection = [];
+            document.addEventListener('keydown', (evt) =>
 				HSDropdown.accessibility(evt),
 			);
 
@@ -318,7 +306,18 @@ class HSDropdown
 					HSDropdown.closeCurrentlyOpened(null, false);
 				}
 			});
-		}
+        }
+
+		(target || document)
+			.querySelectorAll('.hs-dropdown:not(.--prevent-on-load-init)')
+			.forEach((el: IHTMLElementPopper) => {
+				if (
+					!window.$hsDropdownCollection.find(
+						(elC) => (elC?.element?.el as HTMLElement) === el,
+					)
+				)
+					new HSDropdown(el);
+			});
 	}
 
 	static open(target: HTMLElement) {

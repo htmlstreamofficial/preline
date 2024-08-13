@@ -108,10 +108,13 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 			: null;
 	}
 
-	static autoInit() {
-		if (!window.$hsTabsCollection) window.$hsTabsCollection = [];
+	static autoInit(target: HTMLElement | null = null) {
+		if (!window.$hsTabsCollection) {
+            window.$hsTabsCollection = [];
+            document.addEventListener('keydown', (evt) => HSTabs.accessibility(evt));
+        }
 
-		document
+		(target || document)
 			.querySelectorAll(
 				'[role="tablist"]:not(select):not(.--prevent-on-load-init)',
 			)
@@ -123,9 +126,6 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 				)
 					new HSTabs(el);
 			});
-
-		if (window.$hsTabsCollection)
-			document.addEventListener('keydown', (evt) => HSTabs.accessibility(evt));
 	}
 
 	static open(target: HTMLElement) {

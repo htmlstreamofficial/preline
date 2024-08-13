@@ -378,10 +378,15 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			: null;
 	}
 
-	static autoInit() {
-		if (!window.$hsOverlayCollection) window.$hsOverlayCollection = [];
+	static autoInit(target: HTMLElement | null = null) {
+		if (!window.$hsOverlayCollection) {
+            window.$hsOverlayCollection = [];
+            document.addEventListener('keydown', (evt) =>
+				HSOverlay.accessibility(evt),
+			);
+        }
 
-		document
+		(target || document)
 			.querySelectorAll('[data-hs-overlay]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
@@ -391,12 +396,6 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 				)
 					new HSOverlay(el);
 			});
-
-		if (window.$hsOverlayCollection) {
-			document.addEventListener('keydown', (evt) =>
-				HSOverlay.accessibility(evt),
-			);
-		}
 	}
 
 	static open(target: HTMLElement) {

@@ -165,10 +165,10 @@ class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | null = null) {
 		if (!window.$hsPinInputCollection) window.$hsPinInputCollection = [];
 
-		document
+		(target || document)
 			.querySelectorAll('[data-hs-pin-input]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (

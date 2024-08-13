@@ -769,10 +769,10 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | null = null) {
 		if (!window.$hsStepperCollection) window.$hsStepperCollection = [];
 
-		document
+		(target || document)
 			.querySelectorAll('[data-hs-stepper]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (

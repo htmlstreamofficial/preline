@@ -327,11 +327,11 @@ class HSStrongPassword
 		return elInCollection ? elInCollection.element : null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | null = null) {
 		if (!window.$hsStrongPasswordCollection)
 			window.$hsStrongPasswordCollection = [];
 
-		document
+		(target || document)
 			.querySelectorAll(
 				'[data-hs-strong-password]:not(.--prevent-on-load-init)',
 			)

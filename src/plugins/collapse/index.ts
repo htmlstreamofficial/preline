@@ -130,10 +130,10 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | null = null) {
 		if (!window.$hsCollapseCollection) window.$hsCollapseCollection = [];
 
-		document
+		(target || document)
 			.querySelectorAll('.hs-collapse-toggle:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
