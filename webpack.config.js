@@ -32,7 +32,7 @@ module.exports = {
 	module: {
 		rules: [
 			{ test: /\.ts?$/, enforce: 'pre', use: ['source-map-loader'] },
-			{ test: /\.ts?$/, use: 'ts-loader', exclude: /node_modules/ },
+			{ test: /\.ts?$/, use: { loader: 'ts-loader', transpileOnly: true }, exclude: /node_modules/ },
 		],
 	},
 	resolve: { extensions: ['.ts', '.js'] },
