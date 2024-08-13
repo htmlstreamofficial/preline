@@ -73,6 +73,17 @@ const HSStaticMethods: IStaticMethods = {
 			});
 		}
 	},
+    autoClean(collection: string | string[] = 'all', target?: Document | HTMLElement) {
+        if (collection === 'all') {
+            COLLECTIONS.forEach(({ fn }) => {
+                fn?.autoClean(target);
+            });
+        } else {
+            COLLECTIONS.forEach(({ key, fn }) => {
+                if (collection.includes(key)) fn?.autoClean(target);
+            });
+        }
+    },
 	cleanCollection(name: string | string[] = 'all') {
 		if (name === 'all') {
 			COLLECTIONS.forEach(({ collection }) => {

@@ -118,6 +118,16 @@ class HSToggleCount
 					new HSToggleCount(el);
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-toggle-count]')
+			.forEach((el: HTMLElement) => {
+				window.$hsToggleCountCollection = window.$hsToggleCountCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {
