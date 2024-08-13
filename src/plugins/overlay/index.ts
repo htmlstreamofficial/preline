@@ -398,6 +398,16 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			});
 	}
 
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-overlay]')
+			.forEach((el: HTMLElement) => {
+				window.$hsOverlayCollection = window.$hsOverlayCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
+
 	static open(target: HTMLElement) {
 		const elInCollection = window.$hsOverlayCollection.find(
 			(el) =>

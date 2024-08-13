@@ -157,6 +157,16 @@ class HSCopyMarkup
 				}
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-copy-markup]')
+			.forEach((el: HTMLElement) => {
+				window.$hsCopyMarkupCollection = window.$hsCopyMarkupCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {

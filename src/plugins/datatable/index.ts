@@ -425,6 +425,16 @@ class HSDataTable
 					new HSDataTable(el);
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-datatable]')
+			.forEach((el: HTMLElement) => {
+				window.$hsDataTableCollection = window.$hsDataTableCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {

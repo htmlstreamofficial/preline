@@ -348,6 +348,16 @@ class HSStrongPassword
 				}
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-strong-password]')
+			.forEach((el: HTMLElement) => {
+				window.$hsStrongPasswordCollection = window.$hsStrongPasswordCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {

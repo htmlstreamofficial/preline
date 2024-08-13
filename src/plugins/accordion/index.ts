@@ -170,6 +170,16 @@ class HSAccordion
 			});
 	}
 
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('.hs-accordion')
+			.forEach((el: HTMLElement) => {
+				window.$hsAccordionCollection = window.$hsAccordionCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
+
 	static treeView() {
 		if (!document.querySelectorAll('.hs-accordion-treeview-root').length)
 			return false;

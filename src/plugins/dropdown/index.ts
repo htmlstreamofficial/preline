@@ -320,6 +320,16 @@ class HSDropdown
 			});
 	}
 
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('.hs-dropdown')
+			.forEach((el: HTMLElement) => {
+				window.$hsDropdownCollection = window.$hsDropdownCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
+
 	static open(target: HTMLElement) {
 		const elInCollection = window.$hsDropdownCollection.find(
 			(el) =>

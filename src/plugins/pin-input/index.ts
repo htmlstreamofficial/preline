@@ -179,6 +179,16 @@ class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
 					new HSPinInput(el);
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-pin-input]')
+			.forEach((el: HTMLElement) => {
+				window.$hsPinInputCollection = window.$hsPinInputCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {

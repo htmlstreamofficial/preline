@@ -267,6 +267,16 @@ class HSInputNumber
 					new HSInputNumber(el);
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-input-number]')
+			.forEach((el: HTMLElement) => {
+				window.$hsInputNumberCollection = window.$hsInputNumberCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {

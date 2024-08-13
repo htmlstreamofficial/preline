@@ -145,6 +145,16 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 			});
 	}
 
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('.hs-collapse-toggle')
+			.forEach((el: HTMLElement) => {
+				window.$hsCollapseCollection = window.$hsCollapseCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
+
 	static show(target: HTMLElement) {
 		const elInCollection = window.$hsCollapseCollection.find(
 			(el) =>

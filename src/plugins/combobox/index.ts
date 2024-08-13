@@ -878,6 +878,17 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 			});
 	}
 
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-combo-box]')
+			.forEach((el: HTMLElement) => {
+				window.$hsComboBoxCollection = window.$hsComboBoxCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
+
 	static close(target: HTMLElement | string) {
 		const elInCollection = window.$hsComboBoxCollection.find(
 			(el) =>

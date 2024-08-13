@@ -311,6 +311,16 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 					new HSCarousel(el);
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-carousel]')
+			.forEach((el: HTMLElement) => {
+				window.$hsCarouselCollection = window.$hsCarouselCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {

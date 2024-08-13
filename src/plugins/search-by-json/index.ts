@@ -194,6 +194,16 @@ class HSSearchByJson
 					new HSSearchByJson(el);
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-search-by-json]')
+			.forEach((el: HTMLElement) => {
+				window.$hsSearchByJsonCollection = window.$hsSearchByJsonCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {

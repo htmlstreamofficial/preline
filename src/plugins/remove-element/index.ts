@@ -71,6 +71,16 @@ class HSRemoveElement
 					new HSRemoveElement(el);
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-remove-element]')
+			.forEach((el: HTMLElement) => {
+				window.$hsRemoveElementCollection = window.$hsRemoveElementCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {

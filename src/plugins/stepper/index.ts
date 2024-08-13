@@ -783,6 +783,16 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 					new HSStepper(el);
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-stepper]')
+			.forEach((el: HTMLElement) => {
+				window.$hsStepperCollection = window.$hsStepperCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {

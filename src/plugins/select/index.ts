@@ -1129,6 +1129,16 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			});
 	}
 
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-select]')
+			.forEach((el: HTMLElement) => {
+				window.$hsSelectCollection = window.$hsSelectCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
+
 	static open(target: HTMLElement | string) {
 		const elInCollection = window.$hsSelectCollection.find(
 			(el) =>

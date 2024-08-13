@@ -347,6 +347,16 @@ class HSFileUpload
 					new HSFileUpload(el);
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-file-upload]')
+			.forEach((el: HTMLElement) => {
+				window.$hsFileUploadCollection = window.$hsFileUploadCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {

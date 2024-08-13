@@ -175,6 +175,16 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 					new HSScrollspy(el);
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-scrollspy]')
+			.forEach((el: HTMLElement) => {
+				window.$hsScrollspyCollection = window.$hsScrollspyCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {

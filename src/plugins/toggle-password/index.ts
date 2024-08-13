@@ -177,6 +177,16 @@ class HSTogglePassword
 					new HSTogglePassword(el);
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-toggle-password]')
+			.forEach((el: HTMLElement) => {
+				window.$hsTogglePasswordCollection = window.$hsTogglePasswordCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {

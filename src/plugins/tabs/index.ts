@@ -128,6 +128,16 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 			});
 	}
 
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[role="tablist"]:not(select)')
+			.forEach((el: HTMLElement) => {
+				window.$hsTabsCollection = window.$hsTabsCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
+
 	static open(target: HTMLElement) {
 		const elInCollection = window.$hsTabsCollection.find((el) =>
 			Array.from(el.element.toggles).includes(

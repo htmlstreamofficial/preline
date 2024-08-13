@@ -152,6 +152,16 @@ class HSThemeSwitch
 				});
 			});
 	}
+
+    static autoClean(target: Document | HTMLElement = document) {
+        target
+			.querySelectorAll('[data-hs-theme-switch]')
+			.forEach((el: HTMLElement) => {
+				window.$hsThemeSwitchCollection = window.$hsThemeSwitchCollection.filter(
+					(elC) => elC.element.el !== el,
+				);
+			})
+    }
 }
 
 declare global {
