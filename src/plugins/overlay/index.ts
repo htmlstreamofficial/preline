@@ -379,7 +379,12 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	}
 
 	static autoInit() {
-		if (!window.$hsOverlayCollection) window.$hsOverlayCollection = [];
+		if (!window.$hsOverlayCollection) {
+            window.$hsOverlayCollection = [];
+            document.addEventListener('keydown', (evt) =>
+				HSOverlay.accessibility(evt),
+			);
+        }
 
 		document
 			.querySelectorAll('[data-hs-overlay]:not(.--prevent-on-load-init)')
@@ -391,12 +396,6 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 				)
 					new HSOverlay(el);
 			});
-
-		if (window.$hsOverlayCollection) {
-			document.addEventListener('keydown', (evt) =>
-				HSOverlay.accessibility(evt),
-			);
-		}
 	}
 
 	static open(target: HTMLElement) {

@@ -287,21 +287,9 @@ class HSDropdown
 	}
 
 	static autoInit() {
-		if (!window.$hsDropdownCollection) window.$hsDropdownCollection = [];
-
-		document
-			.querySelectorAll('.hs-dropdown:not(.--prevent-on-load-init)')
-			.forEach((el: IHTMLElementPopper) => {
-				if (
-					!window.$hsDropdownCollection.find(
-						(elC) => (elC?.element?.el as HTMLElement) === el,
-					)
-				)
-					new HSDropdown(el);
-			});
-
-		if (window.$hsDropdownCollection) {
-			document.addEventListener('keydown', (evt) =>
+		if (!window.$hsDropdownCollection) {
+            window.$hsDropdownCollection = [];
+            document.addEventListener('keydown', (evt) =>
 				HSDropdown.accessibility(evt),
 			);
 
@@ -318,7 +306,18 @@ class HSDropdown
 					HSDropdown.closeCurrentlyOpened(null, false);
 				}
 			});
-		}
+        }
+
+		document
+            .querySelectorAll('.hs-dropdown:not(.--prevent-on-load-init)')
+			.forEach((el: IHTMLElementPopper) => {
+				if (
+					!window.$hsDropdownCollection.find(
+						(elC) => (elC?.element?.el as HTMLElement) === el,
+					)
+				)
+					new HSDropdown(el);
+			});
 	}
 
 	static open(target: HTMLElement) {

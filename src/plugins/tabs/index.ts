@@ -109,7 +109,10 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 	}
 
 	static autoInit() {
-		if (!window.$hsTabsCollection) window.$hsTabsCollection = [];
+		if (!window.$hsTabsCollection) {
+            window.$hsTabsCollection = [];
+            document.addEventListener('keydown', (evt) => HSTabs.accessibility(evt));
+        }
 
 		document
 			.querySelectorAll(
@@ -123,9 +126,6 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 				)
 					new HSTabs(el);
 			});
-
-		if (window.$hsTabsCollection)
-			document.addEventListener('keydown', (evt) => HSTabs.accessibility(evt));
 	}
 
 	static open(target: HTMLElement) {
