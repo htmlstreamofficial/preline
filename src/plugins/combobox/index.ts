@@ -850,8 +850,8 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 
 	static autoInit() {
 		if (!window.$hsComboBoxCollection) {
-            window.$hsComboBoxCollection = [];
-            window.addEventListener('click', (evt) => {
+			window.$hsComboBoxCollection = [];
+			window.addEventListener('click', (evt) => {
 				const evtTarget = evt.target;
 
 				HSComboBox.closeCurrentlyOpened(evtTarget as HTMLElement);
@@ -860,7 +860,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 			document.addEventListener('keydown', (evt) =>
 				HSComboBox.accessibility(evt),
 			);
-        }
+		}
 
 		document
 			.querySelectorAll('[data-hs-combo-box]:not(.--prevent-on-load-init)')

@@ -288,8 +288,8 @@ class HSDropdown
 
 	static autoInit() {
 		if (!window.$hsDropdownCollection) {
-            window.$hsDropdownCollection = [];
-            document.addEventListener('keydown', (evt) =>
+			window.$hsDropdownCollection = [];
+			document.addEventListener('keydown', (evt) =>
 				HSDropdown.accessibility(evt),
 			);
 

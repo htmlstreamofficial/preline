@@ -380,11 +380,11 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 	static autoInit() {
 		if (!window.$hsOverlayCollection) {
-            window.$hsOverlayCollection = [];
-            document.addEventListener('keydown', (evt) =>
+			window.$hsOverlayCollection = [];
+			document.addEventListener('keydown', (evt) =>
 				HSOverlay.accessibility(evt),
 			);
-        }
+		}
 
 		document
 			.querySelectorAll('[data-hs-overlay]:not(.--prevent-on-load-init)')

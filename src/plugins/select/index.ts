@@ -1101,8 +1101,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 	static autoInit() {
 		if (!window.$hsSelectCollection) {
-            window.$hsSelectCollection = [];
-            window.addEventListener('click', (evt) => {
+			window.$hsSelectCollection = [];
+			window.addEventListener('click', (evt) => {
 				const evtTarget = evt.target;
 
 				HSSelect.closeCurrentlyOpened(evtTarget as HTMLElement);
@@ -1111,7 +1111,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			document.addEventListener('keydown', (evt) =>
 				HSSelect.accessibility(evt),
 			);
-        }
+		}
 
 		document
 			.querySelectorAll('[data-hs-select]:not(.--prevent-on-load-init)')

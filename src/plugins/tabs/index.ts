@@ -110,9 +110,9 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 
 	static autoInit() {
 		if (!window.$hsTabsCollection) {
-            window.$hsTabsCollection = [];
-            document.addEventListener('keydown', (evt) => HSTabs.accessibility(evt));
-        }
+			window.$hsTabsCollection = [];
+			document.addEventListener('keydown', (evt) => HSTabs.accessibility(evt));
+		}
 
 		document
 			.querySelectorAll(
