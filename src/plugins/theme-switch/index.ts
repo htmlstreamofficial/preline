@@ -9,6 +9,7 @@ import { IThemeSwitchOptions, IThemeSwitch } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
+import { querySelectorAllOrMatch } from '../../utils';
 
 class HSThemeSwitch
 	extends HSBasePlugin<IThemeSwitchOptions>
@@ -101,7 +102,7 @@ class HSThemeSwitch
 		return elInCollection ? elInCollection.element : null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsThemeSwitchCollection) window.$hsThemeSwitchCollection = [];
 
 		const toggleObserveSystemTheme = (el: HSThemeSwitch) => {
@@ -110,8 +111,7 @@ class HSThemeSwitch
 			else el.removeSystemThemeObserver();
 		};
 
-		document
-			.querySelectorAll('[data-hs-theme-switch]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-theme-switch]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsThemeSwitchCollection.find(
@@ -135,8 +135,7 @@ class HSThemeSwitch
 				}
 			});
 
-		document
-			.querySelectorAll(
+            querySelectorAllOrMatch(target, 
 				'[data-hs-theme-click-value]:not(.--prevent-on-load-init)',
 			)
 			.forEach((el: HTMLElement) => {
@@ -154,8 +153,7 @@ class HSThemeSwitch
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-theme-switch]')
+        querySelectorAllOrMatch(target, '[data-hs-theme-switch]')
 			.forEach((el: HTMLElement) => {
 				window.$hsThemeSwitchCollection = window.$hsThemeSwitchCollection.filter(
 					(elC) => elC.element.el !== el,

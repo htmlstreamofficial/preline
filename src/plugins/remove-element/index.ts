@@ -6,7 +6,7 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { afterTransition } from '../../utils';
+import { afterTransition, querySelectorAllOrMatch } from '../../utils';
 
 import { IRemoveElementOptions, IRemoveElement } from './interfaces';
 
@@ -56,12 +56,11 @@ class HSRemoveElement
 	}
 
 	// Static method
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsRemoveElementCollection)
 			window.$hsRemoveElementCollection = [];
 
-		document
-			.querySelectorAll('[data-hs-remove-element]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-remove-element]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsRemoveElementCollection.find(
@@ -73,8 +72,7 @@ class HSRemoveElement
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-remove-element]')
+        querySelectorAllOrMatch(target, '[data-hs-remove-element]')
 			.forEach((el: HTMLElement) => {
 				window.$hsRemoveElementCollection = window.$hsRemoveElementCollection.filter(
 					(elC) => elC.element.el !== el,

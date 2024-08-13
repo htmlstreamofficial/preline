@@ -6,7 +6,7 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { dispatch, afterTransition } from '../../utils';
+import { dispatch, afterTransition, querySelectorAllOrMatch } from '../../utils';
 
 import {
 	IAccordionOptions,
@@ -155,11 +155,10 @@ class HSAccordion
 			elInCollection.element.hide();
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsAccordionCollection) window.$hsAccordionCollection = [];
 
-		document
-			.querySelectorAll('.hs-accordion:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '.hs-accordion:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsAccordionCollection.find(
@@ -170,15 +169,14 @@ class HSAccordion
 			});
 	}
 
-    static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('.hs-accordion')
+	static autoClean(target: Document | HTMLElement = document) {
+		querySelectorAllOrMatch(target, '.hs-accordion')
 			.forEach((el: HTMLElement) => {
 				window.$hsAccordionCollection = window.$hsAccordionCollection.filter(
 					(elC) => elC.element.el !== el,
 				);
 			})
-    }
+	}
 
 	static treeView() {
 		if (!document.querySelectorAll('.hs-accordion-treeview-root').length)

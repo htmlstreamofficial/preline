@@ -6,7 +6,7 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { dispatch } from '../../utils';
+import { dispatch, querySelectorAllOrMatch } from '../../utils';
 
 import { ICopyMarkupOptions, ICopyMarkup } from './interfaces';
 
@@ -139,11 +139,10 @@ class HSCopyMarkup
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsCopyMarkupCollection) window.$hsCopyMarkupCollection = [];
 
-		document
-			.querySelectorAll('[data-hs-copy-markup]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-copy-markup]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsCopyMarkupCollection.find(
@@ -159,8 +158,7 @@ class HSCopyMarkup
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-copy-markup]')
+        querySelectorAllOrMatch(target, '[data-hs-copy-markup]')
 			.forEach((el: HTMLElement) => {
 				window.$hsCopyMarkupCollection = window.$hsCopyMarkupCollection.filter(
 					(elC) => elC.element.el !== el,

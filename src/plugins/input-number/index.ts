@@ -6,7 +6,7 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { dispatch } from '../../utils';
+import { dispatch, querySelectorAllOrMatch } from '../../utils';
 
 import { IInputNumberOptions, IInputNumber } from './interfaces';
 
@@ -253,11 +253,10 @@ class HSInputNumber
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsInputNumberCollection) window.$hsInputNumberCollection = [];
 
-		document
-			.querySelectorAll('[data-hs-input-number]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-input-number]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsInputNumberCollection.find(
@@ -269,8 +268,7 @@ class HSInputNumber
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-input-number]')
+        querySelectorAllOrMatch(target, '[data-hs-input-number]')
 			.forEach((el: HTMLElement) => {
 				window.$hsInputNumberCollection = window.$hsInputNumberCollection.filter(
 					(elC) => elC.element.el !== el,

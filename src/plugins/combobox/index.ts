@@ -13,6 +13,7 @@ import {
 	afterTransition,
 	htmlToElement,
 	isParentOrElementHidden,
+    querySelectorAllOrMatch,
 } from '../../utils';
 
 import { IComboBox, IComboBoxOptions, IComboBoxItemAttr } from './interfaces';
@@ -848,7 +849,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsComboBoxCollection) {
 			window.$hsComboBoxCollection = [];
 			window.addEventListener('click', (evt) => {
@@ -862,8 +863,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 			);
 		}
 
-		document
-			.querySelectorAll('[data-hs-combo-box]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-combo-box]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsComboBoxCollection.find(
@@ -880,8 +880,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-combo-box]')
+        querySelectorAllOrMatch(target, '[data-hs-combo-box]')
 			.forEach((el: HTMLElement) => {
 				window.$hsComboBoxCollection = window.$hsComboBoxCollection.filter(
 					(elC) => elC.element.el !== el,

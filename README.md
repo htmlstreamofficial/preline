@@ -32,10 +32,10 @@ First, you need to make sure that you have a working <a href="https://tailwindcs
 
 <pre><code>module.exports = {
   content: [
-    'node_modules/preline/dist/*.js'
+	'node_modules/preline/dist/*.js'
   ],
   plugins: [
-    require('preline/plugin')
+	require('preline/plugin')
   ],
 }</code></pre>
 

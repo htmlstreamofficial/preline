@@ -8,7 +8,7 @@
 
 import { DropzoneFile } from 'dropzone';
 
-import { htmlToElement, classToClassList } from '../../utils';
+import { htmlToElement, classToClassList, querySelectorAllOrMatch } from '../../utils';
 
 import { IFileUploadOptions, IFileUpload } from './interfaces';
 
@@ -333,11 +333,10 @@ class HSFileUpload
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsFileUploadCollection) window.$hsFileUploadCollection = [];
 
-		document
-			.querySelectorAll('[data-hs-file-upload]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-file-upload]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsFileUploadCollection.find(
@@ -349,8 +348,7 @@ class HSFileUpload
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-file-upload]')
+        querySelectorAllOrMatch(target, '[data-hs-file-upload]')
 			.forEach((el: HTMLElement) => {
 				window.$hsFileUploadCollection = window.$hsFileUploadCollection.filter(
 					(elC) => elC.element.el !== el,

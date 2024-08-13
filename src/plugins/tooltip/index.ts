@@ -7,7 +7,7 @@
  */
 
 import { createPopper, PositioningStrategy, Instance } from '@popperjs/core';
-import { getClassProperty, dispatch, afterTransition } from '../../utils';
+import { getClassProperty, dispatch, afterTransition, querySelectorAllOrMatch } from '../../utils';
 
 import { ITooltip } from './interfaces';
 
@@ -183,10 +183,10 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsTooltipCollection) window.$hsTooltipCollection = [];
 
-		document.querySelectorAll('.hs-tooltip').forEach((el: HTMLElement) => {
+		querySelectorAllOrMatch(target, '.hs-tooltip').forEach((el: HTMLElement) => {
 			if (
 				!window.$hsTooltipCollection.find(
 					(elC) => (elC?.element?.el as HTMLElement) === el,
@@ -197,8 +197,7 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('.hs-tooltip')
+        querySelectorAllOrMatch(target, '.hs-tooltip')
 			.forEach((el: HTMLElement) => {
 				window.$hsTooltipCollection = window.$hsTooltipCollection.filter(
 					(elC) => elC.element.el !== el,

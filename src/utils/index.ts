@@ -194,6 +194,14 @@ const menuSearchHistory = {
 	},
 };
 
+const querySelectorAllOrMatch = function (element: HTMLElement | Document, selector: string): HTMLElement[] {
+	if (element instanceof HTMLElement) {
+		return element.matches(selector) ? [element] : Array.from(element.querySelectorAll(selector));
+	}
+
+	return Array.from(element.querySelectorAll(selector));
+}
+
 export {
 	stringToBoolean,
 	getClassProperty,
@@ -210,5 +218,6 @@ export {
 	afterTransition,
 	htmlToElement,
 	classToClassList,
+	querySelectorAllOrMatch,
 	menuSearchHistory,
 };

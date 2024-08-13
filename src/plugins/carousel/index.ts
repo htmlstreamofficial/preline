@@ -10,6 +10,7 @@ import { ICarousel, ICarouselOptions } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
+import { querySelectorAllOrMatch } from '../../utils';
 
 class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	private readonly inner: HTMLElement | null;
@@ -297,11 +298,10 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsCarouselCollection) window.$hsCarouselCollection = [];
 
-		document
-			.querySelectorAll('[data-hs-carousel]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-carousel]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsCarouselCollection.find(
@@ -313,8 +313,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-carousel]')
+        querySelectorAllOrMatch(target, '[data-hs-carousel]')
 			.forEach((el: HTMLElement) => {
 				window.$hsCarouselCollection = window.$hsCarouselCollection.filter(
 					(elC) => elC.element.el !== el,

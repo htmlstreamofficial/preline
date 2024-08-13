@@ -6,7 +6,7 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { dispatch, afterTransition } from '../../utils';
+import { dispatch, afterTransition, querySelectorAllOrMatch } from '../../utils';
 
 import { ICollapse } from './interfaces';
 
@@ -130,11 +130,10 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsCollapseCollection) window.$hsCollapseCollection = [];
 
-		document
-			.querySelectorAll('.hs-collapse-toggle:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '.hs-collapse-toggle:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsCollapseCollection.find(
@@ -146,8 +145,7 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('.hs-collapse-toggle')
+        querySelectorAllOrMatch(target, '.hs-collapse-toggle')
 			.forEach((el: HTMLElement) => {
 				window.$hsCollapseCollection = window.$hsCollapseCollection.filter(
 					(elC) => elC.element.el !== el,

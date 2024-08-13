@@ -14,6 +14,7 @@ import {
 	dispatch,
 	afterTransition,
 	menuSearchHistory,
+    querySelectorAllOrMatch,
 } from '../../utils';
 import { IMenuSearchHistory } from '../../utils/interfaces';
 
@@ -286,7 +287,7 @@ class HSDropdown
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsDropdownCollection) {
 			window.$hsDropdownCollection = [];
 			document.addEventListener('keydown', (evt) =>
@@ -308,8 +309,7 @@ class HSDropdown
 			});
         }
 
-		document
-			.querySelectorAll('.hs-dropdown:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '.hs-dropdown:not(.--prevent-on-load-init)')
 			.forEach((el: IHTMLElementPopper) => {
 				if (
 					!window.$hsDropdownCollection.find(
@@ -321,8 +321,7 @@ class HSDropdown
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('.hs-dropdown')
+        querySelectorAllOrMatch(target, '.hs-dropdown')
 			.forEach((el: HTMLElement) => {
 				window.$hsDropdownCollection = window.$hsDropdownCollection.filter(
 					(elC) => elC.element.el !== el,

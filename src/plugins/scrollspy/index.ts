@@ -6,7 +6,7 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { getClassProperty, dispatch } from '../../utils';
+import { getClassProperty, dispatch, querySelectorAllOrMatch } from '../../utils';
 
 import { IScrollspy } from './interfaces';
 
@@ -161,11 +161,10 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsScrollspyCollection) window.$hsScrollspyCollection = [];
 
-		document
-			.querySelectorAll('[data-hs-scrollspy]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-scrollspy]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsScrollspyCollection.find(
@@ -177,8 +176,7 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-scrollspy]')
+        querySelectorAllOrMatch(target, '[data-hs-scrollspy]')
 			.forEach((el: HTMLElement) => {
 				window.$hsScrollspyCollection = window.$hsScrollspyCollection.filter(
 					(elC) => elC.element.el !== el,

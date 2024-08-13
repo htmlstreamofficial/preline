@@ -6,7 +6,7 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { debounce, htmlToElement, classToClassList } from '../../utils';
+import { debounce, htmlToElement, classToClassList, querySelectorAllOrMatch } from '../../utils';
 
 import {
 	ISearchByJsonOptions,
@@ -179,12 +179,11 @@ class HSSearchByJson
 		return elInCollection ? elInCollection.element : null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsSearchByJsonCollection)
 			window.$hsSearchByJsonCollection = [];
 
-		document
-			.querySelectorAll('[data-hs-search-by-json]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-search-by-json]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLInputElement) => {
 				if (
 					!window.$hsSearchByJsonCollection.find(
@@ -196,8 +195,7 @@ class HSSearchByJson
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-search-by-json]')
+        querySelectorAllOrMatch(target, '[data-hs-search-by-json]')
 			.forEach((el: HTMLElement) => {
 				window.$hsSearchByJsonCollection = window.$hsSearchByJsonCollection.filter(
 					(elC) => elC.element.el !== el,

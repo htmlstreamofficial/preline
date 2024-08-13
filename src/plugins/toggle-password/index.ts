@@ -6,7 +6,7 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { isFormElement, dispatch } from '../../utils';
+import { isFormElement, dispatch, querySelectorAllOrMatch } from '../../utils';
 
 import { ITogglePasswordOptions, ITogglePassword } from './interfaces';
 
@@ -160,12 +160,11 @@ class HSTogglePassword
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsTogglePasswordCollection)
 			window.$hsTogglePasswordCollection = [];
 
-		document
-			.querySelectorAll(
+		querySelectorAllOrMatch(target, 
 				'[data-hs-toggle-password]:not(.--prevent-on-load-init)',
 			)
 			.forEach((el: HTMLInputElement) => {
@@ -179,8 +178,7 @@ class HSTogglePassword
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-toggle-password]')
+        querySelectorAllOrMatch(target, '[data-hs-toggle-password]')
 			.forEach((el: HTMLElement) => {
 				window.$hsTogglePasswordCollection = window.$hsTogglePasswordCollection.filter(
 					(elC) => elC.element.el !== el,

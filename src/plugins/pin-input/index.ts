@@ -6,7 +6,7 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { dispatch } from '../../utils';
+import { dispatch, querySelectorAllOrMatch } from '../../utils';
 
 import { IPinInputOptions, IPinInput } from './interfaces';
 
@@ -165,11 +165,10 @@ class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsPinInputCollection) window.$hsPinInputCollection = [];
 
-		document
-			.querySelectorAll('[data-hs-pin-input]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-pin-input]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsPinInputCollection.find(
@@ -181,8 +180,7 @@ class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-pin-input]')
+        querySelectorAllOrMatch(target, '[data-hs-pin-input]')
 			.forEach((el: HTMLElement) => {
 				window.$hsPinInputCollection = window.$hsPinInputCollection.filter(
 					(elC) => elC.element.el !== el,

@@ -8,7 +8,7 @@
 
 import { Api } from 'datatables.net';
 
-import { debounce, htmlToElement, classToClassList } from '../../utils';
+import { debounce, htmlToElement, classToClassList, querySelectorAllOrMatch } from '../../utils';
 
 import { IDataTableOptions, IDataTable } from './interfaces';
 
@@ -411,11 +411,10 @@ class HSDataTable
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsDataTableCollection) window.$hsDataTableCollection = [];
 
-		document
-			.querySelectorAll('[data-hs-datatable]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-datatable]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsDataTableCollection.find(
@@ -427,8 +426,7 @@ class HSDataTable
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-datatable]')
+        querySelectorAllOrMatch(target, '[data-hs-datatable]')
 			.forEach((el: HTMLElement) => {
 				window.$hsDataTableCollection = window.$hsDataTableCollection.filter(
 					(elC) => elC.element.el !== el,

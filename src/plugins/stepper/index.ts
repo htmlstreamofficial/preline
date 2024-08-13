@@ -6,7 +6,7 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { dispatch } from '../../utils';
+import { dispatch, querySelectorAllOrMatch } from '../../utils';
 
 import { IStepperOptions, IStepper, IStepperItem } from './interfaces';
 
@@ -769,11 +769,10 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsStepperCollection) window.$hsStepperCollection = [];
 
-		document
-			.querySelectorAll('[data-hs-stepper]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-stepper]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsStepperCollection.find(
@@ -785,8 +784,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-stepper]')
+        querySelectorAllOrMatch(target, '[data-hs-stepper]')
 			.forEach((el: HTMLElement) => {
 				window.$hsStepperCollection = window.$hsStepperCollection.filter(
 					(elC) => elC.element.el !== el,

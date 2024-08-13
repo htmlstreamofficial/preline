@@ -11,6 +11,7 @@ import {
 	dispatch,
 	htmlToElement,
 	classToClassList,
+    querySelectorAllOrMatch,
 } from '../../utils';
 
 import { IStrongPasswordOptions, IStrongPassword } from './interfaces';
@@ -327,12 +328,11 @@ class HSStrongPassword
 		return elInCollection ? elInCollection.element : null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsStrongPasswordCollection)
 			window.$hsStrongPasswordCollection = [];
 
-		document
-			.querySelectorAll(
+		querySelectorAllOrMatch(target, 
 				'[data-hs-strong-password]:not(.--prevent-on-load-init)',
 			)
 			.forEach((el: HTMLElement) => {
@@ -350,8 +350,7 @@ class HSStrongPassword
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-strong-password]')
+        querySelectorAllOrMatch(target, '[data-hs-strong-password]')
 			.forEach((el: HTMLElement) => {
 				window.$hsStrongPasswordCollection = window.$hsStrongPasswordCollection.filter(
 					(elC) => elC.element.el !== el,

@@ -12,6 +12,7 @@ import {
 	isParentOrElementHidden,
 	dispatch,
 	afterTransition,
+    querySelectorAllOrMatch,
 } from '../../utils';
 
 import { IOverlayOptions, IOverlay } from './interfaces';
@@ -378,7 +379,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsOverlayCollection) {
 			window.$hsOverlayCollection = [];
 			document.addEventListener('keydown', (evt) =>
@@ -386,8 +387,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			);
 		}
 
-		document
-			.querySelectorAll('[data-hs-overlay]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-overlay]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsOverlayCollection.find(
@@ -399,8 +399,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-overlay]')
+        querySelectorAllOrMatch(target, '[data-hs-overlay]')
 			.forEach((el: HTMLElement) => {
 				window.$hsOverlayCollection = window.$hsOverlayCollection.filter(
 					(elC) => elC.element.el !== el,

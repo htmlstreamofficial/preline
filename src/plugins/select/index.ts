@@ -13,6 +13,7 @@ import {
 	afterTransition,
 	htmlToElement,
 	classToClassList,
+    querySelectorAllOrMatch,
 } from '../../utils';
 
 import {
@@ -1099,7 +1100,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsSelectCollection) {
 			window.$hsSelectCollection = [];
 			window.addEventListener('click', (evt) => {
@@ -1113,8 +1114,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			);
 		}
 
-		document
-			.querySelectorAll('[data-hs-select]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-select]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsSelectCollection.find(
@@ -1130,8 +1130,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-select]')
+        querySelectorAllOrMatch(target, '[data-hs-select]')
 			.forEach((el: HTMLElement) => {
 				window.$hsSelectCollection = window.$hsSelectCollection.filter(
 					(elC) => elC.element.el !== el,

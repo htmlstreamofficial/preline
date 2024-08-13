@@ -6,7 +6,7 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { dispatch } from '../../utils';
+import { dispatch, querySelectorAllOrMatch } from '../../utils';
 
 import { ITabs } from './interfaces';
 
@@ -108,14 +108,13 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsTabsCollection) {
 			window.$hsTabsCollection = [];
 			document.addEventListener('keydown', (evt) => HSTabs.accessibility(evt));
 		}
 
-		document
-			.querySelectorAll(
+		querySelectorAllOrMatch(target, 
 				'[role="tablist"]:not(select):not(.--prevent-on-load-init)',
 			)
 			.forEach((el: HTMLElement) => {
@@ -129,8 +128,7 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[role="tablist"]:not(select)')
+        querySelectorAllOrMatch(target, '[role="tablist"]:not(select)')
 			.forEach((el: HTMLElement) => {
 				window.$hsTabsCollection = window.$hsTabsCollection.filter(
 					(elC) => elC.element.el !== el,

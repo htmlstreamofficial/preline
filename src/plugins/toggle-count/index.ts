@@ -10,6 +10,7 @@ import { IToggleCountOptions, IToggleCount } from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
+import { querySelectorAllOrMatch } from '../../utils';
 
 class HSToggleCount
 	extends HSBasePlugin<IToggleCountOptions>
@@ -104,11 +105,10 @@ class HSToggleCount
 			: null;
 	}
 
-	static autoInit() {
+	static autoInit(target: HTMLElement | Document = document) {
 		if (!window.$hsToggleCountCollection) window.$hsToggleCountCollection = [];
 
-		document
-			.querySelectorAll('[data-hs-toggle-count]:not(.--prevent-on-load-init)')
+		querySelectorAllOrMatch(target, '[data-hs-toggle-count]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsToggleCountCollection.find(
@@ -120,8 +120,7 @@ class HSToggleCount
 	}
 
     static autoClean(target: Document | HTMLElement = document) {
-        target
-			.querySelectorAll('[data-hs-toggle-count]')
+        querySelectorAllOrMatch(target, '[data-hs-toggle-count]')
 			.forEach((el: HTMLElement) => {
 				window.$hsToggleCountCollection = window.$hsToggleCountCollection.filter(
 					(elC) => elC.element.el !== el,
