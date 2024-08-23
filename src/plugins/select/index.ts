@@ -307,9 +307,10 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 	private setToggleIcon() {
 		const icon = this.toggle.querySelector('[data-icon]');
-		icon.innerHTML = '';
 
 		if (icon) {
+			icon.innerHTML = '';
+
 			const img = htmlToElement(
 				this.getItemByValue(this.value as string)?.options?.icon || '',
 			);
@@ -322,13 +323,10 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 	private setToggleTitle() {
 		const title = this.toggle.querySelector('[data-title]');
-		title.classList.add('truncate');
-		title.innerHTML = '';
 
 		if (title) {
-			const titleText =
-				this.getItemByValue(this.value as string)?.title || this.placeholder;
-			title.innerHTML = titleText;
+			title.innerHTML = this.getItemByValue(this.value as string)?.title || this.placeholder;
+			title.classList.add('truncate');
 
 			this.toggle.append(title);
 		}
