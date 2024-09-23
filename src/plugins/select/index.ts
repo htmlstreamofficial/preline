@@ -1462,7 +1462,18 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	}
 
 	static autoInit() {
-		if (!window.$hsSelectCollection) window.$hsSelectCollection = [];
+		if (!window.$hsSelectCollection) {
+			window.$hsSelectCollection = [];
+			window.addEventListener('click', (evt) => {
+				const evtTarget = evt.target;
+
+				HSSelect.closeCurrentlyOpened(evtTarget as HTMLElement);
+			});
+
+			document.addEventListener('keydown', (evt) =>
+				HSSelect.accessibility(evt),
+			);
+		}
 
 		document
 			.querySelectorAll('[data-hs-select]:not(.--prevent-on-load-init)')
@@ -1478,18 +1489,6 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 					new HSSelect(el, options);
 				}
 			});
-
-		if (window.$hsSelectCollection) {
-			window.addEventListener('click', (evt) => {
-				const evtTarget = evt.target;
-
-				HSSelect.closeCurrentlyOpened(evtTarget as HTMLElement);
-			});
-
-			document.addEventListener('keydown', (evt) =>
-				HSSelect.accessibility(evt),
-			);
-		}
 	}
 
 	static open(target: HTMLElement | string) {
