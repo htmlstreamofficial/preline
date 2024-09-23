@@ -1,6 +1,6 @@
 /*
  * HSComboBox
- * @version: 2.4.1
+ * @version: 2.5.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -15,7 +15,11 @@ import {
 	isParentOrElementHidden,
 } from '../../utils';
 
-import { IComboBox, IComboBoxOptions, IComboBoxItemAttr } from './interfaces';
+import {
+	IComboBox,
+	IComboBoxOptions,
+	IComboBoxItemAttr,
+} from '../combobox/interfaces';
 
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';

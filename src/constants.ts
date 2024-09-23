@@ -60,6 +60,7 @@ export const COMBO_BOX_ACCESSIBILITY_KEY_SET = [
 ];
 
 export const BREAKPOINTS: any = {
+	xs: 0,
 	sm: 640,
 	md: 768,
 	lg: 1024,

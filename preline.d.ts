@@ -58,13 +58,14 @@ export interface IAccordion {
 export declare class HSAccordion extends HSBasePlugin<IAccordionOptions> implements IAccordion {
 	private readonly toggle;
 	content: HTMLElement | null;
-	private readonly group;
-	private readonly isAlwaysOpened;
+	private group;
+	private isAlwaysOpened;
 	static selectable: IAccordionTreeView[];
 	constructor(el: HTMLElement, options?: IAccordionOptions, events?: {});
 	private init;
 	show(): boolean;
 	hide(): boolean;
+	update(): boolean;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSAccordion>;
 	static show(target: HTMLElement): void;
 	static hide(target: HTMLElement): void;
@@ -73,13 +74,24 @@ export declare class HSAccordion extends HSBasePlugin<IAccordionOptions> impleme
 	static toggleSelected(root: IAccordionTreeView, item: HTMLElement): void;
 	static on(evt: string, target: HTMLElement, cb: Function): void;
 }
+export type TCarouselOptionsSlidesQty = {
+	[key: string]: number;
+};
 export interface ICarouselOptions {
 	currentIndex: number;
 	loadingClasses?: string | string[];
+	dotsItemClasses?: string;
+	isAutoHeight?: boolean;
 	isAutoPlay?: boolean;
-	speed?: number;
+	isCentered?: boolean;
+	isDraggable?: boolean;
 	isInfiniteLoop?: boolean;
 	isRTL?: boolean;
+	isSnap?: boolean;
+	hasSnapSpacers?: boolean;
+	slidesQty?: TCarouselOptionsSlidesQty | number;
+	speed?: number;
+	updateDelay?: number;
 }
 export interface ICarousel {
 	options?: ICarouselOptions;
@@ -89,28 +101,69 @@ export interface ICarousel {
 	goTo(i: number): void;
 }
 export declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
+	private currentIndex;
+	private readonly loadingClasses;
+	private readonly dotsItemClasses;
+	private readonly isAutoHeight;
+	private readonly isAutoPlay;
+	private readonly isCentered;
+	private readonly isDraggable;
+	private readonly isInfiniteLoop;
+	private readonly isRTL;
+	private readonly isSnap;
+	private readonly hasSnapSpacers;
+	private readonly slidesQty;
+	private readonly speed;
+	private readonly updateDelay;
+	private readonly loadingClassesRemove;
+	private readonly loadingClassesAdd;
+	private readonly afterLoadingClassesAdd;
+	private readonly container;
 	private readonly inner;
 	private readonly slides;
 	private readonly prev;
 	private readonly next;
 	private readonly dots;
+	private dotsItems;
+	private readonly info;
+	private readonly infoTotal;
+	private readonly infoCurrent;
 	private sliderWidth;
-	private currentIndex;
-	private readonly loadingClasses;
-	private readonly loadingClassesRemove;
-	private readonly loadingClassesAdd;
-	private readonly afterLoadingClassesAdd;
-	private readonly isAutoPlay;
-	private readonly isRTL;
-	private readonly speed;
-	private readonly isInfiniteLoop;
 	private timer;
+	private isScrolling;
+	private isDragging;
+	private dragStartX;
+	private initialTranslateX;
 	private readonly touchX;
+	private resizeContainer;
+	resizeContainerWidth: number;
 	constructor(el: HTMLElement, options?: ICarouselOptions);
+	private setIsSnap;
 	private init;
+	private initDragHandling;
+	private getTranslateXValue;
+	private removeClickEventWhileDragging;
+	private handleDragStart;
+	private handleDragMove;
+	private handleDragEnd;
+	private getEventX;
+	private getCurrentSlidesQty;
+	private buildSnapSpacers;
+	private initDots;
+	private buildDots;
+	private setDots;
+	private goToCurrentDot;
+	private buildInfo;
+	private setInfoTotal;
+	private setInfoCurrent;
+	private buildSingleDot;
+	private singleDotEvents;
 	private observeResize;
 	private calculateWidth;
 	private addCurrentClass;
+	private setCurrentDot;
+	private setElementToDisabled;
+	private unsetElementToDisabled;
 	private addDisabledClass;
 	private autoPlay;
 	private setTimer;
@@ -118,9 +171,11 @@ export declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implement
 	private detectDirection;
 	recalculateWidth(): void;
 	private calculateTransform;
+	private setTranslate;
 	goToPrev(): void;
 	goToNext(): void;
 	goTo(i: number): void;
+	private setIndex;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSCarousel | ICollectionItem<HSCarousel>;
 	static autoInit(): void;
 }
@@ -341,6 +396,7 @@ export interface IOverlayOptions {
 	isClosePrev?: boolean;
 	backdropClasses?: string | null;
 	backdropExtraClasses?: string | null;
+	moveOverlayToBody?: number | null;
 }
 export interface IOverlay {
 	options?: IOverlayOptions;
@@ -358,6 +414,7 @@ export declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private autoHide;
 	private readonly overlayId;
 	overlay: HTMLElement | null;
+	initContainer: HTMLElement | null;
 	isCloseWhenClickInside: boolean;
 	isTabAccessibilityLimited: boolean;
 	isLayoutAffect: boolean;
@@ -365,6 +422,7 @@ export declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	hasAbilityToCloseOnBackdropClick: boolean;
 	openedBreakpoint: number | null;
 	autoClose: number | null;
+	moveOverlayToBody: number | null;
 	constructor(el: HTMLElement, options?: IOverlayOptions, events?: {});
 	private init;
 	private hideAuto;
@@ -457,6 +515,13 @@ export interface ISingleOption {
 	selected?: boolean;
 	options?: ISingleOptionOptions | null;
 }
+export interface IApiFieldMap {
+	id: string;
+	title: string;
+	icon?: string | null;
+	description?: string | null;
+	[key: string]: unknown;
+}
 export interface ISelectOptions {
 	value?: string | string[];
 	isOpened?: boolean;
@@ -466,6 +531,13 @@ export interface ISelectOptions {
 	mode?: string;
 	viewport?: string;
 	wrapperClasses?: string;
+	apiUrl?: string | null;
+	apiQuery?: string | null;
+	apiOptions?: RequestInit | null;
+	apiDataPart?: string | null;
+	apiSearchQueryKey?: string | null;
+	apiFieldsMap?: IApiFieldMap | null;
+	apiIconTag?: string | null;
 	toggleTag?: string;
 	toggleClasses?: string;
 	toggleSeparators?: {
@@ -477,6 +549,7 @@ export interface ISelectOptions {
 	toggleCountTextMode?: string;
 	tagsItemTemplate?: string;
 	tagsItemClasses?: string;
+	tagsInputId?: string;
 	tagsInputClasses?: string;
 	dropdownTag?: string;
 	dropdownClasses?: string;
@@ -485,11 +558,18 @@ export interface ISelectOptions {
 		bottom?: string;
 	};
 	dropdownSpace: number;
+	dropdownPlacement: string | null;
+	dropdownScope: "window" | "parent";
 	extraMarkup?: string | string[] | null;
+	searchTemplate?: string;
 	searchWrapperTemplate?: string;
+	searchId?: string;
+	searchLimit?: number | typeof Infinity;
+	isSearchDirectMatch?: boolean;
 	searchClasses?: string;
 	searchWrapperClasses?: string;
 	searchPlaceholder?: string;
+	searchNoResultTemplate?: string | null;
 	searchNoResultText?: string | null;
 	searchNoResultClasses?: string | null;
 	optionTemplate?: string;
@@ -519,6 +599,13 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	isMultiple: boolean | null;
 	isDisabled: boolean | null;
 	selectedItems: string[];
+	private readonly apiUrl;
+	private readonly apiQuery;
+	private readonly apiOptions;
+	private readonly apiDataPart;
+	private readonly apiSearchQueryKey;
+	private readonly apiFieldsMap;
+	private readonly apiIconTag;
 	private readonly toggleTag;
 	private readonly toggleClasses;
 	private readonly toggleSeparators;
@@ -528,15 +615,23 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private readonly wrapperClasses;
 	private readonly tagsItemTemplate;
 	private readonly tagsItemClasses;
+	private readonly tagsInputId;
 	private readonly tagsInputClasses;
 	private readonly dropdownTag;
 	private readonly dropdownClasses;
 	private readonly dropdownDirectionClasses;
 	dropdownSpace: number | null;
+	readonly dropdownPlacement: string | null;
+	readonly dropdownScope: "window" | "parent";
+	private readonly searchTemplate;
 	private readonly searchWrapperTemplate;
 	private readonly searchPlaceholder;
+	private readonly searchId;
+	private readonly searchLimit;
+	private readonly isSearchDirectMatch;
 	private readonly searchClasses;
 	private readonly searchWrapperClasses;
+	private readonly searchNoResultTemplate;
 	private readonly searchNoResultText;
 	private readonly searchNoResultClasses;
 	private readonly optionTag;
@@ -550,6 +645,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private toggleTextWrapper;
 	private tagsInput;
 	private dropdown;
+	private popperInstance;
 	private searchWrapper;
 	private search;
 	private searchNoResult;
@@ -557,6 +653,8 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private extraMarkup;
 	private readonly isAddTagOnEnter;
 	private tagsInputHelper;
+	private remoteOptions;
+	private optionId;
 	constructor(el: HTMLElement, options?: ISelectOptions);
 	setValue(val: string | string[]): void;
 	private init;
@@ -573,8 +671,16 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private setTagsItems;
 	private buildTagsInput;
 	private buildDropdown;
+	private buildPopper;
+	private updateDropdownWidth;
 	private buildSearch;
 	private buildOption;
+	private buildOptionFromRemoteData;
+	private buildOptionsFromRemoteData;
+	private optionsFromRemoteData;
+	private apiRequest;
+	private sortElements;
+	private remoteSearch;
 	private destroyOption;
 	private buildOriginalOption;
 	private destroyOriginalOption;
@@ -588,6 +694,8 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private resetTagsInputField;
 	private clearSelections;
 	private setNewValue;
+	private stringFromValueBasic;
+	private stringFromValueRemoteData;
 	private stringFromValue;
 	private selectSingleItem;
 	private selectMultipleItems;
@@ -595,6 +703,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private searchOptions;
 	private eraseToggleIcon;
 	private eraseToggleTitle;
+	private toggleFn;
 	destroy(): void;
 	open(): boolean;
 	close(): boolean;
@@ -774,6 +883,25 @@ export declare class HSTabs extends HSBasePlugin<{}> implements ITabs {
 	static onStartEnd(isOpposite?: boolean): void;
 	static on(evt: string, target: HTMLElement, cb: Function): void;
 }
+export interface ITextareaAutoHeightOptions {
+	defaultHeight: number;
+}
+export interface ITextareaAutoHeight {
+	options?: ITextareaAutoHeightOptions;
+}
+export declare class HSTextareaAutoHeight extends HSBasePlugin<ITextareaAutoHeightOptions> implements ITextareaAutoHeight {
+	private readonly defaultHeight;
+	constructor(el: HTMLTextAreaElement, options?: ITextareaAutoHeightOptions);
+	private init;
+	private setAutoHeight;
+	private textareaSetHeight;
+	private checkIfOneLine;
+	private isParentHidden;
+	private parentType;
+	private callbackAccordingToType;
+	static getInstance(target: HTMLTextAreaElement | string, isInstance?: boolean): HSTextareaAutoHeight | ICollectionItem<HSTextareaAutoHeight>;
+	static autoInit(): void;
+}
 export interface IThemeSwitchOptions {
 	theme?: "dark" | "light" | "default";
 }
@@ -868,6 +996,47 @@ export declare class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	static hide(target: HTMLElement): void;
 	static on(evt: string, target: HTMLElement, cb: Function): void;
 }
+export type ITreeViewOptionsControlBy = "checkbox" | "button";
+export interface ITreeViewItem {
+	id: string;
+	value: string;
+	isDir: boolean;
+	path: string;
+	isSelected?: boolean;
+}
+export interface ITreeViewOptions {
+	items: ITreeViewItem[] | null;
+	controlBy?: ITreeViewOptionsControlBy;
+	autoSelectChildren?: boolean;
+	isIndeterminate?: boolean;
+}
+export interface ITreeView {
+	options?: ITreeViewOptions;
+}
+export declare class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
+	private items;
+	private readonly controlBy;
+	private readonly autoSelectChildren;
+	private readonly isIndeterminate;
+	static group: number;
+	constructor(el: HTMLElement, options?: ITreeViewOptions, events?: {});
+	private init;
+	private initItems;
+	private controlByButton;
+	private controlByCheckbox;
+	private getItem;
+	private getPath;
+	private unselectItem;
+	private selectItem;
+	private selectChildren;
+	private toggleParent;
+	update(): void;
+	getSelectedItems(): ITreeViewItem[];
+	changeItemProp(id: string, prop: string, val: any): void;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSTreeView>;
+	static autoInit(): void;
+	static on(evt: string, target: HTMLElement, cb: Function): void;
+}
 export interface IStaticMethods {
 	getClassProperty(el: HTMLElement, prop?: string, val?: string): string;
 	afterTransition(el: HTMLElement, cb: Function): void;
@@ -877,10 +1046,12 @@ export interface IStaticMethods {
 export declare const HSStaticMethods: IStaticMethods;
 declare let HSDataTableModule: any;
 declare let HSFileUploadModule: any;
+declare let HSRangeSliderModule: any;
 
 export {
 	HSDataTableModule as HSDataTable,
 	HSFileUploadModule as HSFileUpload,
+	HSRangeSliderModule as HSRangeSlider,
 };
 
 export {};

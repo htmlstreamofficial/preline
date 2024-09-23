@@ -27,6 +27,13 @@ export interface ISingleOption {
 	selected?: boolean;
 	options?: ISingleOptionOptions | null;
 }
+export interface IApiFieldMap {
+	id: string;
+	title: string;
+	icon?: string | null;
+	description?: string | null;
+	[key: string]: unknown;
+}
 export interface ISelectOptions {
 	value?: string | string[];
 	isOpened?: boolean;
@@ -36,6 +43,13 @@ export interface ISelectOptions {
 	mode?: string;
 	viewport?: string;
 	wrapperClasses?: string;
+	apiUrl?: string | null;
+	apiQuery?: string | null;
+	apiOptions?: RequestInit | null;
+	apiDataPart?: string | null;
+	apiSearchQueryKey?: string | null;
+	apiFieldsMap?: IApiFieldMap | null;
+	apiIconTag?: string | null;
 	toggleTag?: string;
 	toggleClasses?: string;
 	toggleSeparators?: {
@@ -47,6 +61,7 @@ export interface ISelectOptions {
 	toggleCountTextMode?: string;
 	tagsItemTemplate?: string;
 	tagsItemClasses?: string;
+	tagsInputId?: string;
 	tagsInputClasses?: string;
 	dropdownTag?: string;
 	dropdownClasses?: string;
@@ -55,11 +70,18 @@ export interface ISelectOptions {
 		bottom?: string;
 	};
 	dropdownSpace: number;
+	dropdownPlacement: string | null;
+	dropdownScope: "window" | "parent";
 	extraMarkup?: string | string[] | null;
+	searchTemplate?: string;
 	searchWrapperTemplate?: string;
+	searchId?: string;
+	searchLimit?: number | typeof Infinity;
+	isSearchDirectMatch?: boolean;
 	searchClasses?: string;
 	searchWrapperClasses?: string;
 	searchPlaceholder?: string;
+	searchNoResultTemplate?: string | null;
 	searchNoResultText?: string | null;
 	searchNoResultClasses?: string | null;
 	optionTemplate?: string;
@@ -89,6 +111,13 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	isMultiple: boolean | null;
 	isDisabled: boolean | null;
 	selectedItems: string[];
+	private readonly apiUrl;
+	private readonly apiQuery;
+	private readonly apiOptions;
+	private readonly apiDataPart;
+	private readonly apiSearchQueryKey;
+	private readonly apiFieldsMap;
+	private readonly apiIconTag;
 	private readonly toggleTag;
 	private readonly toggleClasses;
 	private readonly toggleSeparators;
@@ -98,15 +127,23 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly wrapperClasses;
 	private readonly tagsItemTemplate;
 	private readonly tagsItemClasses;
+	private readonly tagsInputId;
 	private readonly tagsInputClasses;
 	private readonly dropdownTag;
 	private readonly dropdownClasses;
 	private readonly dropdownDirectionClasses;
 	dropdownSpace: number | null;
+	readonly dropdownPlacement: string | null;
+	readonly dropdownScope: "window" | "parent";
+	private readonly searchTemplate;
 	private readonly searchWrapperTemplate;
 	private readonly searchPlaceholder;
+	private readonly searchId;
+	private readonly searchLimit;
+	private readonly isSearchDirectMatch;
 	private readonly searchClasses;
 	private readonly searchWrapperClasses;
+	private readonly searchNoResultTemplate;
 	private readonly searchNoResultText;
 	private readonly searchNoResultClasses;
 	private readonly optionTag;
@@ -120,6 +157,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private toggleTextWrapper;
 	private tagsInput;
 	private dropdown;
+	private popperInstance;
 	private searchWrapper;
 	private search;
 	private searchNoResult;
@@ -127,6 +165,8 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private extraMarkup;
 	private readonly isAddTagOnEnter;
 	private tagsInputHelper;
+	private remoteOptions;
+	private optionId;
 	constructor(el: HTMLElement, options?: ISelectOptions);
 	setValue(val: string | string[]): void;
 	private init;
@@ -143,8 +183,16 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private setTagsItems;
 	private buildTagsInput;
 	private buildDropdown;
+	private buildPopper;
+	private updateDropdownWidth;
 	private buildSearch;
 	private buildOption;
+	private buildOptionFromRemoteData;
+	private buildOptionsFromRemoteData;
+	private optionsFromRemoteData;
+	private apiRequest;
+	private sortElements;
+	private remoteSearch;
 	private destroyOption;
 	private buildOriginalOption;
 	private destroyOriginalOption;
@@ -158,6 +206,8 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private resetTagsInputField;
 	private clearSelections;
 	private setNewValue;
+	private stringFromValueBasic;
+	private stringFromValueRemoteData;
 	private stringFromValue;
 	private selectSingleItem;
 	private selectMultipleItems;
@@ -165,6 +215,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private searchOptions;
 	private eraseToggleIcon;
 	private eraseToggleTitle;
+	private toggleFn;
 	destroy(): void;
 	open(): boolean;
 	close(): boolean;

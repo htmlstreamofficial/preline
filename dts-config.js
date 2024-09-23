@@ -1,8 +1,9 @@
 const fs = require('fs');
 
 const pluginsDir = './src/plugins';
+const helpersDir = './src/helpers';
 const distDir = './dist';
-const excludePlugins = ['base-plugin'];
+const excludePlugins = ['base-plugin', 'docs-scrollspy'];
 
 const outputConfig = { noBanner: true };
 
@@ -18,22 +19,28 @@ const config = {
 		},
 		...fs
 			.readdirSync(pluginsDir)
-			.map((pluginName) => {
-				if (
-					!fs.lstatSync(`${pluginsDir}/${pluginName}`).isDirectory() ||
-					excludePlugins.includes(pluginName)
-				) {
-					return null;
-				}
-
-				return {
-					filePath: `${pluginsDir}/${pluginName}/index.ts`,
-					outFile: `${distDir}/${pluginName}.d.ts`,
-					output: outputConfig,
-				};
-			})
+			.map((pluginName) => writeFile(pluginsDir, pluginName))
+			.filter(Boolean),
+		...fs
+			.readdirSync(helpersDir)
+			.map((pluginName) => writeFile(helpersDir, pluginName, 'helper-'))
 			.filter(Boolean),
 	],
 };
+
+function writeFile(dir, plugin, prefix = '') {
+	if (
+		!fs.lstatSync(`${dir}/${plugin}`).isDirectory() ||
+		excludePlugins.includes(plugin)
+	) {
+		return null;
+	}
+
+	return {
+		filePath: `${dir}/${plugin}/index.ts`,
+		outFile: `${distDir}/${prefix}${plugin}.d.ts`,
+		output: outputConfig,
+	};
+}
 
 module.exports = config;

@@ -1,4 +1,11 @@
-import { ISpaCollectionItem } from './interfaces';
+/*
+ * @version: 2.5.0
+ * @author: Preline Labs Ltd.
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
+ */
+
+import { ISpaCollectionItem } from '../spa/interfaces';
 
 import HSCopyMarkup from '../plugins/copy-markup';
 import HSAccordion from '../plugins/accordion';
@@ -11,16 +18,19 @@ import HSFileUpload from '../plugins/file-upload';
 import HSInputNumber from '../plugins/input-number';
 import HSOverlay from '../plugins/overlay';
 import HSPinInput from '../plugins/pin-input';
+import HSRangeSlider from '../plugins/range-slider';
 import HSRemoveElement from '../plugins/remove-element';
 import HSScrollspy from '../plugins/scrollspy';
 import HSSelect from '../plugins/select';
 import HSStepper from '../plugins/stepper';
 import HSStrongPassword from '../plugins/strong-password';
 import HSTabs from '../plugins/tabs';
+import HSTextareaAutoHeight from '../plugins/textarea-auto-height';
 import HSThemeSwitch from '../plugins/theme-switch';
 import HSToggleCount from '../plugins/toggle-count';
 import HSTogglePassword from '../plugins/toggle-password';
 import HSTooltip from '../plugins/tooltip';
+import HSTreeView from '../plugins/tree-view';
 
 export const COLLECTIONS: ISpaCollectionItem[] = [
 	{
@@ -47,6 +57,11 @@ export const COLLECTIONS: ISpaCollectionItem[] = [
 	{ key: 'overlay', fn: HSOverlay, collection: '$hsOverlayCollection' },
 	{ key: 'pin-input', fn: HSPinInput, collection: '$hsPinInputCollection' },
 	{
+		key: 'range-slider',
+		fn: HSRangeSlider,
+		collection: '$hsRangeSliderCollection',
+	},
+	{
 		key: 'remove-element',
 		fn: HSRemoveElement,
 		collection: '$hsRemoveElementCollection',
@@ -60,6 +75,11 @@ export const COLLECTIONS: ISpaCollectionItem[] = [
 		collection: '$hsStrongPasswordCollection',
 	},
 	{ key: 'tabs', fn: HSTabs, collection: '$hsTabsCollection' },
+	{
+		key: 'textarea-auto-height',
+		fn: HSTextareaAutoHeight,
+		collection: '$hsTextareaAutoHeightCollection',
+	},
 	{
 		key: 'theme-switch',
 		fn: HSThemeSwitch,
@@ -76,4 +96,5 @@ export const COLLECTIONS: ISpaCollectionItem[] = [
 		collection: '$hsTogglePasswordCollection',
 	},
 	{ key: 'tooltip', fn: HSTooltip, collection: '$hsTooltipCollection' },
+	{ key: 'tree-view', fn: HSTreeView, collection: '$hsTreeViewCollection' },
 ];

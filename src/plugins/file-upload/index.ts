@@ -1,6 +1,6 @@
 /*
  * HSFileUpload
- * @version: 2.4.1
+ * @version: 2.5.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -10,7 +10,7 @@ import { DropzoneFile } from 'dropzone';
 
 import { htmlToElement, classToClassList } from '../../utils';
 
-import { IFileUploadOptions, IFileUpload } from './interfaces';
+import { IFileUploadOptions, IFileUpload } from '../file-upload/interfaces';
 
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
@@ -29,7 +29,7 @@ class HSFileUpload
 	private extensions: any = {};
 	private singleton: boolean;
 
-	private dropzone: Dropzone | null;
+	public dropzone: Dropzone | null;
 
 	constructor(el: HTMLElement, options?: IFileUploadOptions, events?: {}) {
 		super(el, options, events);

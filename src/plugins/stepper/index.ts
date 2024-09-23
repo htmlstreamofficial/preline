@@ -1,6 +1,6 @@
 /*
  * HSStepper
- * @version: 2.4.1
+ * @version: 2.5.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -8,7 +8,11 @@
 
 import { dispatch } from '../../utils';
 
-import { IStepperOptions, IStepper, IStepperItem } from './interfaces';
+import {
+	IStepperOptions,
+	IStepper,
+	IStepperItem,
+} from '../stepper/interfaces';
 
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';

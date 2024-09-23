@@ -32,13 +32,14 @@ export interface IAccordion {
 declare class HSAccordion extends HSBasePlugin<IAccordionOptions> implements IAccordion {
 	private readonly toggle;
 	content: HTMLElement | null;
-	private readonly group;
-	private readonly isAlwaysOpened;
+	private group;
+	private isAlwaysOpened;
 	static selectable: IAccordionTreeView[];
 	constructor(el: HTMLElement, options?: IAccordionOptions, events?: {});
 	private init;
 	show(): boolean;
 	hide(): boolean;
+	update(): boolean;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSAccordion>;
 	static show(target: HTMLElement): void;
 	static hide(target: HTMLElement): void;

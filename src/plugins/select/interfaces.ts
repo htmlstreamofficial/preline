@@ -11,6 +11,14 @@ export interface ISingleOption {
 	options?: ISingleOptionOptions | null;
 }
 
+export interface IApiFieldMap {
+	id: string;
+	title: string;
+	icon?: string | null;
+	description?: string | null;
+	[key: string]: unknown;
+}
+
 export interface ISelectOptions {
 	value?: string | string[];
 	isOpened?: boolean;
@@ -22,6 +30,14 @@ export interface ISelectOptions {
 	viewport?: string;
 
 	wrapperClasses?: string;
+
+	apiUrl?: string | null;
+	apiQuery?: string | null;
+	apiOptions?: RequestInit | null;
+	apiDataPart?: string | null;
+	apiSearchQueryKey?: string | null;
+	apiFieldsMap?: IApiFieldMap | null;
+	apiIconTag?: string | null;
 
 	toggleTag?: string;
 	toggleClasses?: string;
@@ -35,6 +51,7 @@ export interface ISelectOptions {
 
 	tagsItemTemplate?: string;
 	tagsItemClasses?: string;
+	tagsInputId?: string;
 	tagsInputClasses?: string;
 
 	dropdownTag?: string;
@@ -44,13 +61,20 @@ export interface ISelectOptions {
 		bottom?: string;
 	};
 	dropdownSpace: number;
+	dropdownPlacement: string | null;
+	dropdownScope: 'window' | 'parent';
 
 	extraMarkup?: string | string[] | null;
 
+	searchTemplate?: string;
 	searchWrapperTemplate?: string;
+	searchId?: string;
+	searchLimit?: number | typeof Infinity;
+	isSearchDirectMatch?: boolean;
 	searchClasses?: string;
 	searchWrapperClasses?: string;
 	searchPlaceholder?: string;
+	searchNoResultTemplate?: string | null;
 	searchNoResultText?: string | null;
 	searchNoResultClasses?: string | null;
 

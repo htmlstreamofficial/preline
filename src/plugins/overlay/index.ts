@@ -1,6 +1,6 @@
 /*
  * HSOverlay
- * @version: 2.4.1
+ * @version: 2.5.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -10,11 +10,12 @@ import {
 	stringToBoolean,
 	getClassProperty,
 	isParentOrElementHidden,
+	isDirectChild,
 	dispatch,
 	afterTransition,
 } from '../../utils';
 
-import { IOverlayOptions, IOverlay } from './interfaces';
+import { IOverlayOptions, IOverlay } from '../overlay/interfaces';
 import { ICollectionItem } from '../../interfaces';
 import { BREAKPOINTS } from '../../constants';
 
@@ -33,6 +34,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly overlayId: string | null;
 
 	public overlay: HTMLElement | null;
+	public initContainer: HTMLElement | null;
 	public isCloseWhenClickInside: boolean;
 	public isTabAccessibilityLimited: boolean;
 	public isLayoutAffect: boolean;
@@ -40,6 +42,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	public hasAbilityToCloseOnBackdropClick: boolean;
 	public openedBreakpoint: number | null;
 	public autoClose: number | null;
+	public moveOverlayToBody: number | null;
 
 	constructor(el: HTMLElement, options?: IOverlayOptions, events?: {}) {
 		super(el, options, events);
@@ -58,11 +61,13 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			concatOptions?.backdropClasses ??
 			'hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900';
 		this.backdropExtraClasses = concatOptions?.backdropExtraClasses ?? '';
+		this.moveOverlayToBody = concatOptions?.moveOverlayToBody || null;
 
 		this.openNextOverlay = false;
 		this.autoHide = null;
 		this.overlayId = this.el.getAttribute('data-hs-overlay');
 		this.overlay = document.querySelector(this.overlayId);
+		this.initContainer = this.overlay?.parentElement || null;
 		if (this.overlay) {
 			this.isCloseWhenClickInside = stringToBoolean(
 				getClassProperty(this.overlay, '--close-when-click-inside', 'false') ||
@@ -549,6 +554,38 @@ const autoCloseResizeFn = () => {
 	});
 };
 
+const moveOverlayToBodyResizeFn = () => {
+	if (
+		!window.$hsOverlayCollection.length ||
+		!window.$hsOverlayCollection.find((el) => el.element.moveOverlayToBody)
+	)
+		return false;
+
+	const overlays = window.$hsOverlayCollection.filter(
+		(el) => el.element.moveOverlayToBody,
+	);
+
+	overlays.forEach((overlay) => {
+		const resolution = overlay.element.moveOverlayToBody;
+		const initPlace = overlay.element.initContainer;
+		const newPlace = document.querySelector('body');
+		const target = overlay.element.overlay;
+
+		if (!initPlace && target) return false;
+
+		if (
+			document.body.clientWidth <= resolution &&
+			!isDirectChild(newPlace, target)
+		)
+			newPlace.appendChild(target);
+		else if (
+			document.body.clientWidth > resolution &&
+			!initPlace.contains(target)
+		)
+			initPlace.appendChild(target);
+	});
+};
+
 const setOpenedResizeFn = () => {
 	if (
 		!window.$hsOverlayCollection.length ||
@@ -601,12 +638,14 @@ const setBackdropZIndexResizeFn = () => {
 window.addEventListener('load', () => {
 	HSOverlay.autoInit();
 
+	moveOverlayToBodyResizeFn();
 	// Uncomment for debug
 	// console.log('Overlay collection:', window.$hsOverlayCollection);
 });
 
 window.addEventListener('resize', () => {
 	autoCloseResizeFn();
+	moveOverlayToBodyResizeFn();
 	setOpenedResizeFn();
 	setBackdropZIndexResizeFn();
 });

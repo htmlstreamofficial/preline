@@ -1,6 +1,6 @@
 /*
  * HSAccordion
- * @version: 2.4.1
+ * @version: 2.5.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -13,7 +13,7 @@ import {
 	IAccordion,
 	IAccordionTreeView,
 	IAccordionTreeViewStaticOptions,
-} from './interfaces';
+} from '../accordion/interfaces';
 
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
@@ -24,8 +24,8 @@ class HSAccordion
 {
 	private readonly toggle: HTMLElement | null;
 	public content: HTMLElement | null;
-	private readonly group: HTMLElement | null;
-	private readonly isAlwaysOpened: boolean;
+	private group: HTMLElement | null;
+	private isAlwaysOpened: boolean;
 
 	static selectable: IAccordionTreeView[];
 
@@ -34,9 +34,7 @@ class HSAccordion
 
 		this.toggle = this.el.querySelector('.hs-accordion-toggle') || null;
 		this.content = this.el.querySelector('.hs-accordion-content') || null;
-		this.group = this.el.closest('.hs-accordion-group') || null;
-		this.isAlwaysOpened =
-			this.group.hasAttribute('data-hs-accordion-always-open') || false;
+		this.update();
 
 		if (this.toggle && this.content) this.init();
 	}
@@ -109,6 +107,24 @@ class HSAccordion
 
 			this.fireEvent('close', this.el);
 			dispatch('close.hs.accordion', this.el, this.el);
+		});
+	}
+
+	public update() {
+		this.group = this.el.closest('.hs-accordion-group') || null;
+
+		if (!this.group) return false;
+
+		this.isAlwaysOpened =
+			this.group.hasAttribute('data-hs-accordion-always-open') || false;
+
+		window.$hsAccordionCollection.map((el) => {
+			if (el.id === this.el.id) {
+				el.element.group = this.group;
+				el.element.isAlwaysOpened = this.isAlwaysOpened;
+			}
+
+			return el;
 		});
 	}
 

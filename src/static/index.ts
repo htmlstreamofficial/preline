@@ -1,14 +1,14 @@
 /*
  * HSStaticMethods
- * @version: 2.4.1
+ * @version: 2.5.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 
 import { getClassProperty, afterTransition } from '../utils';
-import { COLLECTIONS } from '../spa';
-import { IStaticMethods } from './interfaces';
+import { COLLECTIONS } from '../spa/index';
+import { IStaticMethods } from '../static/interfaces';
 import { ICollectionItem } from '../interfaces';
 import type HSCopyMarkup from '../plugins/copy-markup';
 import type HSAccordion from '../plugins/accordion';
@@ -21,16 +21,19 @@ import type HSFileUpload from '../plugins/file-upload';
 import type HSInputNumber from '../plugins/input-number';
 import type HSOverlay from '../plugins/overlay';
 import type HSPinInput from '../plugins/pin-input';
+import type HSRangeSlider from '../plugins/range-slider';
 import type HSRemoveElement from '../plugins/remove-element';
 import type HSScrollspy from '../plugins/scrollspy';
 import type HSSelect from '../plugins/select';
 import type HSStepper from '../plugins/stepper';
 import type HSStrongPassword from '../plugins/strong-password';
 import type HSTabs from '../plugins/tabs';
+import type HSTextareaAutoHeight from '../plugins/textarea-auto-height';
 import type HSThemeSwitch from '../plugins/theme-switch';
 import type HSToggleCount from '../plugins/toggle-count';
 import type HSTogglePassword from '../plugins/toggle-password';
 import type HSTooltip from '../plugins/tooltip';
+import type HSTreeView from '../plugins/tree-view';
 
 declare global {
 	interface Window {
@@ -46,16 +49,19 @@ declare global {
 		$hsInputNumberCollection: { id: number; element: HSInputNumber }[];
 		$hsOverlayCollection: ICollectionItem<HSOverlay>[];
 		$hsPinInputCollection: ICollectionItem<HSPinInput>[];
+		$hsRangeSliderCollection: ICollectionItem<HSRangeSlider>[];
 		$hsRemoveElementCollection: ICollectionItem<HSRemoveElement>[];
 		$hsScrollspyCollection: ICollectionItem<HSScrollspy>[];
 		$hsSelectCollection: ICollectionItem<HSSelect>[];
 		$hsStepperCollection: ICollectionItem<HSStepper>[];
 		$hsStrongPasswordCollection: ICollectionItem<HSStrongPassword>[];
 		$hsTabsCollection: ICollectionItem<HSTabs>[];
+		$hsTextareaAutoHeightCollection: ICollectionItem<HSTextareaAutoHeight>[];
 		$hsThemeSwitchCollection: ICollectionItem<HSThemeSwitch>[];
 		$hsToggleCountCollection: ICollectionItem<HSToggleCount>[];
 		$hsTogglePasswordCollection: ICollectionItem<HSTogglePassword>[];
 		$hsTooltipCollection: ICollectionItem<HSTooltip>[];
+		$hsTreeViewCollection: ICollectionItem<HSTreeView>[];
 	}
 }
 

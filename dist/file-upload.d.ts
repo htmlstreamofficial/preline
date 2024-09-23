@@ -31,7 +31,7 @@ declare class HSFileUpload extends HSBasePlugin<IFileUploadOptions> implements I
 	private previewTemplate;
 	private extensions;
 	private singleton;
-	private dropzone;
+	dropzone: Dropzone | null;
 	constructor(el: HTMLElement, options?: IFileUploadOptions, events?: {});
 	private init;
 	private initDropzone;

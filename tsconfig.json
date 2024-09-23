@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"baseUrl": "./",
 		"outDir": "./dist/",
 		"sourceMap": true,
 		"noImplicitAny": true,
@@ -8,5 +9,13 @@
 		"allowJs": true,
 		"moduleResolution": "node",
 		"esModuleInterop": true
-	}
+	},
+	"include": [
+		"src/**/*",
+		"global.d.ts"
+	],
+	"exclude": [
+		"node_modules",
+		"**/*.spec.ts"
+	]
 }

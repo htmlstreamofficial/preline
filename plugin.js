@@ -1,6 +1,6 @@
 /*
  * Plugin
- * @version: 2.4.1
+ * @version: 2.5.0
  * @author: Preline Labs Ltd.
  * @requires: tailwindcss ^3.4.1
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
@@ -100,6 +100,36 @@ module.exports = plugin(function ({ addVariant, e }) {
 			)}`;
 		});
 	});
+
+	addVariant('hs-tree-view-selected', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `[data-hs-tree-view-item].selected > .${e(
+					`hs-tree-view-selected${separator}${className}`,
+				)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `[data-hs-tree-view-item].selected.${e(
+					`hs-tree-view-selected${separator}${className}`,
+				)}`;
+			});
+		}
+	]);
+
+	addVariant('hs-tree-view-disabled', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `[data-hs-tree-view-item].disabled.${e(`hs-tree-view-disabled${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `[data-hs-tree-view-item].disabled > .${e(`hs-tree-view-disabled${separator}${className}`)}`;
+			});
+		},
+	]);
 
 	addVariant('hs-collapse-open', [
 		({ modifySelectors, separator }) => {
@@ -219,14 +249,31 @@ module.exports = plugin(function ({ addVariant, e }) {
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
 				return `.disabled.${e(
-					`hs-carousel${separator}disabled${separator}${className}`,
+					`hs-carousel-disabled${separator}${className}`,
 				)}`;
 			});
 		},
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
 				return `.disabled .${e(
-					`hs-carousel${separator}disabled${separator}${className}`,
+					`hs-carousel-disabled${separator}${className}`,
+				)}`;
+			});
+		},
+	]);
+
+	addVariant('hs-carousel-dragging', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.dragging.${e(
+					`hs-carousel-dragging${separator}${className}`,
+				)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.dragging .${e(
+					`hs-carousel-dragging${separator}${className}`,
 				)}`;
 			});
 		},
@@ -573,6 +620,41 @@ module.exports = plugin(function ({ addVariant, e }) {
 		({ modifySelectors, separator }) => {
 			modifySelectors(({ className }) => {
 				return `.dt-ordering-desc.${e(`hs-datatable-ordering-desc${separator}${className}`)}`;
+			});
+		},
+	]);
+
+	// Sortable.js
+	addVariant('hs-dragged', ({ modifySelectors, separator }) => {
+		modifySelectors(({ className }) => {
+			return `.dragged.${e(`hs-dragged${separator}${className}`)}`;
+		});
+	});
+
+	// noUiSlider
+	addVariant('hs-range-slider-disabled', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.disabled .${e(`hs-range-slider-disabled${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.disabled.${e(`hs-range-slider-disabled${separator}${className}`)}`;
+			});
+		},
+	]);
+
+	// Dropzone
+	addVariant('hs-file-upload-complete', [
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.complete .${e(`hs-file-upload-complete${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }) => {
+			modifySelectors(({ className }) => {
+				return `.complete.${e(`hs-file-upload-complete${separator}${className}`)}`;
 			});
 		},
 	]);

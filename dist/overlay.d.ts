@@ -22,6 +22,7 @@ export interface IOverlayOptions {
 	isClosePrev?: boolean;
 	backdropClasses?: string | null;
 	backdropExtraClasses?: string | null;
+	moveOverlayToBody?: number | null;
 }
 export interface IOverlay {
 	options?: IOverlayOptions;
@@ -39,6 +40,7 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private autoHide;
 	private readonly overlayId;
 	overlay: HTMLElement | null;
+	initContainer: HTMLElement | null;
 	isCloseWhenClickInside: boolean;
 	isTabAccessibilityLimited: boolean;
 	isLayoutAffect: boolean;
@@ -46,6 +48,7 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	hasAbilityToCloseOnBackdropClick: boolean;
 	openedBreakpoint: number | null;
 	autoClose: number | null;
+	moveOverlayToBody: number | null;
 	constructor(el: HTMLElement, options?: IOverlayOptions, events?: {});
 	private init;
 	private hideAuto;

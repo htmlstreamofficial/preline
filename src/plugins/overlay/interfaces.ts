@@ -4,6 +4,7 @@ export interface IOverlayOptions {
 	isClosePrev?: boolean;
 	backdropClasses?: string | null;
 	backdropExtraClasses?: string | null;
+	moveOverlayToBody?: number | null;
 }
 
 export interface IOverlay {

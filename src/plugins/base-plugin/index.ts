@@ -1,12 +1,14 @@
+/// <reference path="../../../global.d.ts" />
+
 /*
  * HSBasePlugin
- * @version: 2.4.1
+ * @version: 2.5.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { IBasePlugin } from './interfaces';
+import { IBasePlugin } from '../base-plugin/interfaces';
 
 export default class HSBasePlugin<O, E = HTMLElement>
 	implements IBasePlugin<O, E>

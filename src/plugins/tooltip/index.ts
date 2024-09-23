@@ -1,6 +1,6 @@
 /*
  * HSTooltip
- * @version: 2.4.1
+ * @version: 2.5.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -9,7 +9,7 @@
 import { createPopper, PositioningStrategy, Instance } from '@popperjs/core';
 import { getClassProperty, dispatch, afterTransition } from '../../utils';
 
-import { ITooltip } from './interfaces';
+import { ITooltip } from '../tooltip/interfaces';
 
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';

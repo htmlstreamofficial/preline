@@ -1,6 +1,6 @@
 /*
  * HSDropdown
- * @version: 2.4.1
+ * @version: 2.5.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -19,7 +19,7 @@ import { IMenuSearchHistory } from '../../utils/interfaces';
 
 import { createPopper, PositioningStrategy } from '@popperjs/core';
 
-import { IDropdown, IHTMLElementPopper } from './interfaces';
+import { IDropdown, IHTMLElementPopper } from '../dropdown/interfaces';
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
 
