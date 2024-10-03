@@ -264,7 +264,7 @@ export default plugin(function ({ addVariant, e }: PluginAPI) {
 				)}`;
 			});
 		},
-		({ modifySelectors, separator }) => {
+		({ modifySelectors, separator }: IAddVariantOptions) => {
 			modifySelectors(({ className }) => {
 				return `.dragging .${e(
 					`hs-carousel-dragging${separator}${className}`,
