@@ -47,7 +47,7 @@ if (typeof _ !== 'undefined' && typeof Dropzone !== 'undefined')
 else HSFileUploadModule = null;
 export { HSFileUploadModule as HSFileUpload };
 
-if (typeof typeof noUiSlider !== 'undefined')
+if (typeof noUiSlider !== 'undefined')
 	HSRangeSliderModule = require('./plugins/range-slider').default;
 else HSRangeSliderModule = null;
 export { HSRangeSliderModule as HSRangeSlider };

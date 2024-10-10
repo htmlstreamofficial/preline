@@ -207,6 +207,7 @@ export interface IComboBoxOptions {
 	apiDataPart?: string | null;
 	apiQuery?: string | null;
 	apiSearchQuery?: string | null;
+	apiSearchQueryTransformer?: QueryTransformer | string | null;
 	apiHeaders?: {};
 	apiGroupField?: string | null;
 	outputItemTemplate?: string | null;
@@ -223,8 +224,12 @@ export interface IComboBox {
 	options?: IComboBoxOptions;
 	open(): void;
 	close(): void;
+	selectedItem(): HTMLElement | null;
+	selectedValue(): string | null;
+	selectedAttr(attr: string): string | null;
 	recalculateDirection(): void;
 }
+export type QueryTransformer = (query: string) => string;
 export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	gap: number;
 	viewport: string | HTMLElement | null;
@@ -233,6 +238,7 @@ export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implement
 	apiDataPart: string | null;
 	apiQuery: string | null;
 	apiSearchQuery: string | null;
+	apiSearchQueryTransformer: ((query: string) => string) | null;
 	apiHeaders: {};
 	apiGroupField: string | null;
 	outputItemTemplate: string | null;
@@ -248,6 +254,7 @@ export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implement
 	private readonly output;
 	private readonly itemsWrapper;
 	private items;
+	private selectedItemElement;
 	private tabs;
 	private readonly toggle;
 	private readonly toggleClose;
@@ -262,6 +269,7 @@ export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implement
 	isCurrent: boolean;
 	private animationInProcess;
 	constructor(el: HTMLElement, options?: IComboBoxOptions, events?: {});
+	private parseApiQueryTransformer;
 	private init;
 	private build;
 	private setResultAndRender;
@@ -297,9 +305,13 @@ export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implement
 	private destroyOutputPlaceholder;
 	private resultItems;
 	private setValueAndOpen;
-	open(val?: string): boolean;
 	private setValueAndClear;
+	open(val?: string): boolean;
 	close(val?: string | null): boolean;
+	setSearchQueryTransformer(transformer: (query: string) => string): void;
+	selectedItem(): HTMLElement | null;
+	selectedValue(): string | null;
+	selectedAttr(attr: string): string | null;
 	recalculateDirection(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSComboBox | ICollectionItem<HSComboBox>;
 	static autoInit(): void;
