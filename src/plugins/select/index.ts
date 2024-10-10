@@ -496,8 +496,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private getItemByValue(val: string) {
 		const value = this.apiUrl
 			? (this.remoteOptions as (ISingleOption & IApiFieldMap)[]).find(
-					(el) => el[this.apiFieldsMap.title] === val,
-				)
+				(el) => el[this.apiFieldsMap.title] === val,
+			)
 			: this.selectOptions.find((el: ISingleOption) => el.val === val);
 
 		return value;
@@ -973,9 +973,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			(parseInt(window.getComputedStyle(this.wrapper).paddingLeft) +
 				parseInt(window.getComputedStyle(this.wrapper).paddingRight));
 
-		(this.tagsInput as HTMLInputElement).style.width = `${
-			Math.min(newWidth, maxWidth) + 2
-		}px`;
+		(this.tagsInput as HTMLInputElement).style.width = `${Math.min(newWidth, maxWidth) + 2
+			}px`;
 	}
 
 	private adjustInputWidth() {
@@ -1225,11 +1224,11 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			const optionVal = el.getAttribute('data-title-value').toLocaleLowerCase();
 			const regexSafeVal = val
 				? val
-						.split('')
-						.map((char) => {
-							return char.match(/\w/) ? `${char}[\\W_]*` : '\\W*';
-						})
-						.join('')
+					.split('')
+					.map((char) => {
+						return char.match(/\w/) ? `${char}[\\W_]*` : '\\W*';
+					})
+					.join('')
 				: '';
 			const regex = new RegExp(regexSafeVal, 'i');
 			const directMatch = this.isSearchDirectMatch;
@@ -1237,7 +1236,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			const condition = val
 				? directMatch
 					? !cleanedOptionVal.toLowerCase().includes(val.toLowerCase()) ||
-						countLimit >= this.searchLimit
+					countLimit >= this.searchLimit
 					: !regex.test(cleanedOptionVal) || countLimit >= this.searchLimit
 				: !regex.test(cleanedOptionVal);
 
@@ -1594,8 +1593,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 			const preparedOptions = isArrowUp
 				? Array.from(
-						dropdown.querySelectorAll(':scope > *:not(.hidden)'),
-					).reverse()
+					dropdown.querySelectorAll(':scope > *:not(.hidden)'),
+				).reverse()
 				: Array.from(dropdown.querySelectorAll(':scope > *:not(.hidden)'));
 			const options = preparedOptions.filter(
 				(el: any) => !el.classList.contains('disabled'),
@@ -1626,8 +1625,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 			const preparedOptions = isArrowUp
 				? Array.from(
-						dropdown.querySelectorAll(':scope >  *:not(.hidden)'),
-					).reverse()
+					dropdown.querySelectorAll(':scope >  *:not(.hidden)'),
+				).reverse()
 				: Array.from(dropdown.querySelectorAll(':scope >  *:not(.hidden)'));
 			const options = preparedOptions.filter(
 				(el: any) => !el.classList.contains('disabled'),
@@ -1665,8 +1664,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			const preparedOptions = isStart
 				? Array.from(dropdown.querySelectorAll(':scope >  *:not(.hidden)'))
 				: Array.from(
-						dropdown.querySelectorAll(':scope >  *:not(.hidden)'),
-					).reverse();
+					dropdown.querySelectorAll(':scope >  *:not(.hidden)'),
+				).reverse();
 			const options = preparedOptions.filter(
 				(el: any) => !el.classList.contains('disabled'),
 			);

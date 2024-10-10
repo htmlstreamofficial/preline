@@ -40,31 +40,41 @@
 		"access": "public"
 	},
 	"scripts": {
+		"watch:all": "concurrently \"pnpm run watch\" \"pnpm run watch:dts\" \"pnpm run watch:mjs\" \"pnpm run copyjs:watch\"",
+		"copyjs": "cp dist/index.js dist/preline.js && cp dist/index.js preline.js && cp dist/index.js index.js",
+		"copyjs:watch": "pnpm exec chokidar './dist/index.js' -c 'pnpm run copyjs'",
 		"watch": "webpack --config webpack.config.js --watch",
 		"watch:mjs": "webpack --config webpack.config.mjs.js --watch",
+		"watch:dts": "pnpm exec chokidar './src/**/*.ts' -c 'pnpm run generate-dts'",
 		"build": "webpack --config webpack.config.js",
 		"build:mjs": "webpack --config webpack.config.mjs.js",
 		"pretty": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
 		"generate-dts": "dts-bundle-generator --config dts-config.js"
 	},
+	"dependencies": {
+		"@popperjs/core": "^2.11.8"
+	},
 	"devDependencies": {
-		"@types/clipboard": "^2.0.7",
-		"@types/datatables.net": "^1.12.0",
 		"@types/dropzone": "^5.7.8",
 		"@types/jquery": "^3.5.30",
 		"@types/lodash": "^4.17.6",
-		"@types/nouislider": "^15.0.0",
 		"@types/prismjs": "^1.26.4",
 		"@types/vinyl": "^2.0.12",
+		"apexcharts": "^3.54.0",
+		"chokidar-cli": "^3.0.0",
+		"clipboard": "^2.0.11",
+		"concurrently": "^9.0.1",
+		"datatables.net": "^2.1.8",
+		"datatables.net-dt": "^2.1.8",
+		"dropzone": "6.0.0-beta.2",
 		"dts-bundle-generator": "^9.0.0",
+		"nouislider": "^15.8.1",
 		"prettier": "^3.0.0",
 		"source-map-loader": "^4.0.1",
+		"tailwindcss": "^3.4.13",
 		"terser-webpack-plugin": "^5.3.9",
 		"ts-loader": "^9.5.1",
 		"typescript": "^5.5.3",
 		"webpack-cli": "^5.0.1"
-	},
-	"dependencies": {
-		"@popperjs/core": "^2.11.2"
 	}
 }

@@ -6,6 +6,7 @@ export interface IComboBoxOptions {
 	apiDataPart?: string | null;
 	apiQuery?: string | null;
 	apiSearchQuery?: string | null;
+	apiSearchQueryTransformer?: QueryTransformer | string | null;
 	apiHeaders?: {};
 	apiGroupField?: string | null;
 	outputItemTemplate?: string | null;
@@ -24,6 +25,9 @@ export interface IComboBox {
 
 	open(): void;
 	close(): void;
+	selectedItem(): HTMLElement | null;
+	selectedValue(): string | null;
+	selectedAttr(attr: string): string | null;
 	recalculateDirection(): void;
 }
 
@@ -31,3 +35,5 @@ export interface IComboBoxItemAttr {
 	valueFrom: string;
 	attr: string;
 }
+
+export type QueryTransformer = (query: string) => string;
