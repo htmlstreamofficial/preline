@@ -1,7 +1,7 @@
 var t={189:(t,e,n)=>{n.d(e,{Fy:()=>o});const o=["ArrowUp","ArrowLeft","ArrowDown","ArrowRight","Home","End"]},615:(t,e,n)=>{n.d(e,{A:()=>o});class o{constructor(t,e,n){this.el=t,this.options=e,this.events=n,this.el=t,this.options=e,this.events={}}createCollection(t,e){var n;t.push({id:(null===(n=null==e?void 0:e.el)||void 0===n?void 0:n.id)||t.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},926:(t,e,n)=>{n.d(e,{JD:()=>o});const o=(t,e,n=null)=>{const o=new CustomEvent(t,{detail:{payload:n},bubbles:!0,cancelable:!0,composed:!1});e.dispatchEvent(o)}}},e={};function n(o){var r=e[o];if(void 0!==r)return r.exports;var s=e[o]={exports:{}};return t[o](s,s.exports,n),s.exports}n.d=(t,e)=>{for(var o in e)n.o(e,o)&&!n.o(t,o)&&Object.defineProperty(t,o,{enumerable:!0,get:e[o]})},n.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e);var o={};n.d(o,{A:()=>c});var r=n(926),s=n(615),i=n(189);
 /*
  * HSTabs
- * @version: 2.5.0
+ * @version: 2.5.1
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

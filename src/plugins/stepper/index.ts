@@ -1,6 +1,6 @@
 /*
  * HSStepper
- * @version: 2.5.0
+ * @version: 2.5.1
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -698,7 +698,6 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		});
 
 		this.currentIndex = 1;
-
 		this.unsetCompleted();
 		this.isCompleted = false;
 

@@ -1,7 +1,7 @@
 var t={189:(t,s,e)=>{e.d(s,{LO:()=>i});const i={xs:0,sm:640,md:768,lg:1024,xl:1280,"2xl":1536}},615:(t,s,e)=>{e.d(s,{A:()=>i});class i{constructor(t,s,e){this.el=t,this.options=s,this.events=e,this.el=t,this.options=s,this.events={}}createCollection(t,s){var e;t.push({id:(null===(e=null==s?void 0:s.el)||void 0===e?void 0:e.id)||t.length+1,element:s})}fireEvent(t,s=null){if(this.events.hasOwnProperty(t))return this.events[t](s)}on(t,s){this.events[t]=s}}},926:(t,s,e)=>{e.d(s,{en:()=>r,fc:()=>n,sg:()=>i});const i=(t,s=200)=>{let e;return(...i)=>{clearTimeout(e),e=setTimeout((()=>{t.apply(void 0,i)}),s)}},n=t=>{const s=document.createElement("template");return t=t.trim(),s.innerHTML=t,s.content.firstChild},r=(t,s,e=" ",i="add")=>{t.split(e).forEach((t=>"add"===i?s.classList.add(t):s.classList.remove(t)))}}},s={};function e(i){var n=s[i];if(void 0!==n)return n.exports;var r=s[i]={exports:{}};return t[i](r,r.exports,e),r.exports}e.d=(t,s)=>{for(var i in s)e.o(s,i)&&!e.o(t,i)&&Object.defineProperty(t,i,{enumerable:!0,get:s[i]})},e.o=(t,s)=>Object.prototype.hasOwnProperty.call(t,s);var i={};e.d(i,{A:()=>a});var n=e(926),r=e(615),l=e(189);
 /*
  * HSCarousel
- * @version: 2.5.0
+ * @version: 2.5.1
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

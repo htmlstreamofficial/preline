@@ -1,6 +1,6 @@
 /*
  * HSSelect
- * @version: 2.5.0
+ * @version: 2.5.1
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -151,11 +151,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		this.wrapperClasses = concatOptions?.wrapperClasses || null;
 		this.toggleTag = concatOptions?.toggleTag || null;
 		this.toggleClasses = concatOptions?.toggleClasses || null;
-		this.toggleSeparators =
-			{
-				...defaultToggleSeparators,
-				...concatOptions?.toggleSeparators,
-			} ?? defaultToggleSeparators;
+		this.toggleSeparators = defaultToggleSeparators;
 		this.toggleCountText = concatOptions?.toggleCountText || null;
 		this.toggleCountTextMinItems = concatOptions?.toggleCountTextMinItems || 1;
 		this.toggleCountTextMode =

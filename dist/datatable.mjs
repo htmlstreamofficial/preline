@@ -1,7 +1,7 @@
 var t={615:(t,e,i)=>{i.d(e,{A:()=>a});class a{constructor(t,e,i){this.el=t,this.options=e,this.events=i,this.el=t,this.options=e,this.events={}}createCollection(t,e){var i;t.push({id:(null===(i=null==e?void 0:e.el)||void 0===i?void 0:i.id)||t.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},926:(t,e,i)=>{i.d(e,{en:()=>s,fc:()=>n,sg:()=>a});const a=(t,e=200)=>{let i;return(...a)=>{clearTimeout(i),i=setTimeout((()=>{t.apply(void 0,a)}),e)}},n=t=>{const e=document.createElement("template");return t=t.trim(),e.innerHTML=t,e.content.firstChild},s=(t,e,i=" ",a="add")=>{t.split(i).forEach((t=>"add"===a?e.classList.add(t):e.classList.remove(t)))}}},e={};function i(a){var n=e[a];if(void 0!==n)return n.exports;var s=e[a]={exports:{}};return t[a](s,s.exports,i),s.exports}i.d=(t,e)=>{for(var a in e)i.o(e,a)&&!i.o(t,a)&&Object.defineProperty(t,a,{enumerable:!0,get:e[a]})},i.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e);var a={};i.d(a,{A:()=>o});var n=i(926),s=i(615);
 /*
  * HSDataTable
- * @version: 2.5.0
+ * @version: 2.5.1
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

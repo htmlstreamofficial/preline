@@ -1,7 +1,7 @@
 var e={615:(e,t,i)=>{i.d(t,{A:()=>l});class l{constructor(e,t,i){this.el=e,this.options=t,this.events=i,this.el=e,this.options=t,this.events={}}createCollection(e,t){var i;e.push({id:(null===(i=null==t?void 0:t.el)||void 0===i?void 0:i.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},926:(e,t,i)=>{i.d(t,{en:()=>o,fc:()=>l});const l=e=>{const t=document.createElement("template");return e=e.trim(),t.innerHTML=e,t.content.firstChild},o=(e,t,i=" ",l="add")=>{e.split(i).forEach((e=>"add"===l?t.classList.add(e):t.classList.remove(e)))}}},t={};function i(l){var o=t[l];if(void 0!==o)return o.exports;var n=t[l]={exports:{}};return e[l](n,n.exports,i),n.exports}i.d=(e,t)=>{for(var l in t)i.o(t,l)&&!i.o(e,l)&&Object.defineProperty(e,l,{enumerable:!0,get:t[l]})},i.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var l={};i.d(l,{A:()=>s});var o=i(926),n=i(615);
 /*
  * HSFileUpload
- * @version: 2.5.0
+ * @version: 2.5.1
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

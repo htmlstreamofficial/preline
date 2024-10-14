@@ -1,7 +1,7 @@
 var t={615:(t,e,s)=>{s.d(e,{A:()=>i});class i{constructor(t,e,s){this.el=t,this.options=e,this.events=s,this.el=t,this.options=e,this.events={}}createCollection(t,e){var s;t.push({id:(null===(s=null==e?void 0:e.el)||void 0===s?void 0:s.id)||t.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},926:(t,e,s)=>{s.d(e,{JD:()=>n,PR:()=>i,en:()=>l,fc:()=>a});const i=(t,e,s="auto",i=10,n=null)=>{const a=e.getBoundingClientRect(),l=n?n.getBoundingClientRect():null,r=window.innerHeight,o=l?a.top-l.top:a.top,h=(n?l.bottom:r)-a.bottom,c=t.clientHeight+i;return"bottom"===s?h>=c:"top"===s?o>=c:o>=c||h>=c},n=(t,e,s=null)=>{const i=new CustomEvent(t,{detail:{payload:s},bubbles:!0,cancelable:!0,composed:!1});e.dispatchEvent(i)},a=t=>{const e=document.createElement("template");return t=t.trim(),e.innerHTML=t,e.content.firstChild},l=(t,e,s=" ",i="add")=>{t.split(s).forEach((t=>"add"===i?e.classList.add(t):e.classList.remove(t)))}}},e={};function s(i){var n=e[i];if(void 0!==n)return n.exports;var a=e[i]={exports:{}};return t[i](a,a.exports,s),a.exports}s.d=(t,e)=>{for(var i in e)s.o(e,i)&&!s.o(t,i)&&Object.defineProperty(t,i,{enumerable:!0,get:e[i]})},s.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e);var i={};s.d(i,{A:()=>r});var n=s(926),a=s(615);
 /*
  * HSStrongPassword
- * @version: 2.5.0
+ * @version: 2.5.1
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

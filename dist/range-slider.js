@@ -1,7 +1,7 @@
 !function(t,o){if("object"==typeof exports&&"object"==typeof module)module.exports=o();else if("function"==typeof define&&define.amd)define([],o);else{var n=o();for(var e in n)("object"==typeof exports?exports:t)[e]=n[e]}}(self,(()=>(()=>{"use strict";var t={961:(t,o)=>{Object.defineProperty(o,"__esModule",{value:!0});var n=function(){function t(t,o,n){this.el=t,this.options=o,this.events=n,this.el=t,this.options=o,this.events={}}return t.prototype.createCollection=function(t,o){var n;t.push({id:(null===(n=null==o?void 0:o.el)||void 0===n?void 0:n.id)||t.length+1,element:o})},t.prototype.fireEvent=function(t,o){if(void 0===o&&(o=null),this.events.hasOwnProperty(t))return this.events[t](o)},t.prototype.on=function(t,o){this.events[t]=o},t}();o.default=n},347:function(t,o,n){
 /*
  * HSRangeSlider
- * @version: 2.5.0
+ * @version: 2.5.1
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
