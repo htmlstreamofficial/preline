@@ -853,7 +853,18 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	}
 
 	static autoInit() {
-		if (!window.$hsComboBoxCollection) window.$hsComboBoxCollection = [];
+		if (!window.$hsComboBoxCollection) {
+			window.$hsComboBoxCollection = [];
+			window.addEventListener('click', (evt) => {
+				const evtTarget = evt.target;
+
+				HSComboBox.closeCurrentlyOpened(evtTarget as HTMLElement);
+			});
+
+			document.addEventListener('keydown', (evt) =>
+				HSComboBox.accessibility(evt),
+			);
+		}
 
 		document
 			.querySelectorAll('[data-hs-combo-box]:not(.--prevent-on-load-init)')
@@ -869,18 +880,6 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 					new HSComboBox(el, options);
 				}
 			});
-
-		if (window.$hsComboBoxCollection) {
-			window.addEventListener('click', (evt) => {
-				const evtTarget = evt.target;
-
-				HSComboBox.closeCurrentlyOpened(evtTarget as HTMLElement);
-			});
-
-			document.addEventListener('keydown', (evt) =>
-				HSComboBox.accessibility(evt),
-			);
-		}
 	}
 
 	static close(target: HTMLElement | string) {
