@@ -13,7 +13,6 @@ import {
 	afterTransition,
 	htmlToElement,
 	isParentOrElementHidden,
-	isArray,
 } from '../../utils';
 
 import {
@@ -398,7 +397,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	private jsonItemsRender(items: any) {
 
 		// Bullet proofing.
-		if (!isArray(items)) {
+		if (Array.isArray(items)) {
 			return
 		}
 
