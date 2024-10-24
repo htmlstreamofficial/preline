@@ -17,21 +17,6 @@ const config = {
 			outFile: './dist/index.d.ts',
 			output: outputConfig,
 		},
-		{
-			filePath: './src/index.ts',
-			outFile: './dist/preline.d.ts',
-			output: outputConfig,
-		},
-		{
-			filePath: './src/index.ts',
-			outFile: './preline.d.ts',
-			output: outputConfig,
-		},
-		{
-			filePath: './src/index.ts',
-			outFile: './index.d.ts',
-			output: outputConfig,
-		},
 		...fs
 			.readdirSync(pluginsDir)
 			.map((pluginName) => writeFile(pluginsDir, pluginName))

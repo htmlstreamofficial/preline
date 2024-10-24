@@ -211,11 +211,6 @@ const menuSearchHistory = {
 	},
 };
 
-const isArray = (value: any) => {
-	if (value === null || value === undefined) return false;
-	return Array.isArray(value);
-}
-
 export {
 	stringToBoolean,
 	getClassProperty,
@@ -233,6 +228,5 @@ export {
 	afterTransition,
 	htmlToElement,
 	classToClassList,
-	isArray,
 	menuSearchHistory,
 };
