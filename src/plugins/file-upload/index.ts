@@ -37,7 +37,13 @@ class HSFileUpload
 		this.el = typeof el === 'string' ? document.querySelector(el) : el;
 
 		const data = this.el.getAttribute('data-hs-file-upload');
-		const dataOptions: IFileUploadOptions = data ? JSON.parse(data) : {};
+		const dataOptions: IFileUploadOptions = data ? JSON.parse(data, function (_key, value) {
+			return "string" != typeof value
+				? value
+				: "function" == value.substring(0, 8)
+				? eval("(" + value + ")")
+				: value;
+		}) : {};
 
 		this.previewTemplate =
 			this.el.querySelector('[data-hs-file-upload-preview]')?.innerHTML ||
