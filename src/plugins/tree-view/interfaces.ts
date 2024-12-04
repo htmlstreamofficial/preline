@@ -17,4 +17,9 @@ export interface ITreeViewOptions {
 
 export interface ITreeView {
 	options?: ITreeViewOptions;
+
+	update(): void;
+	getSelectedItems(): ITreeViewItem[];
+	changeItemProp(id: string, prop: string, val: any): void;
+	destroy(): void;
 }

@@ -15,6 +15,7 @@ module.exports = {
 		dropdown: './src/plugins/dropdown/index.ts',
 		'file-upload': './src/plugins/file-upload/index.ts',
 		'input-number': './src/plugins/input-number/index.ts',
+		'layout-splitter': './src/plugins/layout-splitter/index.ts',
 		overlay: './src/plugins/overlay/index.ts',
 		'pin-input': './src/plugins/pin-input/index.ts',
 		'range-slider': './src/plugins/range-slider/index.ts',

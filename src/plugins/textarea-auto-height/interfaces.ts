@@ -4,4 +4,6 @@ export interface ITextareaAutoHeightOptions {
 
 export interface ITextareaAutoHeight {
 	options?: ITextareaAutoHeightOptions;
+
+	destroy(): void;
 }

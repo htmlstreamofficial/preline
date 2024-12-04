@@ -31,6 +31,7 @@ export interface IDataTableOptions extends Config {
 }
 export interface IDataTable {
 	options?: IDataTableOptions;
+	destroy(): void;
 }
 declare class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable {
 	private concatOptions;
@@ -51,9 +52,22 @@ declare class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDa
 	private maxPagesToShow;
 	private isRowSelecting;
 	private readonly pageBtnClasses;
+	private onSearchInputListener;
+	private onPageEntitiesChangeListener;
+	private onPagingPrevClickListener;
+	private onPagingNextClickListener;
+	private onRowSelectingAllChangeListener;
+	private onSinglePagingClickListener;
 	constructor(el: HTMLElement, options?: IDataTableOptions, events?: {});
 	private init;
 	private initTable;
+	private searchInput;
+	private pageEntitiesChange;
+	private pagingPrevClick;
+	private pagingNextClick;
+	private rowSelectingAllChange;
+	private singlePagingClick;
+	destroy(): void;
 	private initSearch;
 	private onSearchInput;
 	private initPageEntities;

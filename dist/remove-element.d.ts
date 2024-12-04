@@ -17,14 +17,18 @@ export interface IRemoveElementOptions {
 }
 export interface IRemoveElement {
 	options?: IRemoveElementOptions;
+	destroy(): void;
 }
 declare class HSRemoveElement extends HSBasePlugin<IRemoveElementOptions> implements IRemoveElement {
 	private readonly removeTargetId;
 	private readonly removeTarget;
 	private readonly removeTargetAnimationClass;
+	private onElementClickListener;
 	constructor(el: HTMLElement, options?: IRemoveElementOptions);
+	private elementClick;
 	private init;
 	private remove;
+	destroy(): void;
 	static autoInit(): void;
 }
 

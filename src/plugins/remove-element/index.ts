@@ -1,6 +1,6 @@
 /*
  * HSRemoveElement
- * @version: 2.5.1
+ * @version: 2.6.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -24,6 +24,8 @@ class HSRemoveElement
 	private readonly removeTarget: HTMLElement | null;
 	private readonly removeTargetAnimationClass: string;
 
+	private onElementClickListener: () => void;
+
 	constructor(el: HTMLElement, options?: IRemoveElementOptions) {
 		super(el, options);
 
@@ -42,10 +44,16 @@ class HSRemoveElement
 		if (this.removeTarget) this.init();
 	}
 
+	private elementClick() {
+		this.remove();
+	}
+
 	private init() {
 		this.createCollection(window.$hsRemoveElementCollection, this);
 
-		this.el.addEventListener('click', () => this.remove());
+		this.onElementClickListener = () => this.elementClick();
+
+		this.el.addEventListener('click', this.onElementClickListener);
 	}
 
 	private remove() {
@@ -58,10 +66,30 @@ class HSRemoveElement
 		);
 	}
 
+	// Public methods
+	public destroy() {
+		// Remove classes
+		this.removeTarget.classList.remove(this.removeTargetAnimationClass);
+
+		// Remove listeners
+		this.el.removeEventListener('click', this.onElementClickListener);
+
+		window.$hsRemoveElementCollection =
+			window.$hsRemoveElementCollection.filter(
+				({ element }) => element.el !== this.el,
+			);
+	}
+
 	// Static method
 	static autoInit() {
 		if (!window.$hsRemoveElementCollection)
 			window.$hsRemoveElementCollection = [];
+
+		if (window.$hsRemoveElementCollection)
+			window.$hsRemoveElementCollection =
+				window.$hsRemoveElementCollection.filter(({ element }) =>
+					document.contains(element.el),
+				);
 
 		document
 			.querySelectorAll('[data-hs-remove-element]:not(.--prevent-on-load-init)')

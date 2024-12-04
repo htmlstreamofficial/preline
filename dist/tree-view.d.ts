@@ -32,6 +32,10 @@ export interface ITreeViewOptions {
 }
 export interface ITreeView {
 	options?: ITreeViewOptions;
+	update(): void;
+	getSelectedItems(): ITreeViewItem[];
+	changeItemProp(id: string, prop: string, val: any): void;
+	destroy(): void;
 }
 declare class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 	private items;
@@ -39,7 +43,11 @@ declare class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITree
 	private readonly autoSelectChildren;
 	private readonly isIndeterminate;
 	static group: number;
+	private onElementClickListener;
+	private onControlChangeListener;
 	constructor(el: HTMLElement, options?: ITreeViewOptions, events?: {});
+	private elementClick;
+	private controlChange;
 	private init;
 	private initItems;
 	private controlByButton;
@@ -53,6 +61,7 @@ declare class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITree
 	update(): void;
 	getSelectedItems(): ITreeViewItem[];
 	changeItemProp(id: string, prop: string, val: any): void;
+	destroy(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSTreeView>;
 	static autoInit(): void;
 	static on(evt: string, target: HTMLElement, cb: Function): void;

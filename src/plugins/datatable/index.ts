@@ -1,6 +1,6 @@
 /*
  * HSDataTable
- * @version: 2.5.1
+ * @version: 2.6.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -52,6 +52,18 @@ class HSDataTable
 	private maxPagesToShow: number;
 	private isRowSelecting: boolean;
 	private readonly pageBtnClasses: string | null;
+
+	private onSearchInputListener: (evt: InputEvent) => void;
+	private onPageEntitiesChangeListener: (evt: Event) => void;
+	private onPagingPrevClickListener: () => void;
+	private onPagingNextClickListener: () => void;
+	private onRowSelectingAllChangeListener: () => void;
+	private onSinglePagingClickListener:
+		| {
+				id: number;
+				fn: () => void;
+		  }[]
+		| null;
 
 	constructor(el: HTMLElement, options?: IDataTableOptions, events?: {}) {
 		super(el, options, events);
@@ -126,6 +138,8 @@ class HSDataTable
 		this.pageBtnClasses =
 			this.concatOptions?.pagingOptions?.pageBtnClasses ?? null;
 
+		this.onSinglePagingClickListener = [];
+
 		this.init();
 	}
 
@@ -161,14 +175,85 @@ class HSDataTable
 		});
 	}
 
+	private searchInput(evt: InputEvent) {
+		this.onSearchInput((evt.target as HTMLInputElement).value);
+	}
+
+	private pageEntitiesChange(evt: Event) {
+		this.onEntitiesChange(parseInt((evt.target as HTMLSelectElement).value));
+	}
+
+	private pagingPrevClick() {
+		this.onPrevClick();
+	}
+
+	private pagingNextClick() {
+		this.onNextClick();
+	}
+
+	private rowSelectingAllChange() {
+		this.onSelectAllChange();
+	}
+
+	private singlePagingClick(count: number) {
+		this.onPageClick(count);
+	}
+
+	// Public methods
+	public destroy() {
+		const pagingItems = this.el.querySelectorAll('[data-page]');
+		if (this.search)
+			this.search.removeEventListener('input', this.onSearchInputListener);
+		if (this.pageEntities)
+			this.pageEntities.removeEventListener(
+				'change',
+				this.onPageEntitiesChangeListener,
+			);
+		if (this.pagingPrev)
+			this.pagingPrev.removeEventListener(
+				'click',
+				this.onPagingPrevClickListener,
+			);
+		if (this.pagingNext)
+			this.pagingNext.removeEventListener(
+				'click',
+				this.onPagingNextClickListener,
+			);
+		if (this.rowSelectingAll)
+			this.rowSelectingAll.removeEventListener(
+				'change',
+				this.onRowSelectingAllChangeListener,
+			);
+		if (pagingItems.length) {
+			pagingItems.forEach((el) => {
+				const counter = +el.getAttribute('data-page');
+
+				el.removeEventListener(
+					'click',
+					this.onSinglePagingClickListener.find((el) => el.id === counter).fn,
+				);
+			});
+
+			this.pagingPages.innerHTML = '';
+		}
+
+		this.dataTable.destroy();
+
+		this.rowSelectingAll = null;
+		this.rowSelectingIndividual = null;
+
+		window.$hsDataTableCollection = window.$hsDataTableCollection.filter(
+			({ element }) => element.el !== this.el,
+		);
+	}
+
 	// Search
 	private initSearch() {
-		this.search.addEventListener(
-			'input',
-			debounce((evt: InputEvent) =>
-				this.onSearchInput((evt.target as HTMLInputElement).value),
-			),
+		this.onSearchInputListener = debounce((evt: InputEvent) =>
+			this.searchInput(evt),
 		);
+
+		this.search.addEventListener('input', this.onSearchInputListener);
 	}
 
 	private onSearchInput(val: string) {
@@ -177,8 +262,11 @@ class HSDataTable
 
 	// Page entities
 	private initPageEntities() {
-		this.pageEntities.addEventListener('change', (evt: Event) =>
-			this.onEntitiesChange(parseInt((evt.target as HTMLSelectElement).value)),
+		this.onPageEntitiesChangeListener = (evt) => this.pageEntitiesChange(evt);
+
+		this.pageEntities.addEventListener(
+			'change',
+			this.onPageEntitiesChangeListener,
 		);
 	}
 
@@ -233,9 +321,9 @@ class HSDataTable
 	}
 
 	private initPagingPrev() {
-		this.pagingPrev.addEventListener('click', () => {
-			this.onPrevClick();
-		});
+		this.onPagingPrevClickListener = () => this.pagingPrevClick();
+
+		this.pagingPrev.addEventListener('click', this.onPagingPrevClickListener);
 	}
 
 	private onPrevClick() {
@@ -253,9 +341,9 @@ class HSDataTable
 	}
 
 	private initPagingNext() {
-		this.pagingNext.addEventListener('click', () => {
-			this.onNextClick();
-		});
+		this.onPagingNextClickListener = () => this.pagingNextClick();
+
+		this.pagingNext.addEventListener('click', this.onPagingNextClickListener);
 	}
 
 	private onNextClick() {
@@ -321,7 +409,15 @@ class HSDataTable
 		if (this.pageBtnClasses) classToClassList(this.pageBtnClasses, pageEl);
 		if (page === counter - 1) pageEl.classList.add('active');
 
-		pageEl.addEventListener('click', () => this.onPageClick(counter));
+		this.onSinglePagingClickListener.push({
+			id: counter,
+			fn: () => this.singlePagingClick(counter),
+		});
+
+		pageEl.addEventListener(
+			'click',
+			this.onSinglePagingClickListener.find((el) => el.id === counter).fn,
+		);
 
 		this.pagingPages.append(pageEl);
 	}
@@ -332,8 +428,11 @@ class HSDataTable
 
 	// Select row
 	private initRowSelecting() {
-		this.rowSelectingAll.addEventListener('change', () =>
-			this.onSelectAllChange(),
+		this.onRowSelectingAllChangeListener = () => this.rowSelectingAllChange();
+
+		this.rowSelectingAll.addEventListener(
+			'change',
+			this.onRowSelectingAllChangeListener,
 		);
 	}
 
@@ -413,6 +512,11 @@ class HSDataTable
 
 	static autoInit() {
 		if (!window.$hsDataTableCollection) window.$hsDataTableCollection = [];
+
+		if (window.$hsDataTableCollection)
+			window.$hsDataTableCollection = window.$hsDataTableCollection.filter(
+				({ element }) => document.contains(element.el),
+			);
 
 		document
 			.querySelectorAll('[data-hs-datatable]:not(.--prevent-on-load-init)')

@@ -1,6 +1,6 @@
 /*
  * HSCollapse
- * @version: 2.5.1
+ * @version: 2.6.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -18,6 +18,8 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 	public content: HTMLElement | null;
 	private animationInProcess: boolean;
 
+	private onElementClickListener: () => void;
+
 	constructor(el: HTMLElement, options?: {}, events?: {}) {
 		super(el, options, events);
 
@@ -28,21 +30,25 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 		if (this.content) this.init();
 	}
 
+	private elementClick() {
+		if (this.content.classList.contains('open')) {
+			this.hide();
+		} else {
+			this.show();
+		}
+	}
+
 	private init() {
 		this.createCollection(window.$hsCollapseCollection, this);
+
+		this.onElementClickListener = () => this.elementClick();
 
 		if (this?.el?.ariaExpanded) {
 			if (this.el.classList.contains('open')) this.el.ariaExpanded = 'true';
 			else this.el.ariaExpanded = 'false';
 		}
 
-		this.el.addEventListener('click', () => {
-			if (this.content.classList.contains('open')) {
-				this.hide();
-			} else {
-				this.show();
-			}
-		});
+		this.el.addEventListener('click', this.onElementClickListener);
 	}
 
 	private hideAllMegaMenuItems() {
@@ -115,6 +121,17 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 		}
 	}
 
+	public destroy() {
+		this.el.removeEventListener('click', this.onElementClickListener);
+
+		this.content = null;
+		this.animationInProcess = false;
+
+		window.$hsCollapseCollection = window.$hsCollapseCollection.filter(
+			({ element }) => element.el !== this.el,
+		);
+	}
+
 	// Static methods
 	static getInstance(target: HTMLElement, isInstance = false) {
 		const elInCollection = window.$hsCollapseCollection.find(
@@ -132,6 +149,11 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 
 	static autoInit() {
 		if (!window.$hsCollapseCollection) window.$hsCollapseCollection = [];
+
+		if (window.$hsCollapseCollection)
+			window.$hsCollapseCollection = window.$hsCollapseCollection.filter(
+				({ element }) => document.contains(element.el),
+			);
 
 		document
 			.querySelectorAll('.hs-collapse-toggle:not(.--prevent-on-load-init)')

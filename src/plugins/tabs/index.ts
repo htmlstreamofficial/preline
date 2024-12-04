@@ -1,12 +1,12 @@
 /*
  * HSTabs
- * @version: 2.5.1
+ * @version: 2.6.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { dispatch } from '../../utils';
+import { dispatch, isIOS, isIpadOS } from '../../utils';
 
 import { ITabs } from '../tabs/interfaces';
 
@@ -26,6 +26,16 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 	private prevContentId: string | null;
 	private prevContent: HTMLElement | null;
 
+	private onToggleClickListener:
+		| {
+			el: HTMLElement;
+			fn: () => void;
+		}[]
+		| null;
+	private onExtraToggleChangeListener: (evt: Event) => void;
+
+	private eventType: 'click';
+
 	constructor(el: HTMLElement, options?: {}, events?: {}) {
 		super(el, options, events);
 
@@ -41,18 +51,43 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 		this.prevContentId = null;
 		this.prevContent = null;
 
+		this.eventType = 'click';
+
+		this.onToggleClickListener = [];
+
 		this.init();
+	}
+
+	private toggleClick(el: HTMLElement) {
+		this.open(el);
+	}
+
+	private extraToggleChange(evt: Event) {
+		this.change(evt);
 	}
 
 	private init() {
 		this.createCollection(window.$hsTabsCollection, this);
 
 		this.toggles.forEach((el) => {
-			el.addEventListener('click', () => this.open(el));
+			this.onToggleClickListener.push({
+				el,
+				fn: () => this.toggleClick(el),
+			});
+
+			el.addEventListener(
+				this.eventType,
+				this.onToggleClickListener.find((toggle) => toggle.el === el).fn,
+			);
 		});
 
 		if (this.extraToggle) {
-			this.extraToggle.addEventListener('change', (evt) => this.change(evt));
+			this.onExtraToggleChangeListener = (evt) => this.extraToggleChange(evt);
+
+			this.extraToggle.addEventListener(
+				'change',
+				this.onExtraToggleChangeListener,
+			);
 		}
 	}
 
@@ -93,6 +128,27 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 		if (toggle) toggle.click();
 	}
 
+	// Public methods
+	public destroy() {
+		// Clear listeners
+		this.toggles.forEach((el) => {
+			el.removeEventListener(
+				this.eventType,
+				this.onToggleClickListener.find((toggle) => toggle.el === el).fn,
+			);
+		});
+		this.onToggleClickListener = [];
+		if (this.extraToggle)
+			this.extraToggle.removeEventListener(
+				'change',
+				this.onExtraToggleChangeListener,
+			);
+
+		window.$hsTabsCollection = window.$hsTabsCollection.filter(
+			({ element }) => element.el !== this.el,
+		);
+	}
+
 	// Static methods
 	static getInstance(target: HTMLElement | string, isInstance?: boolean) {
 		const elInCollection = window.$hsTabsCollection.find(
@@ -109,7 +165,16 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 	}
 
 	static autoInit() {
-		if (!window.$hsTabsCollection) window.$hsTabsCollection = [];
+		if (!window.$hsTabsCollection) {
+			window.$hsTabsCollection = [];
+
+			document.addEventListener('keydown', (evt) => HSTabs.accessibility(evt));
+		}
+
+		if (window.$hsTabsCollection)
+			window.$hsTabsCollection = window.$hsTabsCollection.filter(
+				({ element }) => document.contains(element.el),
+			);
 
 		document
 			.querySelectorAll(
@@ -123,9 +188,6 @@ class HSTabs extends HSBasePlugin<{}> implements ITabs {
 				)
 					new HSTabs(el);
 			});
-
-		if (window.$hsTabsCollection)
-			document.addEventListener('keydown', (evt) => HSTabs.accessibility(evt));
 	}
 
 	static open(target: HTMLElement) {

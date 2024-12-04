@@ -20,16 +20,20 @@ export interface ICollapse {
 	options?: {};
 	show(): void;
 	hide(): void;
+	destroy(): void;
 }
 declare class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 	private readonly contentId;
 	content: HTMLElement | null;
 	private animationInProcess;
+	private onElementClickListener;
 	constructor(el: HTMLElement, options?: {}, events?: {});
+	private elementClick;
 	private init;
 	private hideAllMegaMenuItems;
 	show(): boolean;
 	hide(): boolean;
+	destroy(): void;
 	static getInstance(target: HTMLElement, isInstance?: boolean): HTMLElement | ICollectionItem<HSCollapse>;
 	static autoInit(): void;
 	static show(target: HTMLElement): void;

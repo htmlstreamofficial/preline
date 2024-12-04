@@ -21,6 +21,7 @@ export interface IOverlayOptions {
 	emulateScrollbarSpace?: boolean;
 	isClosePrev?: boolean;
 	backdropClasses?: string | null;
+	backdropParent?: string | HTMLElement | Document;
 	backdropExtraClasses?: string | null;
 	moveOverlayToBody?: number | null;
 }
@@ -28,12 +29,15 @@ export interface IOverlay {
 	options?: IOverlayOptions;
 	open(): void;
 	close(): void;
+	destroy(): void;
 }
+export type TOverlayOptionsAutoCloseEqualityType = "less-than" | "more-than";
 declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly hiddenClass;
 	private readonly emulateScrollbarSpace;
 	private readonly isClosePrev;
 	private readonly backdropClasses;
+	private readonly backdropParent;
 	private readonly backdropExtraClasses;
 	private readonly animationTarget;
 	private openNextOverlay;
@@ -48,8 +52,16 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	hasAbilityToCloseOnBackdropClick: boolean;
 	openedBreakpoint: number | null;
 	autoClose: number | null;
+	autoCloseEqualityType: TOverlayOptionsAutoCloseEqualityType | null;
 	moveOverlayToBody: number | null;
+	private backdrop;
+	private onElementClickListener;
+	private onOverlayClickListener;
+	private onBackdropClickListener;
 	constructor(el: HTMLElement, options?: IOverlayOptions, events?: {});
+	private elementClick;
+	private overlayClick;
+	private backdropClick;
 	private init;
 	private hideAuto;
 	private checkTimer;
@@ -59,6 +71,7 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private getScrollbarSize;
 	open(): false | Promise<void>;
 	close(forceClose?: boolean): Promise<unknown>;
+	destroy(): void;
 	static getInstance(target: HTMLElement, isInstance?: boolean): HTMLElement | ICollectionItem<HSOverlay>;
 	static autoInit(): void;
 	static open(target: HTMLElement): void;
@@ -66,7 +79,7 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	static setOpened(breakpoint: number, el: ICollectionItem<HSOverlay>): void;
 	static accessibility(evt: KeyboardEvent): boolean;
 	static onEscape(target: ICollectionItem<HSOverlay>): void;
-	static onTab(target: ICollectionItem<HSOverlay>, focusableElements: HTMLElement[]): boolean;
+	static onTab(target: ICollectionItem<HSOverlay>): boolean;
 	static on(evt: string, target: HTMLElement, cb: Function): void;
 }
 

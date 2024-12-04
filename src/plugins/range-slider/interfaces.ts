@@ -21,4 +21,6 @@ export interface IRangeSliderOptions extends Options {
 
 export interface IRangeSlider {
 	options?: IRangeSliderOptions;
+
+	destroy(): void;
 }

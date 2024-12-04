@@ -21,6 +21,7 @@ export interface IPinInputOptions {
 }
 export interface IPinInput {
 	options?: IPinInputOptions;
+	destroy(): void;
 }
 declare class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
 	private items;
@@ -28,6 +29,16 @@ declare class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinI
 	private currentValue;
 	private readonly placeholders;
 	private readonly availableCharsRE;
+	private onElementInputListener;
+	private onElementPasteListener;
+	private onElementKeydownListener;
+	private onElementFocusinListener;
+	private onElementFocusoutListener;
+	private elementInput;
+	private elementPaste;
+	private elementKeydown;
+	private elementFocusin;
+	private elementFocusout;
 	constructor(el: HTMLElement, options?: IPinInputOptions);
 	private init;
 	private build;
@@ -41,6 +52,7 @@ declare class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinI
 	private onFocusIn;
 	private onFocusOut;
 	private onPaste;
+	destroy(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSPinInput | ICollectionItem<HSPinInput>;
 	static autoInit(): void;
 }
