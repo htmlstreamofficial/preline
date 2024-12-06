@@ -23,6 +23,8 @@ import {
 	IApiFieldMap,
 } from '../select/interfaces';
 
+import { createPopper } from '@popperjs/core';
+
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
 
@@ -647,24 +649,27 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	}
 
 	private buildPopper() {
-		if (typeof Popper !== 'undefined' && Popper.createPopper) {
+		if (typeof createPopper !== 'undefined') {
 			document.body.appendChild(this.dropdown);
 
-			this.popperInstance = Popper.createPopper(
-				this.mode === 'tags' ? this.wrapper : this.toggle,
-				this.dropdown,
-				{
-					placement: POSITIONS[this.dropdownPlacement] || 'bottom',
-					strategy: 'fixed',
-					modifiers: [
-						{
-							name: 'offset',
-							options: {
-								offset: [0, 5],
-							},
+			const referenceElement =
+				this.mode === 'tags' ? this.wrapper : this.toggle;
+
+			this.popperInstance = createPopper(referenceElement, this.dropdown, {
+				placement: POSITIONS[this.dropdownPlacement] || 'bottom',
+				strategy: 'fixed',
+				modifiers: [
+					{
+						name: 'offset',
+						options: {
+							offset: [0, 5],
 						},
-					],
-				},
+					},
+				],
+			});
+		} else {
+			console.error(
+				'Popper.js is not available. Ensure that @popperjs/core is properly bundled.',
 			);
 		}
 	}
