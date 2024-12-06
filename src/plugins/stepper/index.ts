@@ -752,7 +752,9 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		this.unsetCompleted();
 		this.isCompleted = false;
 
+		this.showSkipButton();
 		this.setCurrentNavItem();
+		this.setCurrentContentItem();
 		this.showFinishButton();
 		this.showCompleteStepButton();
 		this.checkForTheFirstStep();
