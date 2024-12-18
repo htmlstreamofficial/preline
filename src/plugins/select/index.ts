@@ -89,6 +89,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly searchNoResultTemplate: string | null;
 	private readonly searchNoResultText: string | null;
 	private readonly searchNoResultClasses: string | null;
+	private readonly optionAllowEmptyOption: boolean;
 	private readonly optionTag: string | null;
 	private readonly optionTemplate: string | null;
 	private readonly optionClasses: string | null;
@@ -208,6 +209,10 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		this.searchNoResultClasses =
 			concatOptions?.searchNoResultClasses ||
 			'px-4 text-sm text-gray-800 dark:text-neutral-200';
+		this.optionAllowEmptyOption =
+			typeof concatOptions?.optionAllowEmptyOption !== 'undefined'
+				? concatOptions?.optionAllowEmptyOption
+				: false;
 		this.optionTemplate = concatOptions?.optionTemplate || null;
 		this.optionTag = concatOptions?.optionTag || null;
 		this.optionClasses = concatOptions?.optionClasses || null;
@@ -307,7 +312,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 		if (this.el.children) {
 			Array.from(this.el.children)
-				.filter((el: HTMLOptionElement) => el.value && el.value !== '')
+				.filter((el: HTMLOptionElement) => this.optionAllowEmptyOption || (!this.optionAllowEmptyOption && el.value && el.value !== ''))
 				.forEach((el: HTMLOptionElement) => {
 					const data = el.getAttribute('data-hs-select-option');
 
