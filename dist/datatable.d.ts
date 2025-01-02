@@ -37,16 +37,13 @@ declare class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDa
 	private concatOptions;
 	private dataTable;
 	private readonly table;
-	private readonly search;
-	private readonly pageEntities;
-	private readonly paging;
-	private readonly pagingPrev;
-	private readonly pagingNext;
-	private readonly pagingPages;
-	private readonly info;
-	private readonly infoFrom;
-	private readonly infoTo;
-	private readonly infoLength;
+	private searches;
+	private pageEntitiesList;
+	private pagingList;
+	private pagingPagesList;
+	private pagingPrevList;
+	private pagingNextList;
+	private readonly infoList;
 	private rowSelectingAll;
 	private rowSelectingIndividual;
 	private maxPagesToShow;
@@ -54,10 +51,10 @@ declare class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDa
 	private readonly pageBtnClasses;
 	private onSearchInputListener;
 	private onPageEntitiesChangeListener;
+	private onSinglePagingClickListener;
 	private onPagingPrevClickListener;
 	private onPagingNextClickListener;
 	private onRowSelectingAllChangeListener;
-	private onSinglePagingClickListener;
 	constructor(el: HTMLElement, options?: IDataTableOptions, events?: {});
 	private init;
 	private initTable;
@@ -67,7 +64,6 @@ declare class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDa
 	private pagingNextClick;
 	private rowSelectingAllChange;
 	private singlePagingClick;
-	destroy(): void;
 	private initSearch;
 	private onSearchInput;
 	private initPageEntities;
@@ -92,6 +88,7 @@ declare class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDa
 	private triggerChangeEventToRow;
 	private onSelectAllChange;
 	private updateSelectAllCheckbox;
+	destroy(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSDataTable>;
 	static autoInit(): void;
 }

@@ -40,6 +40,7 @@ export interface ISelectOptions {
 	isOpened?: boolean;
 	placeholder?: string;
 	hasSearch?: boolean;
+	minSearchLength?: number;
 	preventSearchFocus?: boolean;
 	mode?: string;
 	viewport?: string;
@@ -87,6 +88,7 @@ export interface ISelectOptions {
 	searchNoResultTemplate?: string | null;
 	searchNoResultText?: string | null;
 	searchNoResultClasses?: string | null;
+	optionAllowEmptyOption?: boolean;
 	optionTemplate?: string;
 	optionTag?: string;
 	optionClasses?: string;
@@ -108,6 +110,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	value: string | string[] | null;
 	private readonly placeholder;
 	private readonly hasSearch;
+	private readonly minSearchLength;
 	private readonly preventSearchFocus;
 	private readonly mode;
 	private readonly viewport;
@@ -152,6 +155,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly searchNoResultTemplate;
 	private readonly searchNoResultText;
 	private readonly searchNoResultClasses;
+	private readonly optionAllowEmptyOption;
 	private readonly optionTag;
 	private readonly optionTemplate;
 	private readonly optionClasses;
@@ -242,10 +246,11 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	addOption(items: ISingleOption | ISingleOption[]): void;
 	removeOption(values: string | string[]): void;
 	recalculateDirection(): boolean;
+	private static findInCollection;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSSelect | ICollectionItem<HSSelect>;
 	static autoInit(): void;
-	static open(target: HTMLElement | string): void;
-	static close(target: HTMLElement | string): void;
+	static open(target: HSSelect | HTMLElement | string): void;
+	static close(target: HSSelect | HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;
 	static accessibility(evt: KeyboardEvent): void;
 	static onEscape(): void;

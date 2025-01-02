@@ -1,7 +1,7 @@
 var e={615:(e,t,o)=>{o.d(t,{A:()=>n});class n{constructor(e,t,o){this.el=e,this.options=t,this.events=o,this.el=e,this.options=t,this.events={}}createCollection(e,t){var o;e.push({id:(null===(o=null==t?void 0:t.el)||void 0===o?void 0:o.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},926:(e,t,o)=>{o.d(t,{yd:()=>n});const n=(e,t)=>{const o=()=>{t(),e.removeEventListener("transitionend",o,!0)},n=window.getComputedStyle(e),i=n.getPropertyValue("transition-duration");"none"!==n.getPropertyValue("transition-property")&&parseFloat(i)>0?e.addEventListener("transitionend",o,!0):t()}}},t={};function o(n){var i=t[n];if(void 0!==i)return i.exports;var s=t[n]={exports:{}};return e[n](s,s.exports,o),s.exports}o.d=(e,t)=>{for(var n in t)o.o(t,n)&&!o.o(e,n)&&Object.defineProperty(e,n,{enumerable:!0,get:t[n]})},o.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var n={};o.d(n,{A:()=>l});var i=o(926),s=o(615);
 /*
  * HSRemoveElement
- * @version: 2.6.0
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

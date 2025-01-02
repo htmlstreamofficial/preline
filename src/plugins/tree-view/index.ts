@@ -1,6 +1,6 @@
 /*
  * HSTreeView
- * @version: 2.6.0
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -27,15 +27,15 @@ class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 
 	private onElementClickListener:
 		| {
-				el: Element;
-				fn: (evt: PointerEvent) => void;
-		  }[]
+			el: Element;
+			fn: (evt: PointerEvent) => void;
+		}[]
 		| null;
 	private onControlChangeListener:
 		| {
-				el: Element;
-				fn: () => void;
-		  }[]
+			el: Element;
+			fn: () => void;
+		}[]
 		| null;
 
 	constructor(el: HTMLElement, options?: ITreeViewOptions, events?: {}) {
@@ -299,6 +299,14 @@ class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 	}
 
 	// Static methods
+	private static findInCollection(target: HSTreeView | HTMLElement | string): ICollectionItem<HSTreeView> | null {
+		return window.$hsTreeViewCollection.find((el) => {
+			if (target instanceof HSTreeView) return el.element.el === target.el;
+			else if (typeof target === 'string') return el.element.el === document.querySelector(target);
+			else return el.element.el === target;
+		}) || null;
+	}
+
 	static getInstance(target: HTMLElement | string, isInstance?: boolean) {
 		const elInCollection = window.$hsTreeViewCollection.find(
 			(el) =>
@@ -334,14 +342,12 @@ class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 	}
 
 	// Backward compatibility
-	static on(evt: string, target: HTMLElement, cb: Function) {
-		const elInCollection = window.$hsTreeViewCollection.find(
-			(el) =>
-				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
-		);
+	static on(evt: string, target: HSTreeView | HTMLElement | string, cb: Function) {
+		const instance = HSTreeView.findInCollection(target);
 
-		if (elInCollection) elInCollection.element.events[evt] = cb;
+		console.log(1);
+
+		if (instance) instance.element.events[evt] = cb;
 	}
 }
 

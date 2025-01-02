@@ -47,7 +47,6 @@ declare class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements
 	destroy(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSRangeSlider>;
 	static autoInit(): void;
-	static on(evt: string, target: HTMLElement, cb: Function): void;
 }
 
 export {

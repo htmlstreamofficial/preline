@@ -1,6 +1,6 @@
 /*
  * HSLayoutSplitter
- * @version: 2.6.0
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -631,6 +631,14 @@ class HSLayoutSplitter
 	}
 
 	// Static method
+	private static findInCollection(target: HSLayoutSplitter | HTMLElement | string): ICollectionItem<HSLayoutSplitter> | null {
+		return window.$hsLayoutSplitterCollection.find((el) => {
+			if (target instanceof HSLayoutSplitter) return el.element.el === target.el;
+			else if (typeof target === 'string') return el.element.el === document.querySelector(target);
+			else return el.element.el === target;
+		}) || null;
+	}
+
 	static autoInit() {
 		if (!window.$hsLayoutSplitterCollection) {
 			window.$hsLayoutSplitterCollection = [];
@@ -692,14 +700,10 @@ class HSLayoutSplitter
 			: null;
 	}
 
-	static on(evt: string, target: HTMLElement, cb: Function) {
-		const elInCollection = window.$hsLayoutSplitterCollection.find(
-			(el) =>
-				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
-		);
+	static on(evt: string, target: HSLayoutSplitter | HTMLElement | string, cb: Function) {
+		const instance = HSLayoutSplitter.findInCollection(target);
 
-		if (elInCollection) elInCollection.element.events[evt] = cb;
+		if (instance) instance.element.events[evt] = cb;
 	}
 }
 

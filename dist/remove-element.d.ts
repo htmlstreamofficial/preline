@@ -12,6 +12,10 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
 }
+export interface ICollectionItem<T> {
+	id: string | number;
+	element: T;
+}
 export interface IRemoveElementOptions {
 	removeTargetAnimationClass: string;
 }
@@ -29,6 +33,7 @@ declare class HSRemoveElement extends HSBasePlugin<IRemoveElementOptions> implem
 	private init;
 	private remove;
 	destroy(): void;
+	static getInstance(target: HTMLElement, isInstance?: boolean): HTMLElement | ICollectionItem<HSRemoveElement>;
 	static autoInit(): void;
 }
 

@@ -87,9 +87,10 @@ declare class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> impl
 		breakpoints: Record<number, number>;
 	}>): void;
 	destroy(): void;
+	private static findInCollection;
 	static autoInit(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSLayoutSplitter>;
-	static on(evt: string, target: HTMLElement, cb: Function): void;
+	static on(evt: string, target: HSLayoutSplitter | HTMLElement | string, cb: Function): void;
 }
 
 export {

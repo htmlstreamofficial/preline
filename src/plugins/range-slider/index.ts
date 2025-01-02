@@ -1,6 +1,6 @@
 /*
  * HSRangeSlider
- * @version: 2.6.0
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -196,17 +196,6 @@ class HSRangeSlider
 				)
 					new HSRangeSlider(el);
 			});
-	}
-
-	// Backward compatibility
-	static on(evt: string, target: HTMLElement, cb: Function) {
-		const elInCollection = window.$hsRangeSliderCollection.find(
-			(el) =>
-				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
-		);
-
-		if (elInCollection) elInCollection.element.events[evt] = cb;
 	}
 }
 

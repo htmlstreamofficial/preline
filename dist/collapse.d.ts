@@ -34,11 +34,12 @@ declare class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 	show(): boolean;
 	hide(): boolean;
 	destroy(): void;
+	private static findInCollection;
 	static getInstance(target: HTMLElement, isInstance?: boolean): HTMLElement | ICollectionItem<HSCollapse>;
 	static autoInit(): void;
-	static show(target: HTMLElement): void;
-	static hide(target: HTMLElement): void;
-	static on(evt: string, target: HTMLElement, cb: Function): void;
+	static show(target: HSCollapse | HTMLElement | string): void;
+	static hide(target: HSCollapse | HTMLElement | string): void;
+	static on(evt: string, target: HSCollapse | HTMLElement | string, cb: Function): void;
 }
 
 export {

@@ -1,6 +1,6 @@
 /*
  * HSComboBox
- * @version: 2.6.0
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -30,6 +30,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	gap: number;
 	viewport: string | HTMLElement | null;
 	preventVisibility: boolean;
+	minSearchLength: number;
 	apiUrl: string | null;
 	apiDataPart: string | null;
 	apiQuery: string | null;
@@ -68,6 +69,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	isOpened: boolean;
 	isCurrent: boolean;
 	private animationInProcess: boolean;
+	private isSearchLengthExceeded = false;
 
 	private onInputFocusListener: () => void;
 	private onInputInputListener: (evt: InputEvent) => void;
@@ -92,6 +94,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 				? (document.querySelector(concatOptions?.viewport) as HTMLElement)
 				: concatOptions?.viewport) ?? null;
 		this.preventVisibility = concatOptions?.preventVisibility ?? false;
+		this.minSearchLength = concatOptions?.minSearchLength ?? 0;
 		this.apiUrl = concatOptions?.apiUrl ?? null;
 		this.apiDataPart = concatOptions?.apiDataPart ?? null;
 		this.apiQuery = concatOptions?.apiQuery ?? null;
@@ -170,9 +173,14 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	}
 
 	private inputInput(evt: InputEvent) {
-		this.setResultAndRender((evt.target as HTMLInputElement).value);
+		const val = (evt.target as HTMLInputElement).value.trim();
+
+		if (val.length <= this.minSearchLength) this.setResultAndRender('');
+		else this.setResultAndRender(val);
+
 		if (this.input.value !== '') this.el.classList.add('has-value');
 		else this.el.classList.remove('has-value');
+
 		if (!this.isOpened) this.open();
 	}
 
@@ -255,6 +263,9 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 		this.setResults(_value);
 
 		if (this.apiSearchQuery || this.apiSearchPath || this.apiSearchDefaultPath) this.itemsFromJson();
+
+		if (_value === '') this.isSearchLengthExceeded = true;
+		else this.isSearchLengthExceeded = false;
 	}
 
 	private setResults(val: string) {
@@ -684,6 +695,8 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	}
 
 	private async itemsFromJson() {
+		if (this.isSearchLengthExceeded) return false;
+
 		this.buildOutputLoader();
 
 		try {
@@ -754,7 +767,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 				this.jsonItemsRender(items);
 			}
 
-			this.setResults(this.input.value);
+			this.setResults(this.input.value.length <= this.minSearchLength ? '' : this.input.value);
 		} catch (err) {
 			console.error(err);
 

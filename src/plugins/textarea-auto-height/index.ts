@@ -1,6 +1,6 @@
 /*
  * HSTextareaAutoHeight
- * @version: 2.6.0
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -13,11 +13,11 @@ import {
 
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
+import { ITabsOnChangePayload } from '../tabs/interfaces'
 
 class HSTextareaAutoHeight
 	extends HSBasePlugin<ITextareaAutoHeightOptions>
-	implements ITextareaAutoHeight
-{
+	implements ITextareaAutoHeight {
 	private readonly defaultHeight: number;
 
 	private onElementInputListener: () => void;
@@ -76,9 +76,9 @@ class HSTextareaAutoHeight
 
 	private isParentHidden() {
 		return (
-			this.el.closest('.hs-collapse') ||
-			this.el.closest('.hs-overlay') ||
-			this.el.closest('[role="tabpanel"]')
+			this.el.closest('.hs-overlay.hidden') ||
+			this.el.closest('[role="tabpanel"].hidden') ||
+			this.el.closest('.hs-collapse.hidden')
 		);
 	}
 
@@ -94,13 +94,18 @@ class HSTextareaAutoHeight
 			const tabId = this.el.closest('[role="tabpanel"]')?.id;
 			const tab = document.querySelector(`[data-hs-tab="#${tabId}"]`);
 			const tabs = tab.closest('[role="tablist"]');
-			const { element } =
-				(window.HSTabs as any).getInstance(tabs, true) || null;
+			const { element } = (window.HSTabs as any).getInstance(tabs, true) || null;
 
-			element.on('change', () => {
-				if (!this.el) return false;
+			element.on('change', (payload: ITabsOnChangePayload) => {
+				const textareas = document.querySelectorAll(`${payload.current} [data-hs-textarea-auto-height]`);
 
-				this.textareaSetHeight(3);
+				if (!textareas.length) return false;
+
+				textareas.forEach((el: HTMLTextAreaElement) => {
+					const instance = (window.HSTextareaAutoHeight as any).getInstance(el, true) || null;
+
+					if (instance) instance.element.textareaSetHeight(3);
+				});
 			});
 		} else if (this.parentType() === 'collapse') {
 			const collapseId = this.el.closest('.hs-collapse').id;

@@ -1,7 +1,7 @@
 var e={615:(e,t,n)=>{n.d(t,{A:()=>s});class s{constructor(e,t,n){this.el=e,this.options=t,this.events=n,this.el=e,this.options=t,this.events={}}createCollection(e,t){var n;e.push({id:(null===(n=null==t?void 0:t.el)||void 0===n?void 0:n.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},926:(e,t,n)=>{n.d(t,{JD:()=>s,yd:()=>i});const s=(e,t,n=null)=>{const s=new CustomEvent(e,{detail:{payload:n},bubbles:!0,cancelable:!0,composed:!1});t.dispatchEvent(s)},i=(e,t)=>{const n=()=>{t(),e.removeEventListener("transitionend",n,!0)},s=window.getComputedStyle(e),i=s.getPropertyValue("transition-duration");"none"!==s.getPropertyValue("transition-property")&&parseFloat(i)>0?e.addEventListener("transitionend",n,!0):t()}}},t={};function n(s){var i=t[s];if(void 0!==i)return i.exports;var o=t[s]={exports:{}};return e[s](o,o.exports,n),o.exports}n.d=(e,t)=>{for(var s in t)n.o(t,s)&&!n.o(e,s)&&Object.defineProperty(e,s,{enumerable:!0,get:t[s]})},n.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var s={};n.d(s,{A:()=>a});var i=n(926),o=n(615);
 /*
  * HSCollapse
- * @version: 2.6.0
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

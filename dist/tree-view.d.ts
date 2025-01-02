@@ -62,9 +62,10 @@ declare class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITree
 	getSelectedItems(): ITreeViewItem[];
 	changeItemProp(id: string, prop: string, val: any): void;
 	destroy(): void;
+	private static findInCollection;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSTreeView>;
 	static autoInit(): void;
-	static on(evt: string, target: HTMLElement, cb: Function): void;
+	static on(evt: string, target: HSTreeView | HTMLElement | string, cb: Function): void;
 }
 
 export {

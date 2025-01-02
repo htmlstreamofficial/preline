@@ -1,6 +1,6 @@
 var e={189:(e,t,o)=>{o.d(t,{LO:()=>i});const i={xs:0,sm:640,md:768,lg:1024,xl:1280,"2xl":1536}},615:(e,t,o)=>{o.d(t,{A:()=>i});class i{constructor(e,t,o){this.el=e,this.options=t,this.events=o,this.el=e,this.options=t,this.events={}}createCollection(e,t){var o;e.push({id:(null===(o=null==t?void 0:t.el)||void 0===o?void 0:o.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},926:(e,t,o)=>{o.d(t,{JD:()=>r,PK:()=>i,gj:()=>l,sH:()=>n,wC:()=>s,yd:()=>a});
 /*
- * @version: 2.6.0
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -8,7 +8,7 @@ var e={189:(e,t,o)=>{o.d(t,{LO:()=>i});const i={xs:0,sm:640,md:768,lg:1024,xl:12
 const i=e=>"true"===e,l=(e,t,o="")=>(window.getComputedStyle(e).getPropertyValue(t)||o).replace(" ","");const s=(e,t)=>{const o=e.children;for(let e=0;e<o.length;e++)if(o[e]===t)return!0;return!1},n=e=>{if(!e)return!1;return"none"===window.getComputedStyle(e).display||n(e.parentElement)},r=(e,t,o=null)=>{const i=new CustomEvent(e,{detail:{payload:o},bubbles:!0,cancelable:!0,composed:!1});t.dispatchEvent(i)},a=(e,t)=>{const o=()=>{t(),e.removeEventListener("transitionend",o,!0)},i=window.getComputedStyle(e),l=i.getPropertyValue("transition-duration");"none"!==i.getPropertyValue("transition-property")&&parseFloat(l)>0?e.addEventListener("transitionend",o,!0):t()}}},t={};function o(i){var l=t[i];if(void 0!==l)return l.exports;var s=t[i]={exports:{}};return e[i](s,s.exports,o),s.exports}o.d=(e,t)=>{for(var i in t)o.o(t,i)&&!o.o(e,i)&&Object.defineProperty(e,i,{enumerable:!0,get:t[i]})},o.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var i={};o.d(i,{A:()=>d});var l=o(926),s=o(189),n=o(615);
 /*
  * HSOverlay
- * @version: 2.6.0
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

@@ -20,6 +20,7 @@ export interface IComboBoxOptions {
 	gap?: number;
 	viewport?: string | HTMLElement | null;
 	preventVisibility?: boolean;
+	minSearchLength?: number;
 	apiUrl?: string | null;
 	apiDataPart?: string | null;
 	apiQuery?: string | null;
@@ -50,6 +51,7 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	gap: number;
 	viewport: string | HTMLElement | null;
 	preventVisibility: boolean;
+	minSearchLength: number;
 	apiUrl: string | null;
 	apiDataPart: string | null;
 	apiQuery: string | null;
@@ -85,6 +87,7 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	isOpened: boolean;
 	isCurrent: boolean;
 	private animationInProcess;
+	private isSearchLengthExceeded;
 	private onInputFocusListener;
 	private onInputInputListener;
 	private onToggleClickListener;

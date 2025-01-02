@@ -1,6 +1,6 @@
 /*
  * HSDropdown
- * @version: 2.6.0
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -439,10 +439,13 @@ class HSDropdown
 			this.animationInProcess = false;
 
 			if (this.hasAutofocus) this.focusElement();
+
+			this.fireEvent('open', this.el);
+			dispatch('open.hs.dropdown', this.el, this.el);
 		});
 
-		this.fireEvent('open', this.el);
-		dispatch('open.hs.dropdown', this.el, this.el);
+		// this.fireEvent('open', this.el);
+		// dispatch('open.hs.dropdown', this.el, this.el);
 	}
 
 	public close(isAnimated = true) {
@@ -522,6 +525,14 @@ class HSDropdown
 	}
 
 	// Static methods
+	private static findInCollection(target: HSDropdown | HTMLElement | string): ICollectionItem<HSDropdown> | null {
+		return window.$hsDropdownCollection.find((el) => {
+			if (target instanceof HSDropdown) return el.element.el === target.el;
+			else if (typeof target === 'string') return el.element.el === document.querySelector(target);
+			else return el.element.el === target;
+		}) || null;
+	}
+
 	static getInstance(target: HTMLElement | string, isInstance?: boolean) {
 		const elInCollection = window.$hsDropdownCollection.find(
 			(el) =>
@@ -576,33 +587,22 @@ class HSDropdown
 			});
 	}
 
-	static open(target: HTMLElement) {
-		const elInCollection = window.$hsDropdownCollection.find(
-			(el) =>
-				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
-		);
+	static open(target: HSDropdown | HTMLElement | string) {
+		const instance = HSDropdown.findInCollection(target);
 
 		if (
-			elInCollection &&
-			elInCollection.element.menu.classList.contains('hidden')
-		)
-			elInCollection.element.open();
+			instance &&
+			instance.element.menu.classList.contains('hidden')
+		) instance.element.open();
 	}
 
-	static close(target: HTMLElement) {
-		const elInCollection = window.$hsDropdownCollection.find(
-			(el) =>
-				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
-		);
+	static close(target: HSDropdown | HTMLElement | string) {
+		const instance = HSDropdown.findInCollection(target);
 
 		if (
-			elInCollection &&
-			!elInCollection.element.menu.classList.contains('hidden')
-		) {
-			elInCollection.element.close();
-		}
+			instance &&
+			!instance.element.menu.classList.contains('hidden')
+		) instance.element.close();
 	}
 
 	// Accessibility methods
@@ -930,14 +930,10 @@ class HSDropdown
 	}
 
 	// Backward compatibility
-	static on(evt: string, target: HTMLElement, cb: Function) {
-		const elInCollection = window.$hsDropdownCollection.find(
-			(el) =>
-				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
-		);
+	static on(evt: string, target: HSDropdown | HTMLElement | string, cb: Function) {
+		const instance = HSDropdown.findInCollection(target);
 
-		if (elInCollection) elInCollection.element.events[evt] = cb;
+		if (instance) instance.element.events[evt] = cb;
 	}
 }
 

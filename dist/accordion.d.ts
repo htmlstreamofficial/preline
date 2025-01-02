@@ -51,14 +51,15 @@ declare class HSAccordion extends HSBasePlugin<IAccordionOptions> implements IAc
 	hide(): boolean;
 	update(): boolean;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSAccordion>;
-	static show(target: HTMLElement): void;
-	static hide(target: HTMLElement): void;
+	private static findInCollection;
 	static autoInit(): void;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSAccordion>;
+	static show(target: HSAccordion | HTMLElement | string): void;
+	static hide(target: HSAccordion | HTMLElement | string): void;
 	static onSelectableClick: (evt: Event, item: IAccordionTreeView, el: HTMLElement) => void;
 	static treeView(): boolean;
 	static toggleSelected(root: IAccordionTreeView, item: HTMLElement): void;
-	static on(evt: string, target: HTMLElement, cb: Function): void;
+	static on(evt: string, target: HSAccordion | HTMLElement | string, cb: Function): void;
 }
 
 export {

@@ -1,6 +1,6 @@
 /*
  * HSAccordion
- * @version: 2.6.0
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -112,8 +112,8 @@ class HSAccordion
 		});
 
 		afterTransition(this.content, () => {
-			this.content.style.display = '';
-			this.content.style.height = '0';
+			this.content.style.display = 'none';
+			this.content.style.height = '';
 
 			this.fireEvent('close', this.el);
 			dispatch('close.hs.accordion', this.el, this.el);
@@ -163,46 +163,12 @@ class HSAccordion
 	}
 
 	// Static methods
-	static getInstance(target: HTMLElement | string, isInstance?: boolean) {
-		const elInCollection = window.$hsAccordionCollection.find(
-			(el) =>
-				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
-		);
-
-		return elInCollection
-			? isInstance
-				? elInCollection
-				: elInCollection.element.el
-			: null;
-	}
-
-	static show(target: HTMLElement) {
-		const elInCollection = window.$hsAccordionCollection.find(
-			(el) =>
-				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
-		);
-
-		if (
-			elInCollection &&
-			elInCollection.element.content.style.display !== 'block'
-		)
-			elInCollection.element.show();
-	}
-
-	static hide(target: HTMLElement) {
-		const elInCollection = window.$hsAccordionCollection.find(
-			(el) =>
-				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
-		);
-
-		if (
-			elInCollection &&
-			elInCollection.element.content.style.display === 'block'
-		)
-			elInCollection.element.hide();
+	private static findInCollection(target: HSAccordion | HTMLElement | string): ICollectionItem<HSAccordion> | null {
+		return window.$hsAccordionCollection.find((el) => {
+			if (target instanceof HSAccordion) return el.element.el === target.el;
+			else if (typeof target === 'string') return el.element.el === document.querySelector(target);
+			else return el.element.el === target;
+		}) || null;
 	}
 
 	static autoInit() {
@@ -224,6 +190,39 @@ class HSAccordion
 				)
 					new HSAccordion(el);
 			});
+	}
+
+	static getInstance(target: HTMLElement | string, isInstance?: boolean) {
+		const elInCollection = window.$hsAccordionCollection.find(
+			(el) =>
+				el.element.el ===
+				(typeof target === 'string' ? document.querySelector(target) : target),
+		);
+
+		return elInCollection
+			? isInstance
+				? elInCollection
+				: elInCollection.element.el
+			: null;
+	}
+
+	static show(target: HSAccordion | HTMLElement | string) {
+		const instance = HSAccordion.findInCollection(target);
+
+		if (
+			instance &&
+			instance.element.content.style.display !== 'block'
+		) instance.element.show();
+	}
+
+	static hide(target: HSAccordion | HTMLElement | string) {
+		const instance = HSAccordion.findInCollection(target);
+		const style = instance ? window.getComputedStyle(instance.element.content) : null;
+
+		if (
+			instance &&
+			style.display !== 'none'
+		) instance.element.hide();
 	}
 
 	static onSelectableClick = (
@@ -285,14 +284,10 @@ class HSAccordion
 	}
 
 	// Backward compatibility
-	static on(evt: string, target: HTMLElement, cb: Function) {
-		const elInCollection = window.$hsAccordionCollection.find(
-			(el) =>
-				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
-		);
+	static on(evt: string, target: HSAccordion | HTMLElement | string, cb: Function) {
+		const instance = HSAccordion.findInCollection(target);
 
-		if (elInCollection) elInCollection.element.events[evt] = cb;
+		if (instance) instance.element.events[evt] = cb;
 	}
 }
 

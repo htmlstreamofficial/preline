@@ -2,6 +2,7 @@ export interface IComboBoxOptions {
 	gap?: number;
 	viewport?: string | HTMLElement | null;
 	preventVisibility?: boolean;
+	minSearchLength?: number;
 	apiUrl?: string | null;
 	apiDataPart?: string | null;
 	apiQuery?: string | null;
