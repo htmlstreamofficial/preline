@@ -10,9 +10,9 @@ declare var DataTable: any;
 declare var Dropzone: any;
 declare var noUiSlider: any;
 
-let HSDataTableModule;
-let HSFileUploadModule;
-let HSRangeSliderModule;
+let HSDataTableModule = null;
+let HSFileUploadModule = null;
+let HSRangeSliderModule = null;
 
 export { default as HSCopyMarkup } from './plugins/copy-markup';
 export { default as HSAccordion } from './plugins/accordion';
@@ -38,17 +38,20 @@ export { default as HSTooltip } from './plugins/tooltip';
 export { default as HSTreeView } from './plugins/tree-view';
 export { default as HSStaticMethods } from './static';
 
-if (typeof DataTable !== 'undefined' && typeof jQuery !== 'undefined')
-	HSDataTableModule = require('./plugins/datatable').default;
-else HSDataTableModule = null;
+(async () => {
+	if (typeof DataTable !== 'undefined' && typeof jQuery !== 'undefined') {
+		HSDataTableModule = (await import('./plugins/datatable')).default;
+	}
+
+	if (typeof _ !== 'undefined' && typeof Dropzone !== 'undefined') {
+		HSFileUploadModule = (await import('./plugins/file-upload')).default;
+	}
+
+	if (typeof noUiSlider !== 'undefined') {
+		HSRangeSliderModule = (await import('./plugins/range-slider')).default;
+	}
+})();
+
 export { HSDataTableModule as HSDataTable };
-
-if (typeof _ !== 'undefined' && typeof Dropzone !== 'undefined')
-	HSFileUploadModule = require('./plugins/file-upload').default;
-else HSFileUploadModule = null;
 export { HSFileUploadModule as HSFileUpload };
-
-if (typeof noUiSlider !== 'undefined')
-	HSRangeSliderModule = require('./plugins/range-slider').default;
-else HSRangeSliderModule = null;
 export { HSRangeSliderModule as HSRangeSlider };
