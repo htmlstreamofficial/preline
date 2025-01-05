@@ -1713,10 +1713,6 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 					evt.preventDefault();
 					this.onEnter(evt);
 					break;
-				case 'Space':
-					evt.preventDefault();
-					this.onEnter(evt);
-					break;
 				default:
 					break;
 			}
