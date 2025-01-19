@@ -7,787 +7,312 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-export type TStringFunc = () => string;
-
-export interface IModifySelectors {
-	className: string;
-}
-
-export interface IAddVariantOptions {
-	modifySelectors: (callback: (options: IModifySelectors) => string) => string;
-	separator: string;
-}
-
 import plugin from 'tailwindcss/plugin';
 import type { PluginAPI } from 'tailwindcss/types/config';
 
-export default plugin(function ({ addVariant, e }: PluginAPI) {
+module.exports = plugin(function ({ addVariant }: PluginAPI) {
+	// Dropdown
 	addVariant('hs-dropdown-open', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-dropdown.open > .${e(
-					`hs-dropdown-open${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-dropdown.open .hs-dropdown-toggle .${e(
-					`hs-dropdown-open${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-dropdown.open > .hs-dropdown-menu > .${e(
-					`hs-dropdown-open${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-dropdown-menu.open.${e(
-					`hs-dropdown-open${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.hs-dropdown.open > &',
+		'.hs-dropdown.open > .hs-dropdown-toggle &',
+		'.hs-dropdown.open > .hs-dropdown-menu > &',
+		'.hs-dropdown-menu.open&',
+	]);
 
-	addVariant('hs-dropdown-item-disabled', (({
-		modifySelectors,
-		separator,
-	}: IAddVariantOptions) => {
-		modifySelectors(({ className }) => {
-			return `.hs-dropdown.open > .hs-dropdown-menu .disabled.${e(
-				`hs-dropdown-item-disabled${separator}${className}`,
-			)}`;
-		});
-	}) as TStringFunc);
+	addVariant('hs-dropdown-item-disabled', [
+		'.hs-dropdown.open > .hs-dropdown-menu .disabled &',
+	]);
 
 	addVariant('hs-dropdown-item-checked', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-dropdown.open > .hs-dropdown-menu [aria-checked="true"].${e(
-					`hs-dropdown-item-checked${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-dropdown.open > .hs-dropdown-menu [aria-checked="true"] .${e(
-					`hs-dropdown-item-checked${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.hs-dropdown.open > .hs-dropdown-menu [aria-checked="true"]&',
+		'.hs-dropdown.open > .hs-dropdown-menu [aria-checked="true"] &',
+	]);
 
-	addVariant('hs-removing', (({
-		modifySelectors,
-		separator,
-	}: IAddVariantOptions) => {
-		modifySelectors(({ className }) => {
-			return `.hs-removing.${e(`hs-removing${separator}${className}`)}`;
-		});
-	}) as TStringFunc);
+	// Removing
+	addVariant('hs-removing', [
+		'.hs-removing&',
+	]);
 
-	addVariant('hs-tooltip-shown', (({
-		modifySelectors,
-		separator,
-	}: IAddVariantOptions) => {
-		modifySelectors(({ className }) => {
-			return `.hs-tooltip.show .${e(
-				`hs-tooltip-shown${separator}${className}`,
-			)}`;
-		});
-	}) as TStringFunc);
+	// Tooltip
+	addVariant('hs-tooltip-shown', [
+		'.hs-tooltip.show &',
+		'.hs-tooltip-content.show&',
+	]);
 
+	// Accordion
 	addVariant('hs-accordion-active', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-accordion.active.${e(
-					`hs-accordion-active${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-accordion.active > .${e(
-					`hs-accordion-active${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-accordion.active > .hs-accordion-toggle .${e(
-					`hs-accordion-active${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-accordion.active > .hs-accordion-heading > .hs-accordion-toggle .${e(
-					`hs-accordion-active${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-accordion.active > .hs-accordion-toggle.${e(
-					`hs-accordion-active${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-accordion.active > .hs-accordion-heading > .hs-accordion-toggle.${e(
-					`hs-accordion-active${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-accordion.active .hs-accordion-force-active.${e(
-					`hs-accordion-active${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.hs-accordion.active&',
+		'.hs-accordion.active > &',
+		'.hs-accordion.active > .hs-accordion-toggle &',
+		'.hs-accordion.active > .hs-accordion-heading > .hs-accordion-toggle &',
+		'.hs-accordion.active > .hs-accordion-toggle&',
+		'.hs-accordion.active > .hs-accordion-heading > .hs-accordion-toggle&',
+		'.hs-accordion.active .hs-accordion-force-active&',
+	]);
 
-	addVariant('hs-accordion-selected', (({
-		modifySelectors,
-		separator,
-	}: IAddVariantOptions) => {
-		modifySelectors(({ className }) => {
-			return `.hs-accordion .selected.${e(
-				`hs-accordion-selected${separator}${className}`,
-			)}`;
-		});
-	}) as TStringFunc);
+	addVariant('hs-accordion-selected', [
+		'.hs-accordion .selected &',
+	]);
 
+	// Tree View
+	addVariant('hs-tree-view-selected', [
+		'[data-hs-tree-view-item].selected > &',
+		'[data-hs-tree-view-item].selected&',
+	]);
+
+	addVariant('hs-tree-view-disabled', [
+		'[data-hs-tree-view-item].disabled&',
+		'[data-hs-tree-view-item].disabled > &',
+	]);
+
+	// Collapse
 	addVariant('hs-collapse-open', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-collapse.open .${e(
-					`hs-collapse-open${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-collapse.open.${e(
-					`hs-collapse-open${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-collapse-toggle.open .${e(
-					`hs-collapse-open${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-collapse-toggle.open.${e(
-					`hs-collapse-open${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.hs-collapse.open &',
+		'.hs-collapse.open&',
+		'.hs-collapse-toggle.open &',
+		'.hs-collapse-toggle.open&',
+	]);
 
+	// Tab
 	addVariant('hs-tab-active', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `[data-hs-tab].active.${e(
-					`hs-tab-active${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `[data-hs-tab].active .${e(
-					`hs-tab-active${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'[data-hs-tab].active&',
+		'[data-hs-tab].active &',
+	]);
 
+	// Overlay
 	addVariant('hs-overlay-open', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.open.${e(`hs-overlay-open${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.open .${e(`hs-overlay-open${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.open&',
+		'.open &',
+	]);
 
 	addVariant('hs-overlay-layout-open', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-overlay-body-open.${e(
-					`hs-overlay-layout-open${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-overlay-body-open .${e(
-					`hs-overlay-layout-open${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.hs-overlay-body-open&',
+		'.hs-overlay-body-open &',
+	]);
 
 	addVariant('hs-overlay-backdrop-open', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-overlay-backdrop.${e(
-					`hs-overlay-backdrop-open${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.hs-overlay-backdrop .${e(
-					`hs-overlay-backdrop-open${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.hs-overlay-backdrop&',
+		'.hs-overlay-backdrop &',
+	]);
 
-	addVariant('hs-scrollspy-active', (({
-		modifySelectors,
-		separator,
-	}: IAddVariantOptions) => {
-		modifySelectors(({ className }) => {
-			return `.active.${e(`hs-scrollspy-active${separator}${className}`)}`;
-		});
-	}) as TStringFunc);
+	// Scrollspy
+	addVariant('hs-scrollspy-active', [
+		'.active&',
+	]);
 
+	// Carousel
 	addVariant('hs-carousel-active', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active.${e(`hs-carousel-active${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active .${e(`hs-carousel-active${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.active&',
+		'.active &',
+	]);
 
 	addVariant('hs-carousel-disabled', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.disabled.${e(`hs-carousel-disabled${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.disabled .${e(
-					`hs-carousel-disabled${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.disabled&',
+		'.disabled &',
+	]);
 
 	addVariant('hs-carousel-dragging', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.dragging.${e(`hs-carousel-dragging${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.dragging .${e(
-					`hs-carousel-dragging${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.dragging&',
+		'.dragging &',
+	]);
 
+	// Selected
 	addVariant('hs-selected', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.selected.${e(`hs-selected${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.selected .${e(`hs-selected${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.selected&',
+		'.selected &',
+	]);
 
+	// Select
 	addVariant('hs-select-disabled', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.disabled.${e(`hs-select-disabled${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.disabled .${e(`hs-select-disabled${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.disabled&',
+		'.disabled &',
+	]);
 
 	addVariant('hs-select-active', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active.${e(`hs-select-active${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active .${e(`hs-select-active${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.active&',
+		'.active &',
+	]);
 
+	// Input number
 	addVariant('hs-input-number-disabled', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.disabled.${e(
-					`hs-input-number-disabled${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.disabled .${e(
-					`hs-input-number-disabled${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.disabled&',
+		'.disabled &',
+	]);
 
+	// Pin input
 	addVariant('hs-pin-input-active', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active.${e(`hs-pin-input-active${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active .${e(`hs-pin-input-active${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.active&',
+		'.active &',
+	]);
 
+	// Select opened
 	addVariant('hs-select-opened', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.opened.${e(`hs-select-opened${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.opened&',
+	]);
 
+	// Password
 	addVariant('hs-password-active', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active.${e(`hs-password-active${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active .${e(`hs-password-active${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.active&',
+		'.active &',
+	]);
 
+	// Stepper
 	addVariant('hs-stepper-active', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active.${e(`hs-stepper-active${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active .${e(`hs-stepper-active${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.active&',
+		'.active &',
+	]);
 
 	addVariant('hs-stepper-success', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.success.${e(`hs-stepper-success${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.success .${e(`hs-stepper-success${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.success&',
+		'.success &',
+	]);
 
 	addVariant('hs-stepper-completed', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.completed.${e(
-					`hs-stepper-completed${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.completed .${e(
-					`hs-stepper-completed${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.completed&',
+		'.completed &',
+	]);
 
 	addVariant('hs-stepper-error', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.error.${e(`hs-stepper-error${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.error .${e(`hs-stepper-error${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.error&',
+		'.error &',
+	]);
 
 	addVariant('hs-stepper-processed', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.processed.${e(
-					`hs-stepper-processed${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.processed .${e(
-					`hs-stepper-processed${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.processed&',
+		'.processed &',
+	]);
 
 	addVariant('hs-stepper-disabled', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.disabled.${e(`hs-stepper-disabled${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.disabled .${e(`hs-stepper-disabled${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.disabled&',
+		'.disabled &',
+	]);
 
 	addVariant('hs-stepper-skipped', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.skipped.${e(`hs-stepper-skipped${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.skipped .${e(`hs-stepper-skipped${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.skipped&',
+		'.skipped &',
+	]);
 
+	// Strong password
 	addVariant('hs-strong-password', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.passed.${e(`hs-strong-password${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.passed .${e(`hs-strong-password${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.passed&',
+		'.passed &',
+	]);
 
 	addVariant('hs-strong-password-accepted', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.accepted.${e(
-					`hs-strong-password-accepted${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.accepted .${e(
-					`hs-strong-password-accepted${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.accepted&',
+		'.accepted &',
+	]);
 
 	addVariant('hs-strong-password-active', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active.${e(
-					`hs-strong-password-active${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.active&',
+	]);
 
+	// Combo box
 	addVariant('hs-combo-box-active', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active .${e(`hs-combo-box-active${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active.${e(`hs-combo-box-active${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.active &',
+		'.active&',
+	]);
 
 	addVariant('hs-combo-box-has-value', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.has-value .${e(`hs-combo-box-has-value${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.has-value.${e(`hs-combo-box-has-value${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.has-value &',
+		'.has-value&',
+	]);
 
 	addVariant('hs-combo-box-selected', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.selected .${e(
-					`hs-combo-box-selected${separator}${className}`,
-				)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.selected.${e(
-					`hs-combo-box-selected${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.selected &',
+		'.selected&',
+	]);
 
 	addVariant('hs-combo-box-tab-active', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.active.${e(
-					`hs-combo-box-tab-active${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.active&',
+	]);
 
+	// Apexcharts tooltip in dark mode
 	addVariant('hs-apexcharts-tooltip-dark', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.dark.${e(
-					`hs-apexcharts-tooltip-dark${separator}${className}`,
-				)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.dark&',
+	]);
 
+	// Success / error
 	addVariant('hs-success', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.success .${e(`hs-success${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.success.${e(`hs-success${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.success &',
+		'.success&',
+	]);
 
 	addVariant('hs-error', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.error .${e(`hs-error${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.error.${e(`hs-error${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.error &',
+		'.error&',
+	]);
 
+	// Layout splitter
 	addVariant('hs-layout-splitter-dragging', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.dragging .${e(`hs-layout-splitter-dragging${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.dragging.${e(`hs-layout-splitter-dragging${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.dragging &',
+		'.dragging&',
+	]);
 
 	addVariant('hs-layout-splitter-prev-limit-reached', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.prev-limit-reached .${e(`hs-layout-splitter-prev-limit-reached${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.prev-limit-reached.${e(`hs-layout-splitter-prev-limit-reached${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.prev-limit-reached &',
+		'.prev-limit-reached&',
+	]);
 
 	addVariant('hs-layout-splitter-next-limit-reached', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.next-limit-reached .${e(`hs-layout-splitter-next-limit-reached${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.next-limit-reached.${e(`hs-layout-splitter-next-limit-reached${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.next-limit-reached &',
+		'.next-limit-reached&',
+	]);
 
 	addVariant('hs-layout-splitter-prev-pre-limit-reached', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.prev-pre-limit-reached .${e(`hs-layout-splitter-prev-pre-limit-reached${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.prev-pre-limit-reached.${e(`hs-layout-splitter-prev-pre-limit-reached${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.prev-pre-limit-reached &',
+		'.prev-pre-limit-reached&',
+	]);
 
 	addVariant('hs-layout-splitter-next-pre-limit-reached', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.next-pre-limit-reached .${e(`hs-layout-splitter-next-pre-limit-reached${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.next-pre-limit-reached.${e(`hs-layout-splitter-next-pre-limit-reached${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.next-pre-limit-reached &',
+		'.next-pre-limit-reached&',
+	]);
 
-	// Datatables.net
+	// Datatables
 	addVariant('hs-datatable-ordering-asc', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.dt-ordering-asc .${e(`hs-datatable-ordering-asc${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.dt-ordering-asc.${e(`hs-datatable-ordering-asc${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.dt-ordering-asc &',
+		'.dt-ordering-asc&',
+	]);
 
 	addVariant('hs-datatable-ordering-desc', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.dt-ordering-desc .${e(`hs-datatable-ordering-desc${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.dt-ordering-desc.${e(`hs-datatable-ordering-desc${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.dt-ordering-desc &',
+		'.dt-ordering-desc&',
+	]);
+
+	// Sortable
+	addVariant('hs-dragged', [
+		'.dragged&',
+	]);
 
 	// noUiSlider
 	addVariant('hs-range-slider-disabled', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.disabled .${e(`hs-range-slider-disabled${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.disabled.${e(`hs-range-slider-disabled${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.disabled &',
+		'.disabled&',
+	]);
 
 	// Dropzone
 	addVariant('hs-file-upload-complete', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.complete .${e(`hs-file-upload-complete${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.complete.${e(`hs-file-upload-complete${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.complete &',
+		'.complete&',
+	]);
 
 	// Toastify
 	addVariant('hs-toastify-on', [
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.toastify.on .${e(`hs-toastify-on${separator}${className}`)}`;
-			});
-		},
-		({ modifySelectors, separator }: IAddVariantOptions) => {
-			modifySelectors(({ className }) => {
-				return `.toastify.on.${e(`hs-toastify-on${separator}${className}`)}`;
-			});
-		},
-	] as TStringFunc[]);
+		'.toastify.on &',
+		'.toastify.on&',
+	]);
 
 	// Modes
-	addVariant('hs-default-mode-active', (({
-		modifySelectors,
-		separator,
-	}: IAddVariantOptions) => {
-		modifySelectors(({ className }) => {
-			return `.default .${e(`hs-default-mode-active${separator}${className}`)}`;
-		});
-	}) as TStringFunc);
+	addVariant('hs-default-mode-active', [
+		'.default &',
+	]);
 
-	addVariant('hs-dark-mode-active', (({
-		modifySelectors,
-		separator,
-	}: IAddVariantOptions) => {
-		modifySelectors(({ className }) => {
-			return `.dark .${e(`hs-dark-mode-active${separator}${className}`)}`;
-		});
-	}) as TStringFunc);
+	addVariant('hs-dark-mode-active', [
+		'.dark &',
+	]);
 
-	addVariant('hs-auto-mode-active', (({
-		modifySelectors,
-		separator,
-	}: IAddVariantOptions) => {
-		modifySelectors(({ className }) => {
-			return `.auto .${e(`hs-auto-mode-active${separator}${className}`)}`;
-		});
-	}) as TStringFunc);
+	addVariant('hs-auto-mode-active', [
+		'.auto &',
+	]);
 });
