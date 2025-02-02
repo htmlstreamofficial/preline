@@ -4,4 +4,6 @@ export interface IPinInputOptions {
 
 export interface IPinInput {
 	options?: IPinInputOptions;
+
+	destroy(): void;
 }

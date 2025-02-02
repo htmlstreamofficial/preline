@@ -18,6 +18,7 @@ export interface ICollectionItem<T> {
 }
 export interface ITabs {
 	options?: {};
+	destroy(): void;
 }
 declare class HSTabs extends HSBasePlugin<{}> implements ITabs {
 	toggles: NodeListOf<HTMLElement> | null;
@@ -29,10 +30,16 @@ declare class HSTabs extends HSBasePlugin<{}> implements ITabs {
 	private prev;
 	private prevContentId;
 	private prevContent;
+	private onToggleClickListener;
+	private onExtraToggleChangeListener;
+	private eventType;
 	constructor(el: HTMLElement, options?: {}, events?: {});
+	private toggleClick;
+	private extraToggleChange;
 	private init;
 	private open;
 	private change;
+	destroy(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSTabs | ICollectionItem<HSTabs>;
 	static autoInit(): void;
 	static open(target: HTMLElement): void;

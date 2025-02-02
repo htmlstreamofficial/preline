@@ -1,6 +1,6 @@
 /*
  * HSRangeSlider
- * @version: 2.5.1
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -152,6 +152,17 @@ class HSRangeSlider
 		this.el.classList.add('disabled');
 	}
 
+	// Public methods
+	public destroy() {
+		(this.el as target).noUiSlider.destroy();
+
+		this.format = null;
+
+		window.$hsRangeSliderCollection = window.$hsRangeSliderCollection.filter(
+			({ element }) => element.el !== this.el,
+		);
+	}
+
 	// Static methods
 	static getInstance(target: HTMLElement | string, isInstance = false) {
 		const elInCollection = window.$hsRangeSliderCollection.find(
@@ -170,6 +181,11 @@ class HSRangeSlider
 	static autoInit() {
 		if (!window.$hsRangeSliderCollection) window.$hsRangeSliderCollection = [];
 
+		if (window.$hsRangeSliderCollection)
+			window.$hsRangeSliderCollection = window.$hsRangeSliderCollection.filter(
+				({ element }) => document.contains(element.el),
+			);
+
 		document
 			.querySelectorAll('[data-hs-range-slider]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
@@ -180,17 +196,6 @@ class HSRangeSlider
 				)
 					new HSRangeSlider(el);
 			});
-	}
-
-	// Backward compatibility
-	static on(evt: string, target: HTMLElement, cb: Function) {
-		const elInCollection = window.$hsRangeSliderCollection.find(
-			(el) =>
-				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
-		);
-
-		if (elInCollection) elInCollection.element.events[evt] = cb;
 	}
 }
 

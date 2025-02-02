@@ -2,10 +2,13 @@ export interface IComboBoxOptions {
 	gap?: number;
 	viewport?: string | HTMLElement | null;
 	preventVisibility?: boolean;
+	minSearchLength?: number;
 	apiUrl?: string | null;
 	apiDataPart?: string | null;
 	apiQuery?: string | null;
 	apiSearchQuery?: string | null;
+	apiSearchPath?: string | null;
+	apiSearchDefaultPath?: string | null;
 	apiHeaders?: {};
 	apiGroupField?: string | null;
 	outputItemTemplate?: string | null;
@@ -22,9 +25,11 @@ export interface IComboBoxOptions {
 export interface IComboBox {
 	options?: IComboBoxOptions;
 
+	getCurrentData(): {} | {}[];
 	open(): void;
 	close(): void;
 	recalculateDirection(): void;
+	destroy(): void;
 }
 
 export interface IComboBoxItemAttr {

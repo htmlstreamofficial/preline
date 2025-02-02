@@ -1,5 +1,5 @@
 /*
- * @version: 2.5.1
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -21,6 +21,7 @@ export { default as HSCollapse } from './plugins/collapse';
 export { default as HSComboBox } from './plugins/combobox';
 export { default as HSDropdown } from './plugins/dropdown';
 export { default as HSInputNumber } from './plugins/input-number';
+export { default as HSLayoutSplitter } from './plugins/layout-splitter';
 export { default as HSOverlay } from './plugins/overlay';
 export { default as HSPinInput } from './plugins/pin-input';
 export { default as HSRemoveElement } from './plugins/remove-element';

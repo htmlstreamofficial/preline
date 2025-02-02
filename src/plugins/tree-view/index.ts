@@ -1,6 +1,6 @@
 /*
  * HSTreeView
- * @version: 2.5.1
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -25,6 +25,19 @@ class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 	private readonly isIndeterminate: boolean;
 	static group: number = 0;
 
+	private onElementClickListener:
+		| {
+			el: Element;
+			fn: (evt: PointerEvent) => void;
+		}[]
+		| null;
+	private onControlChangeListener:
+		| {
+			el: Element;
+			fn: () => void;
+		}[]
+		| null;
+
 	constructor(el: HTMLElement, options?: ITreeViewOptions, events?: {}) {
 		super(el, options, events);
 
@@ -39,7 +52,36 @@ class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 		this.autoSelectChildren = concatOptions?.autoSelectChildren || false;
 		this.isIndeterminate = concatOptions?.isIndeterminate || true;
 
+		this.onElementClickListener = [];
+		this.onControlChangeListener = [];
+
 		this.init();
+	}
+
+	private elementClick(evt: PointerEvent, el: Element, data: ITreeViewItem) {
+		evt.stopPropagation();
+
+		if (el.classList.contains('disabled')) return false;
+
+		if (!evt.metaKey && !evt.shiftKey) this.unselectItem(data);
+		this.selectItem(el, data);
+
+		this.fireEvent('click', {
+			el,
+			data: data,
+		});
+		dispatch('click.hs.treeView', this.el, {
+			el,
+			data: data,
+		});
+	}
+
+	private controlChange(el: Element, data: ITreeViewItem) {
+		if (this.autoSelectChildren) {
+			this.selectItem(el, data);
+			if (data.isDir) this.selectChildren(el, data);
+			this.toggleParent(el);
+		} else this.selectItem(el, data);
 	}
 
 	private init() {
@@ -69,36 +111,31 @@ class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 	}
 
 	private controlByButton(el: Element, data: ITreeViewItem) {
-		el.addEventListener('click', (evt: PointerEvent) => {
-			evt.stopPropagation();
-
-			if (el.classList.contains('disabled')) return false;
-
-			if (!evt.metaKey && !evt.shiftKey) this.unselectItem(data);
-			this.selectItem(el, data);
-
-			this.fireEvent('click', {
-				el,
-				data: data,
-			});
-			dispatch('click.hs.treeView', this.el, {
-				el,
-				data: data,
-			});
+		this.onElementClickListener.push({
+			el,
+			fn: (evt: PointerEvent) => this.elementClick(evt, el, data),
 		});
+
+		el.addEventListener(
+			'click',
+			this.onElementClickListener.find((elI) => elI.el === el).fn,
+		);
 	}
 
 	private controlByCheckbox(el: Element, data: ITreeViewItem) {
 		const control = el.querySelector(`input[value="${data.value}"]`);
 
-		if (!!control)
-			control.addEventListener('change', () => {
-				if (this.autoSelectChildren) {
-					this.selectItem(el, data);
-					if (data.isDir) this.selectChildren(el, data);
-					this.toggleParent(el);
-				} else this.selectItem(el, data);
+		if (!!control) {
+			this.onControlChangeListener.push({
+				el: control,
+				fn: () => this.controlChange(el, data),
 			});
+
+			control.addEventListener(
+				'change',
+				this.onControlChangeListener.find((elI) => elI.el === control).fn,
+			);
+		}
 	}
 
 	private getItem(id: string) {
@@ -240,7 +277,36 @@ class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 		});
 	}
 
+	public destroy() {
+		// Remove listeners
+		this.onElementClickListener.forEach(({ el, fn }) => {
+			el.removeEventListener('click', fn);
+		});
+		if (this.onControlChangeListener.length)
+			this.onElementClickListener.forEach(({ el, fn }) => {
+				el.removeEventListener('change', fn);
+			});
+
+		this.unselectItem();
+
+		this.items = [];
+
+		window.$hsTreeViewCollection = window.$hsTreeViewCollection.filter(
+			({ element }) => element.el !== this.el,
+		);
+
+		HSTreeView.group -= 1;
+	}
+
 	// Static methods
+	private static findInCollection(target: HSTreeView | HTMLElement | string): ICollectionItem<HSTreeView> | null {
+		return window.$hsTreeViewCollection.find((el) => {
+			if (target instanceof HSTreeView) return el.element.el === target.el;
+			else if (typeof target === 'string') return el.element.el === document.querySelector(target);
+			else return el.element.el === target;
+		}) || null;
+	}
+
 	static getInstance(target: HTMLElement | string, isInstance?: boolean) {
 		const elInCollection = window.$hsTreeViewCollection.find(
 			(el) =>
@@ -258,6 +324,11 @@ class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 	static autoInit() {
 		if (!window.$hsTreeViewCollection) window.$hsTreeViewCollection = [];
 
+		if (window.$hsTreeViewCollection)
+			window.$hsTreeViewCollection = window.$hsTreeViewCollection.filter(
+				({ element }) => document.contains(element.el),
+			);
+
 		document
 			.querySelectorAll('[data-hs-tree-view]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
@@ -271,14 +342,12 @@ class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 	}
 
 	// Backward compatibility
-	static on(evt: string, target: HTMLElement, cb: Function) {
-		const elInCollection = window.$hsTreeViewCollection.find(
-			(el) =>
-				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
-		);
+	static on(evt: string, target: HSTreeView | HTMLElement | string, cb: Function) {
+		const instance = HSTreeView.findInCollection(target);
 
-		if (elInCollection) elInCollection.element.events[evt] = cb;
+		console.log(1);
+
+		if (instance) instance.element.events[evt] = cb;
 	}
 }
 

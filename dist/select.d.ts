@@ -29,6 +29,7 @@ export interface ISingleOption {
 }
 export interface IApiFieldMap {
 	id: string;
+	val: string;
 	title: string;
 	icon?: string | null;
 	description?: string | null;
@@ -39,6 +40,7 @@ export interface ISelectOptions {
 	isOpened?: boolean;
 	placeholder?: string;
 	hasSearch?: boolean;
+	minSearchLength?: number;
 	preventSearchFocus?: boolean;
 	mode?: string;
 	viewport?: string;
@@ -56,7 +58,8 @@ export interface ISelectOptions {
 		items?: string;
 		betweenItemsAndCounter?: string;
 	};
-	toggleCountText?: string;
+	toggleCountText?: string | null;
+	toggleCountTextPlacement?: "postfix" | "prefix" | "postfix-no-space" | "prefix-no-space";
 	toggleCountTextMinItems?: number;
 	toggleCountTextMode?: string;
 	tagsItemTemplate?: string;
@@ -71,6 +74,7 @@ export interface ISelectOptions {
 	};
 	dropdownSpace: number;
 	dropdownPlacement: string | null;
+	dropdownVerticalFixedPlacement: "top" | "bottom" | null;
 	dropdownScope: "window" | "parent";
 	extraMarkup?: string | string[] | null;
 	searchTemplate?: string;
@@ -84,6 +88,7 @@ export interface ISelectOptions {
 	searchNoResultTemplate?: string | null;
 	searchNoResultText?: string | null;
 	searchNoResultClasses?: string | null;
+	optionAllowEmptyOption?: boolean;
 	optionTemplate?: string;
 	optionTag?: string;
 	optionClasses?: string;
@@ -93,17 +98,19 @@ export interface ISelectOptions {
 }
 export interface ISelect {
 	options?: ISelectOptions;
-	destroy(): void;
+	setValue(val: string | string[]): void;
 	open(): void;
 	close(): void;
 	addOption(items: ISingleOption | ISingleOption[]): void;
 	removeOption(values: string | string[]): void;
 	recalculateDirection(): void;
+	destroy(): void;
 }
 declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	value: string | string[] | null;
 	private readonly placeholder;
 	private readonly hasSearch;
+	private readonly minSearchLength;
 	private readonly preventSearchFocus;
 	private readonly mode;
 	private readonly viewport;
@@ -122,6 +129,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly toggleClasses;
 	private readonly toggleSeparators;
 	private readonly toggleCountText;
+	private readonly toggleCountTextPlacement;
 	private readonly toggleCountTextMinItems;
 	private readonly toggleCountTextMode;
 	private readonly wrapperClasses;
@@ -134,6 +142,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly dropdownDirectionClasses;
 	dropdownSpace: number | null;
 	readonly dropdownPlacement: string | null;
+	readonly dropdownVerticalFixedPlacement: "top" | "bottom" | null;
 	readonly dropdownScope: "window" | "parent";
 	private readonly searchTemplate;
 	private readonly searchWrapperTemplate;
@@ -146,6 +155,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly searchNoResultTemplate;
 	private readonly searchNoResultText;
 	private readonly searchNoResultClasses;
+	private readonly optionAllowEmptyOption;
 	private readonly optionTag;
 	private readonly optionTemplate;
 	private readonly optionClasses;
@@ -167,7 +177,21 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private tagsInputHelper;
 	private remoteOptions;
 	private optionId;
+	private onWrapperClickListener;
+	private onToggleClickListener;
+	private onTagsInputFocusListener;
+	private onTagsInputInputListener;
+	private onTagsInputInputSecondListener;
+	private onTagsInputKeydownListener;
+	private onSearchInputListener;
 	constructor(el: HTMLElement, options?: ISelectOptions);
+	private wrapperClick;
+	private toggleClick;
+	private tagsInputFocus;
+	private tagsInputInput;
+	private tagsInputInputSecond;
+	private tagsInputKeydown;
+	private searchInput;
 	setValue(val: string | string[]): void;
 	private init;
 	private build;
@@ -218,14 +242,15 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private toggleFn;
 	destroy(): void;
 	open(): boolean;
-	close(): boolean;
+	close(forceFocus?: boolean): boolean;
 	addOption(items: ISingleOption | ISingleOption[]): void;
 	removeOption(values: string | string[]): void;
-	recalculateDirection(): void;
+	recalculateDirection(): boolean;
+	private static findInCollection;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSSelect | ICollectionItem<HSSelect>;
 	static autoInit(): void;
-	static open(target: HTMLElement | string): void;
-	static close(target: HTMLElement | string): void;
+	static open(target: HSSelect | HTMLElement | string): void;
+	static close(target: HSSelect | HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;
 	static accessibility(evt: KeyboardEvent): void;
 	static onEscape(): void;

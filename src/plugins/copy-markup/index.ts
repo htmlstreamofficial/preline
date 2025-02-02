@@ -1,6 +1,6 @@
 /*
  * HSCopyMarkup
- * @version: 2.5.1
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -8,10 +8,7 @@
 
 import { dispatch } from '../../utils';
 
-import {
-	ICopyMarkupOptions,
-	ICopyMarkup,
-} from '../copy-markup/interfaces';
+import { ICopyMarkupOptions, ICopyMarkup } from '../copy-markup/interfaces';
 
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
@@ -27,6 +24,9 @@ class HSCopyMarkup
 	private target: HTMLElement | null;
 	private wrapper: HTMLElement | null;
 	private items: HTMLElement[] | null;
+
+	private onElementClickListener: () => void;
+	private onDeleteItemButtonClickListener: () => void;
 
 	constructor(el: HTMLElement, options?: ICopyMarkupOptions) {
 		super(el, options);
@@ -46,13 +46,24 @@ class HSCopyMarkup
 		if (this.targetSelector) this.init();
 	}
 
+	private elementClick() {
+		this.copy();
+	}
+
+	private deleteItemButtonClick(item: HTMLElement) {
+		this.delete(item);
+	}
+
 	private init() {
 		this.createCollection(window.$hsCopyMarkupCollection, this);
+
+		this.onElementClickListener = () => this.elementClick();
 
 		this.setTarget();
 		this.setWrapper();
 		this.addPredefinedItems();
-		this.el.addEventListener('click', () => this.copy());
+
+		this.el.addEventListener('click', this.onElementClickListener);
 	}
 
 	private copy() {
@@ -79,6 +90,9 @@ class HSCopyMarkup
 			.forEach((el: HTMLElement) => {
 				this.addToItems(el);
 			});
+
+		if (this.limit && this.items.length >= this.limit)
+			this.el.setAttribute('disabled', 'disabled');
 	}
 
 	private setTarget() {
@@ -109,8 +123,15 @@ class HSCopyMarkup
 		if (this.wrapper) this.wrapper.append(item);
 		else this.el.before(item);
 
-		if (deleteItemButton)
-			deleteItemButton.addEventListener('click', () => this.delete(item));
+		if (deleteItemButton) {
+			this.onDeleteItemButtonClickListener = () =>
+				this.deleteItemButtonClick(item);
+
+			deleteItemButton.addEventListener(
+				'click',
+				this.onDeleteItemButtonClickListener,
+			);
+		}
 
 		this.items.push(item);
 	}
@@ -125,6 +146,29 @@ class HSCopyMarkup
 
 		this.fireEvent('delete', target);
 		dispatch('delete.hs.copyMarkup', target, target);
+	}
+
+	public destroy() {
+		const deleteItemButtons = this.wrapper.querySelectorAll(
+			'[data-hs-copy-markup-delete-item]',
+		);
+
+		this.el.removeEventListener('click', this.onElementClickListener);
+		if (deleteItemButtons.length) {
+			deleteItemButtons.forEach((el) =>
+				el.removeEventListener('click', this.onDeleteItemButtonClickListener),
+			);
+		}
+
+		this.el.removeAttribute('disabled');
+
+		this.target = null;
+		this.wrapper = null;
+		this.items = null;
+
+		window.$hsCopyMarkupCollection = window.$hsCopyMarkupCollection.filter(
+			({ element }) => element.el !== this.el,
+		);
 	}
 
 	// Static method
@@ -144,6 +188,11 @@ class HSCopyMarkup
 
 	static autoInit() {
 		if (!window.$hsCopyMarkupCollection) window.$hsCopyMarkupCollection = [];
+
+		if (window.$hsCopyMarkupCollection)
+			window.$hsCopyMarkupCollection = window.$hsCopyMarkupCollection.filter(
+				({ element }) => document.contains(element.el),
+			);
 
 		document
 			.querySelectorAll('[data-hs-copy-markup]:not(.--prevent-on-load-init)')

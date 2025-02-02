@@ -8,4 +8,6 @@ export interface IFileUploadOptions extends DropzoneOptions {
 
 export interface IFileUpload {
 	options?: IFileUploadOptions;
+
+	destroy(): void;
 }

@@ -21,6 +21,7 @@ export interface IOverlayOptions {
 	emulateScrollbarSpace?: boolean;
 	isClosePrev?: boolean;
 	backdropClasses?: string | null;
+	backdropParent?: string | HTMLElement | Document;
 	backdropExtraClasses?: string | null;
 	moveOverlayToBody?: number | null;
 }
@@ -28,18 +29,20 @@ export interface IOverlay {
 	options?: IOverlayOptions;
 	open(): void;
 	close(): void;
+	destroy(): void;
 }
+export type TOverlayOptionsAutoCloseEqualityType = "less-than" | "more-than";
 declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly hiddenClass;
 	private readonly emulateScrollbarSpace;
 	private readonly isClosePrev;
 	private readonly backdropClasses;
+	private readonly backdropParent;
 	private readonly backdropExtraClasses;
 	private readonly animationTarget;
 	private openNextOverlay;
 	private autoHide;
-	private readonly overlayId;
-	overlay: HTMLElement | null;
+	private toggleButtons;
 	initContainer: HTMLElement | null;
 	isCloseWhenClickInside: boolean;
 	isTabAccessibilityLimited: boolean;
@@ -48,26 +51,38 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	hasAbilityToCloseOnBackdropClick: boolean;
 	openedBreakpoint: number | null;
 	autoClose: number | null;
+	autoCloseEqualityType: TOverlayOptionsAutoCloseEqualityType | null;
 	moveOverlayToBody: number | null;
+	private backdrop;
+	private onElementClickListener;
+	private onOverlayClickListener;
+	private onBackdropClickListener;
 	constructor(el: HTMLElement, options?: IOverlayOptions, events?: {});
+	private elementClick;
+	private overlayClick;
+	private backdropClick;
 	private init;
+	private buildToggleButtons;
 	private hideAuto;
 	private checkTimer;
 	private buildBackdrop;
 	private destroyBackdrop;
 	private focusElement;
 	private getScrollbarSize;
-	open(): false | Promise<void>;
+	private collectToggleParameters;
+	open(): Promise<void>;
 	close(forceClose?: boolean): Promise<unknown>;
-	static getInstance(target: HTMLElement, isInstance?: boolean): HTMLElement | ICollectionItem<HSOverlay>;
+	destroy(): void;
+	private static findInCollection;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSOverlay>;
 	static autoInit(): void;
-	static open(target: HTMLElement): void;
-	static close(target: HTMLElement): void;
+	static open(target: HSOverlay | HTMLElement | string): void;
+	static close(target: HSOverlay | HTMLElement | string): void;
 	static setOpened(breakpoint: number, el: ICollectionItem<HSOverlay>): void;
 	static accessibility(evt: KeyboardEvent): boolean;
 	static onEscape(target: ICollectionItem<HSOverlay>): void;
-	static onTab(target: ICollectionItem<HSOverlay>, focusableElements: HTMLElement[]): boolean;
-	static on(evt: string, target: HTMLElement, cb: Function): void;
+	static onTab(target: ICollectionItem<HSOverlay>): boolean;
+	static on(evt: string, target: HSOverlay | HTMLElement | string, cb: Function): void;
 }
 
 export {

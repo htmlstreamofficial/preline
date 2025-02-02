@@ -1,6 +1,6 @@
 /*
  * HSScrollspy
- * @version: 2.5.1
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -22,6 +22,14 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 	private readonly scrollableId: string | null;
 	private readonly scrollable: HTMLElement | Document;
 
+	private onScrollableScrollListener: (evt: Event) => void;
+	private onLinkClickListener:
+		| {
+				el: HTMLAnchorElement;
+				fn: (evt: Event) => void;
+		  }[]
+		| null;
+
 	constructor(el: HTMLElement, options = {}) {
 		super(el, options);
 
@@ -37,7 +45,25 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 			? (document.querySelector(this.scrollableId) as HTMLElement)
 			: (document as Document);
 
+		this.onLinkClickListener = [];
+
 		this.init();
+	}
+
+	private scrollableScroll(evt: Event) {
+		Array.from(this.sections).forEach((section: HTMLElement) => {
+			if (!section.getAttribute('id')) return false;
+
+			this.update(evt, section);
+		});
+	}
+
+	private linkClick(evt: Event, el: HTMLAnchorElement) {
+		evt.preventDefault();
+
+		if (el.getAttribute('href') === 'javascript:;') return false;
+
+		this.scrollTo(el);
 	}
 
 	private init() {
@@ -49,22 +75,20 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 			);
 		});
 
-		Array.from(this.sections).forEach((section: HTMLElement) => {
-			if (!section.getAttribute('id')) return false;
+		this.onScrollableScrollListener = (evt) => this.scrollableScroll(evt);
 
-			this.scrollable.addEventListener('scroll', (evt) =>
-				this.update(evt, section),
-			);
-		});
+		this.scrollable.addEventListener('scroll', this.onScrollableScrollListener);
 
 		this.links.forEach((el) => {
-			el.addEventListener('click', (evt) => {
-				evt.preventDefault();
-
-				if (el.getAttribute('href') === 'javascript:;') return false;
-
-				this.scrollTo(el);
+			this.onLinkClickListener.push({
+				el,
+				fn: (evt: Event) => this.linkClick(evt, el),
 			});
+
+			el.addEventListener(
+				'click',
+				this.onLinkClickListener.find((link) => link.el === el).fn,
+			);
 		});
 	}
 
@@ -146,6 +170,27 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 		else scrollFn();
 	}
 
+	// Public methods
+	public destroy() {
+		// Remove classes
+		const activeLink = this.el.querySelector('[href].active');
+		activeLink.classList.remove('active');
+
+		// Remove listeners
+		this.scrollable.removeEventListener(
+			'scroll',
+			this.onScrollableScrollListener,
+		);
+		if (this.onLinkClickListener.length)
+			this.onLinkClickListener.forEach(({ el, fn }) => {
+				el.removeEventListener('click', fn);
+			});
+
+		window.$hsScrollspyCollection = window.$hsScrollspyCollection.filter(
+			({ element }) => element.el !== this.el,
+		);
+	}
+
 	// Static methods
 	static getInstance(target: HTMLElement, isInstance = false) {
 		const elInCollection = window.$hsScrollspyCollection.find(
@@ -163,6 +208,11 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 
 	static autoInit() {
 		if (!window.$hsScrollspyCollection) window.$hsScrollspyCollection = [];
+
+		if (window.$hsScrollspyCollection)
+			window.$hsScrollspyCollection = window.$hsScrollspyCollection.filter(
+				({ element }) => document.contains(element.el),
+			);
 
 		document
 			.querySelectorAll('[data-hs-scrollspy]:not(.--prevent-on-load-init)')

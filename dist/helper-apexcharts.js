@@ -1,6 +1,6 @@
 !function(t,e){if("object"==typeof exports&&"object"==typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var a=e();for(var s in a)("object"==typeof exports?exports:t)[s]=a[s]}}(self,(()=>(()=>{"use strict";var t={};return(()=>{var e=t;
 /*
- * @version: 2.5.1
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

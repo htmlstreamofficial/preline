@@ -23,17 +23,21 @@ export interface ITogglePassword {
 	options?: ITogglePasswordOptions;
 	show(): void;
 	hide(): void;
+	destroy(): void;
 }
 declare class HSTogglePassword extends HSBasePlugin<ITogglePasswordOptions> implements ITogglePassword {
 	private readonly target;
 	private isShown;
 	private isMultiple;
 	private eventType;
+	private onElementActionListener;
 	constructor(el: HTMLElement, options?: ITogglePasswordOptions);
+	private elementAction;
 	private init;
 	private getMultipleToggles;
 	show(): void;
 	hide(): void;
+	destroy(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSTogglePassword | ICollectionItem<HSTogglePassword>;
 	static autoInit(): void;
 }

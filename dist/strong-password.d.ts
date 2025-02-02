@@ -12,6 +12,10 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
 }
+export interface ICollectionItem<T> {
+	id: string | number;
+	element: T;
+}
 export interface IStrongPasswordOptions {
 	target: string | HTMLInputElement;
 	hints?: string;
@@ -25,6 +29,7 @@ export interface IStrongPasswordOptions {
 export interface IStrongPassword {
 	options?: IStrongPasswordOptions;
 	recalculateDirection(): void;
+	destroy(): void;
 }
 declare class HSStrongPassword extends HSBasePlugin<IStrongPasswordOptions> implements IStrongPassword {
 	private readonly target;
@@ -41,7 +46,17 @@ declare class HSStrongPassword extends HSBasePlugin<IStrongPasswordOptions> impl
 	private weakness;
 	private rules;
 	private availableChecks;
+	private onTargetInputListener;
+	private onTargetFocusListener;
+	private onTargetBlurListener;
+	private onTargetInputSecondListener;
+	private onTargetInputThirdListener;
 	constructor(el: HTMLElement, options?: IStrongPasswordOptions);
+	private targetInput;
+	private targetFocus;
+	private targetBlur;
+	private targetInputSecond;
+	private targetInputThird;
 	private init;
 	private build;
 	private buildStrips;
@@ -56,7 +71,8 @@ declare class HSStrongPassword extends HSBasePlugin<IStrongPasswordOptions> impl
 	private setStrength;
 	private hideStrips;
 	recalculateDirection(): void;
-	static getInstance(target: HTMLElement | string): HSStrongPassword;
+	destroy(): void;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSStrongPassword>;
 	static autoInit(): void;
 }
 

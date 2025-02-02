@@ -4,4 +4,6 @@ export interface IRemoveElementOptions {
 
 export interface IRemoveElement {
 	options?: IRemoveElementOptions;
+
+	destroy(): void;
 }

@@ -1,5 +1,5 @@
 /*
- * @version: 2.5.1
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -15,6 +15,7 @@ import HSComboBox from '../plugins/combobox';
 import HSDataTable from '../plugins/datatable';
 import HSDropdown from '../plugins/dropdown';
 import HSFileUpload from '../plugins/file-upload';
+import HSLayoutSplitter from '../plugins/layout-splitter';
 import HSInputNumber from '../plugins/input-number';
 import HSOverlay from '../plugins/overlay';
 import HSPinInput from '../plugins/pin-input';
@@ -53,6 +54,11 @@ export const COLLECTIONS: ISpaCollectionItem[] = [
 		key: 'input-number',
 		fn: HSInputNumber,
 		collection: '$hsInputNumberCollection',
+	},
+	{
+		key: 'layout-splitter',
+		fn: HSLayoutSplitter,
+		collection: '$hsLayoutSplitterCollection',
 	},
 	{ key: 'overlay', fn: HSOverlay, collection: '$hsOverlayCollection' },
 	{ key: 'pin-input', fn: HSPinInput, collection: '$hsPinInputCollection' },

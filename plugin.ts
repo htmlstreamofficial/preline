@@ -1,6 +1,6 @@
 /*
  * Plugin
- * @version: 2.5.1
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @requires: tailwindcss ^3.4.1
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
@@ -41,6 +41,41 @@ export default plugin(function ({ addVariant, e }: PluginAPI) {
 			modifySelectors(({ className }) => {
 				return `.hs-dropdown.open > .hs-dropdown-menu > .${e(
 					`hs-dropdown-open${separator}${className}`,
+				)}`;
+			});
+		},
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.hs-dropdown-menu.open.${e(
+					`hs-dropdown-open${separator}${className}`,
+				)}`;
+			});
+		},
+	] as TStringFunc[]);
+
+	addVariant('hs-dropdown-item-disabled', (({
+		modifySelectors,
+		separator,
+	}: IAddVariantOptions) => {
+		modifySelectors(({ className }) => {
+			return `.hs-dropdown.open > .hs-dropdown-menu .disabled.${e(
+				`hs-dropdown-item-disabled${separator}${className}`,
+			)}`;
+		});
+	}) as TStringFunc);
+
+	addVariant('hs-dropdown-item-checked', [
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.hs-dropdown.open > .hs-dropdown-menu [aria-checked="true"].${e(
+					`hs-dropdown-item-checked${separator}${className}`,
+				)}`;
+			});
+		},
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.hs-dropdown.open > .hs-dropdown-menu [aria-checked="true"] .${e(
+					`hs-dropdown-item-checked${separator}${className}`,
 				)}`;
 			});
 		},
@@ -105,6 +140,13 @@ export default plugin(function ({ addVariant, e }: PluginAPI) {
 		({ modifySelectors, separator }: IAddVariantOptions) => {
 			modifySelectors(({ className }) => {
 				return `.hs-accordion.active > .hs-accordion-heading > .hs-accordion-toggle.${e(
+					`hs-accordion-active${separator}${className}`,
+				)}`;
+			});
+		},
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.hs-accordion.active .hs-accordion-force-active.${e(
 					`hs-accordion-active${separator}${className}`,
 				)}`;
 			});
@@ -242,9 +284,7 @@ export default plugin(function ({ addVariant, e }: PluginAPI) {
 	addVariant('hs-carousel-disabled', [
 		({ modifySelectors, separator }: IAddVariantOptions) => {
 			modifySelectors(({ className }) => {
-				return `.disabled.${e(
-					`hs-carousel-disabled${separator}${className}`,
-				)}`;
+				return `.disabled.${e(`hs-carousel-disabled${separator}${className}`)}`;
 			});
 		},
 		({ modifySelectors, separator }: IAddVariantOptions) => {
@@ -259,9 +299,7 @@ export default plugin(function ({ addVariant, e }: PluginAPI) {
 	addVariant('hs-carousel-dragging', [
 		({ modifySelectors, separator }: IAddVariantOptions) => {
 			modifySelectors(({ className }) => {
-				return `.dragging.${e(
-					`hs-carousel-dragging${separator}${className}`,
-				)}`;
+				return `.dragging.${e(`hs-carousel-dragging${separator}${className}`)}`;
 			});
 		},
 		({ modifySelectors, separator }: IAddVariantOptions) => {
@@ -591,6 +629,71 @@ export default plugin(function ({ addVariant, e }: PluginAPI) {
 		},
 	] as TStringFunc[]);
 
+	addVariant('hs-layout-splitter-dragging', [
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.dragging .${e(`hs-layout-splitter-dragging${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.dragging.${e(`hs-layout-splitter-dragging${separator}${className}`)}`;
+			});
+		},
+	] as TStringFunc[]);
+
+	addVariant('hs-layout-splitter-prev-limit-reached', [
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.prev-limit-reached .${e(`hs-layout-splitter-prev-limit-reached${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.prev-limit-reached.${e(`hs-layout-splitter-prev-limit-reached${separator}${className}`)}`;
+			});
+		},
+	] as TStringFunc[]);
+
+	addVariant('hs-layout-splitter-next-limit-reached', [
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.next-limit-reached .${e(`hs-layout-splitter-next-limit-reached${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.next-limit-reached.${e(`hs-layout-splitter-next-limit-reached${separator}${className}`)}`;
+			});
+		},
+	] as TStringFunc[]);
+
+	addVariant('hs-layout-splitter-prev-pre-limit-reached', [
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.prev-pre-limit-reached .${e(`hs-layout-splitter-prev-pre-limit-reached${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.prev-pre-limit-reached.${e(`hs-layout-splitter-prev-pre-limit-reached${separator}${className}`)}`;
+			});
+		},
+	] as TStringFunc[]);
+
+	addVariant('hs-layout-splitter-next-pre-limit-reached', [
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.next-pre-limit-reached .${e(`hs-layout-splitter-next-pre-limit-reached${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.next-pre-limit-reached.${e(`hs-layout-splitter-next-pre-limit-reached${separator}${className}`)}`;
+			});
+		},
+	] as TStringFunc[]);
+
 	// Datatables.net
 	addVariant('hs-datatable-ordering-asc', [
 		({ modifySelectors, separator }: IAddVariantOptions) => {
@@ -642,6 +745,20 @@ export default plugin(function ({ addVariant, e }: PluginAPI) {
 		({ modifySelectors, separator }: IAddVariantOptions) => {
 			modifySelectors(({ className }) => {
 				return `.complete.${e(`hs-file-upload-complete${separator}${className}`)}`;
+			});
+		},
+	] as TStringFunc[]);
+
+	// Toastify
+	addVariant('hs-toastify-on', [
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.toastify.on .${e(`hs-toastify-on${separator}${className}`)}`;
+			});
+		},
+		({ modifySelectors, separator }: IAddVariantOptions) => {
+			modifySelectors(({ className }) => {
+				return `.toastify.on.${e(`hs-toastify-on${separator}${className}`)}`;
 			});
 		},
 	] as TStringFunc[]);

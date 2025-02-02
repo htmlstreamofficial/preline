@@ -20,6 +20,8 @@ export const DROPDOWN_ACCESSIBILITY_KEY_SET = [
 	'Escape',
 	'ArrowUp',
 	'ArrowDown',
+	'ArrowRight',
+	'ArrowLeft',
 	'Home',
 	'End',
 	'Enter',
@@ -45,6 +47,7 @@ export const SELECT_ACCESSIBILITY_KEY_SET = [
 	'End',
 	'Escape',
 	'Enter',
+	'Space',
 	'Tab',
 ];
 

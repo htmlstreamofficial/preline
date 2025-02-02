@@ -29,6 +29,7 @@ export interface IStepper {
 	disableButtons(): void;
 	enableButtons(): void;
 	setErrorNavItem(n?: number): void;
+	destroy(): void;
 }
 declare class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	private currentIndex;
@@ -44,7 +45,21 @@ declare class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	private completeStepBtnDefaultText;
 	private finishBtn;
 	private resetBtn;
+	private onNavItemClickListener;
+	private onBackClickListener;
+	private onNextClickListener;
+	private onSkipClickListener;
+	private onCompleteStepBtnClickListener;
+	private onFinishBtnClickListener;
+	private onResetBtnClickListener;
 	constructor(el: HTMLElement, options?: IStepperOptions);
+	private navItemClick;
+	private backClick;
+	private nextClick;
+	private skipClick;
+	private completeStepBtnClick;
+	private finishBtnClick;
+	private resetBtnClick;
 	private init;
 	private getUncompletedSteps;
 	private setTotalSteps;
@@ -102,6 +117,7 @@ declare class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	disableButtons(): void;
 	enableButtons(): void;
 	setErrorNavItem(n?: number): void;
+	destroy(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSStepper | ICollectionItem<HSStepper>;
 	static autoInit(): void;
 }

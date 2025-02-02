@@ -1,5 +1,5 @@
 /*
- * @version: 2.5.1
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -131,6 +131,25 @@ const isParentOrElementHidden = (element: any): any => {
 	return isParentOrElementHidden(element.parentElement);
 };
 
+const isJson = (str: string) => {
+	if (typeof str !== 'string') return false;
+
+	const firstChar = str.trim()[0];
+	const lastChar = str.trim().slice(-1);
+
+	if ((firstChar === '{' && lastChar === '}') || (firstChar === '[' && lastChar === ']')) {
+		try {
+			JSON.parse(str);
+
+			return true;
+		} catch {
+			return false;
+		}
+	}
+
+	return false;
+};
+
 const debounce = (func: Function, timeout = 200) => {
 	let timer: any;
 
@@ -223,6 +242,7 @@ export {
 	isParentOrElementHidden,
 	isFormElement,
 	isDirectChild,
+	isJson,
 	debounce,
 	dispatch,
 	afterTransition,

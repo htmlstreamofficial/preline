@@ -1,6 +1,6 @@
 /*
  * HSStaticMethods
- * @version: 2.5.1
+ * @version: 2.7.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -19,6 +19,7 @@ import type HSDataTable from '../plugins/datatable';
 import type HSDropdown from '../plugins/dropdown';
 import type HSFileUpload from '../plugins/file-upload';
 import type HSInputNumber from '../plugins/input-number';
+import type HSLayoutSplitter from '../plugins/layout-splitter';
 import type HSOverlay from '../plugins/overlay';
 import type HSPinInput from '../plugins/pin-input';
 import type HSRangeSlider from '../plugins/range-slider';
@@ -47,6 +48,7 @@ declare global {
 		$hsDropdownCollection: ICollectionItem<HSDropdown>[];
 		$hsFileUploadCollection: ICollectionItem<HSFileUpload>[];
 		$hsInputNumberCollection: { id: number; element: HSInputNumber }[];
+		$hsLayoutSplitterCollection: ICollectionItem<HSLayoutSplitter>[];
 		$hsOverlayCollection: ICollectionItem<HSOverlay>[];
 		$hsPinInputCollection: ICollectionItem<HSPinInput>[];
 		$hsRangeSliderCollection: ICollectionItem<HSRangeSlider>[];

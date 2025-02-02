@@ -20,6 +20,7 @@ export interface ITooltip {
 	options?: {};
 	show(): void;
 	hide(): void;
+	destroy(): void;
 }
 declare class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	private readonly toggle;
@@ -29,20 +30,34 @@ declare class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	private popperInstance;
 	private readonly placement;
 	private readonly strategy;
+	private readonly scope;
+	private onToggleClickListener;
+	private onToggleFocusListener;
+	private onToggleMouseEnterListener;
+	private onToggleMouseLeaveListener;
+	private onToggleHandleListener;
 	constructor(el: HTMLElement, options?: {}, events?: {});
+	private toggleClick;
+	private toggleFocus;
+	private toggleMouseEnter;
+	private toggleMouseLeave;
+	private toggleHandle;
 	private init;
 	private enter;
 	private leave;
 	private click;
 	private focus;
 	private buildPopper;
+	private _show;
 	show(): void;
 	hide(): void;
+	destroy(): void;
+	private static findInCollection;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSTooltip>;
 	static autoInit(): void;
-	static show(target: HTMLElement): void;
-	static hide(target: HTMLElement): void;
-	static on(evt: string, target: HTMLElement, cb: Function): void;
+	static show(target: HSTooltip | HTMLElement | string): void;
+	static hide(target: HSTooltip | HTMLElement | string): void;
+	static on(evt: string, target: HSTooltip | HTMLElement | string, cb: Function): void;
 }
 
 export {
