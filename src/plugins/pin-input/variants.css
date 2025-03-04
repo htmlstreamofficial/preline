@@ -1,0 +1,10 @@
+@custom-variant hs-pin-input-active {
+
+  &.active {
+    @slot;
+  }
+
+  .active & {
+    @slot;
+  }
+}

@@ -1,6 +1,6 @@
 /*
  * HSAccordion
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -25,6 +25,7 @@ class HSAccordion
 	public content: HTMLElement | null;
 	private group: HTMLElement | null;
 	private isAlwaysOpened: boolean;
+	private keepOneOpen: boolean;
 	private isToggleStopPropagated: boolean;
 
 	private onToggleClickListener: (evt: Event) => void;
@@ -36,11 +37,15 @@ class HSAccordion
 
 		this.toggle = this.el.querySelector('.hs-accordion-toggle') || null;
 		this.content = this.el.querySelector('.hs-accordion-content') || null;
+		this.group = this.el.closest('.hs-accordion-group') || null;
 		this.update();
 
 		this.isToggleStopPropagated = stringToBoolean(
 			getClassProperty(this.toggle, '--stop-propagation', 'false') || 'false',
 		);
+		this.keepOneOpen = this.group ? stringToBoolean(
+			getClassProperty(this.group, '--keep-one-open', 'false') || 'false',
+		) : false;
 
 		if (this.toggle && this.content) this.init();
 	}
@@ -55,6 +60,8 @@ class HSAccordion
 
 	// Public methods
 	public toggleClick(evt: Event) {
+		if (this.el.classList.contains('active') && this.keepOneOpen) return false;
+
 		if (this.isToggleStopPropagated) evt.stopPropagation();
 
 		if (this.el.classList.contains('active')) {
@@ -85,6 +92,9 @@ class HSAccordion
 		this.el.classList.add('active');
 		if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'true';
 
+		this.fireEvent('beforeOpen', this.el);
+		dispatch('beforeOpen.hs.accordion', this.el, this.el);
+
 		this.content.style.display = 'block';
 		this.content.style.height = '0';
 		setTimeout(() => {
@@ -105,6 +115,9 @@ class HSAccordion
 
 		this.el.classList.remove('active');
 		if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'false';
+
+		this.fireEvent('beforeClose', this.el);
+		dispatch('beforeClose.hs.accordion', this.el, this.el);
 
 		this.content.style.height = `${this.content.scrollHeight}px`;
 		setTimeout(() => {

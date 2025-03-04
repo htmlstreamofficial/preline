@@ -1,6 +1,6 @@
 /*
  * HSStaticMethods
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -24,6 +24,7 @@ import type HSOverlay from '../plugins/overlay';
 import type HSPinInput from '../plugins/pin-input';
 import type HSRangeSlider from '../plugins/range-slider';
 import type HSRemoveElement from '../plugins/remove-element';
+import type HSScrollNav from '../plugins/scroll-nav';
 import type HSScrollspy from '../plugins/scrollspy';
 import type HSSelect from '../plugins/select';
 import type HSStepper from '../plugins/stepper';
@@ -53,6 +54,7 @@ declare global {
 		$hsPinInputCollection: ICollectionItem<HSPinInput>[];
 		$hsRangeSliderCollection: ICollectionItem<HSRangeSlider>[];
 		$hsRemoveElementCollection: ICollectionItem<HSRemoveElement>[];
+		$hsScrollNavCollection: ICollectionItem<HSScrollNav>[];
 		$hsScrollspyCollection: ICollectionItem<HSScrollspy>[];
 		$hsSelectCollection: ICollectionItem<HSSelect>[];
 		$hsStepperCollection: ICollectionItem<HSStepper>[];

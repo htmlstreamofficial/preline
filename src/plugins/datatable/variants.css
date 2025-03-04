@@ -1,0 +1,21 @@
+@custom-variant hs-datatable-ordering-asc {
+
+  &.dt-ordering-asc {
+    @slot;
+  }
+
+  .dt-ordering-asc & {
+    @slot;
+  }
+}
+
+@custom-variant hs-datatable-ordering-desc {
+
+  &.dt-ordering-desc {
+    @slot;
+  }
+
+  .dt-ordering-desc & {
+    @slot;
+  }
+}

@@ -41,12 +41,13 @@ declare class HSAccordion extends HSBasePlugin<IAccordionOptions> implements IAc
 	content: HTMLElement | null;
 	private group;
 	private isAlwaysOpened;
+	private keepOneOpen;
 	private isToggleStopPropagated;
 	private onToggleClickListener;
 	static selectable: IAccordionTreeView[];
 	constructor(el: HTMLElement, options?: IAccordionOptions, events?: {});
 	private init;
-	toggleClick(evt: Event): void;
+	toggleClick(evt: Event): boolean;
 	show(): boolean;
 	hide(): boolean;
 	update(): boolean;

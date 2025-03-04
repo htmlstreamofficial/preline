@@ -16,11 +16,17 @@ export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
 }
+export interface ITabsOptions {
+	eventType: "click" | "hover";
+	preventNavigationResolution: string | number | null;
+}
 export interface ITabs {
-	options?: {};
+	options?: ITabsOptions;
 	destroy(): void;
 }
-declare class HSTabs extends HSBasePlugin<{}> implements ITabs {
+declare class HSTabs extends HSBasePlugin<ITabsOptions> implements ITabs {
+	private readonly eventType;
+	private readonly preventNavigationResolution;
 	toggles: NodeListOf<HTMLElement> | null;
 	private readonly extraToggleId;
 	private readonly extraToggle;
@@ -30,11 +36,10 @@ declare class HSTabs extends HSBasePlugin<{}> implements ITabs {
 	private prev;
 	private prevContentId;
 	private prevContent;
-	private onToggleClickListener;
+	private onToggleHandler;
 	private onExtraToggleChangeListener;
-	private eventType;
-	constructor(el: HTMLElement, options?: {}, events?: {});
-	private toggleClick;
+	constructor(el: HTMLElement, options?: ITabsOptions, events?: {});
+	private toggle;
 	private extraToggleChange;
 	private init;
 	private open;

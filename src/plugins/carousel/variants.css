@@ -1,0 +1,32 @@
+@custom-variant hs-carousel-active {
+
+  &.active {
+    @slot;
+  }
+
+  .active & {
+    @slot;
+  }
+}
+
+@custom-variant hs-carousel-disabled {
+
+  &.disabled {
+    @slot;
+  }
+
+  .disabled & {
+    @slot;
+  }
+}
+
+@custom-variant hs-carousel-dragging {
+
+  &.dragging {
+    @slot;
+  }
+
+  .dragging & {
+    @slot;
+  }
+}

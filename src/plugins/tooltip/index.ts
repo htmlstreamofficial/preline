@@ -1,12 +1,12 @@
 /*
  * HSTooltip
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { createPopper, PositioningStrategy, Instance } from '@popperjs/core';
+import { type Strategy, computePosition, autoUpdate, offset } from '@floating-ui/dom';
 import { getClassProperty, dispatch, afterTransition } from '../../utils';
 
 import { ITooltip } from './interfaces';
@@ -21,11 +21,12 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	private readonly toggle: HTMLElement | null;
 	public content: HTMLElement | null;
 	readonly eventMode: string;
-	private readonly preventPopper: string;
-	private popperInstance: Instance | null;
+	private readonly preventFloatingUI: string;
 	private readonly placement: string;
-	private readonly strategy: PositioningStrategy;
+	private readonly strategy: Strategy;
 	private readonly scope: TTooltipOptionsScope;
+
+	cleanupAutoUpdate: (() => void) | null = null;
 
 	private onToggleClickListener: () => void;
 	private onToggleFocusListener: () => void;
@@ -40,16 +41,10 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 			this.toggle = this.el.querySelector('.hs-tooltip-toggle') || this.el;
 			this.content = this.el.querySelector('.hs-tooltip-content');
 			this.eventMode = getClassProperty(this.el, '--trigger') || 'hover';
-			this.preventPopper = getClassProperty(
-				this.el,
-				'--prevent-popper',
-				'false',
-			);
+			// TODO:: rename "Popper" to "FLoatingUI"
+			this.preventFloatingUI = getClassProperty(this.el, '--prevent-popper', 'false');
 			this.placement = getClassProperty(this.el, '--placement');
-			this.strategy = getClassProperty(
-				this.el,
-				'--strategy',
-			) as PositioningStrategy;
+			this.strategy = getClassProperty(this.el, '--strategy') as Strategy;
 			this.scope = getClassProperty(this.el, '--scope') as TTooltipOptionsScope || 'parent';
 		}
 
@@ -104,7 +99,7 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 			);
 		}
 
-		if (this.preventPopper === 'false') this.buildPopper();
+		if (this.preventFloatingUI === 'false') this.buildFloatingUI();
 	}
 
 	private enter() {
@@ -140,20 +135,32 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 		this.toggle.addEventListener('blur', handle, true);
 	}
 
-	private buildPopper() {
+	private buildFloatingUI() {
 		if (this.scope === 'window') document.body.appendChild(this.content);
 
-		this.popperInstance = createPopper(this.toggle, this.content, {
+		computePosition(this.toggle, this.content, {
 			placement: POSITIONS[this.placement] || 'top',
 			strategy: this.strategy || 'fixed',
-			modifiers: [
-				{
-					name: 'offset',
-					options: {
-						offset: [0, 5],
-					},
-				},
-			],
+			middleware: [offset(5)],
+		}).then(({ x, y }) => {
+			Object.assign(this.content.style, {
+				position: this.strategy || 'fixed',
+				left: `${x}px`,
+				top: `${y}px`,
+			});
+		});
+
+		this.cleanupAutoUpdate = autoUpdate(this.toggle, this.content, () => {
+			computePosition(this.toggle, this.content, {
+				placement: POSITIONS[this.placement] || 'top',
+				strategy: this.strategy || 'fixed',
+				middleware: [offset(5)],
+			}).then(({ x, y }) => {
+				Object.assign(this.content.style, {
+					left: `${x}px`,
+					top: `${y}px`,
+				});
+			});
 		});
 	}
 
@@ -161,20 +168,7 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 		this.content.classList.remove('hidden');
 		if (this.scope === 'window') this.content.classList.add('show');
 
-		if (this.preventPopper === 'false') {
-			this.popperInstance.setOptions((options) => ({
-				...options,
-				modifiers: [
-					...options.modifiers,
-					{
-						name: 'eventListeners',
-						enabled: true,
-					},
-				],
-			}));
-
-			this.popperInstance.update();
-		}
+		if (this.preventFloatingUI === 'false' && !this.cleanupAutoUpdate) this.buildFloatingUI();
 
 		setTimeout(() => {
 			this.el.classList.add('show');
@@ -206,17 +200,10 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 		this.el.classList.remove('show');
 		if (this.scope === 'window') this.content.classList.remove('show');
 
-		if (this.preventPopper === 'false') {
-			this.popperInstance.setOptions((options) => ({
-				...options,
-				modifiers: [
-					...options.modifiers,
-					{
-						name: 'eventListeners',
-						enabled: false,
-					},
-				],
-			}));
+		if (this.preventFloatingUI === 'false' && this.cleanupAutoUpdate) {
+			this.cleanupAutoUpdate();
+
+			this.cleanupAutoUpdate = null;
 		}
 
 		this.fireEvent('hide', this.el);
@@ -226,6 +213,7 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 			if (this.el.classList.contains('show')) return false;
 
 			this.content.classList.add('hidden');
+
 			this.toggle.style.outline = '';
 		});
 	}
@@ -253,12 +241,12 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 		this.toggle.removeEventListener('click', this.onToggleHandleListener, true);
 		this.toggle.removeEventListener('blur', this.onToggleHandleListener, true);
 
-		this.popperInstance.destroy();
-		this.popperInstance = null;
+		if (this.cleanupAutoUpdate) {
+			this.cleanupAutoUpdate();
+			this.cleanupAutoUpdate = null;
+		}
 
-		window.$hsTooltipCollection = window.$hsTooltipCollection.filter(
-			({ element }) => element.el !== this.el,
-		);
+		window.$hsTooltipCollection = window.$hsTooltipCollection.filter(({ element }) => element.el !== this.el);
 	}
 
 	// Static methods

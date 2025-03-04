@@ -1,6 +1,6 @@
 /*
  * HSScrollspy
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -8,42 +8,46 @@
 
 import { getClassProperty, dispatch } from '../../utils';
 
-import { IScrollspy } from '../scrollspy/interfaces';
+import { IScrollspy, IScrollspyOptions } from '../scrollspy/interfaces';
 
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
 
-class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
-	private activeSection: HTMLElement | null;
-	private readonly contentId: string | null;
-	private readonly content: HTMLElement | null;
+class HSScrollspy extends HSBasePlugin<IScrollspyOptions> implements IScrollspy {
+	private readonly ignoreScrollUp: boolean;
+
 	private readonly links: NodeListOf<HTMLAnchorElement> | null;
 	private readonly sections: HTMLElement[] | null;
 	private readonly scrollableId: string | null;
 	private readonly scrollable: HTMLElement | Document;
 
+	private isScrollingDown: boolean = false;
+	private lastScrollTop: number = 0;
+
 	private onScrollableScrollListener: (evt: Event) => void;
 	private onLinkClickListener:
 		| {
-				el: HTMLAnchorElement;
-				fn: (evt: Event) => void;
-		  }[]
+			el: HTMLAnchorElement;
+			fn: (evt: Event) => void;
+		}[]
 		| null;
 
 	constructor(el: HTMLElement, options = {}) {
 		super(el, options);
 
-		this.activeSection = null;
-		this.contentId = this.el.getAttribute('data-hs-scrollspy');
-		this.content = document.querySelector(this.contentId);
+		const data = el.getAttribute('data-hs-scrollspy-options');
+		const dataOptions: IScrollspyOptions = data ? JSON.parse(data) : {};
+		const concatOptions: IScrollspyOptions = {
+			...dataOptions,
+			...options,
+		};
+
+		this.ignoreScrollUp = typeof concatOptions.ignoreScrollUp !== 'undefined' ? concatOptions.ignoreScrollUp : false;
+
 		this.links = this.el.querySelectorAll('[href]');
 		this.sections = [];
-		this.scrollableId = this.el.getAttribute(
-			'data-hs-scrollspy-scrollable-parent',
-		);
-		this.scrollable = this.scrollableId
-			? (document.querySelector(this.scrollableId) as HTMLElement)
-			: (document as Document);
+		this.scrollableId = this.el.getAttribute('data-hs-scrollspy-scrollable-parent');
+		this.scrollable = this.scrollableId ? (document.querySelector(this.scrollableId) as HTMLElement) : (document as Document);
 
 		this.onLinkClickListener = [];
 
@@ -51,6 +55,10 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 	}
 
 	private scrollableScroll(evt: Event) {
+		const currentScrollTop = this.scrollable instanceof HTMLElement ? this.scrollable.scrollTop : window.scrollY;
+		this.isScrollingDown = currentScrollTop > this.lastScrollTop;
+		this.lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
+
 		Array.from(this.sections).forEach((section: HTMLElement) => {
 			if (!section.getAttribute('id')) return false;
 
@@ -58,21 +66,11 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 		});
 	}
 
-	private linkClick(evt: Event, el: HTMLAnchorElement) {
-		evt.preventDefault();
-
-		if (el.getAttribute('href') === 'javascript:;') return false;
-
-		this.scrollTo(el);
-	}
-
 	private init() {
 		this.createCollection(window.$hsScrollspyCollection, this);
 
 		this.links.forEach((el) => {
-			this.sections.push(
-				this.scrollable.querySelector(el.getAttribute('href')),
-			);
+			this.sections.push(this.scrollable.querySelector(el.getAttribute('href')));
 		});
 
 		this.onScrollableScrollListener = (evt) => this.scrollableScroll(evt);
@@ -92,34 +90,51 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 		});
 	}
 
+	private determineScrollDirection(target: HTMLAnchorElement): boolean {
+		const activeLink = this.el.querySelector('a.active') as HTMLAnchorElement | null;
+
+		if (!activeLink) {
+			return true;
+		}
+
+		const activeIndex = Array.from(this.links).indexOf(activeLink);
+		const targetIndex = Array.from(this.links).indexOf(target);
+
+		if (targetIndex === -1) {
+			return true;
+		}
+
+		return targetIndex > activeIndex;
+	}
+
+	private linkClick(evt: Event, el: HTMLAnchorElement) {
+		evt.preventDefault();
+
+		const href = el.getAttribute('href');
+		if (!href || href === 'javascript:;') return;
+
+		const target: HTMLElement | null = href ? document.querySelector(href) : null;
+		if (!target) return;
+
+		this.isScrollingDown = this.determineScrollDirection(el);
+
+		this.scrollTo(el);
+	}
+
 	private update(evt: Event, section: HTMLElement) {
-		const globalOffset = parseInt(
-			getClassProperty(this.el, '--scrollspy-offset', '0'),
-		);
-		const userOffset =
-			parseInt(getClassProperty(section, '--scrollspy-offset')) || globalOffset;
-		const scrollableParentOffset =
-			evt.target === document
-				? 0
-				: parseInt(
-						String((evt.target as HTMLElement).getBoundingClientRect().top),
-					);
-		const topOffset =
-			parseInt(String(section.getBoundingClientRect().top)) -
-			userOffset -
-			scrollableParentOffset;
+		const globalOffset = parseInt(getClassProperty(this.el, '--scrollspy-offset', '0'));
+		const userOffset = parseInt(getClassProperty(section, '--scrollspy-offset')) || globalOffset;
+		const scrollableParentOffset = evt.target === document ? 0 : parseInt(String((evt.target as HTMLElement).getBoundingClientRect().top));
+		const topOffset = parseInt(String(section.getBoundingClientRect().top)) - userOffset - scrollableParentOffset;
 		const height = section.offsetHeight;
+		const statement = this.ignoreScrollUp
+			? topOffset <= 0 && topOffset + height > 0
+			: (this.isScrollingDown ? topOffset <= 0 && topOffset + height > 0 : topOffset <= 0 && topOffset < height);
 
-		if (topOffset <= 0 && topOffset + height > 0) {
-			if (this.activeSection === section) return false;
+		if (statement) {
+			this.links.forEach((el) => el.classList.remove('active'));
 
-			this.links.forEach((el) => {
-				el.classList.remove('active');
-			});
-
-			const current = this.el.querySelector(
-				`[href="#${section.getAttribute('id')}"]`,
-			);
+			const current = this.el.querySelector(`[href="#${section.getAttribute('id')}"]`);
 
 			if (current) {
 				current.classList.add('active');
@@ -133,22 +148,17 @@ class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
 				}
 			}
 
-			this.activeSection = section;
+			this.fireEvent('afterScroll', current);
+			dispatch('afterScroll.hs.scrollspy', current, this.el);
 		}
 	}
 
 	private scrollTo(link: HTMLAnchorElement) {
 		const targetId = link.getAttribute('href');
 		const target: HTMLElement = document.querySelector(targetId);
-		const globalOffset = parseInt(
-			getClassProperty(this.el, '--scrollspy-offset', '0'),
-		);
-		const userOffset =
-			parseInt(getClassProperty(target, '--scrollspy-offset')) || globalOffset;
-		const scrollableParentOffset =
-			this.scrollable === document
-				? 0
-				: (this.scrollable as HTMLElement).offsetTop;
+		const globalOffset = parseInt(getClassProperty(this.el, '--scrollspy-offset', '0'));
+		const userOffset = parseInt(getClassProperty(target, '--scrollspy-offset')) || globalOffset;
+		const scrollableParentOffset = this.scrollable === document ? 0 : (this.scrollable as HTMLElement).offsetTop;
 		const topOffset = target.offsetTop - userOffset - scrollableParentOffset;
 		const view = this.scrollable === document ? window : this.scrollable;
 		const scrollFn = () => {

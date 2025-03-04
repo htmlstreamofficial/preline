@@ -11,7 +11,7 @@ export interface IOverlayOptions {
 export interface IOverlay {
 	options?: IOverlayOptions;
 
-	open(): void;
-	close(): void;
+	open(cb: Function | null): void;
+	close(forceClose: boolean, cb: Function | null): void;
 	destroy(): void;
 }

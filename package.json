@@ -1,6 +1,6 @@
 {
 	"name": "preline",
-	"version": "2.7.0",
+	"version": "3.0.0",
 	"description": "Preline UI is an open-source set of prebuilt UI components based on the utility-first Tailwind CSS framework.",
 	"main": "index.js",
 	"module": "./src/index.ts",
@@ -49,7 +49,6 @@
 	},
 	"devDependencies": {
 		"@types/clipboard": "^2.0.7",
-		"@types/datatables.net": "^1.12.0",
 		"@types/dropzone": "^5.7.8",
 		"@types/jquery": "^3.5.30",
 		"@types/lodash": "^4.17.6",
@@ -63,8 +62,5 @@
 		"ts-loader": "^9.5.1",
 		"typescript": "^5.5.3",
 		"webpack-cli": "^5.0.1"
-	},
-	"dependencies": {
-		"@popperjs/core": "^2.11.2"
 	}
 }

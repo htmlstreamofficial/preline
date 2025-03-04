@@ -1,0 +1,38 @@
+@custom-variant hs-password-active {
+
+  &.active {
+    @slot;
+  }
+
+  .active & {
+    @slot;
+  }
+}
+
+@custom-variant hs-strong-password {
+
+  &.passed {
+    @slot;
+  }
+
+  .passed & {
+    @slot;
+  }
+}
+
+@custom-variant hs-strong-password-accepted {
+
+  &.accepted {
+    @slot;
+  }
+
+  .accepted & {
+    @slot;
+  }
+}
+
+@custom-variant hs-strong-password-active {
+  &.active {
+    @slot;
+  }
+}

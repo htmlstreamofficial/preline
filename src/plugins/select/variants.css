@@ -1,0 +1,38 @@
+@custom-variant hs-selected {
+
+  &.selected {
+    @slot;
+  }
+
+  .selected & {
+    @slot;
+  }
+}
+
+@custom-variant hs-select-disabled {
+
+  &.disabled {
+    @slot;
+  }
+
+  .disabled & {
+    @slot;
+  }
+}
+
+@custom-variant hs-select-active {
+
+  &.active {
+    @slot;
+  }
+
+  .active & {
+    @slot;
+  }
+}
+
+@custom-variant hs-select-opened {
+  &.opened {
+    @slot;
+  }
+}

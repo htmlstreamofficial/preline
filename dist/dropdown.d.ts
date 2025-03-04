@@ -1,4 +1,4 @@
-import { VirtualElement } from '@popperjs/core';
+import { VirtualElement } from '@floating-ui/dom';
 
 export interface IBasePlugin<O, E> {
 	el: E;
@@ -25,10 +25,10 @@ export interface IDropdown {
 	forceClearState(): void;
 	destroy(): void;
 }
-export interface IHTMLElementPopper extends HTMLElement {
-	_popper: any;
+export interface IHTMLElementFloatingUI extends HTMLElement {
+	_floatingUI: any;
 }
-declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementPopper> implements IDropdown {
+declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDropdown {
 	private static history;
 	private readonly toggle;
 	private readonly closers;
@@ -37,16 +37,21 @@ declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementPopper> implements
 	private closeMode;
 	private hasAutofocus;
 	private animationInProcess;
+	private longPressTimer;
 	private onElementMouseEnterListener;
 	private onElementMouseLeaveListener;
 	private onToggleClickListener;
 	private onToggleContextMenuListener;
+	private onTouchStartListener;
+	private onTouchEndListener;
 	private onCloserClickListener;
-	constructor(el: IHTMLElementPopper, options?: {}, events?: {});
+	constructor(el: IHTMLElementFloatingUI, options?: {}, events?: {});
 	private elementMouseEnter;
 	private elementMouseLeave;
 	private toggleClick;
 	private toggleContextMenu;
+	private handleTouchStart;
+	private handleTouchEnd;
 	private closerClick;
 	private init;
 	resizeHandler(): void;
@@ -58,19 +63,18 @@ declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementPopper> implements
 	private onClickHandler;
 	private onMouseEnterHandler;
 	private onMouseLeaveHandler;
-	private destroyPopper;
-	private absoluteStrategyModifiers;
+	private destroyFloatingUI;
 	private focusElement;
-	private setupPopper;
+	private setupFloatingUI;
 	private selectCheckbox;
 	private selectRadio;
-	calculatePopperPosition(target?: VirtualElement | HTMLElement): import("@popperjs/core").Placement;
+	calculatePopperPosition(target?: VirtualElement | HTMLElement): string;
 	open(target?: VirtualElement | HTMLElement): boolean;
 	close(isAnimated?: boolean): boolean;
 	forceClearState(): void;
 	destroy(): void;
 	private static findInCollection;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): ICollectionItem<HSDropdown> | IHTMLElementPopper;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): ICollectionItem<HSDropdown> | IHTMLElementFloatingUI;
 	static autoInit(): void;
 	static open(target: HSDropdown | HTMLElement | string): void;
 	static close(target: HSDropdown | HTMLElement | string): void;

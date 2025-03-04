@@ -1,6 +1,6 @@
 /*
  * HSDropdown
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -19,19 +19,23 @@ import {
 import { IMenuSearchHistory } from '../../utils/interfaces';
 
 import {
-	createPopper,
-	PositioningStrategy,
+	type Placement,
+	type Strategy,
+	computePosition,
+	autoUpdate,
+	offset,
+	flip,
 	VirtualElement,
-} from '@popperjs/core';
+} from '@floating-ui/dom';
 
-import { IDropdown, IHTMLElementPopper } from '../dropdown/interfaces';
+import { IDropdown, IHTMLElementFloatingUI } from '../dropdown/interfaces';
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
 
 import { POSITIONS, DROPDOWN_ACCESSIBILITY_KEY_SET } from '../../constants';
 
 class HSDropdown
-	extends HSBasePlugin<{}, IHTMLElementPopper>
+	extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 	implements IDropdown {
 	private static history: IMenuSearchHistory;
 	private readonly toggle: HTMLElement | null;
@@ -41,11 +45,14 @@ class HSDropdown
 	private closeMode: string;
 	private hasAutofocus: boolean;
 	private animationInProcess: boolean;
+	private longPressTimer: number | null = null;
 
 	private onElementMouseEnterListener: () => void | null;
 	private onElementMouseLeaveListener: () => void | null;
 	private onToggleClickListener: (evt: Event) => void | null;
 	private onToggleContextMenuListener: (evt: Event) => void | null;
+	private onTouchStartListener: ((evt: TouchEvent) => void) | null = null;
+	private onTouchEndListener: ((evt: TouchEvent) => void) | null = null;
 	private onCloserClickListener:
 		| {
 			el: HTMLButtonElement;
@@ -53,7 +60,7 @@ class HSDropdown
 		}[]
 		| null;
 
-	constructor(el: IHTMLElementPopper, options?: {}, events?: {}) {
+	constructor(el: IHTMLElementFloatingUI, options?: {}, events?: {}) {
 		super(el, options, events);
 
 		this.toggle =
@@ -62,14 +69,11 @@ class HSDropdown
 				':scope > .hs-dropdown-toggle-wrapper > .hs-dropdown-toggle',
 			) ||
 			(this.el.children[0] as HTMLElement);
-		this.closers =
-			Array.from(this.el.querySelectorAll(':scope .hs-dropdown-close')) || null;
+		this.closers = Array.from(this.el.querySelectorAll(':scope .hs-dropdown-close')) || null;
 		this.menu = this.el.querySelector(':scope > .hs-dropdown-menu');
 		this.eventMode = getClassProperty(this.el, '--trigger', 'click');
 		this.closeMode = getClassProperty(this.el, '--auto-close', 'true');
-		this.hasAutofocus = stringToBoolean(
-			getClassProperty(this.el, '--has-autofocus', 'true') || 'true',
-		);
+		this.hasAutofocus = stringToBoolean(getClassProperty(this.el, '--has-autofocus', 'true') || 'true');
 		this.animationInProcess = false;
 
 		this.onCloserClickListener = [];
@@ -93,6 +97,31 @@ class HSDropdown
 		evt.preventDefault();
 
 		this.onContextMenuHandler(evt);
+	}
+
+	private handleTouchStart(evt: TouchEvent): void {
+		this.longPressTimer = window.setTimeout(() => {
+			evt.preventDefault();
+
+			const touch = evt.touches[0];
+			const contextMenuEvent = new MouseEvent("contextmenu", {
+				bubbles: true,
+				cancelable: true,
+				view: window,
+				clientX: touch.clientX,
+				clientY: touch.clientY,
+			});
+
+			if (this.toggle) this.toggle.dispatchEvent(contextMenuEvent);
+		}, 400);
+	}
+
+	private handleTouchEnd(evt: TouchEvent): void {
+		if (this.longPressTimer) {
+			clearTimeout(this.longPressTimer);
+
+			this.longPressTimer = null;
+		}
 	}
 
 	private closerClick() {
@@ -129,13 +158,14 @@ class HSDropdown
 		}
 
 		if (this.eventMode === 'contextmenu') {
-			this.onToggleContextMenuListener = (evt: MouseEvent) =>
-				this.toggleContextMenu(evt);
+			this.onToggleContextMenuListener = (evt: MouseEvent) => this.toggleContextMenu(evt);
+			this.onTouchStartListener = this.handleTouchStart.bind(this);
+			this.onTouchEndListener = this.handleTouchEnd.bind(this);
 
-			this.toggle.addEventListener(
-				'contextmenu',
-				this.onToggleContextMenuListener,
-			);
+			this.toggle.addEventListener('contextmenu', this.onToggleContextMenuListener);
+			this.toggle.addEventListener('touchstart', this.onTouchStartListener, { passive: false });
+			this.toggle.addEventListener('touchend', this.onTouchEndListener);
+			this.toggle.addEventListener('touchmove', this.onTouchEndListener);
 		} else {
 			this.onToggleClickListener = (evt) => this.toggleClick(evt);
 
@@ -220,7 +250,13 @@ class HSDropdown
 	private onMouseEnterHandler() {
 		if (this.eventMode !== 'hover') return false;
 
-		if (this.el._popper) this.forceClearState();
+		if (
+			!this.el._floatingUI ||
+			(
+				this.el._floatingUI &&
+				!this.el.classList.contains('open')
+			)
+		) this.forceClearState();
 
 		if (
 			!this.el.classList.contains('open') &&
@@ -241,10 +277,8 @@ class HSDropdown
 		}
 	}
 
-	private destroyPopper() {
-		const scope = (
-			window.getComputedStyle(this.el).getPropertyValue('--scope') || ''
-		).replace(' ', '');
+	private destroyFloatingUI() {
+		const scope = (window.getComputedStyle(this.el).getPropertyValue('--scope') || '').trim();
 
 		this.menu.classList.remove('block');
 		this.menu.classList.add('hidden');
@@ -252,38 +286,14 @@ class HSDropdown
 		this.menu.style.inset = null;
 		this.menu.style.position = null;
 
-		if (this.el && this.el._popper) this.el._popper.destroy();
+		if (this.el && this.el._floatingUI) {
+			this.el._floatingUI.destroy();
+			this.el._floatingUI = null;
+		}
 
 		if (scope === 'window') this.el.appendChild(this.menu);
 
 		this.animationInProcess = false;
-	}
-
-	private absoluteStrategyModifiers() {
-		return [
-			{
-				name: 'applyStyles',
-				fn: (data: any) => {
-					const strategy = (
-						window.getComputedStyle(this.el).getPropertyValue('--strategy') ||
-						'absolute'
-					).replace(' ', '');
-					const adaptive = (
-						window.getComputedStyle(this.el).getPropertyValue('--adaptive') ||
-						'adaptive'
-					).replace(' ', '');
-
-					data.state.elements.popper.style.position = strategy;
-					data.state.elements.popper.style.transform =
-						adaptive === 'adaptive' ? data.state.styles.popper.transform : null;
-					data.state.elements.popper.style.top = null;
-					data.state.elements.popper.style.bottom = null;
-					data.state.elements.popper.style.left = null;
-					data.state.elements.popper.style.right = null;
-					data.state.elements.popper.style.margin = 0;
-				},
-			},
-		];
 	}
 
 	private focusElement() {
@@ -293,52 +303,77 @@ class HSDropdown
 		else input.focus();
 	}
 
-	private setupPopper(target?: VirtualElement | HTMLElement) {
+	private setupFloatingUI(target?: VirtualElement | HTMLElement) {
 		const _target = target || this.el;
-		const placement = (
-			window.getComputedStyle(this.el).getPropertyValue('--placement') || ''
-		).replace(' ', '');
-		const flip = (
-			window.getComputedStyle(this.el).getPropertyValue('--flip') || 'true'
-		).replace(' ', '');
-		const strategy = (
-			window.getComputedStyle(this.el).getPropertyValue('--strategy') || 'fixed'
-		).replace(' ', '') as PositioningStrategy;
-		const offset = parseInt(
-			(
-				window.getComputedStyle(this.el).getPropertyValue('--offset') || '10'
-			).replace(' ', ''),
-		);
-		const gpuAcceleration = (
-			window.getComputedStyle(this.el).getPropertyValue('--gpu-acceleration') ||
-			'true'
-		).replace(' ', '');
-		const popperInstance = createPopper(_target, this.menu, {
-			placement: POSITIONS[placement] || 'bottom-start',
-			strategy: strategy,
-			modifiers: [
-				...(strategy !== 'fixed' ? this.absoluteStrategyModifiers() : []),
-				{
-					name: 'flip',
-					enabled: flip === 'true',
-				},
-				{
-					name: 'offset',
-					options: {
-						offset: [0, offset],
-					},
-				},
-				{
-					name: 'computeStyles',
-					options: {
-						adaptive: strategy !== 'fixed' ? false : true,
-						gpuAcceleration: gpuAcceleration === 'true',
-					},
-				},
-			],
-		});
+		const computedStyle = window.getComputedStyle(this.el);
 
-		return popperInstance;
+		const placementCss = (computedStyle.getPropertyValue('--placement') || '').trim();
+		const flipCss = (computedStyle.getPropertyValue('--flip') || 'true').trim();
+		const strategyCss = (computedStyle.getPropertyValue('--strategy') || 'fixed').trim();
+		const offsetCss = (computedStyle.getPropertyValue('--offset') || '10').trim();
+		const gpuAccelerationCss = (computedStyle.getPropertyValue('--gpu-acceleration') || 'true').trim();
+		const adaptive = (window.getComputedStyle(this.el).getPropertyValue('--adaptive') || 'adaptive').replace(' ', '');
+
+		const strategy = strategyCss as Strategy;
+		const offsetValue = parseInt(offsetCss, 10);
+		const placement: Placement = POSITIONS[placementCss] || 'bottom-start';
+
+		const middleware = [
+			...(flipCss === 'true' ? [flip()] : []),
+			offset(offsetValue),
+		];
+
+		const options = {
+			placement,
+			strategy,
+			middleware,
+		};
+
+		const update = () => {
+			computePosition(_target, this.menu, options).then(({ x, y, placement: computedPlacement }) => {
+				if (strategy === 'absolute' && adaptive === 'none') {
+					Object.assign(this.menu.style, {
+						position: strategy,
+						margin: '0'
+					});
+				} else if (strategy === 'absolute') {
+					Object.assign(this.menu.style, {
+						position: strategy,
+						transform: `translate3d(${x}px, ${y}px, 0px)`,
+						margin: '0'
+					});
+				} else {
+					if (gpuAccelerationCss === 'true') {
+						Object.assign(this.menu.style, {
+							position: strategy,
+							left: '',
+							top: '',
+							inset: '0px auto auto 0px',
+							margin: '0',
+							transform: `translate3d(${adaptive === 'adaptive' ? x : 0}px, ${y}px, 0)`,
+						});
+					} else {
+						Object.assign(this.menu.style, {
+							position: strategy,
+							left: `${x}px`,
+							top: `${y}px`,
+							transform: '',
+						});
+					}
+				}
+
+				this.menu.setAttribute('data-placement', computedPlacement);
+			});
+		};
+
+		update();
+
+		const cleanup = autoUpdate(_target, this.menu, update);
+
+		return {
+			update,
+			destroy: cleanup,
+		};
 	}
 
 	private selectCheckbox(target: HTMLElement) {
@@ -357,76 +392,33 @@ class HSDropdown
 	}
 
 	// Public methods
+	// TODO:: rename "Popper" to "FLoatingUI"
 	public calculatePopperPosition(target?: VirtualElement | HTMLElement) {
-		const popperInstance = this.setupPopper(target);
-		popperInstance.forceUpdate();
+		const floatingUIInstance = this.setupFloatingUI(target);
+		const floatingUIPosition = this.menu.getAttribute('data-placement');
 
-		const popperPosition = popperInstance.state.placement;
-		popperInstance.destroy();
+		floatingUIInstance.update();
+		floatingUIInstance.destroy();
 
-		return popperPosition;
+		return floatingUIPosition;
 	}
 
 	public open(target?: VirtualElement | HTMLElement) {
 		if (this.el.classList.contains('open') || this.animationInProcess) return false;
 
-		const _target = target || this.el;
-
 		this.animationInProcess = true;
 
-		const scope = (
-			window.getComputedStyle(this.el).getPropertyValue('--scope') || ''
-		).replace(' ', '');
-		const placement = (
-			window.getComputedStyle(this.el).getPropertyValue('--placement') || ''
-		).replace(' ', '');
-		const flip = (
-			window.getComputedStyle(this.el).getPropertyValue('--flip') || 'true'
-		).replace(' ', '');
-		const strategy = (
-			window.getComputedStyle(this.el).getPropertyValue('--strategy') || 'fixed'
-		).replace(' ', '') as PositioningStrategy;
-		const offset = parseInt(
-			(
-				window.getComputedStyle(this.el).getPropertyValue('--offset') || '10'
-			).replace(' ', ''),
-		);
-		const gpuAcceleration = (
-			window.getComputedStyle(this.el).getPropertyValue('--gpu-acceleration') ||
-			'true'
-		).replace(' ', '');
+		const _target = target || this.el;
+		const computedStyle = window.getComputedStyle(this.el);
+		const scope = (computedStyle.getPropertyValue('--scope') || '').trim();
+		const strategyCss = (computedStyle.getPropertyValue('--strategy') || 'fixed').trim();
+		const strategy = strategyCss as Strategy;
 
 		if (scope === 'window') document.body.appendChild(this.menu);
 
-		if (strategy !== ('static' as PositioningStrategy)) {
-			this.el._popper = createPopper(_target, this.menu, {
-				placement: POSITIONS[placement] || 'bottom-start',
-				strategy: strategy,
-				modifiers: [
-					...(strategy !== 'fixed' ? this.absoluteStrategyModifiers() : []),
-					{
-						name: 'flip',
-						enabled: flip === 'true',
-					},
-					{
-						name: 'offset',
-						options: {
-							offset: [0, offset],
-						},
-					},
-					{
-						name: 'computeStyles',
-						options: {
-							adaptive: strategy !== 'fixed' ? false : true,
-							gpuAcceleration: gpuAcceleration === 'true' ? true : false,
-						},
-					},
-				],
-			});
-		}
+		if (strategy !== ('static' as Strategy)) this.el._floatingUI = this.setupFloatingUI(_target);
 
 		this.menu.style.margin = null;
-
 		this.menu.classList.remove('hidden');
 		this.menu.classList.add('block');
 
@@ -443,25 +435,17 @@ class HSDropdown
 			this.fireEvent('open', this.el);
 			dispatch('open.hs.dropdown', this.el, this.el);
 		});
-
-		// this.fireEvent('open', this.el);
-		// dispatch('open.hs.dropdown', this.el, this.el);
 	}
 
 	public close(isAnimated = true) {
-		if (this.animationInProcess || !this.el.classList.contains('open'))
-			return false;
+		if (this.animationInProcess || !this.el.classList.contains('open')) return false;
 
-		const scope = (
-			window.getComputedStyle(this.el).getPropertyValue('--scope') || ''
-		).replace(' ', '');
+		const scope = (window.getComputedStyle(this.el).getPropertyValue('--scope') || '').trim();
 
 		const clearAfterClose = () => {
 			this.menu.style.margin = null;
-
 			if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = 'false';
 			this.el.classList.remove('open');
-
 			this.fireEvent('close', this.el);
 			dispatch('close.hs.dropdown', this.el, this.el);
 		};
@@ -471,44 +455,54 @@ class HSDropdown
 		if (scope === 'window') this.menu.classList.remove('open');
 
 		if (isAnimated) {
-			const el: HTMLElement =
-				this.el.querySelector('[data-hs-dropdown-transition]') || this.menu;
+			const el: HTMLElement = this.el.querySelector('[data-hs-dropdown-transition]') || this.menu;
 
-			afterTransition(el, () => this.destroyPopper());
-		} else this.destroyPopper();
+			afterTransition(el, () => this.destroyFloatingUI());
+		} else {
+			this.destroyFloatingUI();
+		}
 
 		clearAfterClose();
 	}
 
 	public forceClearState() {
-		this.destroyPopper();
+		this.destroyFloatingUI();
+
 		this.menu.style.margin = null;
 		this.el.classList.remove('open');
+		this.menu.classList.add('hidden');
 	}
 
 	public destroy() {
 		// Remove listeners
 		if (!isIOS() && !isIpadOS()) {
-			this.el.removeEventListener(
-				'mouseenter',
-				this.onElementMouseEnterListener,
-			);
-			this.el.removeEventListener(
-				'mouseleave',
-				() => this.onElementMouseLeaveListener,
-			);
+			this.el.removeEventListener('mouseenter', this.onElementMouseEnterListener);
+			this.el.removeEventListener('mouseleave', () => this.onElementMouseLeaveListener);
 
 			this.onElementMouseEnterListener = null;
 			this.onElementMouseLeaveListener = null;
 		}
-		this.toggle.removeEventListener('click', this.onToggleClickListener);
-		this.onToggleClickListener = null;
+
+		if (this.eventMode === 'contextmenu') {
+			if (this.toggle) {
+				this.toggle.removeEventListener('contextmenu', this.onToggleContextMenuListener);
+				this.toggle.removeEventListener('touchstart', this.onTouchStartListener);
+				this.toggle.removeEventListener('touchend', this.onTouchEndListener);
+				this.toggle.removeEventListener('touchmove', this.onTouchEndListener);
+			}
+
+			this.onToggleContextMenuListener = null;
+			this.onTouchStartListener = null;
+			this.onTouchEndListener = null;
+		} else {
+			if (this.toggle) this.toggle.removeEventListener('click', this.onToggleClickListener);
+
+			this.onToggleClickListener = null;
+		}
+
 		if (this.closers.length) {
 			this.closers.forEach((el: HTMLButtonElement) => {
-				el.removeEventListener(
-					'click',
-					this.onCloserClickListener.find((closer) => closer.el === el).fn,
-				);
+				el.removeEventListener('click', this.onCloserClickListener.find((closer) => closer.el === el).fn);
 			});
 
 			this.onCloserClickListener = null;
@@ -517,11 +511,9 @@ class HSDropdown
 		// Remove classes
 		this.el.classList.remove('open');
 
-		this.destroyPopper();
+		this.destroyFloatingUI();
 
-		window.$hsDropdownCollection = window.$hsDropdownCollection.filter(
-			({ element }) => element.el !== this.el,
-		);
+		window.$hsDropdownCollection = window.$hsDropdownCollection.filter(({ element }) => element.el !== this.el);
 	}
 
 	// Static methods
@@ -577,7 +569,7 @@ class HSDropdown
 
 		document
 			.querySelectorAll('.hs-dropdown:not(.--prevent-on-load-init)')
-			.forEach((el: IHTMLElementPopper) => {
+			.forEach((el: IHTMLElementFloatingUI) => {
 				if (
 					!window.$hsDropdownCollection.find(
 						(elC) => (elC?.element?.el as HTMLElement) === el,
@@ -727,12 +719,12 @@ class HSDropdown
 			const preparedLinks = isArrowUp
 				? Array.from(
 					menu.querySelectorAll(
-						'a:not([hidden]), .hs-dropdown > button:not([hidden]), [role="button"]:not([hidden]), [role^="menuitem"]:not([hidden])',
+						'a:not([hidden]), :scope button:not([hidden]), [role="button"]:not([hidden]), [role^="menuitem"]:not([hidden])',
 					),
 				).reverse()
 				: Array.from(
 					menu.querySelectorAll(
-						'a:not([hidden]), .hs-dropdown > button:not([hidden]), [role="button"]:not([hidden]), [role^="menuitem"]:not([hidden])',
+						'a:not([hidden]), :scope button:not([hidden]), [role="button"]:not([hidden]), [role^="menuitem"]:not([hidden])',
 					),
 				);
 			const visiblePreparedLinks = Array.from(preparedLinks).filter((item) => {
@@ -782,15 +774,14 @@ class HSDropdown
 
 		if (
 			menuToOpen.element.el.classList.contains('open') &&
-			menuToOpen.element.el._popper.state.placement.includes(direction)
+			menuToOpen.element.el._floatingUI.state.placement.includes(direction)
 		) {
 			firstLink.focus();
 
 			return false;
 		}
 
-		console.log(menuToOpen);
-
+		// TODO:: rename "Popper" to "FLoatingUI"
 		const futurePosition = menuToOpen.element.calculatePopperPosition();
 
 		if (isRootDropdown && !futurePosition.includes(direction)) return false;

@@ -25,6 +25,7 @@ export interface ISelectOptions {
 	isOpened?: boolean;
 	placeholder?: string;
 	hasSearch?: boolean;
+	minSearchLength?: number;
 	preventSearchFocus?: boolean;
 	mode?: string;
 
@@ -84,8 +85,8 @@ export interface ISelectOptions {
 	searchNoResultTemplate?: string | null;
 	searchNoResultText?: string | null;
 	searchNoResultClasses?: string | null;
+	optionAllowEmptyOption?: boolean;
 
-	optionAllowEmptyOption?: boolean
 	optionTemplate?: string;
 	optionTag?: string;
 	optionClasses?: string;

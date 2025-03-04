@@ -7,6 +7,6 @@ export interface IDropdown {
 	destroy(): void;
 }
 
-export interface IHTMLElementPopper extends HTMLElement {
-	_popper: any;
+export interface IHTMLElementFloatingUI extends HTMLElement {
+	_floatingUI: any;
 }

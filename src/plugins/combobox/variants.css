@@ -1,0 +1,38 @@
+@custom-variant hs-combo-box-active {
+
+  &.active {
+    @slot;
+  }
+
+  .active & {
+    @slot;
+  }
+}
+
+@custom-variant hs-combo-box-has-value {
+
+  &.has-value {
+    @slot;
+  }
+
+  .has-value & {
+    @slot;
+  }
+}
+
+@custom-variant hs-combo-box-selected {
+
+  &.selected {
+    @slot;
+  }
+
+  .selected & {
+    @slot;
+  }
+}
+
+@custom-variant hs-combo-box-tab-active {
+  &.active {
+    @slot;
+  }
+}

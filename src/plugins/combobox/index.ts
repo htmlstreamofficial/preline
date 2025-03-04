@@ -1,6 +1,6 @@
 /*
  * HSComboBox
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -105,7 +105,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 		this.apiGroupField = concatOptions?.apiGroupField ?? null;
 		this.outputItemTemplate =
 			concatOptions?.outputItemTemplate ??
-			`<div class="cursor-pointer py-2 px-4 w-full text-sm text-gray-800 hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800" data-hs-combo-box-output-item>
+			`<div class="cursor-pointer py-2 px-4 w-full text-sm text-gray-800 hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800" data-hs-combo-box-output-item>
 				<div class="flex justify-between items-center w-full">
 					<span data-hs-combo-box-search-text></span>
 					<span class="hidden hs-combo-box-selected:block">
@@ -121,7 +121,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 		this.outputLoaderTemplate =
 			concatOptions?.outputLoaderTemplate ??
 			`<div class="flex justify-center items-center py-2 px-4 text-sm text-gray-800 rounded-lg bg-white dark:bg-neutral-900 dark:text-neutral-200">
-				<div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
+				<div class="animate-spin inline-block size-6 border-3 border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
 					<span class="sr-only">Loading...</span>
 				</div>
 			</div>`;
@@ -449,7 +449,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 			this.itemsFromHtml();
 		}
 
-		if (this.items[0].classList.contains('selected'))
+		if (this?.items.length && this.items[0].classList.contains('selected'))
 			this.currentData = JSON.parse(this.items[0].getAttribute('data-hs-combo-box-item-stored-data'));
 	}
 

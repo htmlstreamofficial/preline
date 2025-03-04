@@ -1,5 +1,9 @@
+export interface IScrollspyOptions {
+	ignoreScrollUp?: boolean;
+}
+
 export interface IScrollspy {
-	options?: {};
+	options?: IScrollspyOptions;
 
 	destroy(): void;
 }

@@ -1,5 +1,5 @@
 /*
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -9,10 +9,12 @@ declare var _: any;
 declare var DataTable: any;
 declare var Dropzone: any;
 declare var noUiSlider: any;
+declare var VanillaCalendarPro: any;
 
 let HSDataTableModule;
 let HSFileUploadModule;
 let HSRangeSliderModule;
+let HSDatepickerModule;
 
 export { default as HSCopyMarkup } from './plugins/copy-markup';
 export { default as HSAccordion } from './plugins/accordion';
@@ -25,6 +27,7 @@ export { default as HSLayoutSplitter } from './plugins/layout-splitter';
 export { default as HSOverlay } from './plugins/overlay';
 export { default as HSPinInput } from './plugins/pin-input';
 export { default as HSRemoveElement } from './plugins/remove-element';
+export { default as HSScrollNav } from './plugins/scroll-nav';
 export { default as HSScrollspy } from './plugins/scrollspy';
 export { default as HSSelect } from './plugins/select';
 export { default as HSStepper } from './plugins/stepper';
@@ -52,3 +55,8 @@ if (typeof noUiSlider !== 'undefined')
 	HSRangeSliderModule = require('./plugins/range-slider').default;
 else HSRangeSliderModule = null;
 export { HSRangeSliderModule as HSRangeSlider };
+
+if (typeof VanillaCalendarPro !== 'undefined')
+	HSDatepickerModule = require('./plugins/datepicker').default;
+else HSDatepickerModule = null;
+export { HSDatepickerModule as HSDatepicker };

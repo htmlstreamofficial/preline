@@ -1,26 +1,27 @@
 /*
  * HSOverlay
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 
 import {
-	stringToBoolean,
-	getClassProperty,
-	isParentOrElementHidden,
-	isDirectChild,
-	dispatch,
 	afterTransition,
-} from '../../utils';
+	dispatch,
+	getClassProperty,
+	getHighestZIndex,
+	isDirectChild,
+	isParentOrElementHidden,
+	stringToBoolean,
+} from "../../utils";
 
-import { IOverlayOptions, IOverlay } from './interfaces';
-import { TOverlayOptionsAutoCloseEqualityType } from './types';
-import { ICollectionItem } from '../../interfaces';
-import { BREAKPOINTS } from '../../constants';
+import { IOverlay, IOverlayOptions } from "./interfaces";
+import { TOverlayOptionsAutoCloseEqualityType } from "./types";
+import { ICollectionItem } from "../../interfaces";
+import { BREAKPOINTS } from "../../constants";
 
-import HSBasePlugin from '../base-plugin';
+import HSBasePlugin from "../base-plugin";
 
 class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private readonly hiddenClass: string | null;
@@ -35,11 +36,14 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private autoHide: ReturnType<typeof setTimeout> | null;
 	private toggleButtons: HTMLElement[];
 
+	static openedItemsQty = 0;
+
 	public initContainer: HTMLElement | null;
 	public isCloseWhenClickInside: boolean;
 	public isTabAccessibilityLimited: boolean;
 	public isLayoutAffect: boolean;
 	public hasAutofocus: boolean;
+	public hasDynamicZIndex: boolean;
 	public hasAbilityToCloseOnBackdropClick: boolean;
 	public openedBreakpoint: number | null;
 	public autoClose: number | null;
@@ -47,8 +51,10 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	public moveOverlayToBody: number | null;
 
 	private backdrop: HTMLElement | null;
+	private initialZIndex = 0;
+	static currentZIndex = 0;
 
-	private onElementClickListener: | {
+	private onElementClickListener: {
 		el: HTMLElement;
 		fn: () => void;
 	}[] | null;
@@ -59,10 +65,12 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		super(el, options, events);
 
 		// Collect all data options from toggles
-		this.toggleButtons = Array.from(document.querySelectorAll(`[data-hs-overlay="#${this.el.id}"]`));
+		this.toggleButtons = Array.from(
+			document.querySelectorAll(`[data-hs-overlay="#${this.el.id}"]`),
+		);
 		const toggleDataOptions = this.collectToggleParameters(this.toggleButtons);
 
-		const data = el.getAttribute('data-hs-overlay-options');
+		const data = el.getAttribute("data-hs-overlay-options");
 		const dataOptions: IOverlayOptions = data ? JSON.parse(data) : {};
 		const concatOptions = {
 			...dataOptions,
@@ -70,32 +78,63 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			...options,
 		};
 
-		this.hiddenClass = concatOptions?.hiddenClass || 'hidden';
+		this.hiddenClass = concatOptions?.hiddenClass || "hidden";
 		this.emulateScrollbarSpace = concatOptions?.emulateScrollbarSpace || false;
 		this.isClosePrev = concatOptions?.isClosePrev ?? true;
-		this.backdropClasses = concatOptions?.backdropClasses ?? 'hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900';
-		this.backdropParent = typeof concatOptions.backdropParent === 'string' ? document.querySelector(concatOptions.backdropParent) as HTMLElement : document.body;
-		this.backdropExtraClasses = concatOptions?.backdropExtraClasses ?? '';
+		this.backdropClasses = concatOptions?.backdropClasses ??
+			"hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900/50 dark:bg-neutral-900/80";
+		this.backdropParent = typeof concatOptions.backdropParent === "string"
+			? document.querySelector(concatOptions.backdropParent) as HTMLElement
+			: document.body;
+		this.backdropExtraClasses = concatOptions?.backdropExtraClasses ?? "";
 		this.moveOverlayToBody = concatOptions?.moveOverlayToBody || null;
 
 		this.openNextOverlay = false;
 		this.autoHide = null;
 		this.initContainer = this.el?.parentElement || null;
-		this.isCloseWhenClickInside = stringToBoolean(getClassProperty(this.el, '--close-when-click-inside', 'false') || 'false');
-		this.isTabAccessibilityLimited = stringToBoolean(getClassProperty(this.el, '--tab-accessibility-limited', 'true') || 'true');
-		this.isLayoutAffect = stringToBoolean(getClassProperty(this.el, '--is-layout-affect', 'false') || 'false');
-		this.hasAutofocus = stringToBoolean(getClassProperty(this.el, '--has-autofocus', 'true') || 'true');
-		this.hasAbilityToCloseOnBackdropClick = stringToBoolean(this.el.getAttribute('data-hs-overlay-keyboard') || 'true');
+		this.isCloseWhenClickInside = stringToBoolean(
+			getClassProperty(this.el, "--close-when-click-inside", "false") ||
+				"false",
+		);
+		this.isTabAccessibilityLimited = stringToBoolean(
+			getClassProperty(this.el, "--tab-accessibility-limited", "true") ||
+				"true",
+		);
+		this.isLayoutAffect = stringToBoolean(
+			getClassProperty(this.el, "--is-layout-affect", "false") || "false",
+		);
+		this.hasAutofocus = stringToBoolean(
+			getClassProperty(this.el, "--has-autofocus", "true") || "true",
+		);
+		this.hasDynamicZIndex = stringToBoolean(
+			getClassProperty(this.el, "--has-dynamic-z-index", "false") || "false",
+		);
+		this.hasAbilityToCloseOnBackdropClick = stringToBoolean(
+			this.el.getAttribute("data-hs-overlay-keyboard") || "true",
+		);
 
-		const autoCloseBreakpoint = getClassProperty(this.el, '--auto-close');
-		const autoCloseEqualityType = getClassProperty(this.el, '--auto-close-equality-type');
-		const openedBreakpoint = getClassProperty(this.el, '--opened');
+		const autoCloseBreakpoint = getClassProperty(this.el, "--auto-close");
+		const autoCloseEqualityType = getClassProperty(
+			this.el,
+			"--auto-close-equality-type",
+		);
+		const openedBreakpoint = getClassProperty(this.el, "--opened");
 
-		this.autoClose = !isNaN(+autoCloseBreakpoint) && isFinite(+autoCloseBreakpoint) ? +autoCloseBreakpoint : BREAKPOINTS[autoCloseBreakpoint] || null;
-		this.autoCloseEqualityType = autoCloseEqualityType as TOverlayOptionsAutoCloseEqualityType ?? null;
-		this.openedBreakpoint = (!isNaN(+openedBreakpoint) && isFinite(+openedBreakpoint) ? +openedBreakpoint : BREAKPOINTS[openedBreakpoint]) || null;
+		this.autoClose =
+			!isNaN(+autoCloseBreakpoint) && isFinite(+autoCloseBreakpoint)
+				? +autoCloseBreakpoint
+				: BREAKPOINTS[autoCloseBreakpoint] || null;
+		this.autoCloseEqualityType =
+			autoCloseEqualityType as TOverlayOptionsAutoCloseEqualityType ?? null;
+		this.openedBreakpoint =
+			(!isNaN(+openedBreakpoint) && isFinite(+openedBreakpoint)
+				? +openedBreakpoint
+				: BREAKPOINTS[openedBreakpoint]) || null;
 
-		this.animationTarget = this?.el?.querySelector('.hs-overlay-animation-target') || this.el;
+		this.animationTarget =
+			this?.el?.querySelector(".hs-overlay-animation-target") || this.el;
+
+		this.initialZIndex = parseInt(getComputedStyle(this.el).zIndex, 10);
 
 		this.onElementClickListener = [];
 
@@ -103,8 +142,18 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	}
 
 	private elementClick() {
-		if (this.el.classList.contains('opened')) this.close();
-		else this.open();
+		const payloadFn = () => {
+			const payload = {
+				el: this.el,
+				isOpened: !!this.el.classList.contains("open"),
+			};
+
+			this.fireEvent("toggleClicked", payload);
+			dispatch("toggleClicked.hs.overlay", this.el, payload);
+		};
+
+		if (this.el.classList.contains("opened")) this.close(false, payloadFn);
+		else this.open(payloadFn);
 	}
 
 	private overlayClick(evt: Event) {
@@ -136,27 +185,38 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 		this.onOverlayClickListener = (evt) => this.overlayClick(evt);
 
-		this.el.addEventListener('click', this.onOverlayClickListener);
+		this.el.addEventListener("click", this.onOverlayClickListener);
 
 		if (this.toggleButtons.length) this.buildToggleButtons();
 	}
 
+	private getElementsByZIndex() {
+		return window.$hsOverlayCollection.filter((el) =>
+			el.element.initialZIndex === this.initialZIndex
+		);
+	}
+
 	private buildToggleButtons() {
 		this.toggleButtons.forEach((el) => {
-			if (this.el.classList.contains('opened')) el.ariaExpanded = 'true';
-			else el.ariaExpanded = 'false';
+			if (this.el.classList.contains("opened")) el.ariaExpanded = "true";
+			else el.ariaExpanded = "false";
 
 			this.onElementClickListener.push({
 				el,
 				fn: () => this.elementClick(),
 			});
 
-			el.addEventListener('click', this.onElementClickListener.find((toggleButton) => toggleButton.el === el).fn,);
+			el.addEventListener(
+				"click",
+				this.onElementClickListener.find((toggleButton) =>
+					toggleButton.el === el
+				).fn,
+			);
 		});
 	}
 
 	private hideAuto() {
-		const time = parseInt(getClassProperty(this.el, '--auto-hide', '0'));
+		const time = parseInt(getClassProperty(this.el, "--auto-hide", "0"));
 
 		if (time) {
 			this.autoHide = setTimeout(() => {
@@ -174,27 +234,29 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	}
 
 	private buildBackdrop() {
-		const overlayClasses = this.el.classList.value.split(' ');
+		const overlayClasses = this.el.classList.value.split(" ");
 		const overlayZIndex = parseInt(
-			window.getComputedStyle(this.el).getPropertyValue('z-index'),
+			window.getComputedStyle(this.el).getPropertyValue("z-index"),
 		);
 		const backdropId =
-			this.el.getAttribute('data-hs-overlay-backdrop-container') || false;
-		this.backdrop = document.createElement('div');
-		let backdropClasses = `${this.backdropClasses} ${this.backdropExtraClasses}`;
+			this.el.getAttribute("data-hs-overlay-backdrop-container") || false;
+		this.backdrop = document.createElement("div");
+		let backdropClasses =
+			`${this.backdropClasses} ${this.backdropExtraClasses}`;
 		const closeOnBackdrop =
-			getClassProperty(this.el, '--overlay-backdrop', 'true') !== 'static';
+			getClassProperty(this.el, "--overlay-backdrop", "true") !== "static";
 		const disableBackdrop =
-			getClassProperty(this.el, '--overlay-backdrop', 'true') === 'false';
+			getClassProperty(this.el, "--overlay-backdrop", "true") === "false";
 
 		this.backdrop.id = `${this.el.id}-backdrop`;
-		if ('style' in this.backdrop)
+		if ("style" in this.backdrop) {
 			this.backdrop.style.zIndex = `${overlayZIndex - 1}`;
+		}
 
 		for (const value of overlayClasses) {
 			if (
-				value.startsWith('hs-overlay-backdrop-open:') ||
-				value.includes(':hs-overlay-backdrop-open:')
+				value.startsWith("hs-overlay-backdrop-open:") ||
+				value.includes(":hs-overlay-backdrop-open:")
 			) {
 				backdropClasses += ` ${value}`;
 			}
@@ -206,23 +268,25 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			this.backdrop = document
 				.querySelector(backdropId)
 				.cloneNode(true) as HTMLElement;
-			this.backdrop.classList.remove('hidden');
+			this.backdrop.classList.remove("hidden");
 
-			backdropClasses = `${(this.backdrop as HTMLElement).classList.toString()}`;
-			this.backdrop.classList.value = '';
+			backdropClasses = `${
+				(this.backdrop as HTMLElement).classList.toString()
+			}`;
+			this.backdrop.classList.value = "";
 		}
 
 		if (closeOnBackdrop) {
 			this.onBackdropClickListener = () => this.backdropClick();
 
 			this.backdrop.addEventListener(
-				'click',
+				"click",
 				this.onBackdropClickListener,
 				true,
 			);
 		}
 
-		this.backdrop.setAttribute('data-hs-overlay-backdrop-template', '');
+		this.backdrop.setAttribute("data-hs-overlay-backdrop-template", "");
 
 		(this.backdropParent as HTMLElement).appendChild(this.backdrop);
 
@@ -239,15 +303,16 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		if (!backdrop) return;
 
 		if (this.openNextOverlay) {
-			backdrop.style.transitionDuration = `${parseFloat(
-				window
-					.getComputedStyle(backdrop)
-					.transitionDuration.replace(/[^\d.-]/g, ''),
-			) * 1.8
-				}s`;
+			backdrop.style.transitionDuration = `${
+				parseFloat(
+					window
+						.getComputedStyle(backdrop)
+						.transitionDuration.replace(/[^\d.-]/g, ""),
+				) * 1.8
+			}s`;
 		}
 
-		backdrop.classList.add('opacity-0');
+		backdrop.classList.add("opacity-0");
 
 		afterTransition(backdrop, () => {
 			backdrop.remove();
@@ -255,17 +320,17 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	}
 
 	private focusElement() {
-		const input: HTMLInputElement = this.el.querySelector('[autofocus]');
+		const input: HTMLInputElement = this.el.querySelector("[autofocus]");
 
 		if (!input) return false;
 		else input.focus();
 	}
 
 	private getScrollbarSize() {
-		let div = document.createElement('div');
-		div.style.overflow = 'scroll';
-		div.style.width = '100px';
-		div.style.height = '100px';
+		let div = document.createElement("div");
+		div.style.overflow = "scroll";
+		div.style.width = "100px";
+		div.style.height = "100px";
 		document.body.appendChild(div);
 
 		let scrollbarSize = div.offsetWidth - div.clientWidth;
@@ -279,11 +344,11 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		let toggleData = {};
 
 		buttons.forEach((el) => {
-			const data = el.getAttribute('data-hs-overlay-options');
+			const data = el.getAttribute("data-hs-overlay-options");
 			const dataOptions: IOverlayOptions = data ? JSON.parse(data) : {};
 			toggleData = {
 				...toggleData,
-				...dataOptions
+				...dataOptions,
 			};
 		});
 
@@ -291,8 +356,17 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	}
 
 	// Public methods
-	public open() {
-		const openedOverlays = document.querySelectorAll('.hs-overlay.open');
+	public open(cb: Function | null = null) {
+		if (this.hasDynamicZIndex) {
+			if (HSOverlay.currentZIndex < this.initialZIndex) {
+				HSOverlay.currentZIndex = this.initialZIndex;
+			}
+
+			HSOverlay.currentZIndex++;
+			this.el.style.zIndex = `${HSOverlay.currentZIndex}`;
+		}
+
+		const openedOverlays = document.querySelectorAll(".hs-overlay.open");
 		const currentlyOpened = window.$hsOverlayCollection.find(
 			(el) =>
 				Array.from(openedOverlays).includes(el.element.el) &&
@@ -302,7 +376,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			`[data-hs-overlay="#${this.el.id}"]`,
 		);
 		const disabledScroll =
-			getClassProperty(this.el, '--body-scroll', 'false') !== 'true';
+			getClassProperty(this.el, "--body-scroll", "false") !== "true";
 
 		if (this.isClosePrev && currentlyOpened) {
 			this.openNextOverlay = true;
@@ -315,9 +389,10 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		}
 
 		if (disabledScroll) {
-			document.body.style.overflow = 'hidden';
-			if (this.emulateScrollbarSpace)
+			document.body.style.overflow = "hidden";
+			if (this.emulateScrollbarSpace) {
 				document.body.style.paddingRight = `${this.getScrollbarSize()}px`;
+			}
 		}
 
 		this.buildBackdrop();
@@ -325,57 +400,75 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		this.hideAuto();
 
 		toggles.forEach((toggle) => {
-			if (toggle.ariaExpanded) toggle.ariaExpanded = 'true';
+			if (toggle.ariaExpanded) toggle.ariaExpanded = "true";
 		});
 		this.el.classList.remove(this.hiddenClass);
-		this.el.setAttribute('aria-overlay', 'true');
-		this.el.setAttribute('tabindex', '-1');
+		this.el.setAttribute("aria-overlay", "true");
+		this.el.setAttribute("tabindex", "-1");
 
 		setTimeout(() => {
-			if (this.el.classList.contains('opened')) return false;
+			if (this.el.classList.contains("opened")) return false;
 
-			this.el.classList.add('open', 'opened');
-			if (this.isLayoutAffect) document.body.classList.add('hs-overlay-body-open');
+			this.el.classList.add("open", "opened");
+			if (this.isLayoutAffect) {
+				document.body.classList.add("hs-overlay-body-open");
+			}
 
-			this.fireEvent('open', this.el);
-			dispatch('open.hs.overlay', this.el, this.el);
+			this.fireEvent("open", this.el);
+			dispatch("open.hs.overlay", this.el, this.el);
 
 			if (this.hasAutofocus) this.focusElement();
+
+			if (typeof cb === "function") cb();
+
+			HSOverlay.openedItemsQty++;
 		}, 50);
 	}
 
-	public close(forceClose = false) {
-		if (this.isLayoutAffect)
-			document.body.classList.remove('hs-overlay-body-open');
+	public close(forceClose = false, cb: Function | null = null) {
+		HSOverlay.openedItemsQty = HSOverlay.openedItemsQty <= 0
+			? 0
+			: HSOverlay.openedItemsQty - 1;
 
-		const closeFn = (cb: Function) => {
-			if (this.el.classList.contains('open')) return false;
+		if (HSOverlay.openedItemsQty === 0 && this.isLayoutAffect) {
+			document.body.classList.remove("hs-overlay-body-open");
+		}
+
+		const closeFn = (_cb: Function) => {
+			if (this.el.classList.contains("open")) return false;
 			const toggles = document.querySelectorAll(
 				`[data-hs-overlay="#${this.el.id}"]`,
 			);
 
 			toggles.forEach((toggle) => {
-				if (toggle.ariaExpanded) toggle.ariaExpanded = 'false';
+				if (toggle.ariaExpanded) toggle.ariaExpanded = "false";
 			});
 			this.el.classList.add(this.hiddenClass);
+			if (this.hasDynamicZIndex) this.el.style.zIndex = "";
 
 			this.destroyBackdrop();
 
-			this.fireEvent('close', this.el);
-			dispatch('close.hs.overlay', this.el, this.el);
+			this.fireEvent("close", this.el);
+			dispatch("close.hs.overlay", this.el, this.el);
 
-			if (!document.querySelector('.hs-overlay.opened')) {
-				document.body.style.overflow = '';
-				if (this.emulateScrollbarSpace) document.body.style.paddingRight = '';
+			if (!document.querySelector(".hs-overlay.opened")) {
+				document.body.style.overflow = "";
+				if (this.emulateScrollbarSpace) document.body.style.paddingRight = "";
 			}
 
-			cb(this.el);
+			_cb(this.el);
+			if (typeof cb === "function") cb();
+
+			if (HSOverlay.openedItemsQty === 0) {
+				document.body.classList.remove("hs-overlay-body-open");
+				if (this.hasDynamicZIndex) HSOverlay.currentZIndex = 0;
+			}
 		};
 
 		return new Promise((resolve) => {
-			this.el.classList.remove('open', 'opened');
-			this.el.removeAttribute('aria-overlay');
-			this.el.removeAttribute('tabindex');
+			this.el.classList.remove("open", "opened");
+			this.el.removeAttribute("aria-overlay");
+			this.el.removeAttribute("tabindex");
 
 			if (forceClose) closeFn(resolve);
 			else afterTransition(this.animationTarget, () => closeFn(resolve));
@@ -384,20 +477,22 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 	public destroy() {
 		// Remove classes
-		this.el.classList.remove('open', 'opened', this.hiddenClass);
-		if (this.isLayoutAffect)
-			document.body.classList.remove('hs-overlay-body-open');
+		this.el.classList.remove("open", "opened", this.hiddenClass);
+		if (this.isLayoutAffect) {
+			document.body.classList.remove("hs-overlay-body-open");
+		}
 
 		// Remove listeners
-		this.el.removeEventListener('click', this.onOverlayClickListener);
+		this.el.removeEventListener("click", this.onOverlayClickListener);
 		if (this.onElementClickListener.length) {
 			this.onElementClickListener.forEach(({ el, fn }) => {
-				el.removeEventListener('click', fn);
+				el.removeEventListener("click", fn);
 			});
 			this.onElementClickListener = null;
 		}
-		if (this.backdrop)
-			this.backdrop.removeEventListener('click', this.onBackdropClickListener);
+		if (this.backdrop) {
+			this.backdrop.removeEventListener("click", this.onBackdropClickListener);
+		}
 
 		if (this.backdrop) {
 			this.backdrop.remove();
@@ -410,29 +505,40 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	}
 
 	// Static methods
-	private static findInCollection(target: HSOverlay | HTMLElement | string): ICollectionItem<HSOverlay> | null {
+	private static findInCollection(
+		target: HSOverlay | HTMLElement | string,
+	): ICollectionItem<HSOverlay> | null {
 		return window.$hsOverlayCollection.find((el) => {
 			if (target instanceof HSOverlay) return el.element.el === target.el;
-			else if (typeof target === 'string') return el.element.el === document.querySelector(target);
-			else return el.element.el === target;
+			else if (typeof target === "string") {
+				return el.element.el === document.querySelector(target);
+			} else return el.element.el === target;
 		}) || null;
 	}
 
 	static getInstance(target: HTMLElement | string, isInstance?: boolean) {
 		// Backward compatibility
-		const _temp = typeof target === 'string' ? document.querySelector(target) : target;
-		const _target = _temp?.getAttribute('data-hs-overlay') ? _temp.getAttribute('data-hs-overlay') : target;
+		const _temp = typeof target === "string"
+			? document.querySelector(target)
+			: target;
+		const _target = _temp?.getAttribute("data-hs-overlay")
+			? _temp.getAttribute("data-hs-overlay")
+			: target;
 
 		const elInCollection = window.$hsOverlayCollection.find(
 			(el) =>
-				el.element.el === (typeof _target === 'string' ? document.querySelector(_target) : _target) ||
-				el.element.el === (typeof _target === 'string' ? document.querySelector(_target) : _target),
+				el.element.el ===
+					(typeof _target === "string"
+						? document.querySelector(_target)
+						: _target) ||
+				el.element.el ===
+					(typeof _target === "string"
+						? document.querySelector(_target)
+						: _target),
 		);
 
 		return elInCollection
-			? isInstance
-				? elInCollection
-				: elInCollection.element.el
+			? isInstance ? elInCollection : elInCollection.element.el
 			: null;
 	}
 
@@ -440,25 +546,28 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		if (!window.$hsOverlayCollection) {
 			window.$hsOverlayCollection = [];
 
-			document.addEventListener('keydown', (evt) =>
-				HSOverlay.accessibility(evt),
+			document.addEventListener(
+				"keydown",
+				(evt) => HSOverlay.accessibility(evt),
 			);
 		}
 
-		if (window.$hsOverlayCollection)
+		if (window.$hsOverlayCollection) {
 			window.$hsOverlayCollection = window.$hsOverlayCollection.filter(
 				({ element }) => document.contains(element.el),
 			);
+		}
 
 		document
-			.querySelectorAll('.hs-overlay:not(.--prevent-on-load-init)')
+			.querySelectorAll(".hs-overlay:not(.--prevent-on-load-init)")
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsOverlayCollection.find(
 						(elC) => (elC?.element?.el as HTMLElement) === el,
 					)
-				)
+				) {
 					new HSOverlay(el);
+				}
 			});
 	}
 
@@ -482,60 +591,68 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 	static setOpened(breakpoint: number, el: ICollectionItem<HSOverlay>) {
 		if (document.body.clientWidth >= breakpoint) {
-			document.body.classList.add('hs-overlay-body-open');
+			document.body.classList.add("hs-overlay-body-open");
 			el.element.open();
 		} else el.element.close(true);
 	}
 
 	// Accessibility methods
 	static accessibility(evt: KeyboardEvent) {
+		const opened = document.querySelectorAll(".hs-overlay.open");
+		const highest = getHighestZIndex(Array.from(opened) as HTMLElement[]);
 		const targets = window.$hsOverlayCollection.filter((el) =>
-			el.element.el.classList.contains('open'),
+			el.element.el.classList.contains("open")
 		);
-		const target = targets[targets.length - 1];
+		const target = targets.find((el) =>
+			window.getComputedStyle(el.element.el).getPropertyValue("z-index") ===
+				`${highest}`
+		);
 		const focusableElements = target?.element?.el?.querySelectorAll(
 			'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
 		);
 		const notHiddenFocusableElements: HTMLElement[] = [];
-		if (focusableElements?.length)
+		if (focusableElements?.length) {
 			focusableElements.forEach((el: HTMLElement) => {
 				if (!isParentOrElementHidden(el)) notHiddenFocusableElements.push(el);
 			});
+		}
 		const basicCheck = target && !evt.metaKey;
 
 		if (
 			basicCheck &&
 			!target.element.isTabAccessibilityLimited &&
-			evt.code === 'Tab'
-		)
+			evt.code === "Tab"
+		) {
 			return false;
+		}
 
-		if (basicCheck && notHiddenFocusableElements.length && evt.code === 'Tab') {
+		if (basicCheck && notHiddenFocusableElements.length && evt.code === "Tab") {
 			evt.preventDefault();
 			this.onTab(target);
 		}
-		if (basicCheck && evt.code === 'Escape') {
+		if (basicCheck && evt.code === "Escape") {
 			evt.preventDefault();
 			this.onEscape(target);
 		}
 	}
 
 	static onEscape(target: ICollectionItem<HSOverlay>) {
-		if (target && target.element.hasAbilityToCloseOnBackdropClick)
+		if (target && target.element.hasAbilityToCloseOnBackdropClick) {
 			target.element.close();
+		}
 	}
 
 	static onTab(target: ICollectionItem<HSOverlay>) {
 		const overlayElement = target.element.el;
 		const focusableElements = Array.from(
 			overlayElement.querySelectorAll<HTMLElement>(
-				'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-			)
+				'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+			),
 		);
 
 		if (focusableElements.length === 0) return false;
 
-		const focusedElement = overlayElement.querySelector(':focus');
+		const focusedElement = overlayElement.querySelector(":focus");
 
 		if (focusedElement) {
 			let foundCurrent = false;
@@ -559,7 +676,11 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	}
 
 	// Backward compatibility
-	static on(evt: string, target: HSOverlay | HTMLElement | string, cb: Function) {
+	static on(
+		evt: string,
+		target: HSOverlay | HTMLElement | string,
+		cb: Function,
+	) {
 		const instance = HSOverlay.findInCollection(target);
 
 		if (instance) instance.element.events[evt] = cb;
@@ -577,8 +698,9 @@ const autoCloseResizeFn = () => {
 	if (
 		!window.$hsOverlayCollection.length ||
 		!window.$hsOverlayCollection.find((el) => el.element.autoClose)
-	)
+	) {
 		return false;
+	}
 
 	const overlays = window.$hsOverlayCollection.filter(
 		(el) => el.element.autoClose,
@@ -586,12 +708,16 @@ const autoCloseResizeFn = () => {
 
 	overlays.forEach((overlay) => {
 		const { autoCloseEqualityType, autoClose } = overlay.element;
-		const condition = autoCloseEqualityType === 'less-than'
+		const condition = autoCloseEqualityType === "less-than"
 			? document.body.clientWidth <= autoClose
 			: document.body.clientWidth >= autoClose;
 
 		if (condition) {
 			overlay.element.close(true);
+		} else {
+			if (overlay.element.isLayoutAffect) {
+				document.body.classList.add("hs-overlay-body-open");
+			}
 		}
 	});
 };
@@ -600,8 +726,9 @@ const moveOverlayToBodyResizeFn = () => {
 	if (
 		!window.$hsOverlayCollection.length ||
 		!window.$hsOverlayCollection.find((el) => el.element.moveOverlayToBody)
-	)
+	) {
 		return false;
+	}
 
 	const overlays = window.$hsOverlayCollection.filter(
 		(el) => el.element.moveOverlayToBody,
@@ -610,7 +737,7 @@ const moveOverlayToBodyResizeFn = () => {
 	overlays.forEach((overlay) => {
 		const resolution = overlay.element.moveOverlayToBody;
 		const initPlace = overlay.element.initContainer;
-		const newPlace = document.querySelector('body');
+		const newPlace = document.querySelector("body");
 		const target = overlay.element.el;
 
 		if (!initPlace && target) return false;
@@ -618,13 +745,14 @@ const moveOverlayToBodyResizeFn = () => {
 		if (
 			document.body.clientWidth <= resolution &&
 			!isDirectChild(newPlace, target)
-		)
+		) {
 			newPlace.appendChild(target);
-		else if (
+		} else if (
 			document.body.clientWidth > resolution &&
 			!initPlace.contains(target)
-		)
+		) {
 			initPlace.appendChild(target);
+		}
 	});
 };
 
@@ -632,8 +760,9 @@ const setOpenedResizeFn = () => {
 	if (
 		!window.$hsOverlayCollection.length ||
 		!window.$hsOverlayCollection.find((el) => el.element.autoClose)
-	)
+	) {
 		return false;
+	}
 
 	const overlays = window.$hsOverlayCollection.filter(
 		(el) => el.element.autoClose,
@@ -641,7 +770,7 @@ const setOpenedResizeFn = () => {
 
 	overlays.forEach((overlay) => {
 		const { autoCloseEqualityType, autoClose } = overlay.element;
-		const condition = autoCloseEqualityType === 'less-than'
+		const condition = autoCloseEqualityType === "less-than"
 			? document.body.clientWidth <= autoClose
 			: document.body.clientWidth >= autoClose;
 
@@ -654,27 +783,38 @@ const setOpenedResizeFn = () => {
 const setBackdropZIndexResizeFn = () => {
 	if (
 		!window.$hsOverlayCollection.length ||
-		!window.$hsOverlayCollection.find((el) => el.element.el.classList.contains('opened'))
-	)
+		!window.$hsOverlayCollection.find((el) =>
+			el.element.el.classList.contains("opened")
+		)
+	) {
 		return false;
+	}
 
-	const overlays = window.$hsOverlayCollection.filter((el) => el.element.el.classList.contains('opened'));
+	const overlays = window.$hsOverlayCollection.filter((el) =>
+		el.element.el.classList.contains("opened")
+	);
 
 	overlays.forEach((overlay) => {
-		const overlayZIndex = parseInt(window.getComputedStyle(overlay.element.el).getPropertyValue('z-index'));
-		const backdrop: HTMLElement = document.querySelector(`#${overlay.element.el.id}-backdrop`);
+		const overlayZIndex = parseInt(
+			window.getComputedStyle(overlay.element.el).getPropertyValue("z-index"),
+		);
+		const backdrop: HTMLElement = document.querySelector(
+			`#${overlay.element.el.id}-backdrop`,
+		);
 		if (!backdrop) return false;
 
-		const backdropZIndex = parseInt(window.getComputedStyle(backdrop).getPropertyValue('z-index'));
+		const backdropZIndex = parseInt(
+			window.getComputedStyle(backdrop).getPropertyValue("z-index"),
+		);
 		if (overlayZIndex === backdropZIndex + 1) return false;
 
-		if ('style' in backdrop) backdrop.style.zIndex = `${overlayZIndex - 1}`;
+		if ("style" in backdrop) backdrop.style.zIndex = `${overlayZIndex - 1}`;
 
-		document.body.classList.add('hs-overlay-body-open');
+		document.body.classList.add("hs-overlay-body-open");
 	});
 };
 
-window.addEventListener('load', () => {
+window.addEventListener("load", () => {
 	HSOverlay.autoInit();
 
 	moveOverlayToBodyResizeFn();
@@ -682,14 +822,14 @@ window.addEventListener('load', () => {
 	// console.log('Overlay collection:', window.$hsOverlayCollection);
 });
 
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
 	autoCloseResizeFn();
 	moveOverlayToBodyResizeFn();
 	setOpenedResizeFn();
 	setBackdropZIndexResizeFn();
 });
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
 	window.HSOverlay = HSOverlay;
 }
 

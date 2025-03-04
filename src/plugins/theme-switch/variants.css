@@ -1,0 +1,17 @@
+@custom-variant hs-default-mode-active {
+  .default & {
+    @slot;
+  }
+}
+
+@custom-variant hs-dark-mode-active {
+  .dark & {
+    @slot;
+  }
+}
+
+@custom-variant hs-auto-mode-active {
+  .auto & {
+    @slot;
+  }
+}

@@ -4,6 +4,7 @@ export interface ICarouselOptions {
 	currentIndex: number;
 	loadingClasses?: string | string[];
 	dotsItemClasses?: string;
+	mode?: 'default' | 'scroll-nav';
 	isAutoHeight?: boolean;
 	isAutoPlay?: boolean;
 	isCentered?: boolean;

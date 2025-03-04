@@ -1,5 +1,5 @@
 /*
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -39,7 +39,7 @@ const getZIndex = (el: HTMLElement) => {
 	return zIndex;
 };
 
-function getHighestZIndex(arr: HTMLElement[]) {
+const getHighestZIndex = (arr: HTMLElement[]) => {
 	let highestZIndex = Number.NEGATIVE_INFINITY;
 
 	arr.forEach((el) => {
@@ -54,26 +54,6 @@ function getHighestZIndex(arr: HTMLElement[]) {
 
 	return highestZIndex;
 }
-
-const isIOS = () => {
-	if (/iPad|iPhone|iPod/.test(navigator.platform)) {
-		return true;
-	} else {
-		return (
-			navigator.maxTouchPoints &&
-			navigator.maxTouchPoints > 2 &&
-			/MacIntel/.test(navigator.platform)
-		);
-	}
-};
-
-const isIpadOS = () => {
-	return (
-		navigator.maxTouchPoints &&
-		navigator.maxTouchPoints > 2 &&
-		/MacIntel/.test(navigator.platform)
-	);
-};
 
 const isDirectChild = (parent: Element, child: HTMLElement) => {
 	const children = parent.children;
@@ -113,6 +93,10 @@ const isEnoughSpace = (
 	}
 };
 
+const isFocused = (target: HTMLElement) => {
+	return document.activeElement === target;
+};
+
 const isFormElement = (target: HTMLElement) => {
 	return (
 		target instanceof HTMLInputElement ||
@@ -121,14 +105,24 @@ const isFormElement = (target: HTMLElement) => {
 	);
 };
 
-const isParentOrElementHidden = (element: any): any => {
-	if (!element) return false;
+const isIOS = () => {
+	if (/iPad|iPhone|iPod/.test(navigator.platform)) {
+		return true;
+	} else {
+		return (
+			navigator.maxTouchPoints &&
+			navigator.maxTouchPoints > 2 &&
+			/MacIntel/.test(navigator.platform)
+		);
+	}
+};
 
-	const computedStyle = window.getComputedStyle(element);
-
-	if (computedStyle.display === 'none') return true;
-
-	return isParentOrElementHidden(element.parentElement);
+const isIpadOS = () => {
+	return (
+		navigator.maxTouchPoints &&
+		navigator.maxTouchPoints > 2 &&
+		/MacIntel/.test(navigator.platform)
+	);
 };
 
 const isJson = (str: string) => {
@@ -149,6 +143,26 @@ const isJson = (str: string) => {
 
 	return false;
 };
+
+const isParentOrElementHidden = (element: any): any => {
+	if (!element) return false;
+
+	const computedStyle = window.getComputedStyle(element);
+
+	if (computedStyle.display === 'none') return true;
+
+	return isParentOrElementHidden(element.parentElement);
+};
+
+const isScrollable = (el: HTMLElement) => {
+	const style = window.getComputedStyle(el);
+	const overflowY = style.overflowY;
+	const overflowX = style.overflowX;
+	const canScrollVertically = (overflowY === 'scroll' || overflowY === 'auto') && el.scrollHeight > el.clientHeight;
+	const canScrollHorizontally = (overflowX === 'scroll' || overflowX === 'auto') && el.scrollWidth > el.clientWidth;
+
+	return canScrollVertically || canScrollHorizontally;
+}
 
 const debounce = (func: Function, timeout = 200) => {
 	let timer: any;
@@ -236,13 +250,15 @@ export {
 	getClassPropertyAlt,
 	getZIndex,
 	getHighestZIndex,
-	isIOS,
-	isIpadOS,
 	isEnoughSpace,
-	isParentOrElementHidden,
+	isFocused,
 	isFormElement,
 	isDirectChild,
+	isIOS,
+	isIpadOS,
 	isJson,
+	isParentOrElementHidden,
+	isScrollable,
 	debounce,
 	dispatch,
 	afterTransition,

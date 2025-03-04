@@ -1,5 +1,5 @@
 /*
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -21,6 +21,7 @@ import HSOverlay from '../plugins/overlay';
 import HSPinInput from '../plugins/pin-input';
 import HSRangeSlider from '../plugins/range-slider';
 import HSRemoveElement from '../plugins/remove-element';
+import HSScrollNav from '../plugins/scroll-nav';
 import HSScrollspy from '../plugins/scrollspy';
 import HSSelect from '../plugins/select';
 import HSStepper from '../plugins/stepper';
@@ -72,6 +73,7 @@ export const COLLECTIONS: ISpaCollectionItem[] = [
 		fn: HSRemoveElement,
 		collection: '$hsRemoveElementCollection',
 	},
+	{ key: 'scroll-nav', fn: HSScrollNav, collection: '$hsScrollNavCollection' },
 	{ key: 'scrollspy', fn: HSScrollspy, collection: '$hsScrollspyCollection' },
 	{ key: 'select', fn: HSSelect, collection: '$hsSelectCollection' },
 	{ key: 'stepper', fn: HSStepper, collection: '$hsStepperCollection' },

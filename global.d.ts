@@ -18,6 +18,7 @@ import type HSOverlay from './src/plugins/overlay';
 import type HSPinInput from './src/plugins/pin-input';
 import type HSRangeSlider from './src/plugins/range-slider';
 import type HSRemoveElement from './src/plugins/remove-element';
+import type HSScrollNav from './src/plugins/scroll-nav';
 import type HSScrollspy from './src/plugins/scrollspy';
 import type HSSelect from './src/plugins/select';
 import type HSStepper from './src/plugins/stepper';
@@ -32,12 +33,19 @@ import type HSTreeView from './src/plugins/tree-view';
 
 declare global {
 	var noUiSlider: typeof INoUiSlider;
-	var Popper: {
-		createPopper: (
-			referenceEl: Element,
-			popperEl: HTMLElement,
-			options?: any,
-		) => any;
+	var FloatingUIDOM: {
+		computePosition: (
+			reference: Element,
+			floating: HTMLElement,
+			options?: any
+		) => Promise<{ x: number; y: number; placement: string }>;
+		autoUpdate: (
+			reference: Element,
+			floating: HTMLElement,
+			update: () => void,
+		) => () => void;
+		offset: (offset: number | [number, number]) => any;
+		flip: () => any;
 	};
 
 	interface Window {
@@ -59,6 +67,7 @@ declare global {
 		$hsPinInputCollection: ICollectionItem<HSPinInput>[];
 		$hsRemoveElementCollection: ICollectionItem<HSRemoveElement>[];
 		$hsRangeSliderCollection: ICollectionItem<HSRangeSlider>[];
+		$hsScrollNavCollection: ICollectionItem<HSScrollNav>[];
 		$hsScrollspyCollection: ICollectionItem<HSScrollspy>[];
 		$hsSelectCollection: ICollectionItem<HSSelect>[];
 		$hsStepperCollection: ICollectionItem<HSStepper>[];
@@ -73,4 +82,4 @@ declare global {
 	}
 }
 
-export {};
+export { };

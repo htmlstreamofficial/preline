@@ -1,0 +1,54 @@
+@custom-variant hs-layout-splitter-dragging {
+
+  &.dragging {
+    @slot;
+  }
+
+  .dragging & {
+    @slot;
+  }
+}
+
+@custom-variant hs-layout-splitter-prev-limit-reached {
+
+  &.prev-limit-reached {
+    @slot;
+  }
+
+  .prev-limit-reached & {
+    @slot;
+  }
+}
+
+@custom-variant hs-layout-splitter-next-limit-reached {
+
+  &.next-limit-reached {
+    @slot;
+  }
+
+  .next-limit-reached & {
+    @slot;
+  }
+}
+
+@custom-variant hs-layout-splitter-prev-pre-limit-reached {
+
+  &.prev-pre-limit-reached {
+    @slot;
+  }
+
+  .prev-pre-limit-reached & {
+    @slot;
+  }
+}
+
+@custom-variant hs-layout-splitter-next-pre-limit-reached {
+
+  &.next-pre-limit-reached {
+    @slot;
+  }
+
+  .next-pre-limit-reached & {
+    @slot;
+  }
+}

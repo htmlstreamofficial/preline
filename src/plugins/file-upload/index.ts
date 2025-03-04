@@ -1,6 +1,6 @@
 /*
  * HSFileUpload
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -60,7 +60,7 @@ class HSFileUpload
 					<span class="size-8 flex justify-center items-center border border-gray-200 text-gray-500 rounded-lg dark:border-neutral-700 dark:text-neutral-500" data-hs-file-upload-file-icon></span>
 					<div>
 						<p class="text-sm font-medium text-gray-800 dark:text-white">
-							<span class="truncate inline-block max-w-[300px] align-bottom" data-hs-file-upload-file-name></span>.<span data-hs-file-upload-file-ext></span>
+							<span class="truncate inline-block max-w-75 align-bottom" data-hs-file-upload-file-name></span>.<span data-hs-file-upload-file-ext></span>
 						</p>
 						<p class="text-xs text-gray-500 dark:text-neutral-500" data-hs-file-upload-file-size></p>
 					</div>

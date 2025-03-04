@@ -16,24 +16,28 @@ export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
 }
+export interface IScrollspyOptions {
+	ignoreScrollUp?: boolean;
+}
 export interface IScrollspy {
-	options?: {};
+	options?: IScrollspyOptions;
 	destroy(): void;
 }
-declare class HSScrollspy extends HSBasePlugin<{}> implements IScrollspy {
-	private activeSection;
-	private readonly contentId;
-	private readonly content;
+declare class HSScrollspy extends HSBasePlugin<IScrollspyOptions> implements IScrollspy {
+	private readonly ignoreScrollUp;
 	private readonly links;
 	private readonly sections;
 	private readonly scrollableId;
 	private readonly scrollable;
+	private isScrollingDown;
+	private lastScrollTop;
 	private onScrollableScrollListener;
 	private onLinkClickListener;
 	constructor(el: HTMLElement, options?: {});
 	private scrollableScroll;
-	private linkClick;
 	private init;
+	private determineScrollDirection;
+	private linkClick;
 	private update;
 	private scrollTo;
 	destroy(): void;

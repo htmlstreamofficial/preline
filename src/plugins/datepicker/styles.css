@@ -1,0 +1,216 @@
+.vc {
+  @apply bg-white border border-gray-200 shadow-lg rounded-xl dark:bg-neutral-900 dark:border-neutral-700;
+
+  &[data-vc-input] {
+    @apply absolute;
+  }
+
+  &[data-vc-type="default"] {
+    @apply p-3;
+  }
+
+  &[data-vc-type="multiple"] {
+    @apply w-80 sm:w-160 py-3;
+  }
+
+  &[data-vc-calendar-hidden] {
+    @apply hidden;
+  }
+}
+
+.vc-week {
+  @apply flex pb-1.5;
+}
+
+.vc-week__day {
+  @apply m-px w-10 block font-normal text-center text-sm text-gray-500 dark:text-neutral-500;
+
+  &:focus {
+    @apply outline-hidden;
+  }
+}
+
+.vc-dates {
+  @apply grid grid-cols-7 gap-y-0.5;
+}
+
+.vc-date {
+  @apply relative size-10.5 flex justify-center items-center text-sm text-gray-800 rounded-full dark:text-neutral-200;
+
+  &:empty {
+    @apply invisible;
+  }
+
+  &:hover {
+    @apply text-blue-600;
+
+    &::before {
+      @apply border-blue-600;
+    }
+  }
+
+  &:nth-child(7n) {
+    @apply rounded-r-full;
+  }
+
+  &:nth-child(7n+1) {
+    @apply rounded-l-full;
+  }
+
+  &::before {
+    content: "";
+    @apply absolute inset-0 size-full border-[1.5px] border-transparent rounded-full;
+  }
+
+  button {
+    @apply relative size-full rounded-full;
+  }
+
+  &[data-vc-date-month="prev"],
+  &[data-vc-date-month="next"] {
+    @apply text-gray-400 dark:text-neutral-600;
+  }
+
+  &[data-vc-date-today] {
+    @apply bg-blue-600 text-white;
+  }
+
+  &[data-vc-date-selected] {
+    @apply bg-blue-600;
+
+    &:not([data-vc-date-selected="middle"]) {
+      @apply text-white;
+    }
+
+    &[data-vc-date-hover="first-and-last"] {
+      @apply rounded-full;
+    }
+  }
+
+  &[data-vc-date-hover="first"],
+  &[data-vc-date-selected="first"] {
+    @apply rounded-l-full rounded-r-none;
+
+    &::before {
+      @apply rounded-l-full rounded-r-none;
+    }
+  }
+
+  &[data-vc-date-hover="last"],
+  &[data-vc-date-selected="last"] {
+    @apply rounded-r-full rounded-l-none;
+
+    &::before {
+      @apply rounded-r-full rounded-l-none;
+    }
+  }
+
+  &[data-vc-date-hover="first"][data-vc-date-selected],
+  &[data-vc-date-hover="last"][data-vc-date-selected],
+  &[data-vc-date-selected="first"],
+  &[data-vc-date-selected="last"] {
+    @apply text-white;
+
+    &::before {
+      @apply bg-blue-600;
+    }
+  }
+
+  &[data-vc-date-hover],
+  &[data-vc-date-selected="middle"] {
+    &:not([data-vc-date-hover="first"]):not([data-vc-date-hover="last"]):not([data-vc-date-hover="first-and-last"]) {
+      @apply rounded-none;
+    }
+
+    &:not([data-vc-date-today]):not([data-vc-date-hover="first-and-last"]) {
+      @apply bg-gray-100 dark:bg-neutral-800;
+    }
+  }
+}
+
+.vc-months {
+  @apply grid grid-cols-4 gap-3;
+}
+
+.vc-months__month {
+  @apply py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 dark:border-neutral-700 dark:text-neutral-200;
+
+  &:hover {
+    @apply border-gray-300 text-gray-500 dark:border-neutral-600 dark:text-neutral-500;
+  }
+
+  &:focus {
+    @apply outline-none border-gray-300 text-gray-500 dark:border-neutral-600 dark:text-neutral-500;
+  }
+
+  &:disabled,
+  &.disabled {
+    @apply opacity-50 pointer-events-none;
+  }
+
+  &[data-vc-months-month-selected] {
+    @apply bg-blue-600 border-blue-600 text-white dark:bg-blue-500 dark:border-blue-500;
+  }
+}
+
+.vc-month {
+  @apply text-gray-800 dark:text-neutral-200;
+
+  &:hover,
+  &:focus {
+    @apply text-gray-600 dark:text-neutral-300;
+  }
+}
+
+.vc-years {
+  @apply grid grid-cols-5 gap-2;
+}
+
+.vc-years__year {
+  @apply py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800 dark:border-neutral-700 dark:text-neutral-200;
+
+  &:hover,
+  &:focus {
+    @apply border-gray-300 text-gray-500 dark:border-neutral-600 dark:text-neutral-500;
+  }
+
+  &:focus {
+    @apply outline-none;
+  }
+
+  &:disabled,
+  &.disabled {
+    @apply opacity-50 pointer-events-none;
+  }
+
+  &[data-vc-years-year-selected] {
+    @apply bg-blue-600 border-blue-600 text-white dark:bg-blue-500 dark:border-blue-500;
+  }
+}
+
+.vc-year {
+  @apply text-gray-800 dark:text-neutral-200;
+
+  &:hover,
+  &:focus {
+    @apply text-gray-600 dark:text-neutral-300;
+  }
+}
+
+.vc-arrow {
+  @apply size-8 flex justify-center items-center text-gray-800 rounded-full dark:text-neutral-400;
+
+  &:hover,
+  &:focus {
+    @apply bg-gray-100 dark:bg-neutral-800;
+  }
+
+  &:focus {
+    @apply outline-hidden;
+  }
+
+  &:disabled,
+  &.disabled {
+    @apply opacity-50 pointer-events-none;
+  }
+}

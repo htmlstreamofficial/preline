@@ -1,0 +1,9 @@
+@custom-variant hs-tooltip-shown {
+  &.hs-tooltip-content.show {
+    @slot;
+  }
+
+  .hs-tooltip.show & {
+    @slot;
+  }
+}

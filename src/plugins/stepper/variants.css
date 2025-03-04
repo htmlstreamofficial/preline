@@ -1,0 +1,76 @@
+@custom-variant hs-stepper-active {
+
+  &.active {
+    @slot;
+  }
+
+  .active & {
+    @slot;
+  }
+}
+
+@custom-variant hs-stepper-success {
+
+  &.success {
+    @slot;
+  }
+
+  .success & {
+    @slot;
+  }
+}
+
+@custom-variant hs-stepper-completed {
+
+  &.completed {
+    @slot;
+  }
+
+  .completed & {
+    @slot;
+  }
+}
+
+@custom-variant hs-stepper-error {
+
+  &.error {
+    @slot;
+  }
+
+  .error & {
+    @slot;
+  }
+}
+
+@custom-variant hs-stepper-processed {
+
+  &.processed {
+    @slot;
+  }
+
+  .processed & {
+    @slot;
+  }
+}
+
+@custom-variant hs-stepper-disabled {
+
+  &.disabled {
+    @slot;
+  }
+
+  .disabled & {
+    @slot;
+  }
+}
+
+@custom-variant hs-stepper-skipped {
+
+  &.skipped {
+    @slot;
+  }
+
+  .skipped & {
+    @slot;
+  }
+}

@@ -167,7 +167,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private toggleTextWrapper;
 	private tagsInput;
 	private dropdown;
-	private popperInstance;
+	private floatingUIInstance;
 	private searchWrapper;
 	private search;
 	private searchNoResult;
@@ -207,7 +207,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private setTagsItems;
 	private buildTagsInput;
 	private buildDropdown;
-	private buildPopper;
+	private buildFloatingUI;
 	private updateDropdownWidth;
 	private buildSearch;
 	private buildOption;

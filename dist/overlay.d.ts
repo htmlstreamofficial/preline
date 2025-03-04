@@ -27,8 +27,8 @@ export interface IOverlayOptions {
 }
 export interface IOverlay {
 	options?: IOverlayOptions;
-	open(): void;
-	close(): void;
+	open(cb: Function | null): void;
+	close(forceClose: boolean, cb: Function | null): void;
 	destroy(): void;
 }
 export type TOverlayOptionsAutoCloseEqualityType = "less-than" | "more-than";
@@ -43,17 +43,21 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private openNextOverlay;
 	private autoHide;
 	private toggleButtons;
+	static openedItemsQty: number;
 	initContainer: HTMLElement | null;
 	isCloseWhenClickInside: boolean;
 	isTabAccessibilityLimited: boolean;
 	isLayoutAffect: boolean;
 	hasAutofocus: boolean;
+	hasDynamicZIndex: boolean;
 	hasAbilityToCloseOnBackdropClick: boolean;
 	openedBreakpoint: number | null;
 	autoClose: number | null;
 	autoCloseEqualityType: TOverlayOptionsAutoCloseEqualityType | null;
 	moveOverlayToBody: number | null;
 	private backdrop;
+	private initialZIndex;
+	static currentZIndex: number;
 	private onElementClickListener;
 	private onOverlayClickListener;
 	private onBackdropClickListener;
@@ -62,6 +66,7 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private overlayClick;
 	private backdropClick;
 	private init;
+	private getElementsByZIndex;
 	private buildToggleButtons;
 	private hideAuto;
 	private checkTimer;
@@ -70,8 +75,8 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private focusElement;
 	private getScrollbarSize;
 	private collectToggleParameters;
-	open(): Promise<void>;
-	close(forceClose?: boolean): Promise<unknown>;
+	open(cb?: Function | null): Promise<void>;
+	close(forceClose?: boolean, cb?: Function | null): Promise<unknown>;
 	destroy(): void;
 	private static findInCollection;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSOverlay>;

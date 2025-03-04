@@ -1,6 +1,6 @@
 /*
  * HSTextareaAutoHeight
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -90,7 +90,27 @@ class HSTextareaAutoHeight
 	}
 
 	private callbackAccordingToType() {
-		if (this.parentType() === 'tabs') {
+		if (this.parentType() === 'collapse') {
+			const collapseId = this.el.closest('.hs-collapse').id;
+			const { element } = (window.HSCollapse as any).getInstance(
+				`[data-hs-collapse="#${collapseId}"]`,
+				true,
+			);
+
+			element.on('beforeOpen', () => {
+				if (!this.el) return false;
+
+				this.textareaSetHeight(3);
+			});
+		} else if (this.parentType() === 'overlay') {
+			const overlay = (window.HSOverlay as any).getInstance(this.el.closest('.hs-overlay'), true);
+
+			overlay.element.on('open', () => {
+				const collection = window.$hsTextareaAutoHeightCollection.filter(({ element }) => element.el.closest('.hs-overlay') === overlay.element.el);
+
+				collection.forEach(({ element }) => element.textareaSetHeight(3));
+			});
+		} else if (this.parentType() === 'tabs') {
 			const tabId = this.el.closest('[role="tabpanel"]')?.id;
 			const tab = document.querySelector(`[data-hs-tab="#${tabId}"]`);
 			const tabs = tab.closest('[role="tablist"]');
@@ -106,29 +126,6 @@ class HSTextareaAutoHeight
 
 					if (instance) instance.element.textareaSetHeight(3);
 				});
-			});
-		} else if (this.parentType() === 'collapse') {
-			const collapseId = this.el.closest('.hs-collapse').id;
-			const { element } = (window.HSCollapse as any).getInstance(
-				`[data-hs-collapse="#${collapseId}"]`,
-				true,
-			);
-
-			element.on('beforeOpen', () => {
-				if (!this.el) return false;
-
-				this.textareaSetHeight(3);
-			});
-		} else if (this.parentType() === 'overlay') {
-			const { element } = (window.HSOverlay as any).getInstance(
-				this.el.closest('.hs-overlay'),
-				true,
-			);
-
-			element.on('open', () => {
-				if (!this.el) return false;
-
-				this.textareaSetHeight(3);
 			});
 		} else return false;
 	}

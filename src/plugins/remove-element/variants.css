@@ -1,0 +1,5 @@
+@custom-variant hs-removing {
+  &.hs-removing {
+    @slot;
+  }
+}

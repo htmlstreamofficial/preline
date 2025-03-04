@@ -1,0 +1,51 @@
+@custom-variant hs-accordion-active {
+  &.hs-accordion.active {
+    @slot;
+  }
+
+  .hs-accordion.active>& {
+    @slot;
+  }
+
+  .hs-accordion.active>.hs-accordion-toggle & {
+    @slot;
+  }
+
+  .hs-accordion.active>.hs-accordion-heading>.hs-accordion-toggle & {
+    @slot;
+  }
+
+  &.hs-accordion-toggle {
+
+    .hs-accordion.active>& {
+      @slot;
+    }
+  }
+
+  &.hs-accordion-toggle {
+
+    .hs-accordion.active>.hs-accordion-heading>& {
+      @slot;
+    }
+  }
+
+  &.hs-accordion-force-active {
+    .hs-accordion.active & {
+      @slot;
+    }
+  }
+}
+
+@custom-variant hs-accordion-selected {
+  &.selected {
+    .hs-accordion & {
+      @slot;
+    }
+  }
+}
+
+@custom-variant hs-accordion-outside-active {
+  &.active {
+    @slot;
+  }
+}

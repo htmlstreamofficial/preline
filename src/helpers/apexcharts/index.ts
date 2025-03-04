@@ -1,5 +1,5 @@
 /*
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -25,7 +25,7 @@ function buildTooltip(props: IChartProps, options: IBuildTooltipHelperOptions) {
 		labelDivider = '',
 		wrapperClasses = 'ms-0.5 mb-2 bg-white border border-gray-200 text-gray-800 rounded-lg shadow-md dark:bg-neutral-800 dark:border-neutral-700',
 		wrapperExtClasses = '',
-		seriesClasses = 'text-[12px]',
+		seriesClasses = 'text-xs',
 		seriesExtClasses = '',
 		titleClasses = 'font-semibold !text-sm !bg-white !border-gray-200 text-gray-800 rounded-t-lg dark:!bg-neutral-800 dark:!border-neutral-700 dark:text-neutral-200',
 		titleExtClasses = '',
@@ -98,7 +98,7 @@ function buildTooltipCompareTwo(
 		labelDivider = '',
 		wrapperClasses = 'ms-0.5 mb-2 bg-white border border-gray-200 text-gray-800 rounded-lg shadow-md dark:bg-neutral-800 dark:border-neutral-700',
 		wrapperExtClasses = '',
-		seriesClasses = '!justify-between w-full text-[12px]',
+		seriesClasses = '!justify-between w-full text-xs',
 		seriesExtClasses = '',
 		titleClasses = 'flex justify-between font-semibold !text-sm !bg-white !border-gray-200 text-gray-800 rounded-t-lg dark:!bg-neutral-800 dark:!border-neutral-700 dark:text-neutral-200',
 		titleExtClasses = '',
@@ -184,7 +184,7 @@ function buildTooltipCompareTwoAlt(
 		labelDivider = '',
 		wrapperClasses = 'ms-0.5 mb-2 bg-white border border-gray-200 text-gray-800 rounded-lg shadow-md dark:bg-neutral-800 dark:border-neutral-700',
 		wrapperExtClasses = '',
-		seriesClasses = '!justify-between w-full text-[12px]',
+		seriesClasses = '!justify-between w-full text-xs',
 		seriesExtClasses = '',
 		titleClasses = 'flex justify-between font-semibold !text-sm !bg-white !border-gray-200 text-gray-800 rounded-t-lg dark:!bg-neutral-800 dark:!border-neutral-700 dark:text-neutral-200',
 		titleExtClasses = '',
@@ -222,7 +222,7 @@ function buildTooltipCompareTwoAlt(
 		seriesGroups += `<div class="apexcharts-tooltip-series-group !flex ${seriesClasses} order-${i + 1} ${seriesExtClasses}">
       <span class="flex items-center">
         <span class="apexcharts-tooltip-marker ${markerClasses} ${markerExtClasses}" style="background: ${colors[i]}"></span>
-        <div class="apexcharts-tooltip-text text-[12px]">
+        <div class="apexcharts-tooltip-text text-xs">
           <div class="apexcharts-tooltip-y-group !py-0.5">
             <span class="apexcharts-tooltip-text-y-value ${valueClasses} ${valueExtClasses}">${newCategory} ${label || ''}${labelDivider}</span>
           </div>

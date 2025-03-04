@@ -1,6 +1,6 @@
 /*
  * HSTreeView
- * @version: 2.7.0
+ * @version: 3.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -344,8 +344,6 @@ class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 	// Backward compatibility
 	static on(evt: string, target: HSTreeView | HTMLElement | string, cb: Function) {
 		const instance = HSTreeView.findInCollection(target);
-
-		console.log(1);
 
 		if (instance) instance.element.events[evt] = cb;
 	}

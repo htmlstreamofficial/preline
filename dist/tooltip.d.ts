@@ -26,11 +26,11 @@ declare class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	private readonly toggle;
 	content: HTMLElement | null;
 	readonly eventMode: string;
-	private readonly preventPopper;
-	private popperInstance;
+	private readonly preventFloatingUI;
 	private readonly placement;
 	private readonly strategy;
 	private readonly scope;
+	cleanupAutoUpdate: (() => void) | null;
 	private onToggleClickListener;
 	private onToggleFocusListener;
 	private onToggleMouseEnterListener;
@@ -47,7 +47,7 @@ declare class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	private leave;
 	private click;
 	private focus;
-	private buildPopper;
+	private buildFloatingUI;
 	private _show;
 	show(): void;
 	hide(): void;

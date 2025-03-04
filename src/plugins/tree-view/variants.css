@@ -1,0 +1,21 @@
+@custom-variant hs-tree-view-selected {
+
+  &[data-hs-tree-view-item].selected {
+    @slot;
+  }
+
+  [data-hs-tree-view-item].selected>& {
+    @slot;
+  }
+}
+
+@custom-variant hs-tree-view-disabled {
+
+  &[data-hs-tree-view-item].disabled {
+    @slot;
+  }
+
+  [data-hs-tree-view-item].disabled>& {
+    @slot;
+  }
+}

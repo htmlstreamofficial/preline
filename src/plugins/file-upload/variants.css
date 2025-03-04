@@ -1,0 +1,10 @@
+@custom-variant hs-file-upload-complete {
+
+  &.complete {
+    @slot;
+  }
+
+  .complete & {
+    @slot;
+  }
+}

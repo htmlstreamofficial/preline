@@ -1,0 +1,5 @@
+@custom-variant hs-scrollspy-active {
+  &.active {
+    @slot;
+  }
+}

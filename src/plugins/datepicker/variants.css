@@ -1,0 +1,119 @@
+@custom-variant hs-vc-date-today {
+  &[data-vc-date-today] {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-date-hover {
+  &[data-vc-date-hover] {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-date-hover-first {
+
+  &[data-vc-date-hover='first'] {
+    @slot;
+  }
+
+  [data-vc-date-hover='first'] & {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-date-hover-last {
+
+  &[data-vc-date-hover='last'] {
+    @slot;
+  }
+
+  [data-vc-date-hover='last'] & {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-date-selected {
+  &[data-vc-date-selected] {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-calendar-selected-middle {
+
+  &[data-vc-date-selected='middle'] {
+    @slot;
+  }
+
+  [data-vc-date-selected='middle'] & {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-calendar-selected-first {
+
+  &[data-vc-date-selected='first'] {
+    @slot;
+  }
+
+  [data-vc-date-selected='first'] & {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-calendar-selected-last {
+
+  &[data-vc-date-selected='last'] {
+    @slot;
+  }
+
+  [data-vc-date-selected='last'] & {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-date-weekend {
+  &[data-vc-date-weekend] {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-week-day-off {
+  &[data-vc-week-day-off] {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-date-month-prev {
+  &[data-vc-date-month='prev'] {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-date-month-next {
+  &[data-vc-date-month='next'] {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-calendar-hidden {
+
+  &[data-vc-calendar-hidden] {
+    @slot;
+  }
+
+  [data-vc-calendar-hidden] & {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-months-month-selected {
+  &[data-vc-months-month-selected] {
+    @slot;
+  }
+}
+
+@custom-variant hs-vc-years-year-selected {
+  &[data-vc-years-year-selected] {
+    @slot;
+  }
+}
