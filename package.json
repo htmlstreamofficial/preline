@@ -62,5 +62,9 @@
 		"ts-loader": "^9.5.1",
 		"typescript": "^5.5.3",
 		"webpack-cli": "^5.0.1"
+	},
+	"dependencies": {
+		"@floating-ui/dom": "^1.6.13",
+		"vanilla-calendar-pro": "^3.0.3"
 	}
 }
