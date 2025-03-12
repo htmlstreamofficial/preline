@@ -1,26 +1,3 @@
-/* States */
-@custom-variant hs-success {
-
-  &.success {
-    @slot;
-  }
-
-  .success & {
-    @slot;
-  }
-}
-
-@custom-variant hs-error {
-
-  &.error {
-    @slot;
-  }
-
-  .error & {
-    @slot;
-  }
-}
-
 /* Preline */
 @import './src/plugins/dropdown/variants.css';
 @import './src/plugins/remove-element/variants.css';
@@ -45,6 +22,29 @@
 @import './src/plugins/file-upload/variants.css';
 @import './src/plugins/datepicker/variants.css';
 @import './src/plugins/theme-switch/variants.css';
+
+/* States */
+@custom-variant hs-success {
+
+  &.success {
+    @slot;
+  }
+
+  .success & {
+    @slot;
+  }
+}
+
+@custom-variant hs-error {
+
+  &.error {
+    @slot;
+  }
+
+  .error & {
+    @slot;
+  }
+}
 
 /* Apexcharts */
 @custom-variant hs-apexcharts-tooltip-dark {
