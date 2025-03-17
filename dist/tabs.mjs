@@ -1,7 +1,14 @@
-var e={189:(e,t,n)=>{n.d(t,{Fy:()=>o,LO:()=>i});const o=["ArrowUp","ArrowLeft","ArrowDown","ArrowRight","Home","End"],i={xs:0,sm:640,md:768,lg:1024,xl:1280,"2xl":1536}},615:(e,t,n)=>{n.d(t,{A:()=>o});class o{constructor(e,t,n){this.el=e,this.options=t,this.events=n,this.el=e,this.options=t,this.events={}}createCollection(e,t){var n;e.push({id:(null===(n=null==t?void 0:t.el)||void 0===n?void 0:n.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},926:(e,t,n)=>{n.d(t,{JD:()=>o});const o=(e,t,n=null)=>{const o=new CustomEvent(e,{detail:{payload:n},bubbles:!0,cancelable:!0,composed:!1});t.dispatchEvent(o)}}},t={};function n(o){var i=t[o];if(void 0!==i)return i.exports;var s=t[o]={exports:{}};return e[o](s,s.exports,n),s.exports}n.d=(e,t)=>{for(var o in t)n.o(t,o)&&!n.o(e,o)&&Object.defineProperty(e,o,{enumerable:!0,get:t[o]})},n.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var o={};n.d(o,{A:()=>a});var i=n(926),s=n(615),r=n(189);
+var e={189:(e,t,n)=>{n.d(t,{Fy:()=>o,LO:()=>i});const o=["ArrowUp","ArrowLeft","ArrowDown","ArrowRight","Home","End"],i={xs:0,sm:640,md:768,lg:1024,xl:1280,"2xl":1536}},615:(e,t,n)=>{n.d(t,{A:()=>o});class o{constructor(e,t,n){this.el=e,this.options=t,this.events=n,this.el=e,this.options=t,this.events={}}createCollection(e,t){var n;e.push({id:(null===(n=null==t?void 0:t.el)||void 0===n?void 0:n.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},926:(e,t,n)=>{n.d(t,{JD:()=>o});
+/*
+ * @version: 3.0.1
+ * @author: Preline Labs Ltd.
+ * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+ * Copyright 2024 Preline Labs Ltd.
+ */
+const o=(e,t,n=null)=>{const o=new CustomEvent(e,{detail:{payload:n},bubbles:!0,cancelable:!0,composed:!1});t.dispatchEvent(o)}}},t={};function n(o){var i=t[o];if(void 0!==i)return i.exports;var s=t[o]={exports:{}};return e[o](s,s.exports,n),s.exports}n.d=(e,t)=>{for(var o in t)n.o(t,o)&&!n.o(e,o)&&Object.defineProperty(e,o,{enumerable:!0,get:t[o]})},n.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var o={};n.d(o,{A:()=>a});var i=n(926),s=n(615),r=n(189);
 /*
  * HSTabs
- * @version: 3.0.0
+ * @version: 3.0.1
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

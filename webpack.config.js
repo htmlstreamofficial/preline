@@ -12,6 +12,7 @@ module.exports = {
 		combobox: './src/plugins/combobox/index.ts',
 		'copy-markup': './src/plugins/copy-markup/index.ts',
 		datatable: './src/plugins/datatable/index.ts',
+		datepicker: './src/plugins/datepicker/index.ts',
 		dropdown: './src/plugins/dropdown/index.ts',
 		'file-upload': './src/plugins/file-upload/index.ts',
 		'input-number': './src/plugins/input-number/index.ts',
@@ -58,6 +59,7 @@ module.exports = {
 		dropzone: 'Dropzone',
 		clipboard: 'ClipboardJS',
 		noUiSlider: 'noUiSlider',
+		VanillaCalendarPro: 'VanillaCalendarPro'
 	},
 	optimization: {
 		minimize: true,

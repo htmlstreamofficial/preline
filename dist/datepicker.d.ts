@@ -89,6 +89,7 @@ export interface ISelectOptions {
 	isAddTagOnEnter?: boolean;
 }
 export interface ICustomDatepickerOptions extends Options {
+	removeDefaultStyles?: boolean;
 	mode?: "custom-select" | "default";
 	inputModeOptions?: {
 		dateSeparator?: string;
@@ -115,6 +116,7 @@ export interface IDatepicker {
 }
 declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private dataOptions;
+	private updatedStyles;
 	private vanillaCalendar;
 	constructor(el: HTMLElement, options?: {}, events?: {});
 	private init;

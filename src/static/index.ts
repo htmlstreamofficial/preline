@@ -1,6 +1,6 @@
 /*
  * HSStaticMethods
- * @version: 3.0.0
+ * @version: 3.0.1
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -16,6 +16,7 @@ import type HSCarousel from '../plugins/carousel';
 import type HSCollapse from '../plugins/collapse';
 import type HSComboBox from '../plugins/combobox';
 import type HSDataTable from '../plugins/datatable';
+import type HSDatepicker from '../plugins/datepicker';
 import type HSDropdown from '../plugins/dropdown';
 import type HSFileUpload from '../plugins/file-upload';
 import type HSInputNumber from '../plugins/input-number';
@@ -46,6 +47,7 @@ declare global {
 		$hsCollapseCollection: ICollectionItem<HSCollapse>[];
 		$hsComboBoxCollection: ICollectionItem<HSComboBox>[];
 		$hsDataTableCollection: ICollectionItem<HSDataTable>[];
+		$hsDatepickerCollection: ICollectionItem<HSDatepicker>[];
 		$hsDropdownCollection: ICollectionItem<HSDropdown>[];
 		$hsFileUploadCollection: ICollectionItem<HSFileUpload>[];
 		$hsInputNumberCollection: { id: number; element: HSInputNumber }[];

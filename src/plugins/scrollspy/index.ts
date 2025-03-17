@@ -1,6 +1,6 @@
 /*
  * HSScrollspy
- * @version: 3.0.0
+ * @version: 3.0.1
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

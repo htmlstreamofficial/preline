@@ -138,6 +138,7 @@ declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICaro
 	private resetTimer;
 	private detectDirection;
 	private calculateTransform;
+	private setTransform;
 	private setTranslate;
 	private setIndex;
 	recalculateWidth(): void;
