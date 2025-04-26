@@ -140,6 +140,15 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	}
 
 	private finishBtnClick() {
+		this.fireEvent('beforeFinish', this.currentIndex);
+		dispatch('beforeFinish.hs.stepper', this.el, this.currentIndex);
+
+		if (this.getNavItem(this.currentIndex)?.isProcessed) {
+			this.disableAll();
+
+			return false;
+		}
+
 		this.handleFinishButtonClick();
 	}
 
@@ -789,6 +798,10 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 			if (this.nextBtn) this.nextBtn.style.display = 'none';
 			if (this.completeStepBtn) this.completeStepBtn.style.display = 'none';
 		}
+	}
+
+	public goToFinish() {
+		this.handleFinishButtonClick();
 	}
 
 	public disableButtons() {
