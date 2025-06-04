@@ -1,6 +1,6 @@
 /*
  * HSOverlay
- * @version: 3.0.1
+ * @version: 3.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -355,6 +355,40 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		return toggleData;
 	}
 
+	private isElementVisible(): boolean {
+		const style = window.getComputedStyle(this.el);
+
+		if (
+			style.display === "none" || style.visibility === "hidden" ||
+			style.opacity === "0"
+		) {
+			return false;
+		}
+
+		const rect = this.el.getBoundingClientRect();
+
+		if (rect.width === 0 || rect.height === 0) {
+			return false;
+		}
+
+		let parent = this.el.parentElement;
+
+		while (parent) {
+			const parentStyle = window.getComputedStyle(parent);
+
+			if (
+				parentStyle.display === "none" || parentStyle.visibility === "hidden" ||
+				parentStyle.opacity === "0"
+			) {
+				return false;
+			}
+
+			parent = parent.parentElement;
+		}
+
+		return true;
+	}
+
 	// Public methods
 	public open(cb: Function | null = null) {
 		if (this.hasDynamicZIndex) {
@@ -421,14 +455,16 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 			if (typeof cb === "function") cb();
 
-			HSOverlay.openedItemsQty++;
+			if (this.isElementVisible()) HSOverlay.openedItemsQty++;
 		}, 50);
 	}
 
 	public close(forceClose = false, cb: Function | null = null) {
-		HSOverlay.openedItemsQty = HSOverlay.openedItemsQty <= 0
-			? 0
-			: HSOverlay.openedItemsQty - 1;
+		if (this.isElementVisible()) {
+			HSOverlay.openedItemsQty = HSOverlay.openedItemsQty <= 0
+				? 0
+				: HSOverlay.openedItemsQty - 1;
+		}
 
 		if (HSOverlay.openedItemsQty === 0 && this.isLayoutAffect) {
 			document.body.classList.remove("hs-overlay-body-open");

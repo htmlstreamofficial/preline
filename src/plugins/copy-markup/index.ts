@@ -1,22 +1,20 @@
 /*
  * HSCopyMarkup
- * @version: 3.0.1
+ * @version: 3.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { dispatch } from '../../utils';
+import { dispatch } from "../../utils";
 
-import { ICopyMarkupOptions, ICopyMarkup } from '../copy-markup/interfaces';
+import { ICopyMarkup, ICopyMarkupOptions } from "../copy-markup/interfaces";
 
-import HSBasePlugin from '../base-plugin';
-import { ICollectionItem } from '../../interfaces';
+import HSBasePlugin from "../base-plugin";
+import { ICollectionItem } from "../../interfaces";
 
-class HSCopyMarkup
-	extends HSBasePlugin<ICopyMarkupOptions>
-	implements ICopyMarkup
-{
+class HSCopyMarkup extends HSBasePlugin<ICopyMarkupOptions>
+	implements ICopyMarkup {
 	private readonly targetSelector: string | null;
 	private readonly wrapperSelector: string | null;
 	private readonly limit: number | null;
@@ -31,7 +29,7 @@ class HSCopyMarkup
 	constructor(el: HTMLElement, options?: ICopyMarkupOptions) {
 		super(el, options);
 
-		const data = el.getAttribute('data-hs-copy-markup');
+		const data = el.getAttribute("data-hs-copy-markup");
 		const dataOptions: ICopyMarkupOptions = data ? JSON.parse(data) : {};
 		const concatOptions = {
 			...dataOptions,
@@ -63,61 +61,61 @@ class HSCopyMarkup
 		this.setWrapper();
 		this.addPredefinedItems();
 
-		this.el.addEventListener('click', this.onElementClickListener);
+		this.el.addEventListener("click", this.onElementClickListener);
 	}
 
 	private copy() {
 		if (this.limit && this.items.length >= this.limit) return false;
 
-		if (this.el.hasAttribute('disabled')) this.el.setAttribute('disabled', '');
+		if (this.el.hasAttribute("disabled")) this.el.setAttribute("disabled", "");
 
 		const copiedElement = this.target.cloneNode(true) as HTMLElement;
 
 		this.addToItems(copiedElement);
 
-		if (this.limit && this.items.length >= this.limit)
-			this.el.setAttribute('disabled', 'disabled');
+		if (this.limit && this.items.length >= this.limit) {
+			this.el.setAttribute("disabled", "disabled");
+		}
 
-		this.fireEvent('copy', copiedElement);
-		dispatch('copy.hs.copyMarkup', copiedElement, copiedElement);
+		this.fireEvent("copy", copiedElement);
+		dispatch("copy.hs.copyMarkup", copiedElement, copiedElement);
 	}
 
 	private addPredefinedItems() {
 		Array.from(this.wrapper.children)
 			.filter(
-				(el: HTMLElement) => !el.classList.contains('[--ignore-for-count]'),
+				(el: HTMLElement) => !el.classList.contains("[--ignore-for-count]"),
 			)
 			.forEach((el: HTMLElement) => {
 				this.addToItems(el);
 			});
 
-		if (this.limit && this.items.length >= this.limit)
-			this.el.setAttribute('disabled', 'disabled');
+		if (this.limit && this.items.length >= this.limit) {
+			this.el.setAttribute("disabled", "disabled");
+		}
 	}
 
 	private setTarget() {
-		const target: HTMLElement =
-			typeof this.targetSelector === 'string'
-				? (document
-						.querySelector(this.targetSelector)
-						.cloneNode(true) as HTMLElement)
-				: ((this.targetSelector as HTMLElement).cloneNode(true) as HTMLElement);
+		const target: HTMLElement = typeof this.targetSelector === "string"
+			? (document
+				.querySelector(this.targetSelector)
+				.cloneNode(true) as HTMLElement)
+			: ((this.targetSelector as HTMLElement).cloneNode(true) as HTMLElement);
 
-		target.removeAttribute('id');
+		target.removeAttribute("id");
 
 		this.target = target;
 	}
 
 	private setWrapper() {
-		this.wrapper =
-			typeof this.wrapperSelector === 'string'
-				? document.querySelector(this.wrapperSelector)
-				: this.wrapperSelector;
+		this.wrapper = typeof this.wrapperSelector === "string"
+			? document.querySelector(this.wrapperSelector)
+			: this.wrapperSelector;
 	}
 
 	private addToItems(item: HTMLElement) {
 		const deleteItemButton = item.querySelector(
-			'[data-hs-copy-markup-delete-item]',
+			"[data-hs-copy-markup-delete-item]",
 		);
 
 		if (this.wrapper) this.wrapper.append(item);
@@ -128,7 +126,7 @@ class HSCopyMarkup
 				this.deleteItemButtonClick(item);
 
 			deleteItemButton.addEventListener(
-				'click',
+				"click",
 				this.onDeleteItemButtonClickListener,
 			);
 		}
@@ -144,23 +142,27 @@ class HSCopyMarkup
 
 		target.remove();
 
-		this.fireEvent('delete', target);
-		dispatch('delete.hs.copyMarkup', target, target);
+		if (this.limit && this.items.length < this.limit) {
+			this.el.removeAttribute("disabled");
+		}
+
+		this.fireEvent("delete", target);
+		dispatch("delete.hs.copyMarkup", target, target);
 	}
 
 	public destroy() {
 		const deleteItemButtons = this.wrapper.querySelectorAll(
-			'[data-hs-copy-markup-delete-item]',
+			"[data-hs-copy-markup-delete-item]",
 		);
 
-		this.el.removeEventListener('click', this.onElementClickListener);
+		this.el.removeEventListener("click", this.onElementClickListener);
 		if (deleteItemButtons.length) {
 			deleteItemButtons.forEach((el) =>
-				el.removeEventListener('click', this.onDeleteItemButtonClickListener),
+				el.removeEventListener("click", this.onDeleteItemButtonClickListener)
 			);
 		}
 
-		this.el.removeAttribute('disabled');
+		this.el.removeAttribute("disabled");
 
 		this.target = null;
 		this.wrapper = null;
@@ -176,33 +178,34 @@ class HSCopyMarkup
 		const elInCollection = window.$hsCopyMarkupCollection.find(
 			(el) =>
 				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
+					(typeof target === "string"
+						? document.querySelector(target)
+						: target),
 		);
 
 		return elInCollection
-			? isInstance
-				? elInCollection
-				: elInCollection.element
+			? isInstance ? elInCollection : elInCollection.element
 			: null;
 	}
 
 	static autoInit() {
 		if (!window.$hsCopyMarkupCollection) window.$hsCopyMarkupCollection = [];
 
-		if (window.$hsCopyMarkupCollection)
+		if (window.$hsCopyMarkupCollection) {
 			window.$hsCopyMarkupCollection = window.$hsCopyMarkupCollection.filter(
 				({ element }) => document.contains(element.el),
 			);
+		}
 
 		document
-			.querySelectorAll('[data-hs-copy-markup]:not(.--prevent-on-load-init)')
+			.querySelectorAll("[data-hs-copy-markup]:not(.--prevent-on-load-init)")
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsCopyMarkupCollection.find(
 						(elC) => (elC?.element?.el as HTMLElement) === el,
 					)
 				) {
-					const data = el.getAttribute('data-hs-copy-markup');
+					const data = el.getAttribute("data-hs-copy-markup");
 					const options: ICopyMarkupOptions = data ? JSON.parse(data) : {};
 
 					new HSCopyMarkup(el, options);
@@ -218,14 +221,14 @@ declare global {
 	}
 }
 
-window.addEventListener('load', () => {
+window.addEventListener("load", () => {
 	HSCopyMarkup.autoInit();
 
 	// Uncomment for debug
 	// console.log('Copy markup collection:', window.$hsCopyMarkupCollection);
 });
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
 	window.HSCopyMarkup = HSCopyMarkup;
 }
 

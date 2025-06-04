@@ -1,6 +1,6 @@
 var t={189:(t,e,i)=>{i.d(e,{jU:()=>s});const s=["ArrowUp","ArrowLeft","ArrowDown","ArrowRight","Home","End","Escape","Enter"]},615:(t,e,i)=>{i.d(e,{A:()=>s});class s{constructor(t,e,i){this.el=t,this.options=e,this.events=i,this.el=t,this.options=e,this.events={}}createCollection(t,e){var i;t.push({id:(null===(i=null==e?void 0:e.el)||void 0===i?void 0:i.id)||t.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},926:(t,e,i)=>{i.d(e,{JD:()=>n,PR:()=>s,fc:()=>r,sH:()=>o,sg:()=>l,yd:()=>a});
 /*
- * @version: 3.0.1
+ * @version: 3.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

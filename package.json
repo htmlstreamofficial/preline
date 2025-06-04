@@ -1,6 +1,6 @@
 {
 	"name": "preline",
-	"version": "3.0.1",
+	"version": "3.1.0",
 	"description": "Preline UI is an open-source set of prebuilt UI components based on the utility-first Tailwind CSS framework.",
 	"main": "index.js",
 	"module": "./src/index.ts",
@@ -48,14 +48,17 @@
 		"generate-dts": "dts-bundle-generator --config dts-config.js"
 	},
 	"dependencies": {
-    "@floating-ui/dom": "^1.6.13"
-  },
+		"@floating-ui/dom": "^1.6.13",
+		"apexcharts": "^4.5.0",
+		"datatables.net-dt": "^2.2.2",
+		"dropzone": "^6.0.0-beta.2",
+		"nouislider": "^15.8.1",
+		"vanilla-calendar-pro": "^3.0.4"
+	},
 	"devDependencies": {
-		"@types/clipboard": "^2.0.7",
-		"@types/dropzone": "^5.7.8",
+		"@types/dropzone": "5.7.9",
 		"@types/jquery": "^3.5.30",
 		"@types/lodash": "^4.17.6",
-		"@types/nouislider": "^15.0.0",
 		"@types/prismjs": "^1.26.4",
 		"@types/vinyl": "^2.0.12",
 		"dts-bundle-generator": "^9.0.0",

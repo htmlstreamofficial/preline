@@ -55,6 +55,7 @@ module.exports = {
 	externals: {
 		jquery: 'jQuery',
 		lodash: '_',
+		apexcharts: 'ApexCharts',
 		'datatable.net-dt': 'DataTable',
 		dropzone: 'Dropzone',
 		clipboard: 'ClipboardJS',

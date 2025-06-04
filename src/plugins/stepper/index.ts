@@ -1,17 +1,17 @@
 /*
  * HSStepper
- * @version: 3.0.1
+ * @version: 3.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { dispatch } from '../../utils';
+import { dispatch } from "../../utils";
 
-import { IStepperOptions, IStepper, IStepperItem } from '../stepper/interfaces';
+import { IStepper, IStepperItem, IStepperOptions } from "./interfaces";
 
-import HSBasePlugin from '../base-plugin';
-import { ICollectionItem } from '../../interfaces';
+import HSBasePlugin from "../base-plugin";
+import { ICollectionItem } from "../../interfaces";
 
 class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	private currentIndex: number | null;
@@ -32,9 +32,9 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 
 	private onNavItemClickListener:
 		| {
-				el: HTMLElement;
-				fn: () => void;
-		  }[]
+			el: HTMLElement;
+			fn: () => void;
+		}[]
 		| null;
 	private onBackClickListener: () => void;
 	private onNextClickListener: () => void;
@@ -46,7 +46,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	constructor(el: HTMLElement, options?: IStepperOptions) {
 		super(el, options);
 
-		const data = el.getAttribute('data-hs-stepper');
+		const data = el.getAttribute("data-hs-stepper");
 		const dataOptions: IStepperOptions = data ? JSON.parse(data) : {};
 		const concatOptions = {
 			...dataOptions,
@@ -54,11 +54,10 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		};
 
 		this.currentIndex = concatOptions?.currentIndex || 1;
-		this.mode = concatOptions?.mode || 'linear';
-		this.isCompleted =
-			typeof concatOptions?.isCompleted !== 'undefined'
-				? concatOptions?.isCompleted
-				: false;
+		this.mode = concatOptions?.mode || "linear";
+		this.isCompleted = typeof concatOptions?.isCompleted !== "undefined"
+			? concatOptions?.isCompleted
+			: false;
 
 		this.totalSteps = 1;
 
@@ -77,7 +76,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	private backClick() {
 		this.handleBackButtonClick();
 
-		if (this.mode === 'linear') {
+		if (this.mode === "linear") {
 			const currentNavItem = this.navItems.find(
 				({ index }) => index === this.currentIndex,
 			);
@@ -91,19 +90,19 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 				currentNavItem.isCompleted = false;
 				currentNavItem.isSkip = false;
 
-				currentNavItem.el.classList.remove('success', 'skipped');
+				currentNavItem.el.classList.remove("success", "skipped");
 			}
 
 			if (currentContentItem.isCompleted) {
 				currentContentItem.isCompleted = false;
 				currentContentItem.isSkip = false;
 
-				currentContentItem.el.classList.remove('success', 'skipped');
+				currentContentItem.el.classList.remove("success", "skipped");
 			}
 
-			if (this.mode === 'linear' && this.currentIndex !== this.totalSteps) {
-				if (this.nextBtn) this.nextBtn.style.display = '';
-				if (this.completeStepBtn) this.completeStepBtn.style.display = '';
+			if (this.mode === "linear" && this.currentIndex !== this.totalSteps) {
+				if (this.nextBtn) this.nextBtn.style.display = "";
+				if (this.completeStepBtn) this.completeStepBtn.style.display = "";
 			}
 
 			this.showSkipButton();
@@ -113,8 +112,8 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	}
 
 	private nextClick() {
-		this.fireEvent('beforeNext', this.currentIndex);
-		dispatch('beforeNext.hs.stepper', this.el, this.currentIndex);
+		this.fireEvent("beforeNext", this.currentIndex);
+		dispatch("beforeNext.hs.stepper", this.el, this.currentIndex);
 
 		if (this.getNavItem(this.currentIndex)?.isProcessed) {
 			this.disableAll();
@@ -128,10 +127,10 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	private skipClick() {
 		this.handleSkipButtonClick();
 
-		if (this.mode === 'linear' && this.currentIndex === this.totalSteps) {
-			if (this.nextBtn) this.nextBtn.style.display = 'none';
-			if (this.completeStepBtn) this.completeStepBtn.style.display = 'none';
-			if (this.finishBtn) this.finishBtn.style.display = '';
+		if (this.mode === "linear" && this.currentIndex === this.totalSteps) {
+			if (this.nextBtn) this.nextBtn.style.display = "none";
+			if (this.completeStepBtn) this.completeStepBtn.style.display = "none";
+			if (this.finishBtn) this.finishBtn.style.display = "";
 		}
 	}
 
@@ -140,8 +139,8 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	}
 
 	private finishBtnClick() {
-		this.fireEvent('beforeFinish', this.currentIndex);
-		dispatch('beforeFinish.hs.stepper', this.el, this.currentIndex);
+		this.fireEvent("beforeFinish", this.currentIndex);
+		dispatch("beforeFinish.hs.stepper", this.el, this.currentIndex);
 
 		if (this.getNavItem(this.currentIndex)?.isProcessed) {
 			this.disableAll();
@@ -167,7 +166,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 
 	private getUncompletedSteps(inIncludedSkipped: boolean = false) {
 		return this.navItems.filter(({ isCompleted, isSkip }) =>
-			inIncludedSkipped ? !isCompleted || isSkip : !isCompleted && !isSkip,
+			inIncludedSkipped ? !isCompleted || isSkip : !isCompleted && !isSkip
 		);
 	}
 
@@ -182,7 +181,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	// Nav
 	private buildNav() {
 		this.el
-			.querySelectorAll('[data-hs-stepper-nav-item]')
+			.querySelectorAll("[data-hs-stepper-nav-item]")
 			.forEach((el) => this.addNavItem(el as HTMLElement));
 
 		this.navItems.forEach((item) => this.buildNavItem(item));
@@ -193,14 +192,14 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 
 		if (index === this.currentIndex) this.setCurrentNavItem();
 
-		if (this.mode !== 'linear' || isDisabled) {
+		if (this.mode !== "linear" || isDisabled) {
 			this.onNavItemClickListener.push({
 				el,
 				fn: () => this.navItemClick(item),
 			});
 
 			el.addEventListener(
-				'click',
+				"click",
 				this.onNavItemClickListener.find((navItem) => navItem.el === el).fn,
 			);
 		}
@@ -216,17 +215,18 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 			isDisabled = false,
 			isProcessed = false,
 			hasError = false,
-		} = JSON.parse(el.getAttribute('data-hs-stepper-nav-item'));
+		} = JSON.parse(el.getAttribute("data-hs-stepper-nav-item"));
 
-		if (isCompleted) el.classList.add('success');
-		if (isSkip) el.classList.add('skipped');
+		if (isCompleted) el.classList.add("success");
+		if (isSkip) el.classList.add("skipped");
 		if (isDisabled) {
-			if (el.tagName === 'BUTTON' || el.tagName === 'INPUT')
-				el.setAttribute('disabled', 'disabled');
+			if (el.tagName === "BUTTON" || el.tagName === "INPUT") {
+				el.setAttribute("disabled", "disabled");
+			}
 
-			el.classList.add('disabled');
+			el.classList.add("disabled");
 		}
-		if (hasError) el.classList.add('error');
+		if (hasError) el.classList.add("error");
 
 		this.navItems.push({
 			index,
@@ -251,10 +251,10 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	}
 
 	private setCurrentNavItemActions(el: HTMLElement) {
-		el.classList.add('active');
+		el.classList.add("active");
 
-		this.fireEvent('active', this.currentIndex);
-		dispatch('active.hs.stepper', this.el, this.currentIndex);
+		this.fireEvent("active", this.currentIndex);
+		dispatch("active.hs.stepper", this.el, this.currentIndex);
 	}
 
 	private getNavItem(n = this.currentIndex) {
@@ -264,17 +264,17 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	private setProcessedNavItemActions(item: IStepperItem) {
 		item.isProcessed = true;
 
-		item.el.classList.add('processed');
+		item.el.classList.add("processed");
 	}
 
 	private setErrorNavItemActions(item: IStepperItem) {
 		item.hasError = true;
 
-		item.el.classList.add('error');
+		item.el.classList.add("error");
 	}
 
 	private unsetCurrentNavItemActions(el: HTMLElement) {
-		el.classList.remove('active');
+		el.classList.remove("active");
 	}
 
 	private handleNavItemClick(item: IStepperItem) {
@@ -291,7 +291,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	// Content
 	private buildContent() {
 		this.el
-			.querySelectorAll('[data-hs-stepper-content-item]')
+			.querySelectorAll("[data-hs-stepper-content-item]")
 			.forEach((el) => this.addContentItem(el as HTMLElement));
 
 		this.navItems.forEach((item) => this.buildContentItem(item));
@@ -309,10 +309,10 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 			isFinal = false,
 			isCompleted = false,
 			isSkip = false,
-		} = JSON.parse(el.getAttribute('data-hs-stepper-content-item'));
+		} = JSON.parse(el.getAttribute("data-hs-stepper-content-item"));
 
-		if (isCompleted) el.classList.add('success');
-		if (isSkip) el.classList.add('skipped');
+		if (isCompleted) el.classList.add("success");
+		if (isSkip) el.classList.add("skipped");
 
 		this.contentItems.push({
 			index,
@@ -329,8 +329,8 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 			const otherContentItems = this.contentItems.filter(
 				({ isFinal }) => !isFinal,
 			);
-			finalContentItem.el.style.display = '';
-			otherContentItems.forEach(({ el }) => (el.style.display = 'none'));
+			finalContentItem.el.style.display = "";
+			otherContentItems.forEach(({ el }) => (el.style.display = "none"));
 
 			return false;
 		}
@@ -344,15 +344,15 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	}
 
 	private hideAllContentItems() {
-		this.contentItems.forEach(({ el }) => (el.style.display = 'none'));
+		this.contentItems.forEach(({ el }) => (el.style.display = "none"));
 	}
 
 	private setCurrentContentItemActions(el: HTMLElement) {
-		el.style.display = '';
+		el.style.display = "";
 	}
 
 	private unsetCurrentContentItemActions(el: HTMLElement) {
-		el.style.display = 'none';
+		el.style.display = "none";
 	}
 
 	private disableAll() {
@@ -360,31 +360,31 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		currentNavItem.hasError = false;
 		currentNavItem.isCompleted = false;
 		currentNavItem.isDisabled = false;
-		currentNavItem.el.classList.remove('error', 'success');
+		currentNavItem.el.classList.remove("error", "success");
 
 		this.disableButtons();
 	}
 
 	private disableNavItemActions(item: IStepperItem) {
 		item.isDisabled = true;
-		item.el.classList.add('disabled');
+		item.el.classList.add("disabled");
 	}
 
 	private enableNavItemActions(item: IStepperItem) {
 		item.isDisabled = false;
-		item.el.classList.remove('disabled');
+		item.el.classList.remove("disabled");
 	}
 
 	// Buttons
 	private buildButtons() {
-		this.backBtn = this.el.querySelector('[data-hs-stepper-back-btn]');
-		this.nextBtn = this.el.querySelector('[data-hs-stepper-next-btn]');
-		this.skipBtn = this.el.querySelector('[data-hs-stepper-skip-btn]');
+		this.backBtn = this.el.querySelector("[data-hs-stepper-back-btn]");
+		this.nextBtn = this.el.querySelector("[data-hs-stepper-next-btn]");
+		this.skipBtn = this.el.querySelector("[data-hs-stepper-skip-btn]");
 		this.completeStepBtn = this.el.querySelector(
-			'[data-hs-stepper-complete-step-btn]',
+			"[data-hs-stepper-complete-step-btn]",
 		);
-		this.finishBtn = this.el.querySelector('[data-hs-stepper-finish-btn]');
-		this.resetBtn = this.el.querySelector('[data-hs-stepper-reset-btn]');
+		this.finishBtn = this.el.querySelector("[data-hs-stepper-finish-btn]");
+		this.resetBtn = this.el.querySelector("[data-hs-stepper-reset-btn]");
 
 		this.buildBackButton();
 		this.buildNextButton();
@@ -402,19 +402,19 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 
 		this.onBackClickListener = () => this.backClick();
 
-		this.backBtn.addEventListener('click', this.onBackClickListener);
+		this.backBtn.addEventListener("click", this.onBackClickListener);
 	}
 
 	private handleBackButtonClick() {
 		if (this.currentIndex === 1) return;
 
-		if (this.mode === 'linear') {
+		if (this.mode === "linear") {
 			this.removeOptionalClasses();
 		}
 
 		this.currentIndex--;
 
-		if (this.mode === 'linear') {
+		if (this.mode === "linear") {
 			this.removeOptionalClasses();
 		}
 
@@ -422,11 +422,12 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		this.setCurrentContentItem();
 
 		this.checkForTheFirstStep();
-		if (this.completeStepBtn)
+		if (this.completeStepBtn) {
 			this.changeTextAndDisableCompleteButtonIfStepCompleted();
+		}
 
-		this.fireEvent('back', this.currentIndex);
-		dispatch('back.hs.stepper', this.el, this.currentIndex);
+		this.fireEvent("back", this.currentIndex);
+		dispatch("back.hs.stepper", this.el, this.currentIndex);
 	}
 
 	private checkForTheFirstStep() {
@@ -438,17 +439,19 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	}
 
 	private setToDisabled(el: HTMLElement) {
-		if (el.tagName === 'BUTTON' || el.tagName === 'INPUT')
-			el.setAttribute('disabled', 'disabled');
+		if (el.tagName === "BUTTON" || el.tagName === "INPUT") {
+			el.setAttribute("disabled", "disabled");
+		}
 
-		el.classList.add('disabled');
+		el.classList.add("disabled");
 	}
 
 	private setToNonDisabled(el: HTMLElement) {
-		if (el.tagName === 'BUTTON' || el.tagName === 'INPUT')
-			el.removeAttribute('disabled');
+		if (el.tagName === "BUTTON" || el.tagName === "INPUT") {
+			el.removeAttribute("disabled");
+		}
 
-		el.classList.remove('disabled');
+		el.classList.remove("disabled");
 	}
 
 	// next
@@ -457,13 +460,13 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 
 		this.onNextClickListener = () => this.nextClick();
 
-		this.nextBtn.addEventListener('click', this.onNextClickListener);
+		this.nextBtn.addEventListener("click", this.onNextClickListener);
 	}
 
 	private unsetProcessedNavItemActions(item: IStepperItem) {
 		item.isProcessed = false;
 
-		item.el.classList.remove('processed');
+		item.el.classList.remove("processed");
 	}
 
 	private handleNextButtonClick(infinite = true) {
@@ -484,7 +487,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 			}
 		}
 
-		if (this.mode === 'linear') {
+		if (this.mode === "linear") {
 			this.removeOptionalClasses();
 		}
 
@@ -492,15 +495,16 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		this.setCurrentContentItem();
 
 		this.checkForTheFirstStep();
-		if (this.completeStepBtn)
+		if (this.completeStepBtn) {
 			this.changeTextAndDisableCompleteButtonIfStepCompleted();
+		}
 
 		this.showSkipButton();
 		this.showFinishButton();
 		this.showCompleteStepButton();
 
-		this.fireEvent('next', this.currentIndex);
-		dispatch('next.hs.stepper', this.el, this.currentIndex);
+		this.fireEvent("next", this.currentIndex);
+		dispatch("next.hs.stepper", this.el, this.currentIndex);
 	}
 
 	private removeOptionalClasses() {
@@ -516,8 +520,8 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		currentNavItem.isDisabled = false;
 		currentContentItem.isSkip = false;
 
-		currentNavItem.el.classList.remove('skipped', 'success', 'error');
-		currentContentItem.el.classList.remove('skipped', 'success', 'error');
+		currentNavItem.el.classList.remove("skipped", "success", "error");
+		currentContentItem.el.classList.remove("skipped", "success", "error");
 	}
 
 	// skip
@@ -528,7 +532,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 
 		this.onSkipClickListener = () => this.skipClick();
 
-		this.skipBtn.addEventListener('click', this.onSkipClickListener);
+		this.skipBtn.addEventListener("click", this.onSkipClickListener);
 	}
 
 	private setSkipItem(n?: number) {
@@ -548,7 +552,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	private setSkipItemActions(item: IStepperItem) {
 		item.isSkip = true;
 
-		item.el.classList.add('skipped');
+		item.el.classList.add("skipped");
 	}
 
 	private showSkipButton() {
@@ -558,16 +562,16 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 			({ index }) => index === this.currentIndex,
 		);
 
-		if (isOptional) this.skipBtn.style.display = '';
-		else this.skipBtn.style.display = 'none';
+		if (isOptional) this.skipBtn.style.display = "";
+		else this.skipBtn.style.display = "none";
 	}
 
 	private handleSkipButtonClick() {
 		this.setSkipItem();
 		this.handleNextButtonClick();
 
-		this.fireEvent('skip', this.currentIndex);
-		dispatch('skip.hs.stepper', this.el, this.currentIndex);
+		this.fireEvent("skip", this.currentIndex);
+		dispatch("skip.hs.stepper", this.el, this.currentIndex);
 	}
 
 	// complete
@@ -579,7 +583,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		this.onCompleteStepBtnClickListener = () => this.completeStepBtnClick();
 
 		this.completeStepBtn.addEventListener(
-			'click',
+			"click",
 			this.onCompleteStepBtnClickListener,
 		);
 	}
@@ -589,20 +593,20 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 			({ index }) => index === this.currentIndex,
 		);
 		const { completedText } = JSON.parse(
-			this.completeStepBtn.getAttribute('data-hs-stepper-complete-step-btn'),
+			this.completeStepBtn.getAttribute("data-hs-stepper-complete-step-btn"),
 		);
 
 		if (!currentNavItem) return;
 
 		if (currentNavItem.isCompleted) {
-			this.completeStepBtn.innerText =
-				completedText || this.completeStepBtnDefaultText;
-			this.completeStepBtn.setAttribute('disabled', 'disabled');
-			this.completeStepBtn.classList.add('disabled');
+			this.completeStepBtn.innerText = completedText ||
+				this.completeStepBtnDefaultText;
+			this.completeStepBtn.setAttribute("disabled", "disabled");
+			this.completeStepBtn.classList.add("disabled");
 		} else {
 			this.completeStepBtn.innerText = this.completeStepBtnDefaultText;
-			this.completeStepBtn.removeAttribute('disabled');
-			this.completeStepBtn.classList.remove('disabled');
+			this.completeStepBtn.removeAttribute("disabled");
+			this.completeStepBtn.classList.remove("disabled");
 		}
 	}
 
@@ -623,7 +627,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	private setCompleteItemActions(item: IStepperItem) {
 		item.isCompleted = true;
 
-		item.el.classList.add('success');
+		item.el.classList.add("success");
 	}
 
 	private showCompleteStepButton() {
@@ -631,23 +635,24 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 
 		const nonCompletedSteps = this.getUncompletedSteps();
 
-		if (nonCompletedSteps.length === 1)
-			this.completeStepBtn.style.display = 'none';
-		else this.completeStepBtn.style.display = '';
+		if (nonCompletedSteps.length === 1) {
+			this.completeStepBtn.style.display = "none";
+		} else this.completeStepBtn.style.display = "";
 	}
 
 	private handleCompleteStepButtonClick() {
 		this.setCompleteItem();
 
-		this.fireEvent('complete', this.currentIndex);
-		dispatch('complete.hs.stepper', this.el, this.currentIndex);
+		this.fireEvent("complete", this.currentIndex);
+		dispatch("complete.hs.stepper", this.el, this.currentIndex);
 
 		this.handleNextButtonClick(false);
 		this.showFinishButton();
 		this.showCompleteStepButton();
 		this.checkForTheFirstStep();
-		if (this.completeStepBtn)
+		if (this.completeStepBtn) {
 			this.changeTextAndDisableCompleteButtonIfStepCompleted();
+		}
 		this.showSkipButton();
 	}
 
@@ -661,15 +666,15 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 
 		this.onFinishBtnClickListener = () => this.finishBtnClick();
 
-		this.finishBtn.addEventListener('click', this.onFinishBtnClickListener);
+		this.finishBtn.addEventListener("click", this.onFinishBtnClickListener);
 	}
 
 	private setCompleted() {
-		this.el.classList.add('completed');
+		this.el.classList.add("completed");
 	}
 
 	private unsetCompleted() {
-		this.el.classList.remove('completed');
+		this.el.classList.remove("completed");
 	}
 
 	private showFinishButton() {
@@ -677,8 +682,8 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 
 		const nonCompletedSteps = this.getUncompletedSteps();
 
-		if (nonCompletedSteps.length === 1) this.finishBtn.style.display = '';
-		else this.finishBtn.style.display = 'none';
+		if (nonCompletedSteps.length === 1) this.finishBtn.style.display = "";
+		else this.finishBtn.style.display = "none";
 	}
 
 	private handleFinishButtonClick() {
@@ -686,8 +691,9 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		const uncompletedOrSkipSteps = this.getUncompletedSteps(true);
 		const { el } = this.contentItems.find(({ isFinal }) => isFinal);
 
-		if (uncompletedSteps.length)
+		if (uncompletedSteps.length) {
 			uncompletedSteps.forEach(({ index }) => this.setCompleteItem(index));
+		}
 
 		this.currentIndex = this.totalSteps;
 
@@ -699,23 +705,23 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		);
 		const currentNavItemEl = currentNavItem ? currentNavItem.el : null;
 
-		currentNavItemEl.classList.remove('active');
+		currentNavItemEl.classList.remove("active");
 
-		el.style.display = 'block';
-		if (this.backBtn) this.backBtn.style.display = 'none';
-		if (this.nextBtn) this.nextBtn.style.display = 'none';
-		if (this.skipBtn) this.skipBtn.style.display = 'none';
-		if (this.completeStepBtn) this.completeStepBtn.style.display = 'none';
-		if (this.finishBtn) this.finishBtn.style.display = 'none';
-		if (this.resetBtn) this.resetBtn.style.display = '';
+		el.style.display = "block";
+		if (this.backBtn) this.backBtn.style.display = "none";
+		if (this.nextBtn) this.nextBtn.style.display = "none";
+		if (this.skipBtn) this.skipBtn.style.display = "none";
+		if (this.completeStepBtn) this.completeStepBtn.style.display = "none";
+		if (this.finishBtn) this.finishBtn.style.display = "none";
+		if (this.resetBtn) this.resetBtn.style.display = "";
 
 		if (uncompletedOrSkipSteps.length <= 1) {
 			this.isCompleted = true;
 			this.setCompleted();
 		}
 
-		this.fireEvent('finish', this.currentIndex);
-		dispatch('finish.hs.stepper', this.el, this.currentIndex);
+		this.fireEvent("finish", this.currentIndex);
+		dispatch("finish.hs.stepper", this.el, this.currentIndex);
 	}
 
 	// reset
@@ -724,19 +730,19 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 
 		this.onResetBtnClickListener = () => this.resetBtnClick();
 
-		this.resetBtn.addEventListener('click', this.onResetBtnClickListener);
+		this.resetBtn.addEventListener("click", this.onResetBtnClickListener);
 	}
 
 	private handleResetButtonClick() {
-		if (this.backBtn) this.backBtn.style.display = '';
-		if (this.nextBtn) this.nextBtn.style.display = '';
+		if (this.backBtn) this.backBtn.style.display = "";
+		if (this.nextBtn) this.nextBtn.style.display = "";
 		if (this.completeStepBtn) {
-			this.completeStepBtn.style.display = '';
+			this.completeStepBtn.style.display = "";
 			this.completeStepBtn.innerText = this.completeStepBtnDefaultText;
-			this.completeStepBtn.removeAttribute('disabled');
-			this.completeStepBtn.classList.remove('disabled');
+			this.completeStepBtn.removeAttribute("disabled");
+			this.completeStepBtn.classList.remove("disabled");
 		}
-		if (this.resetBtn) this.resetBtn.style.display = 'none';
+		if (this.resetBtn) this.resetBtn.style.display = "none";
 
 		this.navItems.forEach((item) => {
 			const { el } = item;
@@ -744,7 +750,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 			item.isCompleted = false;
 
 			this.unsetCurrentNavItemActions(el);
-			el.classList.remove('success', 'skipped');
+			el.classList.remove("success", "skipped");
 		});
 
 		this.contentItems.forEach((item) => {
@@ -753,7 +759,7 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 			item.isCompleted = false;
 
 			this.unsetCurrentContentItemActions(el);
-			el.classList.remove('success', 'skipped');
+			el.classList.remove("success", "skipped");
 		});
 
 		this.currentIndex = 1;
@@ -768,8 +774,8 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		this.showCompleteStepButton();
 		this.checkForTheFirstStep();
 
-		this.fireEvent('reset', this.currentIndex);
-		dispatch('reset.hs.stepper', this.el, this.currentIndex);
+		this.fireEvent("reset", this.currentIndex);
+		dispatch("reset.hs.stepper", this.el, this.currentIndex);
 	}
 
 	// Public methods
@@ -790,13 +796,13 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	}
 
 	public goToNext() {
-		if (this.mode === 'linear') this.setCompleteItem();
+		if (this.mode === "linear") this.setCompleteItem();
 
-		this.handleNextButtonClick(this.mode !== 'linear');
+		this.handleNextButtonClick(this.mode !== "linear");
 
-		if (this.mode === 'linear' && this.currentIndex === this.totalSteps) {
-			if (this.nextBtn) this.nextBtn.style.display = 'none';
-			if (this.completeStepBtn) this.completeStepBtn.style.display = 'none';
+		if (this.mode === "linear" && this.currentIndex === this.totalSteps) {
+			if (this.nextBtn) this.nextBtn.style.display = "none";
+			if (this.completeStepBtn) this.completeStepBtn.style.display = "none";
 		}
 	}
 
@@ -824,50 +830,58 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 
 	public destroy() {
 		// Remove classes
-		this.el.classList.remove('completed');
-		this.el.querySelectorAll('[data-hs-stepper-nav-item]').forEach((el) => {
-			el.classList.remove('active', 'success', 'skipped', 'disabled', 'error');
+		this.el.classList.remove("completed");
+		this.el.querySelectorAll("[data-hs-stepper-nav-item]").forEach((el) => {
+			el.classList.remove("active", "success", "skipped", "disabled", "error");
 
-			if (el.tagName === 'BUTTON' || el.tagName === 'INPUT')
-				el.removeAttribute('disabled');
+			if (el.tagName === "BUTTON" || el.tagName === "INPUT") {
+				el.removeAttribute("disabled");
+			}
 		});
-		this.el.querySelectorAll('[data-hs-stepper-content-item]').forEach((el) => {
-			el.classList.remove('success', 'skipped');
+		this.el.querySelectorAll("[data-hs-stepper-content-item]").forEach((el) => {
+			el.classList.remove("success", "skipped");
 		});
-		if (this.backBtn) this.backBtn.classList.remove('disabled');
-		if (this.nextBtn) this.nextBtn.classList.remove('disabled');
-		if (this.completeStepBtn) this.completeStepBtn.classList.remove('disabled');
+		if (this.backBtn) this.backBtn.classList.remove("disabled");
+		if (this.nextBtn) this.nextBtn.classList.remove("disabled");
+		if (this.completeStepBtn) this.completeStepBtn.classList.remove("disabled");
 
 		// Remove attributes
-		if (this.backBtn) this.backBtn.style.display = '';
-		if (this.nextBtn) this.nextBtn.style.display = '';
-		if (this.skipBtn) this.skipBtn.style.display = '';
-		if (this.finishBtn) this.finishBtn.style.display = 'none';
-		if (this.resetBtn) this.resetBtn.style.display = 'none';
+		if (this.backBtn) this.backBtn.style.display = "";
+		if (this.nextBtn) this.nextBtn.style.display = "";
+		if (this.skipBtn) this.skipBtn.style.display = "";
+		if (this.finishBtn) this.finishBtn.style.display = "none";
+		if (this.resetBtn) this.resetBtn.style.display = "none";
 
 		// Remove listeners
-		if (this.onNavItemClickListener.length)
+		if (this.onNavItemClickListener.length) {
 			this.onNavItemClickListener.forEach(({ el, fn }) => {
-				el.removeEventListener('click', fn);
+				el.removeEventListener("click", fn);
 			});
-		if (this.backBtn)
-			this.backBtn.removeEventListener('click', this.onBackClickListener);
-		if (this.nextBtn)
-			this.nextBtn.removeEventListener('click', this.onNextClickListener);
-		if (this.skipBtn)
-			this.skipBtn.removeEventListener('click', this.onSkipClickListener);
-		if (this.completeStepBtn)
+		}
+		if (this.backBtn) {
+			this.backBtn.removeEventListener("click", this.onBackClickListener);
+		}
+		if (this.nextBtn) {
+			this.nextBtn.removeEventListener("click", this.onNextClickListener);
+		}
+		if (this.skipBtn) {
+			this.skipBtn.removeEventListener("click", this.onSkipClickListener);
+		}
+		if (this.completeStepBtn) {
 			this.completeStepBtn.removeEventListener(
-				'click',
+				"click",
 				this.onCompleteStepBtnClickListener,
 			);
-		if (this.finishBtn)
+		}
+		if (this.finishBtn) {
 			this.finishBtn.removeEventListener(
-				'click',
+				"click",
 				this.onFinishBtnClickListener,
 			);
-		if (this.resetBtn)
-			this.resetBtn.removeEventListener('click', this.onResetBtnClickListener);
+		}
+		if (this.resetBtn) {
+			this.resetBtn.removeEventListener("click", this.onResetBtnClickListener);
+		}
 
 		window.$hsStepperCollection = window.$hsStepperCollection.filter(
 			({ element }) => element.el !== this.el,
@@ -879,33 +893,35 @@ class HSStepper extends HSBasePlugin<{}> implements IStepper {
 		const elInCollection = window.$hsStepperCollection.find(
 			(el) =>
 				el.element.el ===
-				(typeof target === 'string' ? document.querySelector(target) : target),
+					(typeof target === "string"
+						? document.querySelector(target)
+						: target),
 		);
 
 		return elInCollection
-			? isInstance
-				? elInCollection
-				: elInCollection.element
+			? isInstance ? elInCollection : elInCollection.element
 			: null;
 	}
 
 	static autoInit() {
 		if (!window.$hsStepperCollection) window.$hsStepperCollection = [];
 
-		if (window.$hsStepperCollection)
+		if (window.$hsStepperCollection) {
 			window.$hsStepperCollection = window.$hsStepperCollection.filter(
 				({ element }) => document.contains(element.el),
 			);
+		}
 
 		document
-			.querySelectorAll('[data-hs-stepper]:not(.--prevent-on-load-init)')
+			.querySelectorAll("[data-hs-stepper]:not(.--prevent-on-load-init)")
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsStepperCollection.find(
 						(elC) => (elC?.element?.el as HTMLElement) === el,
 					)
-				)
+				) {
 					new HSStepper(el);
+				}
 			});
 	}
 }
@@ -917,14 +933,14 @@ declare global {
 	}
 }
 
-window.addEventListener('load', () => {
+window.addEventListener("load", () => {
 	HSStepper.autoInit();
 
 	// Uncomment for debug
 	// console.log('Stepper collection:', window.$hsStepperCollection);
 });
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
 	window.HSStepper = HSStepper;
 }
 

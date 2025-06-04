@@ -33,6 +33,9 @@ export interface IApiFieldMap {
 	title: string;
 	icon?: string | null;
 	description?: string | null;
+	page?: string;
+	offset?: string;
+	limit?: string;
 	[key: string]: unknown;
 }
 export interface ISelectOptions {
@@ -51,7 +54,12 @@ export interface ISelectOptions {
 	apiDataPart?: string | null;
 	apiSearchQueryKey?: string | null;
 	apiFieldsMap?: IApiFieldMap | null;
+	apiSelectedValues?: string | string[];
 	apiIconTag?: string | null;
+	apiLoadMore?: boolean | {
+		perPage: number;
+		scrollThreshold: number;
+	};
 	toggleTag?: string;
 	toggleClasses?: string;
 	toggleSeparators?: {
@@ -95,6 +103,8 @@ export interface ISelectOptions {
 	descriptionClasses?: string;
 	iconClasses?: string;
 	isAddTagOnEnter?: boolean;
+	dropdownAutoPlacement?: boolean;
+	isSelectedOptionOnTop?: boolean;
 }
 export interface ISelect {
 	options?: ISelectOptions;
@@ -123,8 +133,10 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly apiOptions;
 	private readonly apiDataPart;
 	private readonly apiSearchQueryKey;
+	private readonly apiLoadMore;
 	private readonly apiFieldsMap;
 	private readonly apiIconTag;
+	private readonly apiSelectedValues;
 	private readonly toggleTag;
 	private readonly toggleClasses;
 	private readonly toggleSeparators;
@@ -142,6 +154,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly dropdownDirectionClasses;
 	dropdownSpace: number | null;
 	readonly dropdownPlacement: string | null;
+	private readonly dropdownAutoPlacement;
 	readonly dropdownVerticalFixedPlacement: "top" | "bottom" | null;
 	readonly dropdownScope: "window" | "parent";
 	private readonly searchTemplate;
@@ -162,6 +175,9 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly descriptionClasses;
 	private readonly iconClasses;
 	private animationInProcess;
+	private currentPage;
+	private isLoading;
+	private hasMore;
 	private wrapper;
 	private toggle;
 	private toggleTextWrapper;
@@ -184,6 +200,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private onTagsInputInputSecondListener;
 	private onTagsInputKeydownListener;
 	private onSearchInputListener;
+	private readonly isSelectedOptionOnTop;
 	constructor(el: HTMLElement, options?: ISelectOptions);
 	private wrapperClick;
 	private toggleClick;
@@ -207,6 +224,9 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private setTagsItems;
 	private buildTagsInput;
 	private buildDropdown;
+	private setupInfiniteScroll;
+	private handleScroll;
+	private loadMore;
 	private buildFloatingUI;
 	private updateDropdownWidth;
 	private buildSearch;

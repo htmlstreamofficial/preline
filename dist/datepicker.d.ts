@@ -25,6 +25,9 @@ export interface IApiFieldMap {
 	title: string;
 	icon?: string | null;
 	description?: string | null;
+	page?: string;
+	offset?: string;
+	limit?: string;
 	[key: string]: unknown;
 }
 export interface ISelectOptions {
@@ -43,7 +46,12 @@ export interface ISelectOptions {
 	apiDataPart?: string | null;
 	apiSearchQueryKey?: string | null;
 	apiFieldsMap?: IApiFieldMap | null;
+	apiSelectedValues?: string | string[];
 	apiIconTag?: string | null;
+	apiLoadMore?: boolean | {
+		perPage: number;
+		scrollThreshold: number;
+	};
 	toggleTag?: string;
 	toggleClasses?: string;
 	toggleSeparators?: {
@@ -87,6 +95,8 @@ export interface ISelectOptions {
 	descriptionClasses?: string;
 	iconClasses?: string;
 	isAddTagOnEnter?: boolean;
+	dropdownAutoPlacement?: boolean;
+	isSelectedOptionOnTop?: boolean;
 }
 export interface ICustomDatepickerOptions extends Options {
 	removeDefaultStyles?: boolean;
@@ -153,6 +163,7 @@ declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		selectedDates: DatesArr;
 		selectedTime: string;
 	};
+	destroy(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSDatepicker>;
 	static autoInit(): void;
 }

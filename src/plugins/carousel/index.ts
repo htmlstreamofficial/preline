@@ -1,6 +1,6 @@
 /*
  * HSCarousel
- * @version: 3.0.1
+ * @version: 3.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -791,8 +791,16 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	private detectDirection() {
 		const { start, end } = this.touchX;
 
-		if (end < start) this.goToNext();
-		if (end > start) this.goToPrev();
+		if (!this.isInfiniteLoop) {
+			if (
+				end < start &&
+				this.currentIndex < this.slides.length - this.getCurrentSlidesQty()
+			) this.goToNext();
+			if (end > start && this.currentIndex > 0) this.goToPrev();
+		} else {
+			if (end < start) this.goToNext();
+			if (end > start) this.goToPrev();
+		}
 	}
 
 	private calculateTransform(currentIdx?: number | undefined): void {
@@ -894,7 +902,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			this.currentIndex = this.slides.length - this.getCurrentSlidesQty();
 		}
 
-		this.fireEvent('update', this.currentIndex);
+		this.fireEvent("update", this.currentIndex);
 
 		if (this.isSnap) {
 			const itemWidth = this.sliderWidth / this.getCurrentSlidesQty();
@@ -924,7 +932,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			this.currentIndex = 0;
 		}
 
-		this.fireEvent('update', this.currentIndex);
+		this.fireEvent("update", this.currentIndex);
 
 		if (this.isSnap) {
 			const itemWidth = this.sliderWidth / this.getCurrentSlidesQty();
@@ -947,7 +955,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		const currentIndex = this.currentIndex;
 		this.currentIndex = i;
 
-		this.fireEvent('update', this.currentIndex);
+		this.fireEvent("update", this.currentIndex);
 
 		if (this.isSnap) {
 			const itemWidth = this.sliderWidth / this.getCurrentSlidesQty();

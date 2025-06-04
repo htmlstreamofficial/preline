@@ -45,7 +45,7 @@ declare global {
 			update: () => void,
 		) => () => void;
 		offset: (offset: number | [number, number]) => any;
-		flip: () => any;
+		flip: (options?: { fallbackPlacements?: string[] }) => any;
 	};
 
 	interface Window {

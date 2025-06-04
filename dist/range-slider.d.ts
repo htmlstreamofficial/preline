@@ -26,7 +26,12 @@ export interface IRangeSliderOptionsFormatterOptions {
 }
 export interface IRangeSliderOptions extends Options {
 	disabled?: boolean;
+	wrapper?: HTMLElement;
+	currentValue?: HTMLElement[];
 	formatter?: IRangeSliderOptionsFormatterOptions | TRangeSliderOptionsFormatterType;
+	icons?: {
+		handle?: string;
+	};
 }
 export interface IRangeSlider {
 	options?: IRangeSliderOptions;
@@ -34,7 +39,10 @@ export interface IRangeSlider {
 }
 declare class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements IRangeSlider {
 	private readonly concatOptions;
+	private readonly wrapper;
+	private readonly currentValue;
 	private format;
+	private readonly icons;
 	constructor(el: HTMLElement, options?: IRangeSliderOptions, events?: {});
 	get formattedValue(): any;
 	private processClasses;
@@ -44,6 +52,8 @@ declare class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements
 	private prefixOrPostfixFormatter;
 	private thousandsSeparatorAndDecimalPointsFormatter;
 	private setDisabled;
+	private buildHandleIcon;
+	private updateCurrentValue;
 	destroy(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSRangeSlider>;
 	static autoInit(): void;

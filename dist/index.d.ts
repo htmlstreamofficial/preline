@@ -447,7 +447,7 @@ export declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 	forceClearState(): void;
 	destroy(): void;
 	private static findInCollection;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): ICollectionItem<HSDropdown> | IHTMLElementFloatingUI;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSDropdown | ICollectionItem<HSDropdown>;
 	static autoInit(): void;
 	static open(target: HSDropdown | HTMLElement | string): void;
 	static close(target: HSDropdown | HTMLElement | string): void;
@@ -637,6 +637,7 @@ export declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private focusElement;
 	private getScrollbarSize;
 	private collectToggleParameters;
+	private isElementVisible;
 	open(cb?: Function | null): Promise<void>;
 	close(forceClose?: boolean, cb?: Function | null): Promise<unknown>;
 	destroy(): void;
@@ -801,6 +802,9 @@ export interface IApiFieldMap {
 	title: string;
 	icon?: string | null;
 	description?: string | null;
+	page?: string;
+	offset?: string;
+	limit?: string;
 	[key: string]: unknown;
 }
 export interface ISelectOptions {
@@ -819,7 +823,12 @@ export interface ISelectOptions {
 	apiDataPart?: string | null;
 	apiSearchQueryKey?: string | null;
 	apiFieldsMap?: IApiFieldMap | null;
+	apiSelectedValues?: string | string[];
 	apiIconTag?: string | null;
+	apiLoadMore?: boolean | {
+		perPage: number;
+		scrollThreshold: number;
+	};
 	toggleTag?: string;
 	toggleClasses?: string;
 	toggleSeparators?: {
@@ -863,6 +872,8 @@ export interface ISelectOptions {
 	descriptionClasses?: string;
 	iconClasses?: string;
 	isAddTagOnEnter?: boolean;
+	dropdownAutoPlacement?: boolean;
+	isSelectedOptionOnTop?: boolean;
 }
 export interface ISelect {
 	options?: ISelectOptions;
@@ -891,8 +902,10 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private readonly apiOptions;
 	private readonly apiDataPart;
 	private readonly apiSearchQueryKey;
+	private readonly apiLoadMore;
 	private readonly apiFieldsMap;
 	private readonly apiIconTag;
+	private readonly apiSelectedValues;
 	private readonly toggleTag;
 	private readonly toggleClasses;
 	private readonly toggleSeparators;
@@ -910,6 +923,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private readonly dropdownDirectionClasses;
 	dropdownSpace: number | null;
 	readonly dropdownPlacement: string | null;
+	private readonly dropdownAutoPlacement;
 	readonly dropdownVerticalFixedPlacement: "top" | "bottom" | null;
 	readonly dropdownScope: "window" | "parent";
 	private readonly searchTemplate;
@@ -930,6 +944,9 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private readonly descriptionClasses;
 	private readonly iconClasses;
 	private animationInProcess;
+	private currentPage;
+	private isLoading;
+	private hasMore;
 	private wrapper;
 	private toggle;
 	private toggleTextWrapper;
@@ -952,6 +969,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private onTagsInputInputSecondListener;
 	private onTagsInputKeydownListener;
 	private onSearchInputListener;
+	private readonly isSelectedOptionOnTop;
 	constructor(el: HTMLElement, options?: ISelectOptions);
 	private wrapperClick;
 	private toggleClick;
@@ -975,6 +993,9 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private setTagsItems;
 	private buildTagsInput;
 	private buildDropdown;
+	private setupInfiniteScroll;
+	private handleScroll;
+	private loadMore;
 	private buildFloatingUI;
 	private updateDropdownWidth;
 	private buildSearch;
@@ -1037,6 +1058,7 @@ export interface IStepper {
 	setProcessedNavItem(n?: number): void;
 	unsetProcessedNavItem(n?: number): void;
 	goToNext(): void;
+	goToFinish(): void;
 	disableButtons(): void;
 	enableButtons(): void;
 	setErrorNavItem(n?: number): void;
@@ -1125,6 +1147,7 @@ export declare class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	setProcessedNavItem(n?: number): void;
 	unsetProcessedNavItem(n?: number): void;
 	goToNext(): void;
+	goToFinish(): void;
 	disableButtons(): void;
 	enableButtons(): void;
 	setErrorNavItem(n?: number): void;

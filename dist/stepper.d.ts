@@ -26,6 +26,7 @@ export interface IStepper {
 	setProcessedNavItem(n?: number): void;
 	unsetProcessedNavItem(n?: number): void;
 	goToNext(): void;
+	goToFinish(): void;
 	disableButtons(): void;
 	enableButtons(): void;
 	setErrorNavItem(n?: number): void;
@@ -114,6 +115,7 @@ declare class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	setProcessedNavItem(n?: number): void;
 	unsetProcessedNavItem(n?: number): void;
 	goToNext(): void;
+	goToFinish(): void;
 	disableButtons(): void;
 	enableButtons(): void;
 	setErrorNavItem(n?: number): void;

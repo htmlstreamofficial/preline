@@ -1,6 +1,6 @@
 /*
  * HSDatepicker
- * @version: 3.0.1
+ * @version: 3.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -734,6 +734,17 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			selectedDates: this.vanillaCalendar.selectedDates,
 			selectedTime: this.vanillaCalendar.selectedTime,
 		};
+	}
+
+	public destroy() {
+		if (this.vanillaCalendar) {
+			this.vanillaCalendar.destroy();
+			this.vanillaCalendar = null;
+		}
+
+		window.$hsDatepickerCollection = window.$hsDatepickerCollection.filter(
+			({ element }) => element.el !== this.el,
+		);
 	}
 
 	// Static methods

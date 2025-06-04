@@ -74,7 +74,7 @@ declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implem
 	forceClearState(): void;
 	destroy(): void;
 	private static findInCollection;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): ICollectionItem<HSDropdown> | IHTMLElementFloatingUI;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSDropdown | ICollectionItem<HSDropdown>;
 	static autoInit(): void;
 	static open(target: HSDropdown | HTMLElement | string): void;
 	static close(target: HSDropdown | HTMLElement | string): void;

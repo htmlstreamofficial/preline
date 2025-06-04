@@ -75,6 +75,7 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private focusElement;
 	private getScrollbarSize;
 	private collectToggleParameters;
+	private isElementVisible;
 	open(cb?: Function | null): Promise<void>;
 	close(forceClose?: boolean, cb?: Function | null): Promise<unknown>;
 	destroy(): void;

@@ -1,6 +1,6 @@
 /*
  * HSDropdown
- * @version: 3.0.1
+ * @version: 3.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -358,7 +358,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 			if (x + menuRect.width > availableWidth) {
 				x = availableWidth - menuRect.width;
 			}
-
+      
 			if (x < 0) x = 0;
 
 			return x;
@@ -609,7 +609,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 		);
 
 		return elInCollection
-			? isInstance ? elInCollection : elInCollection.element.el
+			? isInstance ? elInCollection : elInCollection.element
 			: null;
 	}
 

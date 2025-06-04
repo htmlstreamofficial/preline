@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 .vc {
   @apply bg-white border border-gray-200 shadow-lg rounded-xl dark:bg-neutral-900 dark:border-neutral-700;
 
