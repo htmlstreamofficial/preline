@@ -894,6 +894,8 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			this.currentIndex = this.slides.length - this.getCurrentSlidesQty();
 		}
 
+		this.fireEvent('update', this.currentIndex);
+
 		if (this.isSnap) {
 			const itemWidth = this.sliderWidth / this.getCurrentSlidesQty();
 
@@ -922,6 +924,8 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			this.currentIndex = 0;
 		}
 
+		this.fireEvent('update', this.currentIndex);
+
 		if (this.isSnap) {
 			const itemWidth = this.sliderWidth / this.getCurrentSlidesQty();
 			const maxScrollLeft = this.container.scrollWidth -
@@ -942,6 +946,8 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	public goTo(i: number) {
 		const currentIndex = this.currentIndex;
 		this.currentIndex = i;
+
+		this.fireEvent('update', this.currentIndex);
 
 		if (this.isSnap) {
 			const itemWidth = this.sliderWidth / this.getCurrentSlidesQty();
