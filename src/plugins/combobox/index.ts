@@ -618,8 +618,14 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 						el.getAttribute("data-hs-combo-box-output-item-attr"),
 					);
 
-					attributes.forEach((attr: IComboBoxItemAttr) => {
-						el.setAttribute(attr.attr, item[attr.valueFrom]);
+					 attributes.forEach((attr: IComboBoxItemAttr) => {
+						let value: string = item[attr.valueFrom]
+
+						if (attr.attr === 'class' && el.className) {
+							el.className = `${el.className} ${value}`.trim()
+						} else {
+							el.setAttribute(attr.attr, value)
+						}
 					});
 				});
 			newItem.setAttribute("tabIndex", `${index}`);
