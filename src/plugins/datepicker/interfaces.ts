@@ -23,6 +23,8 @@ export interface ICustomDatepickerOptions extends Options {
 			meridiem?: ISelectOptions;
 		}
 	};
+	dateFormat?: string;
+	replaceTodayWithText?: boolean;
 }
 
 export interface IDatepicker {

@@ -25,6 +25,7 @@ export interface ITabs {
 	destroy(): void;
 }
 declare class HSTabs extends HSBasePlugin<ITabsOptions> implements ITabs {
+	private accessibilityComponent;
 	private readonly eventType;
 	private readonly preventNavigationResolution;
 	toggles: NodeListOf<HTMLElement> | null;
@@ -44,13 +45,13 @@ declare class HSTabs extends HSBasePlugin<ITabsOptions> implements ITabs {
 	private init;
 	private open;
 	private change;
+	private setupAccessibility;
+	private onArrow;
+	private onStartEnd;
 	destroy(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSTabs | ICollectionItem<HSTabs>;
 	static autoInit(): void;
 	static open(target: HTMLElement): void;
-	static accessibility(evt: KeyboardEvent): void;
-	static onArrow(isOpposite?: boolean): void;
-	static onStartEnd(isOpposite?: boolean): void;
 	static on(evt: string, target: HTMLElement, cb: Function): void;
 }
 

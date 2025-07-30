@@ -1,12 +1,15 @@
 export const templates = {
-  default: `<div class="--single-month flex flex-col overflow-hidden">
+  default: (theme: string | boolean = false) =>
+    `<div class="--single-month flex flex-col overflow-hidden">
     <div class="grid grid-cols-5 items-center gap-x-3 mx-1.5 pb-3" data-vc="header">
       <div class="col-span-1">
         <#CustomArrowPrev />
       </div>
       <div class="col-span-3 flex justify-center items-center gap-x-1">
         <#CustomMonth />
-        <span class="text-gray-800 dark:text-neutral-200">/</span>
+        <span class="text-gray-800 ${
+      theme !== "light" ? "dark:text-neutral-200" : ""
+    }">/</span>
         <#CustomYear />
       </div>
       <div class="col-span-1 flex justify-end">
@@ -20,7 +23,8 @@ export const templates = {
       </div>
     </div>
   </div>`,
-  multiple: `<div class="relative flex flex-col overflow-hidden">
+  multiple: (theme: string | boolean = false) =>
+    `<div class="relative flex flex-col overflow-hidden">
     <div class="absolute top-2 start-2">
       <#CustomArrowPrev />
     </div>
@@ -33,7 +37,9 @@ export const templates = {
           <div class="pb-3" data-vc="header">
             <div class="flex justify-center items-center gap-x-1" data-vc-header="content">
               <#CustomMonth />
-              <span class="text-gray-800 dark:text-neutral-200">/</span>
+              <span class="text-gray-800 ${
+      theme !== "light" ? "dark:text-neutral-200" : ""
+    }">/</span>
               <#CustomYear />
             </div>
           </div>
@@ -47,14 +53,19 @@ export const templates = {
       <#/Multiple>
     </div>
   </div>`,
-  year: `<div class="relative bg-white dark:bg-neutral-900" data-vc="header" role="toolbar">
+  year: (theme: string | boolean = false) =>
+    `<div class="relative bg-white ${
+      theme !== "light" ? "dark:bg-neutral-900" : ""
+    }" data-vc="header" role="toolbar">
     <div class="grid grid-cols-5 items-center gap-x-3 mx-1.5 pb-3" data-vc="header">
       <div class="col-span-1">
         <#CustomArrowPrev />
       </div>
       <div class="col-span-3 flex justify-center items-center gap-x-1">
         <#Month />
-        <span class="text-gray-800 dark:text-neutral-200">/</span>
+        <span class="text-gray-800 ${
+      theme !== "light" ? "dark:text-neutral-200" : ""
+    }">/</span>
         <#Year />
       </div>
       <div class="col-span-1 flex justify-end">
@@ -67,10 +78,13 @@ export const templates = {
       <#Years />
     </div>
   </div>`,
-  month: `<div class="pb-3" data-vc="header" role="toolbar">
+  month: (theme: string | boolean = false) =>
+    `<div class="pb-3" data-vc="header" role="toolbar">
     <div class="flex justify-center items-center gap-x-1" data-vc-header="content">
       <#Month />
-      <span class="text-gray-800 dark:text-neutral-200">/</span>
+      <span class="text-gray-800 ${
+      theme !== "light" ? "dark:text-neutral-200" : ""
+    }">/</span>
       <#Year />
     </div>
   </div>
@@ -80,7 +94,7 @@ export const templates = {
     </div>
   </div>`,
   // Custom
-  years: (options: string) => {
+  years: (options: string, theme: string | boolean = false) => {
     return `<div class="relative">
       <span class="hidden" data-vc="year"></span>
       <select data-hs-select='{
@@ -88,26 +102,55 @@ export const templates = {
           "dropdownScope": "parent",
           "dropdownVerticalFixedPlacement": "bottom",
           "toggleTag": "<button type=\\"button\\"><span data-title></span></button>",
-          "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative flex text-nowrap w-full cursor-pointer text-start font-medium text-gray-800 hover:text-gray-600 focus:outline-hidden focus:text-gray-600 before:absolute before:inset-0 before:z-1 dark:text-neutral-200 dark:hover:text-neutral-300 dark:focus:text-neutral-300",
-          "dropdownClasses": "mt-2 z-50 w-20 max-h-60 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-900 dark:border-neutral-700",
-          "optionClasses": "p-2 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800",
-          "optionTemplate": "<div class=\\"flex justify-between items-center w-full\\"><span data-title></span><span class=\\"hidden hs-selected:block\\"><svg class=\\"shrink-0 size-3.5 text-gray-800 dark:text-neutral-200\\" xmlns=\\"http:.w3.org/2000/svg\\" width=\\"24\\" height=\\"24\\" viewBox=\\"0 0 24 24\\" fill=\\"none\\" stroke=\\"currentColor\\" stroke-width=\\"2\\" stroke-linecap=\\"round\\" stroke-linejoin=\\"round\\"><polyline points=\\"20 6 9 17 4 12\\"/></svg></span></div>"
+          "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative flex text-nowrap w-full cursor-pointer text-start font-medium text-gray-800 hover:text-gray-600 focus:outline-hidden focus:text-gray-600 before:absolute before:inset-0 before:z-1 ${
+      theme !== "light"
+        ? "dark:text-neutral-200 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
+        : ""
+    }",
+          "dropdownClasses": "mt-2 z-50 w-20 max-h-60 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ${
+      theme !== "light"
+        ? "dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-900 dark:border-neutral-700"
+        : ""
+    }",
+          "optionClasses": "p-2 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 ${
+      theme !== "light"
+        ? "dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800"
+        : ""
+    }",
+          "optionTemplate": "<div class=\\"flex justify-between items-center w-full\\"><span data-title></span><span class=\\"hidden hs-selected:block\\"><svg class=\\"shrink-0 size-3.5 text-gray-800 ${
+      theme !== "light" ? "dark:text-neutral-200" : ""
+    }\\" xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"24\\" height=\\"24\\" viewBox=\\"0 0 24 24\\" fill=\\"none\\" stroke=\\"currentColor\\" stroke-width=\\"2\\" stroke-linecap=\\"round\\" stroke-linejoin=\\"round\\"><polyline points=\\"20 6 9 17 4 12\\"/></svg></span></div>"
         }' class="hidden --year --prevent-on-load-init">
         ${options}
       </select>
     </div>`;
   },
-  months: `<div class="relative">
+  months: (theme: string | boolean = false) =>
+    `<div class="relative">
     <span class="hidden" data-vc="month"></span>
     <select data-hs-select='{
         "placeholder": "Select month",
         "dropdownScope": "parent",
         "dropdownVerticalFixedPlacement": "bottom",
         "toggleTag": "<button type=\\"button\\"><span data-title></span></button>",
-        "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative flex text-nowrap w-full cursor-pointer text-start font-medium text-gray-800 hover:text-gray-600 focus:outline-hidden focus:text-gray-600 before:absolute before:inset-0 before:z-1 dark:text-neutral-200 dark:hover:text-neutral-300 dark:focus:text-neutral-300",
-        "dropdownClasses": "mt-2 z-50 w-32 max-h-60 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-900 dark:border-neutral-700",
-        "optionClasses": "p-2 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg hs-select-disabled:opacity-50 hs-select-disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800",
-        "optionTemplate": "<div class=\\"flex justify-between items-center w-full\\"><span data-title></span><span class=\\"hidden hs-selected:block\\"><svg class=\\"shrink-0 size-3.5 text-gray-800 dark:text-neutral-200\\" xmlns=\\"http:.w3.org/2000/svg\\" width=\\"24\\" height=\\"24\\" viewBox=\\"0 0 24 24\\" fill=\\"none\\" stroke=\\"currentColor\\" stroke-width=\\"2\\" stroke-linecap=\\"round\\" stroke-linejoin=\\"round\\"><polyline points=\\"20 6 9 17 4 12\\"/></svg></span></div>"
+        "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative flex text-nowrap w-full cursor-pointer text-start font-medium text-gray-800 hover:text-gray-600 focus:outline-hidden focus:text-gray-600 before:absolute before:inset-0 before:z-1 ${
+      theme !== "light"
+        ? "dark:text-neutral-200 dark:hover:text-neutral-300 dark:focus:text-neutral-300"
+        : ""
+    }",
+        "dropdownClasses": "mt-2 z-50 w-32 max-h-60 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ${
+      theme !== "light"
+        ? "dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-900 dark:border-neutral-700"
+        : ""
+    }",
+        "optionClasses": "p-2 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg hs-select-disabled:opacity-50 hs-select-disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100 ${
+      theme !== "light"
+        ? "dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800"
+        : ""
+    }",
+        "optionTemplate": "<div class=\\"flex justify-between items-center w-full\\"><span data-title></span><span class=\\"hidden hs-selected:block\\"><svg class=\\"shrink-0 size-3.5 text-gray-800 ${
+      theme !== "light" ? "dark:text-neutral-200" : ""
+    }\\" xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"24\\" height=\\"24\\" viewBox=\\"0 0 24 24\\" fill=\\"none\\" stroke=\\"currentColor\\" stroke-width=\\"2\\" stroke-linecap=\\"round\\" stroke-linejoin=\\"round\\"><polyline points=\\"20 6 9 17 4 12\\"/></svg></span></div>"
       }' class="hidden --month --prevent-on-load-init">
       <option value="0">January</option>
       <option value="1">February</option>
@@ -123,13 +166,30 @@ export const templates = {
       <option value="11">December</option>
     </select>
   </div>`,
-  hours: `<div class="relative">
+  hours: (theme: string | boolean = false) =>
+    `<div class="relative">
     <select class="--hours hidden" data-hs-select='{
       "placeholder": "Select option...",
       "dropdownVerticalFixedPlacement": "top",
-      "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-1 px-2 pe-6 flex text-nowrap w-full cursor-pointer bg-white border border-gray-200 rounded-lg text-start text-sm focus:border-blue-500 focus:ring-blue-500 before:absolute before:inset-0 before:z-1 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400",
-      "dropdownClasses": "mt-2 z-50 w-full min-w-24 max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-900 dark:border-neutral-700",
-      "optionClasses": "hs-selected:bg-gray-100 dark:hs-selected:bg-neutral-800 py-2 px-4 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 dark:hs-selected:bg-gray-700 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800",
+      "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-1 px-2 pe-6 flex text-nowrap w-full cursor-pointer bg-white border border-gray-200 rounded-lg text-start text-sm focus:border-blue-500 focus:ring-blue-500 before:absolute before:inset-0 before:z-1 ${
+      theme !== "light"
+        ? "dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400"
+        : ""
+    }",
+      "dropdownClasses": "mt-2 z-50 w-full min-w-24 max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ${
+      theme !== "light"
+        ? "dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-900 dark:border-neutral-700"
+        : ""
+    }",
+      "optionClasses": "hs-selected:bg-gray-100 ${
+      theme !== "light" ? "dark:hs-selected:bg-neutral-800" : ""
+    } py-2 px-4 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 ${
+      theme !== "light" ? "dark:hs-selected:bg-gray-700" : ""
+    } ${
+      theme !== "light"
+        ? "dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800"
+        : ""
+    }",
       "optionTemplate": "<div class=\\"flex justify-between items-center w-full\\"><span data-title></span></div>"
     }'>
       <option value="01">01</option>
@@ -146,16 +206,35 @@ export const templates = {
       <option value="12" selected>12</option>
     </select>
     <div class="absolute top-1/2 end-2 -translate-y-1/2">
-      <svg class="shrink-0 size-3 text-gray-500 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+      <svg class="shrink-0 size-3 text-gray-500 ${
+      theme !== "light" ? "dark:text-neutral-500" : ""
+    }" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
     </div>
   </div>`,
-  minutes: `<div class="relative">
+  minutes: (theme: string | boolean = false) =>
+    `<div class="relative">
     <select class="--minutes hidden" data-hs-select='{
       "placeholder": "Select option...",
       "dropdownVerticalFixedPlacement": "top",
-      "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-1 px-2 pe-6 flex text-nowrap w-full cursor-pointer bg-white border border-gray-200 rounded-lg text-start text-sm focus:border-blue-500 focus:ring-blue-500 before:absolute before:inset-0 before:z-1 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400",
-      "dropdownClasses": "mt-2 z-50 w-full min-w-24 max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-900 dark:border-neutral-700",
-      "optionClasses": "hs-selected:bg-gray-100 dark:hs-selected:bg-neutral-800 py-2 px-4 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 dark:hs-selected:bg-gray-700 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800",
+      "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-1 px-2 pe-6 flex text-nowrap w-full cursor-pointer bg-white border border-gray-200 rounded-lg text-start text-sm focus:border-blue-500 focus:ring-blue-500 before:absolute before:inset-0 before:z-1 ${
+      theme !== "light"
+        ? "dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400"
+        : ""
+    }",
+      "dropdownClasses": "mt-2 z-50 w-full min-w-24 max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ${
+      theme !== "light"
+        ? "dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-900 dark:border-neutral-700"
+        : ""
+    }",
+      "optionClasses": "hs-selected:bg-gray-100 ${
+      theme !== "light" ? "dark:hs-selected:bg-neutral-800" : ""
+    } py-2 px-4 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 ${
+      theme !== "light" ? "dark:hs-selected:bg-gray-700" : ""
+    } ${
+      theme !== "light"
+        ? "dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800"
+        : ""
+    }",
       "optionTemplate": "<div class=\\"flex justify-between items-center w-full\\"><span data-title></span></div>"
     }'>
       <option value="00" selected>00</option>
@@ -220,23 +299,44 @@ export const templates = {
       <option value="59">59</option>
     </select>
     <div class="absolute top-1/2 end-2 -translate-y-1/2">
-      <svg class="shrink-0 size-3 text-gray-500 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+      <svg class="shrink-0 size-3 text-gray-500 ${
+      theme !== "light" ? "dark:text-neutral-500" : ""
+    }" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
     </div>
   </div>`,
-  meridiem: `<div class="relative">
+  meridiem: (theme: string | boolean = false) =>
+    `<div class="relative">
     <select class="--meridiem hidden" data-hs-select='{
       "placeholder": "Select option...",
       "dropdownVerticalFixedPlacement": "top",
-      "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-1 px-2 pe-6 flex text-nowrap w-full cursor-pointer bg-white border border-gray-200 rounded-lg text-start text-sm focus:border-blue-500 focus:ring-blue-500 before:absolute before:inset-0 before:z-1 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400",
-      "dropdownClasses": "mt-2 z-50 w-full min-w-24 max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-900 dark:border-neutral-700",
-      "optionClasses": "hs-selected:bg-gray-100 dark:hs-selected:bg-neutral-800 py-2 px-4 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 dark:hs-selected:bg-gray-700 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800",
+      "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-1 px-2 pe-6 flex text-nowrap w-full cursor-pointer bg-white border border-gray-200 rounded-lg text-start text-sm focus:border-blue-500 focus:ring-blue-500 before:absolute before:inset-0 before:z-1 ${
+      theme !== "light"
+        ? "dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400"
+        : ""
+    }",
+      "dropdownClasses": "mt-2 z-50 w-full min-w-24 max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ${
+      theme !== "light"
+        ? "dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-900 dark:border-neutral-700"
+        : ""
+    }",
+      "optionClasses": "hs-selected:bg-gray-100 ${
+      theme !== "light" ? "dark:hs-selected:bg-neutral-800" : ""
+    } py-2 px-4 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 ${
+      theme !== "light" ? "dark:hs-selected:bg-gray-700" : ""
+    } ${
+      theme !== "light"
+        ? "dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800"
+        : ""
+    }",
       "optionTemplate": "<div class=\\"flex justify-between items-center w-full\\"><span data-title></span></div>"
     }'>
       <option value="PM" selected>PM</option>
       <option value="AM">AM</option>
     </select>
     <div class="absolute top-1/2 end-2 -translate-y-1/2">
-      <svg class="shrink-0 size-3 text-gray-500 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+      <svg class="shrink-0 size-3 text-gray-500 ${
+      theme !== "light" ? "dark:text-neutral-500" : ""
+    }" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
     </div>
-  </div>`
+  </div>`,
 };

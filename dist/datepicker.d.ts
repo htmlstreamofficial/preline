@@ -126,6 +126,7 @@ export interface IDatepicker {
 }
 declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private dataOptions;
+	private concatOptions;
 	private updatedStyles;
 	private vanillaCalendar;
 	constructor(el: HTMLElement, options?: {}, events?: {});

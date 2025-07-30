@@ -29,15 +29,17 @@ export interface IHTMLElementFloatingUI extends HTMLElement {
 	_floatingUI: any;
 }
 declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDropdown {
-	private static history;
+	private accessibilityComponent;
 	private readonly toggle;
 	private readonly closers;
 	menu: HTMLElement | null;
 	private eventMode;
 	private closeMode;
 	private hasAutofocus;
+	private autofocusOnKeyboardOnly;
 	private animationInProcess;
 	private longPressTimer;
+	private openedViaKeyboard;
 	private onElementMouseEnterListener;
 	private onElementMouseLeaveListener;
 	private onToggleClickListener;
@@ -55,6 +57,7 @@ declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implem
 	private closerClick;
 	private init;
 	resizeHandler(): void;
+	private isOpen;
 	private buildToggle;
 	private buildMenu;
 	private buildClosers;
@@ -69,24 +72,24 @@ declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implem
 	private selectCheckbox;
 	private selectRadio;
 	calculatePopperPosition(target?: VirtualElement | HTMLElement): string;
-	open(target?: VirtualElement | HTMLElement): boolean;
+	open(target?: VirtualElement | HTMLElement, openedViaKeyboard?: boolean): boolean;
 	close(isAnimated?: boolean): boolean;
 	forceClearState(): void;
 	destroy(): void;
 	private static findInCollection;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSDropdown | ICollectionItem<HSDropdown>;
 	static autoInit(): void;
-	static open(target: HSDropdown | HTMLElement | string): void;
+	static open(target: HSDropdown | HTMLElement | string, openedViaKeyboard?: boolean): void;
 	static close(target: HSDropdown | HTMLElement | string): void;
-	static accessibility(evt: KeyboardEvent): void;
-	static onEscape(evt: KeyboardEvent): void;
-	static onEnter(evt: KeyboardEvent): boolean;
-	static onArrow(isArrowUp?: boolean): boolean;
-	static onArrowX(evt: KeyboardEvent, direction: "right" | "left"): boolean;
-	static onStartEnd(isStart?: boolean): boolean;
-	static onFirstLetter(code: string): boolean;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null, isAnimated?: boolean): void;
+	private setupAccessibility;
+	private onFirstLetter;
+	private onArrowX;
+	private onStartEnd;
+	private focusMenuItem;
 	static on(evt: string, target: HSDropdown | HTMLElement | string, cb: Function): void;
+	isOpened(): boolean;
+	containsElement(element: HTMLElement): boolean;
 }
 
 export {

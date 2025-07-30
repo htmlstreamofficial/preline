@@ -1,6 +1,6 @@
 /*
  * HSDatepicker
- * @version: 3.1.0
+ * @version: 3.2.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -8,6 +8,11 @@
 
 import { dispatch } from "../../utils";
 import { Calendar, DatesArr, Range } from "vanilla-calendar-pro";
+import dayjs from "dayjs";
+import localeData from "dayjs/plugin/localeData";
+import "dayjs/locale/en";
+
+dayjs.extend(localeData);
 
 import CustomVanillaCalendar from "./vanilla-datepicker-pro";
 import { templates } from "./templates";
@@ -24,6 +29,7 @@ declare var _: any;
 
 class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private dataOptions: ICustomDatepickerOptions;
+	private concatOptions: ICustomDatepickerOptions;
 	private updatedStyles: ICustomDatepickerOptions["styles"];
 
 	private vanillaCalendar: Calendar;
@@ -58,6 +64,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 		const today = new Date();
 		const defaults = {
+			selectedTheme: this.dataOptions.selectedTheme ?? "",
 			styles: this.updatedStyles,
 			dateMin: this.dataOptions.dateMin ?? today.toISOString().split("T")[0],
 			dateMax: this.dataOptions.dateMax ?? "2470-12-31",
@@ -78,10 +85,9 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		const initTime = (self: Calendar) => {
 			if (this.hasTime(self)) this.initCustomTime(self);
 		};
-
 		const _options = {
 			layouts: {
-				month: templates.month,
+				month: templates.month(defaults.selectedTheme),
 			},
 			onInit: chainCallbacks(this.dataOptions.onInit, (self) => {
 				if (defaults.mode === "custom-select" && !this.dataOptions.inputMode) {
@@ -142,18 +148,30 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			}),
 		};
 
+		this.concatOptions = _.merge(_options, this.dataOptions);
+
 		const processedOptions = {
 			...defaults,
 			layouts: {
-				default: this.processCustomTemplate(templates.default, "default"),
-				multiple: this.processCustomTemplate(templates.multiple, "multiple"),
-				year: this.processCustomTemplate(templates.year, "default"),
+				default: this.processCustomTemplate(
+					templates.default(defaults.selectedTheme),
+					"default",
+				),
+				multiple: this.processCustomTemplate(
+					templates.multiple(defaults.selectedTheme),
+					"multiple",
+				),
+				year: this.processCustomTemplate(
+					templates.year(defaults.selectedTheme),
+					"default",
+				),
 			},
 		};
 
+		this.concatOptions = _.merge(this.concatOptions, processedOptions);
 		this.vanillaCalendar = new CustomVanillaCalendar(
 			this.el,
-			_.merge(_options, this.dataOptions, processedOptions),
+			this.concatOptions,
 		);
 
 		this.init();
@@ -190,6 +208,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	}
 
 	private setInputValue(target: HTMLInputElement, dates: DatesArr) {
+		const dateFormat = this.dataOptions?.dateFormat;
 		const dateSeparator = this.dataOptions?.inputModeOptions?.dateSeparator ??
 			".";
 		const itemsSeparator = this.dataOptions?.inputModeOptions?.itemsSeparator ??
@@ -200,19 +219,49 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			if (selectionDatesMode === "multiple") {
 				const temp: string[] = [];
 				dates.forEach((date) =>
-					temp.push(this.changeDateSeparator(date, dateSeparator))
+					temp.push(
+						dateFormat
+							? this.formatDateWithDayjs(date, dateFormat)
+							: this.changeDateSeparator(date, dateSeparator),
+					)
 				);
 
 				target.value = temp.join(itemsSeparator);
 			} else {
-				target.value = [
-					this.changeDateSeparator(dates[0], dateSeparator),
-					this.changeDateSeparator(dates[1], dateSeparator),
-				].join(itemsSeparator);
+				const formattedStart = dateFormat
+					? this.formatDateWithDayjs(dates[0], dateFormat)
+					: this.changeDateSeparator(dates[0], dateSeparator);
+				const formattedEnd = dateFormat
+					? this.formatDateWithDayjs(dates[1], dateFormat)
+					: this.changeDateSeparator(dates[1], dateSeparator);
+
+				target.value = [formattedStart, formattedEnd].join(itemsSeparator);
 			}
 		} else if (dates.length && dates.length === 1) {
-			target.value = this.changeDateSeparator(dates[0], dateSeparator);
+			target.value = dateFormat
+				? this.formatDateWithDayjs(dates[0], dateFormat)
+				: this.changeDateSeparator(dates[0], dateSeparator);
 		} else target.value = "";
+	}
+
+	private formatDateWithDayjs(
+		date: string | number | Date,
+		format: string,
+	): string {
+		const formattedDate = dayjs(date).format(format);
+
+		if (this.dataOptions?.replaceTodayWithText && format.includes("dddd")) {
+			const today = dayjs();
+			const inputDate = dayjs(date);
+
+			if (inputDate.isSame(today, "day")) {
+				const dayName = dayjs(date).format("dddd");
+
+				return formattedDate.replace(dayName, "Today");
+			}
+		}
+
+		return formattedDate;
 	}
 
 	private changeDateSeparator(
@@ -241,6 +290,12 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		};
 		const formatDate = (date: string | number | Date): string[] => {
 			if (typeof date === "string") {
+				if (date.toLowerCase() === "today") {
+					const today = new Date();
+
+					return [today.toISOString().split("T")[0]];
+				}
+
 				const rangeMatch = date.match(
 					/^(\d{4}-\d{2}-\d{2})\s*[^a-zA-Z0-9]*\s*(\d{4}-\d{2}-\d{2})$/,
 				);
@@ -458,29 +513,31 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		const customSelectOptions = this.updatedStyles?.customSelect;
 		const hours = customSelectOptions
 			? this.updateTemplate(
-				templates.hours,
+				templates.hours(this.concatOptions.selectedTheme),
 				customSelectOptions?.shared || {} as ISelectOptions,
 				customSelectOptions?.hours || {} as ISelectOptions,
 			)
-			: templates.hours;
+			: templates.hours(this.concatOptions.selectedTheme);
 		const minutes = customSelectOptions
 			? this.updateTemplate(
-				templates.minutes,
+				templates.minutes(this.concatOptions.selectedTheme),
 				customSelectOptions?.shared || {} as ISelectOptions,
 				customSelectOptions?.minutes || {} as ISelectOptions,
 			)
-			: templates.minutes;
+			: templates.minutes(this.concatOptions.selectedTheme);
 		const meridiem = customSelectOptions
 			? this.updateTemplate(
-				templates.meridiem,
+				templates.meridiem(this.concatOptions.selectedTheme),
 				customSelectOptions?.shared || {} as ISelectOptions,
 				customSelectOptions?.meridiem || {} as ISelectOptions,
 			)
-			: templates.meridiem;
+			: templates.meridiem(this.concatOptions.selectedTheme);
 		const time = this?.dataOptions?.templates?.time ?? `
 			<div class="pt-3 flex justify-center items-center gap-x-2">
         ${hours}
-        <span class="text-gray-800 dark:text-white">:</span>
+        <span class="text-gray-800 ${
+			this.concatOptions.selectedTheme !== "light" ? "dark:text-white" : ""
+		}">:</span>
         ${minutes}
         ${meridiem}
       </div>
@@ -494,11 +551,11 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		const customSelectOptions = this.updatedStyles?.customSelect;
 		const updatedTemplate = customSelectOptions
 			? this.updateTemplate(
-				templates.months,
+				templates.months(this.concatOptions.selectedTheme),
 				customSelectOptions?.shared || {} as ISelectOptions,
 				customSelectOptions?.months || {} as ISelectOptions,
 			)
-			: templates.months;
+			: templates.months(this.concatOptions.selectedTheme);
 		const month = mode === "custom-select" ? updatedTemplate : "<#Month />";
 
 		return month;
@@ -526,7 +583,10 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 				return result;
 			};
-			const years = templates.years(generateOptions());
+			const years = templates.years(
+				generateOptions(),
+				this.concatOptions.selectedTheme,
+			);
 			const customSelectOptions = this.updatedStyles?.customSelect;
 			const updatedTemplate = customSelectOptions
 				? this.updateTemplate(

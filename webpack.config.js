@@ -60,7 +60,8 @@ module.exports = {
 		dropzone: 'Dropzone',
 		clipboard: 'ClipboardJS',
 		noUiSlider: 'noUiSlider',
-		VanillaCalendarPro: 'VanillaCalendarPro'
+		VanillaCalendarPro: 'VanillaCalendarPro',
+		'vanilla-calendar-pro': 'VanillaCalendarPro'
 	},
 	optimization: {
 		minimize: true,

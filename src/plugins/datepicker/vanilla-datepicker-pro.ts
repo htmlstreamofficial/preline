@@ -65,5 +65,5 @@ class CustomVanillaCalendar extends Calendar {
 		console.log("This log is from CustomVanillaCalendar!", this);
 	}
 }
-
 export default CustomVanillaCalendar;
+

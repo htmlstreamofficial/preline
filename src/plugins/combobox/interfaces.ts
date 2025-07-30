@@ -21,6 +21,8 @@ export interface IComboBoxOptions {
 	preventAutoPosition?: boolean;
 	preventClientFiltering?: boolean;
 	isOpenOnFocus?: boolean;
+	keepOriginalOrder?: boolean;
+	preserveSelectionOnEmpty?: boolean;
 }
 
 export interface IComboBox {

@@ -79,6 +79,7 @@ declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICaro
 	private dragStartX;
 	private initialTranslateX;
 	private readonly touchX;
+	private readonly touchY;
 	private resizeContainer;
 	resizeContainerWidth: number;
 	private onPrevClickListener;

@@ -33,6 +33,9 @@ export interface IOverlay {
 }
 export type TOverlayOptionsAutoCloseEqualityType = "less-than" | "more-than";
 declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
+	private accessibilityComponent;
+	private lastFocusedToggle;
+	private initiallyOpened;
 	private readonly hiddenClass;
 	private readonly emulateScrollbarSpace;
 	private readonly isClosePrev;
@@ -43,6 +46,7 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private openNextOverlay;
 	private autoHide;
 	private toggleButtons;
+	toggleMinifierButtons: HTMLElement[];
 	static openedItemsQty: number;
 	initContainer: HTMLElement | null;
 	isCloseWhenClickInside: boolean;
@@ -59,15 +63,18 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private initialZIndex;
 	static currentZIndex: number;
 	private onElementClickListener;
+	private onElementMinifierClickListener;
 	private onOverlayClickListener;
 	private onBackdropClickListener;
 	constructor(el: HTMLElement, options?: IOverlayOptions, events?: {});
 	private elementClick;
+	private elementMinifierClick;
+	minify(isMinified: boolean, cb?: Function | null): void;
 	private overlayClick;
 	private backdropClick;
 	private init;
-	private getElementsByZIndex;
 	private buildToggleButtons;
+	private buildToggleMinifierButtons;
 	private hideAuto;
 	private checkTimer;
 	private buildBackdrop;
@@ -76,18 +83,19 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private getScrollbarSize;
 	private collectToggleParameters;
 	private isElementVisible;
+	private isOpened;
 	open(cb?: Function | null): Promise<void>;
 	close(forceClose?: boolean, cb?: Function | null): Promise<unknown>;
+	updateToggles(): void;
 	destroy(): void;
 	private static findInCollection;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSOverlay>;
 	static autoInit(): void;
 	static open(target: HSOverlay | HTMLElement | string): void;
 	static close(target: HSOverlay | HTMLElement | string): void;
+	static minify(target: HSOverlay | HTMLElement | string, isMinified: boolean): void;
 	static setOpened(breakpoint: number, el: ICollectionItem<HSOverlay>): void;
-	static accessibility(evt: KeyboardEvent): boolean;
-	static onEscape(target: ICollectionItem<HSOverlay>): void;
-	static onTab(target: ICollectionItem<HSOverlay>): boolean;
+	private setupAccessibility;
 	static on(evt: string, target: HSOverlay | HTMLElement | string, cb: Function): void;
 }
 
