@@ -1,6 +1,6 @@
 /*
  * HSDatepicker
- * @version: 3.2.1
+ * @version: 3.2.2
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

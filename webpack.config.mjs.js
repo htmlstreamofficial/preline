@@ -60,6 +60,9 @@ module.exports = {
 	},
 	resolve: {
 		extensions: ['.ts', '.js'],
+		alias: {
+			'VanillaCalendarPro': 'vanilla-calendar-pro'
+		}
 	},
 	output: {
 		path: path.resolve(__dirname, 'dist'),
@@ -74,8 +77,7 @@ module.exports = {
 		dropzone: 'Dropzone',
 		clipboard: 'ClipboardJS',
 		noUiSlider: 'noUiSlider',
-		VanillaCalendarPro: 'VanillaCalendarPro',
-		'vanilla-calendar-pro': 'VanillaCalendarPro'
+		VanillaCalendarPro: 'VanillaCalendarPro'
 	},
 	optimization: {
 		minimize: true,
