@@ -1,7 +1,7 @@
 var e={615:(e,t,s)=>{s.d(t,{A:()=>i});class i{constructor(e,t,s){this.el=e,this.options=t,this.events=s,this.el=e,this.options=t,this.events={}}createCollection(e,t){var s;e.push({id:(null===(s=null==t?void 0:t.el)||void 0===s?void 0:s.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}}},t={};function s(i){var n=t[i];if(void 0!==n)return n.exports;var h=t[i]={exports:{}};return e[i](h,h.exports,s),h.exports}s.d=(e,t)=>{for(var i in t)s.o(t,i)&&!s.o(e,i)&&Object.defineProperty(e,i,{enumerable:!0,get:t[i]})},s.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var i={};s.d(i,{A:()=>o});var n=s(615);
 /*
  * HSThemeSwitch
- * @version: 3.2.0
+ * @version: 3.2.1
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

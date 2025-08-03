@@ -1,6 +1,6 @@
 /*
  * HSDatepicker
- * @version: 3.2.0
+ * @version: 3.2.1
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -8,14 +8,10 @@
 
 import { dispatch } from "../../utils";
 import { Calendar, DatesArr, Range } from "vanilla-calendar-pro";
-import dayjs from "dayjs";
-import localeData from "dayjs/plugin/localeData";
-import "dayjs/locale/en";
-
-dayjs.extend(localeData);
 
 import CustomVanillaCalendar from "./vanilla-datepicker-pro";
 import { templates } from "./templates";
+import { todayTranslations } from "./locale";
 import { classToClassList, htmlToElement } from "../../utils";
 import HSSelect from "../select";
 import { ISelectOptions } from "../select/interfaces";
@@ -221,7 +217,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 				dates.forEach((date) =>
 					temp.push(
 						dateFormat
-							? this.formatDateWithDayjs(date, dateFormat)
+							? this.formatDate(date, dateFormat)
 							: this.changeDateSeparator(date, dateSeparator),
 					)
 				);
@@ -229,39 +225,23 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 				target.value = temp.join(itemsSeparator);
 			} else {
 				const formattedStart = dateFormat
-					? this.formatDateWithDayjs(dates[0], dateFormat)
+					? this.formatDate(dates[0], dateFormat)
 					: this.changeDateSeparator(dates[0], dateSeparator);
 				const formattedEnd = dateFormat
-					? this.formatDateWithDayjs(dates[1], dateFormat)
+					? this.formatDate(dates[1], dateFormat)
 					: this.changeDateSeparator(dates[1], dateSeparator);
 
 				target.value = [formattedStart, formattedEnd].join(itemsSeparator);
 			}
 		} else if (dates.length && dates.length === 1) {
 			target.value = dateFormat
-				? this.formatDateWithDayjs(dates[0], dateFormat)
+				? this.formatDate(dates[0], dateFormat)
 				: this.changeDateSeparator(dates[0], dateSeparator);
 		} else target.value = "";
 	}
 
-	private formatDateWithDayjs(
-		date: string | number | Date,
-		format: string,
-	): string {
-		const formattedDate = dayjs(date).format(format);
-
-		if (this.dataOptions?.replaceTodayWithText && format.includes("dddd")) {
-			const today = dayjs();
-			const inputDate = dayjs(date);
-
-			if (inputDate.isSame(today, "day")) {
-				const dayName = dayjs(date).format("dddd");
-
-				return formattedDate.replace(dayName, "Today");
-			}
-		}
-
-		return formattedDate;
+	private getLocalizedTodayText(locale?: string): string {
+		return todayTranslations[locale] || "Today";
 	}
 
 	private changeDateSeparator(
@@ -269,8 +249,20 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		separator = ".",
 		defaultSeparator = "-",
 	) {
-		const newDate = (date as string).split(defaultSeparator);
+		const dateObj = new Date(date);
 
+		if (this.dataOptions?.replaceTodayWithText) {
+			const today = new Date();
+			const isToday = dateObj.toDateString() === today.toDateString();
+
+			if (isToday) {
+				const dateLocale = this.dataOptions?.dateLocale;
+
+				return this.getLocalizedTodayText(dateLocale);
+			}
+		}
+
+		const newDate = (date as string).split(defaultSeparator);
 		return newDate.join(separator);
 	}
 
@@ -794,6 +786,120 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			selectedDates: this.vanillaCalendar.selectedDates,
 			selectedTime: this.vanillaCalendar.selectedTime,
 		};
+	}
+
+	public formatDate(
+		date: string | number | Date,
+		format?: string,
+	): string {
+		const dateFormat = format || this.dataOptions?.dateFormat;
+		const dateLocale = this.dataOptions?.dateLocale || undefined;
+
+		if (!dateFormat) {
+			const dateSeparator = this.dataOptions?.inputModeOptions?.dateSeparator ??
+				".";
+
+			return this.changeDateSeparator(date, dateSeparator);
+		}
+
+		const dateObj = new Date(date);
+
+		if (isNaN(dateObj.getTime())) {
+			return this.changeDateSeparator(date as string);
+		}
+
+		let result = "";
+		let i = 0;
+
+		while (i < dateFormat.length) {
+			if (dateFormat.slice(i, i + 4) === "YYYY") {
+				result += dateObj.getFullYear().toString();
+				i += 4;
+			} else if (dateFormat.slice(i, i + 4) === "dddd") {
+				const dayName = dateObj.toLocaleDateString(dateLocale, {
+					weekday: "long",
+				});
+
+				if (this.dataOptions?.replaceTodayWithText) {
+					const today = new Date();
+					const isToday = dateObj.toDateString() === today.toDateString();
+
+					if (isToday) {
+						result += this.getLocalizedTodayText(dateLocale);
+					} else {
+						result += dayName;
+					}
+				} else {
+					result += dayName;
+				}
+				i += 4;
+			} else if (dateFormat.slice(i, i + 4) === "MMMM") {
+				result += dateObj.toLocaleDateString(dateLocale, { month: "long" });
+				i += 4;
+			} else if (dateFormat.slice(i, i + 3) === "ddd") {
+				const dayName = dateObj.toLocaleDateString(dateLocale, {
+					weekday: "short",
+				});
+
+				if (this.dataOptions?.replaceTodayWithText) {
+					const today = new Date();
+					const isToday = dateObj.toDateString() === today.toDateString();
+
+					if (isToday) {
+						result += this.getLocalizedTodayText(dateLocale);
+					} else {
+						result += dayName;
+					}
+				} else {
+					result += dayName;
+				}
+				i += 3;
+			} else if (dateFormat.slice(i, i + 3) === "MMM") {
+				result += dateObj.toLocaleDateString(dateLocale, { month: "short" });
+				i += 3;
+			} else if (dateFormat.slice(i, i + 2) === "YY") {
+				result += dateObj.getFullYear().toString().slice(-2);
+				i += 2;
+			} else if (dateFormat.slice(i, i + 2) === "MM") {
+				result += String(dateObj.getMonth() + 1).padStart(2, "0");
+				i += 2;
+			} else if (dateFormat.slice(i, i + 2) === "DD") {
+				result += String(dateObj.getDate()).padStart(2, "0");
+				i += 2;
+			} else if (dateFormat.slice(i, i + 2) === "HH") {
+				result += String(dateObj.getHours()).padStart(2, "0");
+				i += 2;
+			} else if (dateFormat.slice(i, i + 2) === "mm") {
+				result += String(dateObj.getMinutes()).padStart(2, "0");
+				i += 2;
+			} else if (dateFormat.slice(i, i + 2) === "ss") {
+				result += String(dateObj.getSeconds()).padStart(2, "0");
+				i += 2;
+			} else if (dateFormat[i] === "Y") {
+				result += dateObj.getFullYear().toString();
+				i += 1;
+			} else if (dateFormat[i] === "M") {
+				result += String(dateObj.getMonth() + 1);
+				i += 1;
+			} else if (dateFormat[i] === "D") {
+				result += String(dateObj.getDate());
+				i += 1;
+			} else if (dateFormat[i] === "H") {
+				result += String(dateObj.getHours());
+				i += 1;
+			} else if (dateFormat[i] === "m") {
+				result += String(dateObj.getMinutes());
+				i += 1;
+			} else if (dateFormat[i] === "s") {
+				result += String(dateObj.getSeconds());
+				i += 1;
+			} else {
+				result += dateFormat[i];
+				i += 1;
+			}
+		}
+
+		return result;
 	}
 
 	public destroy() {

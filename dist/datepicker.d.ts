@@ -120,9 +120,13 @@ export interface ICustomDatepickerOptions extends Options {
 			meridiem?: ISelectOptions;
 		};
 	};
+	dateFormat?: string;
+	dateLocale?: string;
+	replaceTodayWithText?: boolean;
 }
 export interface IDatepicker {
 	options?: ICustomDatepickerOptions;
+	formatDate(date: string | number | Date, format?: string): string;
 }
 declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private dataOptions;
@@ -134,6 +138,7 @@ declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private getTimeParts;
 	private getCurrentMonthAndYear;
 	private setInputValue;
+	private getLocalizedTodayText;
 	private changeDateSeparator;
 	private formatDateArrayToIndividualDates;
 	private hasTime;
@@ -164,6 +169,7 @@ declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		selectedDates: DatesArr;
 		selectedTime: string;
 	};
+	formatDate(date: string | number | Date, format?: string): string;
 	destroy(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSDatepicker>;
 	static autoInit(): void;

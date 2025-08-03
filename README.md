@@ -28,14 +28,11 @@ First, you need to make sure that you have a working <a href="https://tailwindcs
 
 <pre><code>npm i preline</code></pre>
 
-2. Use <code>@source</code> Preline UI JavaScript path and <code>@import</code> CSS Variants file <code>variants.css</code> into your Tailwind CSS file, ensuring it comes after the tailwindcss import.
+2. Import the Preline UI CSS Variants file <code>variants.css</code> into your Tailwind CSS file, ensuring it comes after the <code>tailwindcss</code> import.
 
-<pre>
-  <code>@source "./node_modules/preline/dist/*.js";</code>
-  <code>@import "./node_modules/preline/variants.css";</code>
-</pre>
+<pre><code>@import "./node_modules/preline/variants.css";</code></pre>
 
-3. Include the JavaScript <code>&lt;script&gt;</code> that powers the interactive elements near the end of your <code>&lt;body&gt;</code> tag:
+3. Include the JavaScript <code><script></code> that powers the interactive elements near the end of your <code>&lt;body&gt;</code> tag:
 
 <pre><code><script src="./node_modules/preline/dist/preline.js"></script></code></pre>
 
