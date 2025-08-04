@@ -124,9 +124,7 @@ class HSDataTable
 				null;
 		if (this.concatOptions?.rowSelectingOptions)
 			this.rowSelectingIndividual =
-				this.concatOptions?.rowSelectingOptions?.individualSelector ??
-				'[data-hs-datatable-row-selecting-individual]' ??
-				null;
+				this.concatOptions?.rowSelectingOptions?.individualSelector ?? '[data-hs-datatable-row-selecting-individual]'
 
 		if (this.pageEntitiesList.length) this.concatOptions.pageLength = parseInt(this.pageEntitiesList[0].value);
 
