@@ -28,6 +28,9 @@ export interface HSAccessibilityObserver {
     isActive?: boolean,
     name?: string,
     selector?: string,
-    context?: HTMLElement
+    context?: HTMLElement,
   ): IAccessibilityComponent;
+  addAllowedKeybinding(key: string): void;
+  removeAllowedKeybinding(key: string): void;
+  getAllowedKeybindings(): string[];
 }

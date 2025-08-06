@@ -1,6 +1,6 @@
 /*
  * HSDropdown
- * @version: 3.2.2
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -220,7 +220,24 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 			el.addEventListener("click", () => this.selectRadio(el))
 		);
 
-		this.menu.addEventListener("click", () => {
+		this.menu.addEventListener("click", (evt) => {
+			const target = evt.target as HTMLElement;
+
+			if (
+				target.tagName === "INPUT" ||
+				target.tagName === "TEXTAREA" ||
+				target.tagName === "SELECT" ||
+				target.tagName === "BUTTON" ||
+				target.tagName === "A" ||
+				target.closest("button") ||
+				target.closest("a") ||
+				target.closest("input") ||
+				target.closest("textarea") ||
+				target.closest("select")
+			) {
+				return;
+			}
+
 			this.menu.focus();
 		});
 	}

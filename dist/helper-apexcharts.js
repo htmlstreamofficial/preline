@@ -1,6 +1,6 @@
 !function(e,t){if("object"==typeof exports&&"object"==typeof module)module.exports=t(require("ApexCharts"));else if("function"==typeof define&&define.amd)define(["ApexCharts"],t);else{var s="object"==typeof exports?t(require("ApexCharts")):t(e.ApexCharts);for(var a in s)("object"==typeof exports?exports:e)[a]=s[a]}}(self,(e=>(()=>{"use strict";var t={24:function(e,t,s){
 /*
- * @version: 3.2.2
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

@@ -8,6 +8,20 @@ class HSAccessibilityObserver {
   private currentlyOpenedComponents: IAccessibilityComponent[] = [];
   private activeComponent: IAccessibilityComponent | null = null;
 
+  private readonly allowedKeybindings = new Set([
+    "Escape",
+    "Enter",
+    " ",
+    "Space",
+    "ArrowDown",
+    "ArrowUp",
+    "ArrowLeft",
+    "ArrowRight",
+    "Tab",
+    "Home",
+    "End",
+  ]);
+
   constructor() {
     this.initGlobalListeners();
   }
@@ -22,6 +36,21 @@ class HSAccessibilityObserver {
       "focusin",
       (evt) => this.handleGlobalFocusin(evt),
     );
+  }
+
+  private isAllowedKeybinding(evt: KeyboardEvent): boolean {
+    if (this.allowedKeybindings.has(evt.key)) {
+      return true;
+    }
+
+    if (
+      evt.key.length === 1 && /^[a-zA-Z]$/.test(evt.key) && !evt.metaKey &&
+      !evt.ctrlKey && !evt.altKey && !evt.shiftKey
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   private getActiveComponent(el: HTMLElement) {
@@ -65,6 +94,10 @@ class HSAccessibilityObserver {
     this.activeComponent = this.getActiveComponent(target);
 
     if (!this.activeComponent) return;
+
+    if (!this.isAllowedKeybinding(evt)) {
+      return;
+    }
 
     switch (evt.key) {
       case "Escape":
@@ -217,6 +250,18 @@ class HSAccessibilityObserver {
     this.currentlyOpenedComponents = this.currentlyOpenedComponents.filter(
       (comp) => comp !== component,
     );
+  }
+
+  public addAllowedKeybinding(key: string): void {
+    this.allowedKeybindings.add(key);
+  }
+
+  public removeAllowedKeybinding(key: string): void {
+    this.allowedKeybindings.delete(key);
+  }
+
+  public getAllowedKeybindings(): string[] {
+    return Array.from(this.allowedKeybindings);
   }
 }
 

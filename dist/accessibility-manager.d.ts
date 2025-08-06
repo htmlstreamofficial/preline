@@ -23,8 +23,10 @@ declare class HSAccessibilityObserver {
 	private components;
 	private currentlyOpenedComponents;
 	private activeComponent;
+	private readonly allowedKeybindings;
 	constructor();
 	private initGlobalListeners;
+	private isAllowedKeybinding;
 	private getActiveComponent;
 	private handleGlobalFocusin;
 	private handleGlobalKeydown;
@@ -32,6 +34,9 @@ declare class HSAccessibilityObserver {
 	registerComponent(wrapper: HTMLElement, handlers: IAccessibilityKeyboardHandlers, isOpened?: boolean, name?: string, selector?: string, context?: HTMLElement): IAccessibilityComponent;
 	updateComponentState(component: IAccessibilityComponent, isOpened: boolean): void;
 	unregisterComponent(component: IAccessibilityComponent): void;
+	addAllowedKeybinding(key: string): void;
+	removeAllowedKeybinding(key: string): void;
+	getAllowedKeybindings(): string[];
 }
 
 export {
