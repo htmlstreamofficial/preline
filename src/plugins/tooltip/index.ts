@@ -1,6 +1,6 @@
 /*
  * HSTooltip
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -9,7 +9,9 @@
 import {
 	autoUpdate,
 	computePosition,
+	flip,
 	offset,
+	type Placement,
 	type Strategy,
 } from "@floating-ui/dom";
 import { afterTransition, dispatch, getClassProperty } from "../../utils";
@@ -19,7 +21,6 @@ import { TTooltipOptionsScope } from "./types";
 
 import HSBasePlugin from "../base-plugin";
 import { ICollectionItem } from "../../interfaces";
-
 import { POSITIONS } from "../../constants";
 
 class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
@@ -35,6 +36,7 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 
 	private onToggleClickListener: () => void;
 	private onToggleFocusListener: () => void;
+	private onToggleBlurListener: () => void;
 	private onToggleMouseEnterListener: () => void;
 	private onToggleMouseLeaveListener: () => void;
 	private onToggleHandleListener: () => void;
@@ -52,7 +54,7 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 				"--prevent-popper",
 				"false",
 			);
-			this.placement = getClassProperty(this.el, "--placement");
+			this.placement = getClassProperty(this.el, "--placement") || "top";
 			this.strategy = getClassProperty(this.el, "--strategy") as Strategy;
 			this.scope =
 				getClassProperty(this.el, "--scope") as TTooltipOptionsScope ||
@@ -88,18 +90,18 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	private init() {
 		this.createCollection(window.$hsTooltipCollection, this);
 
+		this.onToggleFocusListener = () => this.enter();
+		this.onToggleBlurListener = () => this.hide();
+
+		this.toggle.addEventListener("focus", this.onToggleFocusListener);
+		this.toggle.addEventListener("blur", this.onToggleBlurListener);
+
 		if (this.eventMode === "click") {
 			this.onToggleClickListener = () => this.toggleClick();
-
 			this.toggle.addEventListener("click", this.onToggleClickListener);
-		} else if (this.eventMode === "focus") {
-			this.onToggleFocusListener = () => this.toggleFocus();
-
-			this.toggle.addEventListener("click", this.onToggleFocusListener);
 		} else if (this.eventMode === "hover") {
 			this.onToggleMouseEnterListener = () => this.toggleMouseEnter();
 			this.onToggleMouseLeaveListener = () => this.toggleMouseLeave();
-
 			this.toggle.addEventListener(
 				"mouseenter",
 				this.onToggleMouseEnterListener,
@@ -136,82 +138,93 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 
 	private focus() {
 		this._show();
+	}
 
-		const handle = () => {
-			this.hide();
+	private async positionTooltip(
+		placement: string,
+	): Promise<{ x: number; y: number; placement: string }> {
+		const actualPlacement = placement === "auto" ? "top" : placement;
+		const fallbackPlacements =
+			(placement === "auto"
+				? ["bottom", "left", "right"]
+				: this.getFallbackPlacements(actualPlacement)) as Placement[];
+		const middlewareArr = [
+			offset(5),
+			flip({ fallbackPlacements }),
+		];
+		const result = await computePosition(this.toggle, this.content, {
+			placement: actualPlacement as any,
+			strategy: this.strategy || "fixed",
+			middleware: middlewareArr,
+		});
 
-			this.toggle.removeEventListener("blur", handle, true);
-		};
+		return result;
+	}
 
-		this.toggle.addEventListener("blur", handle, true);
+	private getFallbackPlacements(placement: string): Placement[] {
+		switch (placement) {
+			case "top":
+				return ["bottom", "left", "right"] as Placement[];
+			case "bottom":
+				return ["top", "left", "right"] as Placement[];
+			case "left":
+				return ["right", "top", "bottom"] as Placement[];
+			case "right":
+				return ["left", "top", "bottom"] as Placement[];
+			case "top-start":
+				return ["bottom-start", "top-end", "bottom-end"] as Placement[];
+			case "top-end":
+				return ["bottom-end", "top-start", "bottom-start"] as Placement[];
+			case "bottom-start":
+				return ["top-start", "bottom-end", "top-end"] as Placement[];
+			case "bottom-end":
+				return ["top-end", "bottom-start", "top-start"] as Placement[];
+			case "left-start":
+				return ["right-start", "left-end", "right-end"] as Placement[];
+			case "left-end":
+				return ["right-end", "left-start", "right-start"] as Placement[];
+			case "right-start":
+				return ["left-start", "right-end", "left-end"] as Placement[];
+			case "right-end":
+				return ["left-end", "right-start", "left-start"] as Placement[];
+			default:
+				return ["top", "bottom", "left", "right"] as Placement[];
+		}
+	}
+
+	private applyTooltipPosition(x: number, y: number, placement: string) {
+		Object.assign(this.content.style, {
+			position: this.strategy || "fixed",
+			left: `${x}px`,
+			top: `${y}px`,
+		});
+		this.content.setAttribute("data-placement", placement);
 	}
 
 	private buildFloatingUI() {
 		if (this.scope === "window") document.body.appendChild(this.content);
 
-		const checkSpaceAndAdjust = (x: number, y: number, placement: string) => {
-			const contentRect = this.content.getBoundingClientRect();
-			const viewportWidth = window.innerWidth;
-			const viewportHeight = window.innerHeight;
-			const scrollbarWidth = window.innerWidth -
-				document.documentElement.clientWidth;
-			const availableWidth = viewportWidth - scrollbarWidth;
-			const toggleRect = this.toggle.getBoundingClientRect();
-			let adjustedX = x;
-			let adjustedY = y;
-			let adjustedPlacement = placement;
+		const isAutoPlacement = this.placement.startsWith("auto");
+		const originalPlacement = getClassProperty(this.el, "--placement");
+		const isDefaultPlacement = !originalPlacement || originalPlacement === "";
+		const targetPlacement = isAutoPlacement
+			? "auto"
+			: isDefaultPlacement
+			? "auto"
+			: (POSITIONS[this.placement] || this.placement);
 
-			if (
-				placement.includes("right") && x + contentRect.width > availableWidth
-			) {
-				adjustedPlacement = placement.replace("right", "left");
-				adjustedX = toggleRect.left - contentRect.width - 5;
-			} else if (placement.includes("left") && x < 0) {
-				adjustedPlacement = placement.replace("left", "right");
-				adjustedX = toggleRect.right + 5;
-			}
-
-			if (placement.includes("top") && y - contentRect.height < 0) {
-				adjustedPlacement = placement.replace("top", "bottom");
-				adjustedY = toggleRect.bottom + 5;
-			} else if (
-				placement.includes("bottom") && y + contentRect.height > viewportHeight
-			) {
-				adjustedPlacement = placement.replace("bottom", "top");
-				adjustedY = toggleRect.top - contentRect.height - 5;
-			}
-
-			return { x: adjustedX, y: adjustedY, placement: adjustedPlacement };
-		};
-
-		computePosition(this.toggle, this.content, {
-			placement: POSITIONS[this.placement] || "top",
-			strategy: this.strategy || "fixed",
-			middleware: [offset(5)],
-		}).then(({ x, y, placement }) => {
-			const adjusted = checkSpaceAndAdjust(x, y, placement);
-
-			Object.assign(this.content.style, {
-				position: this.strategy || "fixed",
-				left: `${adjusted.x}px`,
-				top: `${adjusted.y}px`,
-			});
-			this.content.setAttribute("data-placement", adjusted.placement);
+		this.positionTooltip(targetPlacement).then((result) => {
+			this.applyTooltipPosition(result.x, result.y, result.placement);
 		});
 
 		this.cleanupAutoUpdate = autoUpdate(this.toggle, this.content, () => {
-			computePosition(this.toggle, this.content, {
-				placement: POSITIONS[this.placement] || "top",
-				strategy: this.strategy || "fixed",
-				middleware: [offset(5)],
-			}).then(({ x, y, placement }) => {
-				const adjusted = checkSpaceAndAdjust(x, y, placement);
-
+			this.positionTooltip(targetPlacement).then((result) => {
 				Object.assign(this.content.style, {
-					left: `${adjusted.x}px`,
-					top: `${adjusted.y}px`,
+					position: this.strategy || "fixed",
+					left: `${result.x}px`,
+					top: `${result.y}px`,
 				});
-				this.content.setAttribute("data-placement", adjusted.placement);
+				this.content.setAttribute("data-placement", result.placement);
 			});
 		});
 	}
@@ -219,7 +232,6 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	private _show() {
 		this.content.classList.remove("hidden");
 		if (this.scope === "window") this.content.classList.add("show");
-
 		if (this.preventFloatingUI === "false" && !this.cleanupAutoUpdate) {
 			this.buildFloatingUI();
 		}
@@ -234,16 +246,10 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 
 	// Public methods
 	public show() {
-		switch (this.eventMode) {
-			case "click":
-				this.click();
-				break;
-			case "focus":
-				this.focus();
-				break;
-			default:
-				this.enter();
-				break;
+		if (this.eventMode === "click") {
+			this.click();
+		} else {
+			this.enter();
 		}
 
 		this.toggle.focus();
@@ -278,10 +284,12 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 		this.content.classList.add("hidden");
 
 		// Remove listeners
+		this.toggle.removeEventListener("focus", this.onToggleFocusListener);
+		this.toggle.removeEventListener("blur", this.onToggleBlurListener);
+
+		// Remove eventMode-specific listeners
 		if (this.eventMode === "click") {
 			this.toggle.removeEventListener("click", this.onToggleClickListener);
-		} else if (this.eventMode === "focus") {
-			this.toggle.removeEventListener("click", this.onToggleFocusListener);
 		} else if (this.eventMode === "hover") {
 			this.toggle.removeEventListener(
 				"mouseenter",
@@ -292,6 +300,7 @@ class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 				this.onToggleMouseLeaveListener,
 			);
 		}
+
 		this.toggle.removeEventListener("click", this.onToggleHandleListener, true);
 		this.toggle.removeEventListener("blur", this.onToggleHandleListener, true);
 

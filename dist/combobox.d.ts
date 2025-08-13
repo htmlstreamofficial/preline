@@ -37,7 +37,10 @@ export interface IComboBoxOptions {
 	tabsWrapperTemplate?: string | null;
 	preventSelection?: boolean;
 	preventAutoPosition?: boolean;
+	preventClientFiltering?: boolean;
 	isOpenOnFocus?: boolean;
+	keepOriginalOrder?: boolean;
+	preserveSelectionOnEmpty?: boolean;
 }
 export interface IComboBox {
 	options?: IComboBoxOptions;
@@ -68,7 +71,11 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	tabsWrapperTemplate: string | null;
 	preventSelection: boolean;
 	preventAutoPosition: boolean;
+	preventClientFiltering: boolean;
 	isOpenOnFocus: boolean;
+	keepOriginalOrder: boolean;
+	preserveSelectionOnEmpty: boolean;
+	private accessibilityComponent;
 	private readonly input;
 	private readonly output;
 	private readonly itemsWrapper;
@@ -108,10 +115,10 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	private setSelectedByValue;
 	private setResultAndRender;
 	private setResults;
+	private updatePlaceholderVisibility;
 	private setGroups;
 	private setApiGroups;
 	private setItemsVisibility;
-	private isTextExists;
 	private isTextExistsAny;
 	private hasVisibleItems;
 	private valuesBySelector;
@@ -134,6 +141,12 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	private appendItemsToWrapper;
 	private resultItems;
 	private destroyOutputPlaceholder;
+	private getPreparedItems;
+	private setHighlighted;
+	private setupAccessibility;
+	private onEnter;
+	private focusMenuItem;
+	private onStartEnd;
 	getCurrentData(): {} | {}[];
 	setCurrent(): void;
 	open(val?: string): boolean;
@@ -144,13 +157,6 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	static autoInit(): void;
 	static close(target: HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;
-	private static getPreparedItems;
-	private static setHighlighted;
-	static accessibility(evt: KeyboardEvent): void;
-	static onEscape(): void;
-	static onArrow(isArrowUp?: boolean): boolean;
-	static onStartEnd(isStart?: boolean): boolean;
-	static onEnter(evt: Event): void;
 }
 
 export {

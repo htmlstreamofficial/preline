@@ -1,6 +1,6 @@
 var e={615:(e,t,o)=>{o.d(t,{A:()=>i});class i{constructor(e,t,o){this.el=e,this.options=t,this.events=o,this.el=e,this.options=t,this.events={}}createCollection(e,t){var o;e.push({id:(null===(o=null==t?void 0:t.el)||void 0===o?void 0:o.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},926:(e,t,o)=>{o.d(t,{JD:()=>s,PK:()=>i,gj:()=>n,yd:()=>l});
 /*
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -8,7 +8,7 @@ var e={615:(e,t,o)=>{o.d(t,{A:()=>i});class i{constructor(e,t,o){this.el=e,this.
 const i=e=>"true"===e,n=(e,t,o="")=>(window.getComputedStyle(e).getPropertyValue(t)||o).replace(" ",""),s=(e,t,o=null)=>{const i=new CustomEvent(e,{detail:{payload:o},bubbles:!0,cancelable:!0,composed:!1});t.dispatchEvent(i)},l=(e,t)=>{const o=()=>{t(),e.removeEventListener("transitionend",o,!0)},i=window.getComputedStyle(e),n=i.getPropertyValue("transition-duration");"none"!==i.getPropertyValue("transition-property")&&parseFloat(n)>0?e.addEventListener("transitionend",o,!0):t()}}},t={};function o(i){var n=t[i];if(void 0!==n)return n.exports;var s=t[i]={exports:{}};return e[i](s,s.exports,o),s.exports}o.d=(e,t)=>{for(var i in t)o.o(t,i)&&!o.o(e,i)&&Object.defineProperty(e,i,{enumerable:!0,get:t[i]})},o.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var i={};o.d(i,{A:()=>c});var n=o(926),s=o(615);
 /*
  * HSAccordion
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

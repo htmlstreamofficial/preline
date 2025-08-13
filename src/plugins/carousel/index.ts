@@ -1,6 +1,6 @@
 /*
  * HSCarousel
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -57,6 +57,10 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 
 	// Touch events' help variables
 	private readonly touchX: {
+		start: number;
+		end: number;
+	};
+	private readonly touchY: {
 		start: number;
 		end: number;
 	};
@@ -158,6 +162,10 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			start: 0,
 			end: 0,
 		};
+		this.touchY = {
+			start: 0,
+			end: 0,
+		};
 
 		// Resize events' help variables
 		this.resizeContainer = document.querySelector("body");
@@ -226,10 +234,12 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 
 	private elementTouchStart(evt: TouchEvent) {
 		this.touchX.start = evt.changedTouches[0].screenX;
+		this.touchY.start = evt.changedTouches[0].screenY;
 	}
 
 	private elementTouchEnd(evt: TouchEvent) {
 		this.touchX.end = evt.changedTouches[0].screenX;
+		this.touchY.end = evt.changedTouches[0].screenY;
 
 		this.detectDirection();
 	}
@@ -789,36 +799,42 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	}
 
 	private detectDirection() {
-		const { start, end } = this.touchX;
+		const deltaX = this.touchX.end - this.touchX.start;
+		const deltaY = this.touchY.end - this.touchY.start;
+		const absDeltaX = Math.abs(deltaX);
+		const absDeltaY = Math.abs(deltaY);
+		const SWIPE_THRESHOLD = 30;
+
+		if (absDeltaX < SWIPE_THRESHOLD || absDeltaX < absDeltaY) return;
+
+		const isSwipeToNext = this.isRTL ? deltaX > 0 : deltaX < 0;
 
 		if (!this.isInfiniteLoop) {
 			if (
-				end < start &&
+				isSwipeToNext &&
 				this.currentIndex < this.slides.length - this.getCurrentSlidesQty()
-			) this.goToNext();
-			if (end > start && this.currentIndex > 0) this.goToPrev();
+			) {
+				this.goToNext();
+			}
+			if (
+				!isSwipeToNext &&
+				this.currentIndex > 0
+			) {
+				this.goToPrev();
+			}
 		} else {
-			if (end < start) this.goToNext();
-			if (end > start) this.goToPrev();
+			if (isSwipeToNext) this.goToNext();
+			else this.goToPrev();
 		}
 	}
 
 	private calculateTransform(currentIdx?: number | undefined): void {
 		if (currentIdx !== undefined) this.currentIndex = currentIdx;
 
-		// TODO:: need to test without this setting
-		// if (
-		// 	(this.currentIndex > this.slides.length - this.getCurrentSlidesQty()) &&
-		// 	!this.isCentered
-		// ) {
-		// 	this.currentIndex = this.slides.length - this.getCurrentSlidesQty();
-		// }
-
 		const containerWidth = this.sliderWidth;
 		const itemWidth = containerWidth / this.getCurrentSlidesQty();
 		let translateX = this.currentIndex * itemWidth;
 
-		// TODO:: need to test auto scrolling to the end if last on resize
 		if (this.isSnap && !this.isCentered) {
 			if (
 				this.container.scrollLeft < containerWidth &&

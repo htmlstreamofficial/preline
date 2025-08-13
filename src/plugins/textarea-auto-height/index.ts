@@ -1,6 +1,6 @@
 /*
  * HSTextareaAutoHeight
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

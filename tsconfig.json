@@ -5,7 +5,7 @@
 		"sourceMap": true,
 		"noImplicitAny": true,
 		"module": "commonjs",
-		"target": "es2015", // Class extend requires using "es2015" instead of "es5"
+		"target": "es2015",
 		"allowJs": true,
 		"moduleResolution": "node",
 		"esModuleInterop": true

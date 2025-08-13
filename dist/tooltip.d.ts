@@ -33,6 +33,7 @@ declare class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	cleanupAutoUpdate: (() => void) | null;
 	private onToggleClickListener;
 	private onToggleFocusListener;
+	private onToggleBlurListener;
 	private onToggleMouseEnterListener;
 	private onToggleMouseLeaveListener;
 	private onToggleHandleListener;
@@ -47,6 +48,9 @@ declare class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	private leave;
 	private click;
 	private focus;
+	private positionTooltip;
+	private getFallbackPlacements;
+	private applyTooltipPosition;
 	private buildFloatingUI;
 	private _show;
 	show(): void;

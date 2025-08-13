@@ -1,7 +1,7 @@
 var t={615:(t,o,i)=>{i.d(o,{A:()=>e});class e{constructor(t,o,i){this.el=t,this.options=o,this.events=i,this.el=t,this.options=o,this.events={}}createCollection(t,o){var i;t.push({id:(null===(i=null==o?void 0:o.el)||void 0===i?void 0:i.id)||t.length+1,element:o})}fireEvent(t,o=null){if(this.events.hasOwnProperty(t))return this.events[t](o)}on(t,o){this.events[t]=o}}}},o={};function i(e){var n=o[e];if(void 0!==n)return n.exports;var s=o[e]={exports:{}};return t[e](s,s.exports,i),s.exports}i.d=(t,o)=>{for(var e in o)i.o(o,e)&&!i.o(t,e)&&Object.defineProperty(t,e,{enumerable:!0,get:o[e]})},i.o=(t,o)=>Object.prototype.hasOwnProperty.call(t,o);var e={};i.d(e,{A:()=>r});var n=i(615);
 /*
  * HSRangeSlider
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

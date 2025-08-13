@@ -1,5 +1,5 @@
 /*
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -97,23 +97,29 @@ function buildTooltip(props: IChartProps, options: IBuildTooltipHelperOptions) {
   </div>`;
 }
 
-function buildHeatmapTooltip(props: IChartProps, options: IBuildTooltipHelperSingleOptions) {
+function buildHeatmapTooltip(
+	props: IChartProps,
+	options: IBuildTooltipHelperSingleOptions,
+) {
 	const {
 		mode,
 		valuePrefix = "$",
 		valuePostfix = "",
 		divider = "",
-		wrapperClasses = "ms-0.5 mb-2 bg-white border border-gray-200 text-gray-800 rounded-lg shadow-md dark:bg-neutral-800 dark:border-neutral-700",
+		wrapperClasses =
+			"ms-0.5 mb-2 bg-white border border-gray-200 text-gray-800 rounded-lg shadow-md dark:bg-neutral-800 dark:border-neutral-700",
 		wrapperExtClasses = "",
 		markerClasses = "!w-2.5 !h-2.5 !me-1.5",
 		markerStyles = "",
 		markerExtClasses = "!rounded-xs",
 		valueClasses = "!font-medium text-gray-500 !ms-auto dark:text-neutral-400",
-		valueExtClasses = ""
+		valueExtClasses = "",
 	} = options;
 	const { dataPointIndex, seriesIndex, series } = props;
 	const { name } = props.ctx.opts.series[seriesIndex] as IChartPropsSeries;
-	const val = `${valuePrefix}${series[seriesIndex][dataPointIndex]}${valuePostfix}`;
+	const val = `${valuePrefix}${
+		series[seriesIndex][dataPointIndex]
+	}${valuePostfix}`;
 
 	return `<div class="${
 		mode === "dark" ? "dark " : ""
@@ -175,9 +181,14 @@ function buildTooltipCompareTwo(
 			category[1] ? category[1].slice(0, 3) : ""
 		}`
 		: "";
-	const isGrowing = s0 > s1;
-	const isDifferenceIsNull = s0 / s1 === 1;
-	const difference = isDifferenceIsNull ? 0 : (s0 / s1) * 100;
+	// const isGrowing = s0 > s1;
+	// const isDifferenceIsNull = s0 / s1 === 1;
+	// const difference = isDifferenceIsNull ? 0 : (s0 / s1) * 100;
+	// TODO: test this before deleting the code above
+	const isPrevZero = s1 === 0;
+	const difference = isPrevZero ? 0 : ((s0 - s1) / Math.abs(s1)) * 100;
+	const isDifferenceIsNull = difference === 0;
+	const isGrowing = difference > 0;
 	const icon = isGrowing
 		? `<svg class="inline-block size-4 self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`
 		: `<svg class="inline-block size-4 self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7" /><polyline points="16 17 22 17 22 11" /></svg>`;
@@ -279,9 +290,14 @@ function buildTooltipCompareTwoAlt(
 			category[1] ? category[1].slice(0, 3) : ""
 		}`
 		: "";
-	const isGrowing = s0 > s1;
-	const isDifferenceIsNull = s0 / s1 === 1;
-	const difference = isDifferenceIsNull ? 0 : (s0 / s1) * 100;
+	// const isGrowing = s0 > s1;
+	// const isDifferenceIsNull = s0 / s1 === 1;
+	// const difference = isDifferenceIsNull ? 0 : (s0 / s1) * 100;
+	// TODO: test this before deleting the code above
+	const isPrevZero = s1 === 0;
+	const difference = isPrevZero ? 0 : ((s0 - s1) / Math.abs(s1)) * 100;
+	const isDifferenceIsNull = difference === 0;
+	const isGrowing = difference > 0;
 	const icon = isGrowing
 		? `<svg class="inline-block size-4 self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`
 		: `<svg class="inline-block size-4 self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7" /><polyline points="16 17 22 17 22 11" /></svg>`;
@@ -362,7 +378,12 @@ function buildTooltipForDonut(
   </div>`;
 }
 
-function buildChart(id: string, shared: Function, light: string, dark: string) {
+function buildChart(
+	id: string,
+	shared: Function,
+	light: string,
+	dark: string,
+) {
 	const $chart = document.querySelector(id);
 	let chart: any = null;
 
@@ -377,7 +398,17 @@ function buildChart(id: string, shared: Function, light: string, dark: string) {
 
 	const optionsFn = (
 		mode = modeFromBodyClass || localStorage.getItem("hs_theme"),
-	) => window._.merge(shared(mode), mode === "dark" ? dark : light);
+	) => {
+		if (
+			mode === "dark" ||
+			(mode === "auto" &&
+				window.matchMedia("(prefers-color-scheme: dark)").matches)
+		) {
+			return window._.merge(shared("dark"), dark);
+		} else {
+			return window._.merge(shared("light"), light);
+		}
+	};
 
 	if ($chart) {
 		let isInitialLoad = true;
@@ -503,8 +534,8 @@ function fullBarHoverEffect(
 
 export {
 	buildChart,
-	buildTooltip,
 	buildHeatmapTooltip,
+	buildTooltip,
 	buildTooltipCompareTwo,
 	buildTooltipCompareTwoAlt,
 	buildTooltipForDonut,

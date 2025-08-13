@@ -1,27 +1,27 @@
 /*
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 
 const stringToBoolean = (string: string): boolean => {
-	return string === 'true' ? true : false;
+	return string === "true" ? true : false;
 };
 
-const getClassProperty = (el: HTMLElement, prop: string, val = '') => {
+const getClassProperty = (el: HTMLElement, prop: string, val = "") => {
 	return (window.getComputedStyle(el).getPropertyValue(prop) || val).replace(
-		' ',
-		'',
+		" ",
+		"",
 	);
 };
 
 const getClassPropertyAlt = (
 	el: HTMLElement,
 	prop?: string,
-	val: string = '',
+	val: string = "",
 ) => {
-	let targetClass = '';
+	let targetClass = "";
 
 	el.classList.forEach((c) => {
 		if (c.includes(prop)) {
@@ -34,7 +34,7 @@ const getClassPropertyAlt = (
 
 const getZIndex = (el: HTMLElement) => {
 	const computedStyle = window.getComputedStyle(el);
-	const zIndex = computedStyle.getPropertyValue('z-index');
+	const zIndex = computedStyle.getPropertyValue("z-index");
 
 	return zIndex;
 };
@@ -45,7 +45,7 @@ const getHighestZIndex = (arr: HTMLElement[]) => {
 	arr.forEach((el) => {
 		let zIndex: string | number = getZIndex(el);
 
-		if (zIndex !== 'auto') {
+		if (zIndex !== "auto") {
 			zIndex = parseInt(zIndex, 10);
 
 			if (zIndex > highestZIndex) highestZIndex = zIndex;
@@ -53,7 +53,7 @@ const getHighestZIndex = (arr: HTMLElement[]) => {
 	});
 
 	return highestZIndex;
-}
+};
 
 const isDirectChild = (parent: Element, child: HTMLElement) => {
 	const children = parent.children;
@@ -68,7 +68,7 @@ const isDirectChild = (parent: Element, child: HTMLElement) => {
 const isEnoughSpace = (
 	el: HTMLElement,
 	toggle: HTMLElement,
-	preferredPosition: 'top' | 'bottom' | 'auto' = 'auto',
+	preferredPosition: "top" | "bottom" | "auto" = "auto",
 	space = 10,
 	wrapper: HTMLElement | null = null,
 ) => {
@@ -78,13 +78,13 @@ const isEnoughSpace = (
 	const spaceAbove = wrapperRect
 		? referenceRect.top - wrapperRect.top
 		: referenceRect.top;
-	const spaceBelow =
-		(wrapper ? wrapperRect.bottom : viewportHeight) - referenceRect.bottom;
+	const spaceBelow = (wrapper ? wrapperRect.bottom : viewportHeight) -
+		referenceRect.bottom;
 	const minimumSpaceRequired = el.clientHeight + space;
 
-	if (preferredPosition === 'bottom') {
+	if (preferredPosition === "bottom") {
 		return spaceBelow >= minimumSpaceRequired;
-	} else if (preferredPosition === 'top') {
+	} else if (preferredPosition === "top") {
 		return spaceAbove >= minimumSpaceRequired;
 	} else {
 		return (
@@ -126,12 +126,15 @@ const isIpadOS = () => {
 };
 
 const isJson = (str: string) => {
-	if (typeof str !== 'string') return false;
+	if (typeof str !== "string") return false;
 
 	const firstChar = str.trim()[0];
 	const lastChar = str.trim().slice(-1);
 
-	if ((firstChar === '{' && lastChar === '}') || (firstChar === '[' && lastChar === ']')) {
+	if (
+		(firstChar === "{" && lastChar === "}") ||
+		(firstChar === "[" && lastChar === "]")
+	) {
 		try {
 			JSON.parse(str);
 
@@ -149,7 +152,7 @@ const isParentOrElementHidden = (element: any): any => {
 
 	const computedStyle = window.getComputedStyle(element);
 
-	if (computedStyle.display === 'none') return true;
+	if (computedStyle.display === "none") return true;
 
 	return isParentOrElementHidden(element.parentElement);
 };
@@ -158,11 +161,15 @@ const isScrollable = (el: HTMLElement) => {
 	const style = window.getComputedStyle(el);
 	const overflowY = style.overflowY;
 	const overflowX = style.overflowX;
-	const canScrollVertically = (overflowY === 'scroll' || overflowY === 'auto') && el.scrollHeight > el.clientHeight;
-	const canScrollHorizontally = (overflowX === 'scroll' || overflowX === 'auto') && el.scrollWidth > el.clientWidth;
+	const canScrollVertically =
+		(overflowY === "scroll" || overflowY === "auto") &&
+		el.scrollHeight > el.clientHeight;
+	const canScrollHorizontally =
+		(overflowX === "scroll" || overflowX === "auto") &&
+		el.scrollWidth > el.clientWidth;
 
 	return canScrollVertically || canScrollHorizontally;
-}
+};
 
 const debounce = (func: Function, timeout = 200) => {
 	let timer: any;
@@ -191,25 +198,25 @@ const afterTransition = (el: HTMLElement, callback: Function) => {
 	const handleEvent = () => {
 		callback();
 
-		el.removeEventListener('transitionend', handleEvent, true);
+		el.removeEventListener("transitionend", handleEvent, true);
 	};
 
 	const computedStyle = window.getComputedStyle(el);
 	const transitionDuration = computedStyle.getPropertyValue(
-		'transition-duration',
+		"transition-duration",
 	);
 	const transitionProperty = computedStyle.getPropertyValue(
-		'transition-property',
+		"transition-property",
 	);
-	const hasTransition =
-		transitionProperty !== 'none' && parseFloat(transitionDuration) > 0;
+	const hasTransition = transitionProperty !== "none" &&
+		parseFloat(transitionDuration) > 0;
 
-	if (hasTransition) el.addEventListener('transitionend', handleEvent, true);
+	if (hasTransition) el.addEventListener("transitionend", handleEvent, true);
 	else callback();
 };
 
 const htmlToElement = (html: string): HTMLElement => {
-	const template = document.createElement('template');
+	const template = document.createElement("template");
 	html = html.trim();
 	template.innerHTML = html;
 
@@ -219,13 +226,15 @@ const htmlToElement = (html: string): HTMLElement => {
 const classToClassList = (
 	classes: string,
 	target: HTMLElement,
-	splitter = ' ',
-	action: 'add' | 'remove' = 'add',
+	splitter = " ",
+	action: "add" | "remove" = "add",
 ) => {
 	const classesToArray = classes.split(splitter);
-	classesToArray.forEach((cl) =>
-		action === 'add' ? target.classList.add(cl) : target.classList.remove(cl),
-	);
+	classesToArray.forEach((cl) => {
+		if (cl.trim()) {
+			action === "add" ? target.classList.add(cl) : target.classList.remove(cl);
+		}
+	});
 };
 
 const menuSearchHistory = {
@@ -245,24 +254,24 @@ const menuSearchHistory = {
 };
 
 export {
-	stringToBoolean,
+	afterTransition,
+	classToClassList,
+	debounce,
+	dispatch,
 	getClassProperty,
 	getClassPropertyAlt,
-	getZIndex,
 	getHighestZIndex,
+	getZIndex,
+	htmlToElement,
+	isDirectChild,
 	isEnoughSpace,
 	isFocused,
 	isFormElement,
-	isDirectChild,
 	isIOS,
 	isIpadOS,
 	isJson,
 	isParentOrElementHidden,
 	isScrollable,
-	debounce,
-	dispatch,
-	afterTransition,
-	htmlToElement,
-	classToClassList,
 	menuSearchHistory,
+	stringToBoolean,
 };

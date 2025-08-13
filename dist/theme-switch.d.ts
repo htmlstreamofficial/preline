@@ -28,9 +28,9 @@ export interface IThemeSwitch {
 declare class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements IThemeSwitch {
 	theme: string;
 	type: "change" | "click";
-	private themeSet;
 	private onElementChangeListener;
 	private onElementClickListener;
+	private static systemThemeObserver;
 	constructor(el: HTMLElement | HTMLInputElement, options?: IThemeSwitchOptions);
 	private elementChange;
 	private elementClick;

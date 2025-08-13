@@ -60,6 +60,9 @@ module.exports = {
 	},
 	resolve: {
 		extensions: ['.ts', '.js'],
+		alias: {
+			'VanillaCalendarPro': 'vanilla-calendar-pro'
+		}
 	},
 	output: {
 		path: path.resolve(__dirname, 'dist'),

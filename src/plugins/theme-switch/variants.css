@@ -4,14 +4,32 @@
   }
 }
 
+@custom-variant hs-light-mode-active {
+  .light:not(.auto) & {
+    @slot;
+  }
+}
+
 @custom-variant hs-dark-mode-active {
-  .dark & {
+  .dark:not(.auto) & {
     @slot;
   }
 }
 
 @custom-variant hs-auto-mode-active {
   .auto & {
+    @slot;
+  }
+}
+
+@custom-variant hs-auto-dark-mode-active {
+  .auto.dark & {
+    @slot;
+  }
+}
+
+@custom-variant hs-auto-light-mode-active {
+  .auto.light & {
     @slot;
   }
 }

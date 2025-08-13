@@ -1,6 +1,6 @@
 /*
  * HSDropdown
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -13,10 +13,8 @@ import {
 	getClassPropertyAlt,
 	isIOS,
 	isIpadOS,
-	menuSearchHistory,
 	stringToBoolean,
 } from "../../utils";
-import { IMenuSearchHistory } from "../../utils/interfaces";
 
 import {
 	autoUpdate,
@@ -30,21 +28,26 @@ import {
 
 import { IDropdown, IHTMLElementFloatingUI } from "../dropdown/interfaces";
 import HSBasePlugin from "../base-plugin";
+import HSAccessibilityObserver from "../accessibility-manager";
 import { ICollectionItem } from "../../interfaces";
+import { IAccessibilityComponent } from "../accessibility-manager/interfaces";
 
-import { DROPDOWN_ACCESSIBILITY_KEY_SET, POSITIONS } from "../../constants";
+import { POSITIONS } from "../../constants";
 
 class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 	implements IDropdown {
-	private static history: IMenuSearchHistory;
+	private accessibilityComponent: IAccessibilityComponent;
+
 	private readonly toggle: HTMLElement | null;
 	private readonly closers: HTMLElement[] | null;
 	public menu: HTMLElement | null;
 	private eventMode: string;
 	private closeMode: string;
 	private hasAutofocus: boolean;
+	private autofocusOnKeyboardOnly: boolean;
 	private animationInProcess: boolean;
 	private longPressTimer: number | null = null;
+	private openedViaKeyboard: boolean = false;
 
 	private onElementMouseEnterListener: () => void | null;
 	private onElementMouseLeaveListener: () => void | null;
@@ -74,6 +77,10 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 		this.closeMode = getClassProperty(this.el, "--auto-close", "true");
 		this.hasAutofocus = stringToBoolean(
 			getClassProperty(this.el, "--has-autofocus", "true") || "true",
+		);
+		this.autofocusOnKeyboardOnly = stringToBoolean(
+			getClassProperty(this.el, "--autofocus-on-keyboard-only", "true") ||
+				"true",
 		);
 		this.animationInProcess = false;
 
@@ -145,11 +152,30 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 			this.el.addEventListener("mouseenter", this.onElementMouseEnterListener);
 			this.el.addEventListener("mouseleave", this.onElementMouseLeaveListener);
 		}
+
+		if (typeof window !== "undefined") {
+			if (!window.HSAccessibilityObserver) {
+				window.HSAccessibilityObserver = new HSAccessibilityObserver();
+			}
+			this.setupAccessibility();
+		}
 	}
 
 	resizeHandler() {
 		this.eventMode = getClassProperty(this.el, "--trigger", "click");
 		this.closeMode = getClassProperty(this.el, "--auto-close", "true");
+		this.hasAutofocus = stringToBoolean(
+			getClassProperty(this.el, "--has-autofocus", "true") || "true",
+		);
+		this.autofocusOnKeyboardOnly = stringToBoolean(
+			getClassProperty(this.el, "--autofocus-on-keyboard-only", "true") ||
+				"true",
+		);
+	}
+
+	private isOpen(): boolean {
+		return this.el.classList.contains("open") &&
+			!this.menu.classList.contains("hidden");
 	}
 
 	private buildToggle() {
@@ -182,6 +208,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 
 	private buildMenu() {
 		this.menu.role = this.menu.getAttribute("role") || "menu";
+		this.menu.tabIndex = -1;
 
 		const checkboxes = this.menu.querySelectorAll('[role="menuitemcheckbox"]');
 		const radiobuttons = this.menu.querySelectorAll('[role="menuitemradio"]');
@@ -192,6 +219,27 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 		radiobuttons.forEach((el: HTMLElement) =>
 			el.addEventListener("click", () => this.selectRadio(el))
 		);
+
+		this.menu.addEventListener("click", (evt) => {
+			const target = evt.target as HTMLElement;
+
+			if (
+				target.tagName === "INPUT" ||
+				target.tagName === "TEXTAREA" ||
+				target.tagName === "SELECT" ||
+				target.tagName === "BUTTON" ||
+				target.tagName === "A" ||
+				target.closest("button") ||
+				target.closest("a") ||
+				target.closest("input") ||
+				target.closest("textarea") ||
+				target.closest("select")
+			) {
+				return;
+			}
+
+			this.menu.focus();
+		});
 	}
 
 	private buildClosers() {
@@ -248,6 +296,25 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 	}
 
 	private onClickHandler(evt: Event) {
+		const isMouseHoverTrigger = this.eventMode === "hover" &&
+			window.matchMedia("(hover: hover)").matches &&
+			(evt as PointerEvent).pointerType === "mouse";
+
+		if (isMouseHoverTrigger) {
+			const el = evt.currentTarget as HTMLElement;
+			const isAnchor = el.tagName === "A";
+			const isNavLink = isAnchor && el.hasAttribute("href") &&
+				el.getAttribute("href") !== "#";
+
+			if (!isNavLink) {
+				evt.preventDefault();
+				evt.stopPropagation();
+				evt.stopImmediatePropagation?.();
+			}
+
+			return false;
+		}
+
 		if (
 			this.el.classList.contains("open") &&
 			!this.menu.classList.contains("hidden")
@@ -312,8 +379,25 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 	private focusElement() {
 		const input: HTMLInputElement = this.menu.querySelector("[autofocus]");
 
-		if (!input) return false;
-		else input.focus();
+		if (input) {
+			input.focus();
+
+			return true;
+		}
+
+		const menuItems = this.menu.querySelectorAll(
+			'a:not([hidden]), button:not([hidden]), [role="menuitem"]:not([hidden])',
+		);
+
+		if (menuItems.length > 0) {
+			const firstItem = menuItems[0] as HTMLElement;
+
+			firstItem.focus();
+
+			return true;
+		}
+
+		return false;
 	}
 
 	private setupFloatingUI(target?: VirtualElement | HTMLElement) {
@@ -358,7 +442,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 			if (x + menuRect.width > availableWidth) {
 				x = availableWidth - menuRect.width;
 			}
-      
+
 			if (x < 0) x = 0;
 
 			return x;
@@ -444,11 +528,15 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 		return floatingUIPosition;
 	}
 
-	public open(target?: VirtualElement | HTMLElement) {
+	public open(
+		target?: VirtualElement | HTMLElement,
+		openedViaKeyboard: boolean = false,
+	) {
 		if (this.el.classList.contains("open") || this.animationInProcess) {
 			return false;
 		}
 
+		this.openedViaKeyboard = openedViaKeyboard;
 		this.animationInProcess = true;
 		this.menu.style.cssText = "";
 
@@ -473,11 +561,21 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 			if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = "true";
 			this.el.classList.add("open");
 
+			if (window.HSAccessibilityObserver && this.accessibilityComponent) {
+				window.HSAccessibilityObserver.updateComponentState(
+					this.accessibilityComponent,
+					true,
+				);
+			}
+
 			if (scope === "window") this.menu.classList.add("open");
 
 			this.animationInProcess = false;
 
-			if (this.hasAutofocus) this.focusElement();
+			if (
+				this.hasAutofocus &&
+				(!this.autofocusOnKeyboardOnly || this.openedViaKeyboard)
+			) this.focusElement();
 
 			this.fireEvent("open", this.el);
 			dispatch("open.hs.dropdown", this.el, this.el);
@@ -497,6 +595,9 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 			this.menu.style.margin = null;
 			if (this?.toggle?.ariaExpanded) this.toggle.ariaExpanded = "false";
 			this.el.classList.remove("open");
+
+			this.openedViaKeyboard = false;
+
 			this.fireEvent("close", this.el);
 			dispatch("close.hs.dropdown", this.el, this.el);
 		};
@@ -505,11 +606,35 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 
 		if (scope === "window") this.menu.classList.remove("open");
 
+		if (window.HSAccessibilityObserver && this.accessibilityComponent) {
+			window.HSAccessibilityObserver.updateComponentState(
+				this.accessibilityComponent,
+				false,
+			);
+		}
+
 		if (isAnimated) {
 			const el: HTMLElement =
 				this.el.querySelector("[data-hs-dropdown-transition]") || this.menu;
+			let hasCompleted = false;
 
-			afterTransition(el, () => this.destroyFloatingUI());
+			const completeClose = () => {
+				if (hasCompleted) return;
+
+				hasCompleted = true;
+
+				this.destroyFloatingUI();
+			};
+
+			afterTransition(el, completeClose);
+
+			const computedStyle = window.getComputedStyle(el);
+			const transitionDuration = computedStyle.getPropertyValue(
+				"transition-duration",
+			);
+			const duration = parseFloat(transitionDuration) * 1000 || 150;
+
+			setTimeout(completeClose, duration + 50);
 		} else {
 			this.destroyFloatingUI();
 		}
@@ -523,6 +648,8 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 		this.menu.style.margin = null;
 		this.el.classList.remove("open");
 		this.menu.classList.add("hidden");
+
+		this.openedViaKeyboard = false;
 	}
 
 	public destroy() {
@@ -585,6 +712,11 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 		window.$hsDropdownCollection = window.$hsDropdownCollection.filter((
 			{ element },
 		) => element.el !== this.el);
+
+		// Unregister accessibility
+		// if (typeof window !== "undefined" && window.HSAccessibilityObserver) {
+		// 	window.HSAccessibilityObserver.unregisterPlugin(this);
+		// }
 	}
 
 	// Static methods
@@ -616,11 +748,6 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 	static autoInit() {
 		if (!window.$hsDropdownCollection) {
 			window.$hsDropdownCollection = [];
-
-			document.addEventListener(
-				"keydown",
-				(evt) => HSDropdown.accessibility(evt),
-			);
 
 			window.addEventListener("click", (evt) => {
 				const evtTarget = evt.target;
@@ -656,13 +783,16 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 			});
 	}
 
-	static open(target: HSDropdown | HTMLElement | string) {
+	static open(
+		target: HSDropdown | HTMLElement | string,
+		openedViaKeyboard: boolean = false,
+	) {
 		const instance = HSDropdown.findInCollection(target);
 
 		if (
 			instance &&
 			instance.element.menu.classList.contains("hidden")
-		) instance.element.open();
+		) instance.element.open(undefined, openedViaKeyboard);
 	}
 
 	static close(target: HSDropdown | HTMLElement | string) {
@@ -672,268 +802,6 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 			instance &&
 			!instance.element.menu.classList.contains("hidden")
 		) instance.element.close();
-	}
-
-	// Accessibility methods
-	static accessibility(evt: KeyboardEvent) {
-		this.history = menuSearchHistory;
-
-		const target: ICollectionItem<HSDropdown> | null = window
-			.$hsDropdownCollection.find((el) =>
-				el.element.el.classList.contains("open")
-			);
-
-		if (
-			target &&
-			(DROPDOWN_ACCESSIBILITY_KEY_SET.includes(evt.code) ||
-				(evt.code.length === 4 &&
-					evt.code[evt.code.length - 1].match(/^[A-Z]*$/))) &&
-			!evt.metaKey &&
-			!target.element.menu.querySelector("input:focus") &&
-			!target.element.menu.querySelector("textarea:focus")
-		) {
-			switch (evt.code) {
-				case "Escape":
-					if (!target.element.menu.querySelector(".hs-select.active")) {
-						evt.preventDefault();
-						this.onEscape(evt);
-					}
-					break;
-				case "Enter":
-					if (
-						!target.element.menu.querySelector(".hs-select button:focus") &&
-						!target.element.menu.querySelector(".hs-collapse-toggle:focus")
-					) {
-						this.onEnter(evt);
-					}
-					break;
-				case "ArrowUp":
-					evt.preventDefault();
-					evt.stopImmediatePropagation();
-					this.onArrow();
-					break;
-				case "ArrowDown":
-					evt.preventDefault();
-					evt.stopImmediatePropagation();
-					this.onArrow(false);
-					break;
-				case "ArrowRight":
-					evt.preventDefault();
-					evt.stopImmediatePropagation();
-					this.onArrowX(evt, "right");
-					break;
-				case "ArrowLeft":
-					evt.preventDefault();
-					evt.stopImmediatePropagation();
-					this.onArrowX(evt, "left");
-					break;
-				case "Home":
-					evt.preventDefault();
-					evt.stopImmediatePropagation();
-					this.onStartEnd();
-					break;
-				case "End":
-					evt.preventDefault();
-					evt.stopImmediatePropagation();
-					this.onStartEnd(false);
-					break;
-				default:
-					evt.preventDefault();
-					this.onFirstLetter(evt.key);
-					break;
-			}
-		}
-	}
-
-	static onEscape(evt: KeyboardEvent) {
-		const dropdown = (evt.target as HTMLElement).closest(".hs-dropdown.open");
-
-		if (window.$hsDropdownCollection.find((el) => el.element.el === dropdown)) {
-			const target = window.$hsDropdownCollection.find(
-				(el) => el.element.el === dropdown,
-			);
-
-			if (target) {
-				target.element.close();
-				target.element.toggle.focus();
-			}
-		} else {
-			this.closeCurrentlyOpened();
-		}
-	}
-
-	static onEnter(evt: KeyboardEvent) {
-		const target = evt.target as HTMLElement;
-		const { element } = window.$hsDropdownCollection.find(
-			(el) => el.element.el === target.closest(".hs-dropdown"),
-		) ?? null;
-
-		if (element && target.classList.contains("hs-dropdown-toggle")) {
-			evt.preventDefault();
-			element.open();
-		} else if (element && target.getAttribute("role") === "menuitemcheckbox") {
-			element.selectCheckbox(target);
-			element.close();
-		} else if (element && target.getAttribute("role") === "menuitemradio") {
-			element.selectRadio(target);
-			element.close();
-		} else {
-			return false;
-		}
-	}
-
-	static onArrow(isArrowUp = true) {
-		const target = window.$hsDropdownCollection.find((el) =>
-			el.element.el.classList.contains("open")
-		);
-
-		if (target) {
-			const menu = target.element.menu;
-
-			if (!menu) return false;
-
-			const preparedLinks = isArrowUp
-				? Array.from(
-					menu.querySelectorAll(
-						'a:not([hidden]), :scope button:not([hidden]), [role="button"]:not([hidden]), [role^="menuitem"]:not([hidden])',
-					),
-				).reverse()
-				: Array.from(
-					menu.querySelectorAll(
-						'a:not([hidden]), :scope button:not([hidden]), [role="button"]:not([hidden]), [role^="menuitem"]:not([hidden])',
-					),
-				);
-			const visiblePreparedLinks = Array.from(preparedLinks).filter((item) => {
-				const el = item as HTMLElement;
-
-				return el.closest("[hidden]") === null && el.offsetParent !== null;
-			});
-			const links = visiblePreparedLinks.filter(
-				(el: any) => !el.classList.contains("disabled"),
-			);
-			const current = menu.querySelector(
-				'a:focus, button:focus, [role="button"]:focus, [role^="menuitem"]:focus',
-			);
-			let currentInd = links.findIndex((el: any) => el === current);
-
-			if (currentInd + 1 < links.length) {
-				currentInd++;
-			}
-
-			(links[currentInd] as HTMLButtonElement | HTMLAnchorElement).focus();
-		}
-	}
-
-	static onArrowX(evt: KeyboardEvent, direction: "right" | "left") {
-		const toggle = evt.target as HTMLElement;
-		const closestDropdown = toggle.closest(".hs-dropdown.open");
-		const isRootDropdown = !!closestDropdown &&
-			!closestDropdown?.parentElement.closest(".hs-dropdown");
-		const menuToOpen = (HSDropdown.getInstance(
-			toggle.closest(".hs-dropdown") as HTMLElement,
-			true,
-		) as ICollectionItem<HSDropdown>) ?? null;
-		const firstLink = menuToOpen.element.menu.querySelector(
-			'a, button, [role="button"], [role^="menuitem"]',
-		) as HTMLButtonElement;
-
-		if (isRootDropdown && !toggle.classList.contains("hs-dropdown-toggle")) {
-			return false;
-		}
-
-		const menuToClose = (HSDropdown.getInstance(
-			toggle.closest(".hs-dropdown.open") as HTMLElement,
-			true,
-		) as ICollectionItem<HSDropdown>) ?? null;
-
-		if (
-			menuToOpen.element.el.classList.contains("open") &&
-			menuToOpen.element.el._floatingUI.state.placement.includes(direction)
-		) {
-			firstLink.focus();
-
-			return false;
-		}
-
-		// TODO:: rename "Popper" to "FLoatingUI"
-		const futurePosition = menuToOpen.element.calculatePopperPosition();
-
-		if (isRootDropdown && !futurePosition.includes(direction)) return false;
-
-		if (
-			futurePosition.includes(direction) &&
-			toggle.classList.contains("hs-dropdown-toggle")
-		) {
-			menuToOpen.element.open();
-			firstLink.focus();
-		} else {
-			menuToClose.element.close(false);
-			menuToClose.element.toggle.focus();
-		}
-	}
-
-	static onStartEnd(isStart = true) {
-		const target = window.$hsDropdownCollection.find((el) =>
-			el.element.el.classList.contains("open")
-		);
-
-		if (target) {
-			const menu = target.element.menu;
-
-			if (!menu) return false;
-
-			const preparedLinks = isStart
-				? Array.from(
-					menu.querySelectorAll(
-						'a, button, [role="button"], [role^="menuitem"]',
-					),
-				)
-				: Array.from(
-					menu.querySelectorAll(
-						'a, button, [role="button"], [role^="menuitem"]',
-					),
-				).reverse();
-			const links = preparedLinks.filter(
-				(el: any) => !el.classList.contains("disabled"),
-			);
-
-			if (links.length) {
-				(links[0] as HTMLButtonElement).focus();
-			}
-		}
-	}
-
-	static onFirstLetter(code: string) {
-		const target = window.$hsDropdownCollection.find((el) =>
-			el.element.el.classList.contains("open")
-		);
-
-		if (target) {
-			const menu = target.element.menu;
-
-			if (!menu) return false;
-
-			const links = Array.from(
-				menu.querySelectorAll('a, [role="button"], [role^="menuitem"]'),
-			);
-			const getCurrentInd = () =>
-				links.findIndex(
-					(el, i) =>
-						(el as HTMLElement).innerText.toLowerCase().charAt(0) ===
-							code.toLowerCase() && this.history.existsInHistory(i),
-				);
-			let currentInd = getCurrentInd();
-
-			if (currentInd === -1) {
-				this.history.clearHistory();
-				currentInd = getCurrentInd();
-			}
-
-			if (currentInd !== -1) {
-				(links[currentInd] as HTMLElement).focus();
-				this.history.addHistory(currentInd);
-			}
-		}
 	}
 
 	static closeCurrentlyOpened(
@@ -959,15 +827,34 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 				el.element.el.classList.contains("open")
 			);
 
-		if (
-			evtTarget &&
-			evtTarget.closest(".hs-dropdown") &&
-			getClassPropertyAlt(evtTarget.closest(".hs-dropdown"), "--auto-close") ===
-				"inside"
-		) {
-			currentlyOpened = currentlyOpened.filter(
-				(el) => el.element.el !== evtTarget.closest(".hs-dropdown"),
-			);
+		if (evtTarget) {
+			const dropdownElement = evtTarget.closest(".hs-dropdown") as HTMLElement;
+
+			if (dropdownElement) {
+				if (getClassPropertyAlt(dropdownElement, "--auto-close") === "inside") {
+					currentlyOpened = currentlyOpened.filter(
+						(el) => el.element.el !== dropdownElement,
+					);
+				}
+			} else {
+				const dropdownMenu = evtTarget.closest(".hs-dropdown-menu");
+
+				if (dropdownMenu) {
+					const originalDropdown = window.$hsDropdownCollection.find(
+						(item) => item.element.menu === dropdownMenu,
+					);
+
+					if (
+						originalDropdown &&
+						getClassPropertyAlt(originalDropdown.element.el, "--auto-close") ===
+							"inside"
+					) {
+						currentlyOpened = currentlyOpened.filter(
+							(el) => el.element.el !== originalDropdown.element.el,
+						);
+					}
+				}
+			}
 		}
 
 		if (currentlyOpened) {
@@ -995,6 +882,147 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 		}
 	}
 
+	// Accessibility methods
+	private setupAccessibility(): void {
+		this.accessibilityComponent = window.HSAccessibilityObserver
+			.registerComponent(
+				this.el,
+				{
+					onEnter: () => {
+						if (!this.isOpened()) this.open(undefined, true);
+					},
+					onSpace: () => {
+						if (!this.isOpened()) this.open(undefined, true);
+					},
+					onEsc: () => {
+						if (this.isOpened()) {
+							this.close();
+							if (this.toggle) this.toggle.focus();
+						}
+					},
+					onArrow: (evt: KeyboardEvent) => {
+						if (evt.metaKey) return;
+
+						switch (evt.key) {
+							case "ArrowDown":
+								if (!this.isOpened()) this.open(undefined, true);
+								else this.focusMenuItem("next");
+								break;
+							case "ArrowUp":
+								if (this.isOpened()) this.focusMenuItem("prev");
+								break;
+							case "ArrowRight":
+								this.onArrowX(evt, "right");
+								break;
+							case "ArrowLeft":
+								this.onArrowX(evt, "left");
+								break;
+						}
+					},
+					onHome: () => {
+						if (this.isOpened()) this.onStartEnd(true);
+					},
+					onEnd: () => {
+						if (this.isOpened()) this.onStartEnd(false);
+					},
+					onTab: () => {
+						if (this.isOpened()) this.close();
+					},
+					onFirstLetter: (key: string) => {
+						if (this.isOpened()) this.onFirstLetter(key);
+					},
+				},
+				this.isOpened(),
+				"Dropdown",
+				".hs-dropdown",
+				this.menu,
+			);
+	}
+
+	private onFirstLetter(key: string): void {
+		if (!this.isOpened() || !this.menu) return;
+
+		const menuItems = this.menu.querySelectorAll(
+			'a:not([hidden]), button:not([hidden]), [role="menuitem"]:not([hidden])',
+		);
+
+		if (menuItems.length === 0) return;
+
+		const currentIndex = Array.from(menuItems).indexOf(
+			document.activeElement as HTMLElement,
+		);
+
+		for (let i = 1; i <= menuItems.length; i++) {
+			const index = (currentIndex + i) % menuItems.length;
+			const text =
+				(menuItems[index] as HTMLElement).textContent?.trim().toLowerCase() ||
+				"";
+
+			if (text.startsWith(key.toLowerCase())) {
+				(menuItems[index] as HTMLElement).focus();
+
+				return;
+			}
+		}
+
+		(menuItems[0] as HTMLElement).focus();
+	}
+
+	private onArrowX(evt: KeyboardEvent, direction: "left" | "right"): void {
+		if (!this.isOpened()) return;
+
+		evt.preventDefault();
+		evt.stopImmediatePropagation();
+
+		const menuItems = this.menu.querySelectorAll(
+			'a:not([hidden]), button:not([hidden]), [role="menuitem"]:not([hidden])',
+		);
+
+		if (!menuItems.length) return;
+
+		const currentIndex = Array.from(menuItems).indexOf(
+			document.activeElement as HTMLElement,
+		);
+		let nextIndex = -1;
+
+		if (direction === "right") {
+			nextIndex = (currentIndex + 1) % menuItems.length;
+		} else {
+			nextIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
+		}
+
+		(menuItems[nextIndex] as HTMLElement).focus();
+	}
+
+	private onStartEnd(toStart: boolean = true): void {
+		if (!this.isOpened()) return;
+
+		const menuItems = this.menu.querySelectorAll(
+			'a:not([hidden]), button:not([hidden]), [role="menuitem"]:not([hidden])',
+		);
+
+		if (!menuItems.length) return;
+
+		const index = toStart ? 0 : menuItems.length - 1;
+		(menuItems[index] as HTMLElement).focus();
+	}
+
+	private focusMenuItem(direction: "next" | "prev"): void {
+		const menuItems = this.menu.querySelectorAll(
+			'a:not([hidden]), button:not([hidden]), [role="menuitem"]:not([hidden])',
+		);
+
+		if (!menuItems.length) return;
+
+		const currentIndex = Array.from(menuItems).indexOf(
+			document.activeElement as HTMLElement,
+		);
+		const nextIndex = direction === "next"
+			? (currentIndex + 1) % menuItems.length
+			: (currentIndex - 1 + menuItems.length) % menuItems.length;
+		(menuItems[nextIndex] as HTMLElement).focus();
+	}
+
 	// Backward compatibility
 	static on(
 		evt: string,
@@ -1004,6 +1032,14 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 		const instance = HSDropdown.findInCollection(target);
 
 		if (instance) instance.element.events[evt] = cb;
+	}
+
+	public isOpened(): boolean {
+		return this.isOpen();
+	}
+
+	public containsElement(element: HTMLElement): boolean {
+		return this.el.contains(element);
 	}
 }
 

@@ -1,14 +1,14 @@
 var e={615:(e,t,i)=>{i.d(t,{A:()=>l});class l{constructor(e,t,i){this.el=e,this.options=t,this.events=i,this.el=e,this.options=t,this.events={}}createCollection(e,t){var i;e.push({id:(null===(i=null==t?void 0:t.el)||void 0===i?void 0:i.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},926:(e,t,i)=>{i.d(t,{en:()=>n,fc:()=>l});
 /*
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
-const l=e=>{const t=document.createElement("template");return e=e.trim(),t.innerHTML=e,t.content.firstChild},n=(e,t,i=" ",l="add")=>{e.split(i).forEach((e=>"add"===l?t.classList.add(e):t.classList.remove(e)))}}},t={};function i(l){var n=t[l];if(void 0!==n)return n.exports;var o=t[l]={exports:{}};return e[l](o,o.exports,i),o.exports}i.d=(e,t)=>{for(var l in t)i.o(t,l)&&!i.o(e,l)&&Object.defineProperty(e,l,{enumerable:!0,get:t[l]})},i.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var l={};i.d(l,{A:()=>s});var n=i(926),o=i(615);
+const l=e=>{const t=document.createElement("template");return e=e.trim(),t.innerHTML=e,t.content.firstChild},n=(e,t,i=" ",l="add")=>{e.split(i).forEach((e=>{e.trim()&&("add"===l?t.classList.add(e):t.classList.remove(e))}))}}},t={};function i(l){var n=t[l];if(void 0!==n)return n.exports;var o=t[l]={exports:{}};return e[l](o,o.exports,i),o.exports}i.d=(e,t)=>{for(var l in t)i.o(t,l)&&!i.o(e,l)&&Object.defineProperty(e,l,{enumerable:!0,get:t[l]})},i.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var l={};i.d(l,{A:()=>s});var n=i(926),o=i(615);
 /*
  * HSFileUpload
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

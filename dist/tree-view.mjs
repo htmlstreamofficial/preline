@@ -1,6 +1,6 @@
 var e={615:(e,t,i)=>{i.d(t,{A:()=>n});class n{constructor(e,t,i){this.el=e,this.options=t,this.events=i,this.el=e,this.options=t,this.events={}}createCollection(e,t){var i;e.push({id:(null===(i=null==t?void 0:t.el)||void 0===i?void 0:i.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},926:(e,t,i)=>{i.d(t,{JD:()=>n});
 /*
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -8,7 +8,7 @@ var e={615:(e,t,i)=>{i.d(t,{A:()=>n});class n{constructor(e,t,i){this.el=e,this.
 const n=(e,t,i=null)=>{const n=new CustomEvent(e,{detail:{payload:i},bubbles:!0,cancelable:!0,composed:!1});t.dispatchEvent(n)}}},t={};function i(n){var s=t[n];if(void 0!==s)return s.exports;var l=t[n]={exports:{}};return e[n](l,l.exports,i),l.exports}i.d=(e,t)=>{for(var n in t)i.o(t,n)&&!i.o(e,n)&&Object.defineProperty(e,n,{enumerable:!0,get:t[n]})},i.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var n={};i.d(n,{A:()=>r});var s=i(926),l=i(615);
 /*
  * HSTreeView
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

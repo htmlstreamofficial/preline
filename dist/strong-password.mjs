@@ -1,14 +1,14 @@
 var t={615:(t,e,s)=>{s.d(e,{A:()=>i});class i{constructor(t,e,s){this.el=t,this.options=e,this.events=s,this.el=t,this.options=e,this.events={}}createCollection(t,e){var s;t.push({id:(null===(s=null==e?void 0:e.el)||void 0===s?void 0:s.id)||t.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},926:(t,e,s)=>{s.d(e,{JD:()=>n,PR:()=>i,en:()=>o,fc:()=>r});
 /*
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
-const i=(t,e,s="auto",i=10,n=null)=>{const r=e.getBoundingClientRect(),o=n?n.getBoundingClientRect():null,a=window.innerHeight,l=o?r.top-o.top:r.top,h=(n?o.bottom:a)-r.bottom,c=t.clientHeight+i;return"bottom"===s?h>=c:"top"===s?l>=c:l>=c||h>=c},n=(t,e,s=null)=>{const i=new CustomEvent(t,{detail:{payload:s},bubbles:!0,cancelable:!0,composed:!1});e.dispatchEvent(i)},r=t=>{const e=document.createElement("template");return t=t.trim(),e.innerHTML=t,e.content.firstChild},o=(t,e,s=" ",i="add")=>{t.split(s).forEach((t=>"add"===i?e.classList.add(t):e.classList.remove(t)))}}},e={};function s(i){var n=e[i];if(void 0!==n)return n.exports;var r=e[i]={exports:{}};return t[i](r,r.exports,s),r.exports}s.d=(t,e)=>{for(var i in e)s.o(e,i)&&!s.o(t,i)&&Object.defineProperty(t,i,{enumerable:!0,get:e[i]})},s.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e);var i={};s.d(i,{A:()=>a});var n=s(926),r=s(615);
+const i=(t,e,s="auto",i=10,n=null)=>{const r=e.getBoundingClientRect(),o=n?n.getBoundingClientRect():null,a=window.innerHeight,l=o?r.top-o.top:r.top,h=(n?o.bottom:a)-r.bottom,c=t.clientHeight+i;return"bottom"===s?h>=c:"top"===s?l>=c:l>=c||h>=c},n=(t,e,s=null)=>{const i=new CustomEvent(t,{detail:{payload:s},bubbles:!0,cancelable:!0,composed:!1});e.dispatchEvent(i)},r=t=>{const e=document.createElement("template");return t=t.trim(),e.innerHTML=t,e.content.firstChild},o=(t,e,s=" ",i="add")=>{t.split(s).forEach((t=>{t.trim()&&("add"===i?e.classList.add(t):e.classList.remove(t))}))}}},e={};function s(i){var n=e[i];if(void 0!==n)return n.exports;var r=e[i]={exports:{}};return t[i](r,r.exports,s),r.exports}s.d=(t,e)=>{for(var i in e)s.o(e,i)&&!s.o(t,i)&&Object.defineProperty(t,i,{enumerable:!0,get:e[i]})},s.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e);var i={};s.d(i,{A:()=>a});var n=s(926),r=s(615);
 /*
  * HSStrongPassword
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

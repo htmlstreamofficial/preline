@@ -1,6 +1,6 @@
 var e={615:(e,t,s)=>{s.d(t,{A:()=>o});class o{constructor(e,t,s){this.el=e,this.options=t,this.events=s,this.el=e,this.options=t,this.events={}}createCollection(e,t){var s;e.push({id:(null===(s=null==t?void 0:t.el)||void 0===s?void 0:s.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},926:(e,t,s)=>{s.d(t,{JD:()=>i,V6:()=>o});
 /*
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -8,7 +8,7 @@ var e={615:(e,t,s)=>{s.d(t,{A:()=>o});class o{constructor(e,t,s){this.el=e,this.
 const o=e=>e instanceof HTMLInputElement||e instanceof HTMLTextAreaElement||e instanceof HTMLSelectElement,i=(e,t,s=null)=>{const o=new CustomEvent(e,{detail:{payload:s},bubbles:!0,cancelable:!0,composed:!1});t.dispatchEvent(o)}}},t={};function s(o){var i=t[o];if(void 0!==i)return i.exports;var l=t[o]={exports:{}};return e[o](l,l.exports,s),l.exports}s.d=(e,t)=>{for(var o in t)s.o(t,o)&&!s.o(e,o)&&Object.defineProperty(e,o,{enumerable:!0,get:t[o]})},s.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var o={};s.d(o,{A:()=>r});var i=s(926),l=s(615);
 /*
  * HSTogglePassword
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

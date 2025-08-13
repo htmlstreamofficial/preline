@@ -1,6 +1,6 @@
 /*
  * HSThemeSwitch
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -101,7 +101,7 @@ class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions>
 		HSThemeSwitch.systemThemeObserver = (e: MediaQueryListEvent) => {
 			window.$hsThemeSwitchCollection?.forEach((instance) => {
 				if (localStorage.getItem("hs_theme") === "auto") {
-					instance.element.setAppearance(e.matches ? "dark" : "default", false);
+					instance.element.setAppearance("auto", false);
 				}
 			});
 		};
@@ -138,14 +138,22 @@ class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions>
 
 		if (isSaveToLocalStorage) localStorage.setItem("hs_theme", theme);
 
-		if (theme === "auto") {
-			theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+		let computedTheme = theme;
+		if (computedTheme === "default") computedTheme = "light";
+
+		if (computedTheme === "auto") {
+			computedTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
 				? "dark"
-				: "default";
+				: "light";
 		}
 
 		html.classList.remove("light", "dark", "default", "auto");
-		html.classList.add(theme);
+
+		if (theme === "auto") {
+			html.classList.add("auto", computedTheme);
+		} else {
+			html.classList.add(computedTheme);
+		}
 
 		setTimeout(() => resetStyles.remove());
 

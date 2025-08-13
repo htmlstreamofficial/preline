@@ -1,14 +1,14 @@
 var t={615:(t,e,i)=>{i.d(e,{A:()=>l});class l{constructor(t,e,i){this.el=t,this.options=e,this.events=i,this.el=t,this.options=e,this.events={}}createCollection(t,e){var i;t.push({id:(null===(i=null==e?void 0:e.el)||void 0===i?void 0:i.id)||t.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},926:(t,e,i)=>{i.d(e,{Fh:()=>l,JD:()=>n,en:()=>o,fc:()=>r});
 /*
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
-const l=t=>{if("string"!=typeof t)return!1;const e=t.trim()[0],i=t.trim().slice(-1);if("{"===e&&"}"===i||"["===e&&"]"===i)try{return JSON.parse(t),!0}catch(t){return!1}return!1},n=(t,e,i=null)=>{const l=new CustomEvent(t,{detail:{payload:i},bubbles:!0,cancelable:!0,composed:!1});e.dispatchEvent(l)},r=t=>{const e=document.createElement("template");return t=t.trim(),e.innerHTML=t,e.content.firstChild},o=(t,e,i=" ",l="add")=>{t.split(i).forEach((t=>"add"===l?e.classList.add(t):e.classList.remove(t)))}}},e={};function i(l){var n=e[l];if(void 0!==n)return n.exports;var r=e[l]={exports:{}};return t[l](r,r.exports,i),r.exports}i.d=(t,e)=>{for(var l in e)i.o(e,l)&&!i.o(t,l)&&Object.defineProperty(t,l,{enumerable:!0,get:e[l]})},i.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e);var l={};i.d(l,{A:()=>s});var n=i(926),r=i(615);
+const l=t=>{if("string"!=typeof t)return!1;const e=t.trim()[0],i=t.trim().slice(-1);if("{"===e&&"}"===i||"["===e&&"]"===i)try{return JSON.parse(t),!0}catch(t){return!1}return!1},n=(t,e,i=null)=>{const l=new CustomEvent(t,{detail:{payload:i},bubbles:!0,cancelable:!0,composed:!1});e.dispatchEvent(l)},r=t=>{const e=document.createElement("template");return t=t.trim(),e.innerHTML=t,e.content.firstChild},o=(t,e,i=" ",l="add")=>{t.split(i).forEach((t=>{t.trim()&&("add"===l?e.classList.add(t):e.classList.remove(t))}))}}},e={};function i(l){var n=e[l];if(void 0!==n)return n.exports;var r=e[l]={exports:{}};return t[l](r,r.exports,i),r.exports}i.d=(t,e)=>{for(var l in e)i.o(e,l)&&!i.o(t,l)&&Object.defineProperty(t,l,{enumerable:!0,get:e[l]})},i.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e);var l={};i.d(l,{A:()=>s});var n=i(926),r=i(615);
 /*
  * HSLayoutSplitter
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

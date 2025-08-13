@@ -20,6 +20,21 @@
   }
 }
 
+@custom-variant hs-overlay-minified {
+
+  &.minified {
+    @slot;
+  }
+
+  .minified & {
+    @slot;
+  }
+
+  .hs-overlay-minified & {
+    @slot;
+  }
+}
+
 @custom-variant hs-overlay-backdrop-open {
 
   &.hs-overlay-backdrop {

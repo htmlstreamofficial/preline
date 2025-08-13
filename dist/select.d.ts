@@ -117,6 +117,7 @@ export interface ISelect {
 	destroy(): void;
 }
 declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
+	private accessibilityComponent;
 	value: string | string[] | null;
 	private readonly placeholder;
 	private readonly hasSearch;
@@ -124,7 +125,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly preventSearchFocus;
 	private readonly mode;
 	private readonly viewport;
-	isOpened: boolean | null;
+	private _isOpened;
 	isMultiple: boolean | null;
 	isDisabled: boolean | null;
 	selectedItems: string[];
@@ -192,6 +193,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly isAddTagOnEnter;
 	private tagsInputHelper;
 	private remoteOptions;
+	private disabledObserver;
 	private optionId;
 	private onWrapperClickListener;
 	private onToggleClickListener;
@@ -210,6 +212,8 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private tagsInputKeydown;
 	private searchInput;
 	setValue(val: string | string[]): void;
+	private setDisabledState;
+	private hasValue;
 	private init;
 	private build;
 	private buildWrapper;
@@ -260,24 +264,23 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private eraseToggleIcon;
 	private eraseToggleTitle;
 	private toggleFn;
+	private setupAccessibility;
+	private focusMenuItem;
+	private onStartEnd;
 	destroy(): void;
 	open(): boolean;
 	close(forceFocus?: boolean): boolean;
 	addOption(items: ISingleOption | ISingleOption[]): void;
 	removeOption(values: string | string[]): void;
 	recalculateDirection(): boolean;
+	isOpened(): boolean;
+	containsElement(element: HTMLElement): boolean;
 	private static findInCollection;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSSelect | ICollectionItem<HSSelect>;
 	static autoInit(): void;
 	static open(target: HSSelect | HTMLElement | string): void;
 	static close(target: HSSelect | HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;
-	static accessibility(evt: KeyboardEvent): void;
-	static onEscape(): void;
-	static onArrow(isArrowUp?: boolean): boolean;
-	static onTab(isArrowUp?: boolean): boolean;
-	static onStartEnd(isStart?: boolean): boolean;
-	static onEnter(evt: Event): void;
 }
 
 export {

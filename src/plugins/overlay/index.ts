@@ -1,6 +1,6 @@
 /*
  * HSOverlay
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -10,20 +10,24 @@ import {
 	afterTransition,
 	dispatch,
 	getClassProperty,
-	getHighestZIndex,
 	isDirectChild,
-	isParentOrElementHidden,
 	stringToBoolean,
 } from "../../utils";
 
 import { IOverlay, IOverlayOptions } from "./interfaces";
 import { TOverlayOptionsAutoCloseEqualityType } from "./types";
 import { ICollectionItem } from "../../interfaces";
+import { IAccessibilityComponent } from "../accessibility-manager/interfaces";
 import { BREAKPOINTS } from "../../constants";
 
 import HSBasePlugin from "../base-plugin";
+import HSAccessibilityObserver from "../accessibility-manager";
 
 class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
+	private accessibilityComponent: IAccessibilityComponent;
+	private lastFocusedToggle: HTMLElement | null = null;
+	private initiallyOpened: boolean;
+
 	private readonly hiddenClass: string | null;
 	private readonly emulateScrollbarSpace: boolean;
 	private readonly isClosePrev: boolean;
@@ -35,6 +39,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private openNextOverlay: boolean;
 	private autoHide: ReturnType<typeof setTimeout> | null;
 	private toggleButtons: HTMLElement[];
+	public toggleMinifierButtons: HTMLElement[];
 
 	static openedItemsQty = 0;
 
@@ -58,6 +63,10 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		el: HTMLElement;
 		fn: () => void;
 	}[] | null;
+	private onElementMinifierClickListener: {
+		el: HTMLElement;
+		fn: () => void;
+	}[] | null;
 	private onOverlayClickListener: (evt: Event) => void;
 	private onBackdropClickListener: () => void;
 
@@ -69,6 +78,10 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			document.querySelectorAll(`[data-hs-overlay="#${this.el.id}"]`),
 		);
 		const toggleDataOptions = this.collectToggleParameters(this.toggleButtons);
+
+		this.toggleMinifierButtons = Array.from(
+			document.querySelectorAll(`[data-hs-overlay-minifier="#${this.el.id}"]`),
+		);
 
 		const data = el.getAttribute("data-hs-overlay-options");
 		const dataOptions: IOverlayOptions = data ? JSON.parse(data) : {};
@@ -137,6 +150,11 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		this.initialZIndex = parseInt(getComputedStyle(this.el).zIndex, 10);
 
 		this.onElementClickListener = [];
+		this.onElementMinifierClickListener = [];
+
+		this.initiallyOpened = document.body.classList.contains(
+			"hs-overlay-body-open",
+		);
 
 		this.init();
 	}
@@ -154,6 +172,35 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 		if (this.el.classList.contains("opened")) this.close(false, payloadFn);
 		else this.open(payloadFn);
+	}
+
+	private elementMinifierClick() {
+		const payloadFn = () => {
+			const payload = {
+				el: this.el,
+				isMinified: !!this.el.classList.contains("minified"),
+			};
+
+			this.fireEvent("toggleMinifierClicked", payload);
+			dispatch("toggleMinifierClicked.hs.overlay", this.el, payload);
+		};
+
+		if (this.el.classList.contains("minified")) this.minify(false, payloadFn);
+		else this.minify(true, payloadFn);
+	}
+
+	public minify(isMinified: boolean, cb: Function | null = null) {
+		if (isMinified) {
+			this.el.classList.add("minified");
+			document.body.classList.add("hs-overlay-minified");
+
+			if (cb) cb();
+		} else {
+			this.el.classList.remove("minified");
+			document.body.classList.remove("hs-overlay-minified");
+
+			if (cb) cb();
+		}
 	}
 
 	private overlayClick(evt: Event) {
@@ -187,17 +234,20 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 
 		this.el.addEventListener("click", this.onOverlayClickListener);
 
-		if (this.toggleButtons.length) this.buildToggleButtons();
+		if (this.toggleButtons.length) this.buildToggleButtons(this.toggleButtons);
+
+		if (this.toggleMinifierButtons.length) this.buildToggleMinifierButtons();
+
+		if (typeof window !== "undefined") {
+			if (!window.HSAccessibilityObserver) {
+				window.HSAccessibilityObserver = new HSAccessibilityObserver();
+			}
+			this.setupAccessibility();
+		}
 	}
 
-	private getElementsByZIndex() {
-		return window.$hsOverlayCollection.filter((el) =>
-			el.element.initialZIndex === this.initialZIndex
-		);
-	}
-
-	private buildToggleButtons() {
-		this.toggleButtons.forEach((el) => {
+	private buildToggleButtons(buttons: HTMLElement[]) {
+		buttons.forEach((el) => {
 			if (this.el.classList.contains("opened")) el.ariaExpanded = "true";
 			else el.ariaExpanded = "false";
 
@@ -210,6 +260,25 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 				"click",
 				this.onElementClickListener.find((toggleButton) =>
 					toggleButton.el === el
+				).fn,
+			);
+		});
+	}
+
+	private buildToggleMinifierButtons() {
+		this.toggleMinifierButtons.forEach((el) => {
+			if (this.el.classList.contains("minified")) el.ariaExpanded = "true";
+			else el.ariaExpanded = "false";
+
+			this.onElementMinifierClickListener.push({
+				el,
+				fn: () => this.elementMinifierClick(),
+			});
+
+			el.addEventListener(
+				"click",
+				this.onElementMinifierClickListener.find((minifierButton) =>
+					minifierButton.el === el
 				).fn,
 			);
 		});
@@ -389,8 +458,17 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		return true;
 	}
 
+	private isOpened(): boolean {
+		return this.el.classList.contains("open") &&
+			!this.el.classList.contains(this.hiddenClass);
+	}
+
 	// Public methods
 	public open(cb: Function | null = null) {
+		if (this.el.classList.contains("minified")) {
+			this.minify(false);
+		}
+
 		if (this.hasDynamicZIndex) {
 			if (HSOverlay.currentZIndex < this.initialZIndex) {
 				HSOverlay.currentZIndex = this.initialZIndex;
@@ -411,6 +489,8 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		);
 		const disabledScroll =
 			getClassProperty(this.el, "--body-scroll", "false") !== "true";
+
+		this.lastFocusedToggle = document.activeElement as HTMLElement;
 
 		if (this.isClosePrev && currentlyOpened) {
 			this.openNextOverlay = true;
@@ -448,8 +528,22 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 				document.body.classList.add("hs-overlay-body-open");
 			}
 
+			if (!this.initiallyOpened) {
+				this.el.focus();
+
+				this.el.style.outline = "none";
+			}
+			this.initiallyOpened = false;
+
 			this.fireEvent("open", this.el);
 			dispatch("open.hs.overlay", this.el, this.el);
+
+			if (window.HSAccessibilityObserver && this.accessibilityComponent) {
+				window.HSAccessibilityObserver.updateComponentState(
+					this.accessibilityComponent,
+					true,
+				);
+			}
 
 			if (this.hasAutofocus) this.focusElement();
 
@@ -487,9 +581,21 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			this.fireEvent("close", this.el);
 			dispatch("close.hs.overlay", this.el, this.el);
 
+			if (window.HSAccessibilityObserver && this.accessibilityComponent) {
+				window.HSAccessibilityObserver.updateComponentState(
+					this.accessibilityComponent,
+					false,
+				);
+			}
+
 			if (!document.querySelector(".hs-overlay.opened")) {
 				document.body.style.overflow = "";
 				if (this.emulateScrollbarSpace) document.body.style.paddingRight = "";
+			}
+
+			if (this.lastFocusedToggle) {
+				this.lastFocusedToggle.focus();
+				this.lastFocusedToggle = null;
 			}
 
 			_cb(this.el);
@@ -506,8 +612,35 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 			this.el.removeAttribute("aria-overlay");
 			this.el.removeAttribute("tabindex");
 
+			this.el.style.outline = "";
+
 			if (forceClose) closeFn(resolve);
 			else afterTransition(this.animationTarget, () => closeFn(resolve));
+		});
+	}
+
+	public updateToggles() {
+		const found = Array.from(
+			document.querySelectorAll<HTMLElement>(
+				`[data-hs-overlay="#${this.el.id}"]`,
+			),
+		);
+		const newButtons = found.filter((btn) => !this.toggleButtons.includes(btn));
+
+		if (newButtons.length) {
+			this.toggleButtons.push(...newButtons);
+			this.buildToggleButtons(newButtons);
+		}
+
+		this.toggleButtons = this.toggleButtons.filter((btn) => {
+			if (document.contains(btn)) return true;
+
+			const listener = this.onElementClickListener?.find(
+				(lst) => lst.el === btn,
+			);
+			if (listener) btn.removeEventListener("click", listener.fn as () => void);
+
+			return false;
 		});
 	}
 
@@ -581,11 +714,6 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	static autoInit() {
 		if (!window.$hsOverlayCollection) {
 			window.$hsOverlayCollection = [];
-
-			document.addEventListener(
-				"keydown",
-				(evt) => HSOverlay.accessibility(evt),
-			);
 		}
 
 		if (window.$hsOverlayCollection) {
@@ -625,90 +753,100 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		) instance.element.close();
 	}
 
+	static minify(target: HSOverlay | HTMLElement | string, isMinified: boolean) {
+		const instance = HSOverlay.findInCollection(target);
+
+		if (instance) {
+			instance.element.minify(isMinified);
+		}
+	}
+
 	static setOpened(breakpoint: number, el: ICollectionItem<HSOverlay>) {
 		if (document.body.clientWidth >= breakpoint) {
+			if (el.element.el.classList.contains("minified")) {
+				el.element.minify(false);
+			}
+
 			document.body.classList.add("hs-overlay-body-open");
+
 			el.element.open();
 		} else el.element.close(true);
 	}
 
 	// Accessibility methods
-	static accessibility(evt: KeyboardEvent) {
-		const opened = document.querySelectorAll(".hs-overlay.open");
-		const highest = getHighestZIndex(Array.from(opened) as HTMLElement[]);
-		const targets = window.$hsOverlayCollection.filter((el) =>
-			el.element.el.classList.contains("open")
-		);
-		const target = targets.find((el) =>
-			window.getComputedStyle(el.element.el).getPropertyValue("z-index") ===
-				`${highest}`
-		);
-		const focusableElements = target?.element?.el?.querySelectorAll(
-			'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-		);
-		const notHiddenFocusableElements: HTMLElement[] = [];
-		if (focusableElements?.length) {
-			focusableElements.forEach((el: HTMLElement) => {
-				if (!isParentOrElementHidden(el)) notHiddenFocusableElements.push(el);
-			});
-		}
-		const basicCheck = target && !evt.metaKey;
+	private setupAccessibility(): void {
+		this.accessibilityComponent = window.HSAccessibilityObserver
+			.registerComponent(
+				this.el,
+				{
+					onEnter: () => {
+						if (!this.isOpened()) this.open();
+					},
+					onEsc: () => {
+						if (this.isOpened()) {
+							this.close();
+						}
+					},
+					onTab: () => {
+						if (!this.isOpened() || !this.isTabAccessibilityLimited) return;
 
-		if (
-			basicCheck &&
-			!target.element.isTabAccessibilityLimited &&
-			evt.code === "Tab"
-		) {
-			return false;
-		}
+						const focusableElements = Array.from(
+							this.el.querySelectorAll<HTMLElement>(
+								'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+							),
+						).filter((el) =>
+							!el.hidden && window.getComputedStyle(el).display !== "none"
+						);
 
-		if (basicCheck && notHiddenFocusableElements.length && evt.code === "Tab") {
-			evt.preventDefault();
-			this.onTab(target);
-		}
-		if (basicCheck && evt.code === "Escape") {
-			evt.preventDefault();
-			this.onEscape(target);
-		}
-	}
+						if (focusableElements.length === 0) return;
 
-	static onEscape(target: ICollectionItem<HSOverlay>) {
-		if (target && target.element.hasAbilityToCloseOnBackdropClick) {
-			target.element.close();
-		}
-	}
+						const focusedElement = this.el.querySelector(":focus");
+						const currentIndex = focusedElement
+							? focusableElements.indexOf(focusedElement as HTMLElement)
+							: -1;
+						const isShiftPressed = window.event instanceof KeyboardEvent &&
+							window.event.shiftKey;
 
-	static onTab(target: ICollectionItem<HSOverlay>) {
-		const overlayElement = target.element.el;
-		const focusableElements = Array.from(
-			overlayElement.querySelectorAll<HTMLElement>(
-				'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-			),
-		);
+						if (isShiftPressed) {
+							if (currentIndex <= 0) {
+								focusableElements[focusableElements.length - 1].focus();
+							} else {
+								focusableElements[currentIndex - 1].focus();
+							}
+						} else {
+							if (currentIndex === focusableElements.length - 1) {
+								focusableElements[0].focus();
+							} else {
+								focusableElements[currentIndex + 1].focus();
+							}
+						}
 
-		if (focusableElements.length === 0) return false;
+						window.event?.preventDefault();
+					},
+				},
+				this.isOpened(),
+				"Overlay",
+				".hs-overlay",
+			);
 
-		const focusedElement = overlayElement.querySelector(":focus");
-
-		if (focusedElement) {
-			let foundCurrent = false;
-
-			for (const element of focusableElements) {
-				if (foundCurrent) {
-					element.focus();
-
-					return;
-				}
-
-				if (element === focusedElement) {
-					foundCurrent = true;
-				}
-			}
-
-			focusableElements[0].focus();
-		} else {
-			focusableElements[0].focus();
-		}
+		this.toggleButtons.forEach((toggleButton) => {
+			window.HSAccessibilityObserver.registerComponent(
+				toggleButton,
+				{
+					onEnter: () => {
+						if (!this.isOpened()) this.open();
+					},
+					onEsc: () => {
+						if (this.isOpened()) {
+							this.close();
+						}
+					},
+				},
+				this.isOpened(),
+				"Overlay Toggle",
+				`[data-hs-overlay="#${this.el.id}"]`,
+			);
+		});
 	}
 
 	// Backward compatibility
@@ -730,6 +868,14 @@ declare global {
 	}
 }
 
+let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+
+const debounceResize = (callback: () => void, delay: number = 150) => {
+	if (resizeTimeout) clearTimeout(resizeTimeout);
+
+	resizeTimeout = setTimeout(callback, delay);
+};
+
 const autoCloseResizeFn = () => {
 	if (
 		!window.$hsOverlayCollection.length ||
@@ -748,10 +894,17 @@ const autoCloseResizeFn = () => {
 			? document.body.clientWidth <= autoClose
 			: document.body.clientWidth >= autoClose;
 
-		if (condition) {
+		if (condition && overlay.element.el.classList.contains("opened")) {
+			if (overlay.element.el.classList.contains("minified")) {
+				overlay.element.minify(false);
+			}
+
 			overlay.element.close(true);
 		} else {
-			if (overlay.element.isLayoutAffect) {
+			if (
+				overlay.element.isLayoutAffect &&
+				overlay.element.el.classList.contains("opened")
+			) {
 				document.body.classList.add("hs-overlay-body-open");
 			}
 		}
@@ -795,23 +948,31 @@ const moveOverlayToBodyResizeFn = () => {
 const setOpenedResizeFn = () => {
 	if (
 		!window.$hsOverlayCollection.length ||
-		!window.$hsOverlayCollection.find((el) => el.element.autoClose)
+		!window.$hsOverlayCollection.find((el) => el.element.openedBreakpoint)
 	) {
 		return false;
 	}
 
 	const overlays = window.$hsOverlayCollection.filter(
-		(el) => el.element.autoClose,
+		(el) => el.element.openedBreakpoint,
 	);
 
 	overlays.forEach((overlay) => {
-		const { autoCloseEqualityType, autoClose } = overlay.element;
-		const condition = autoCloseEqualityType === "less-than"
-			? document.body.clientWidth <= autoClose
-			: document.body.clientWidth >= autoClose;
+		const { openedBreakpoint } = overlay.element;
+		const condition = document.body.clientWidth >= openedBreakpoint;
 
 		if (condition) {
-			overlay.element.close(true);
+			if (!overlay.element.el.classList.contains("opened")) {
+				HSOverlay.setOpened(openedBreakpoint, overlay);
+			}
+		} else {
+			if (overlay.element.el.classList.contains("opened")) {
+				if (overlay.element.el.classList.contains("minified")) {
+					overlay.element.minify(false);
+				}
+
+				overlay.element.close(true);
+			}
 		}
 	});
 };
@@ -850,19 +1011,43 @@ const setBackdropZIndexResizeFn = () => {
 	});
 };
 
+const ensureBodyOpenForMinifiedSidebar = () => {
+	if (!window.$hsOverlayCollection?.length) return;
+
+	window.$hsOverlayCollection.forEach((overlayItem) => {
+		const overlay = overlayItem.element;
+		if (
+			overlay.toggleMinifierButtons?.length > 0 &&
+			overlay.openedBreakpoint
+		) {
+			if (document.body.clientWidth >= overlay.openedBreakpoint) {
+				document.body.classList.add("hs-overlay-body-open");
+			} else {
+				document.body.classList.remove("hs-overlay-body-open");
+			}
+		}
+	});
+};
+
 window.addEventListener("load", () => {
 	HSOverlay.autoInit();
 
 	moveOverlayToBodyResizeFn();
+	ensureBodyOpenForMinifiedSidebar();
+
 	// Uncomment for debug
 	// console.log('Overlay collection:', window.$hsOverlayCollection);
 });
 
 window.addEventListener("resize", () => {
-	autoCloseResizeFn();
+	debounceResize(() => {
+		autoCloseResizeFn();
+		setOpenedResizeFn();
+	});
+
 	moveOverlayToBodyResizeFn();
-	setOpenedResizeFn();
 	setBackdropZIndexResizeFn();
+	ensureBodyOpenForMinifiedSidebar();
 });
 
 if (typeof window !== "undefined") {

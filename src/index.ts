@@ -1,5 +1,5 @@
 /*
- * @version: 3.1.0
+ * @version: 3.2.3
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -11,10 +11,16 @@ declare var Dropzone: any;
 declare var noUiSlider: any;
 declare var VanillaCalendarPro: any;
 
+import HSAccessibilityObserver from "./plugins/accessibility-manager";
+
+if (typeof window !== "undefined") {
+	window.HSAccessibilityObserver = new HSAccessibilityObserver();
+}
+
 let HSDataTableModule;
 let HSFileUploadModule;
 let HSRangeSliderModule;
-let HSDatepickerModule;
+let HSDatepickerModule: any = null;
 
 export { default as HSCopyMarkup } from "./plugins/copy-markup";
 export { default as HSAccordion } from "./plugins/accordion";
