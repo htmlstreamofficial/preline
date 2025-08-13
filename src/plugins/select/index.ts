@@ -520,8 +520,11 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 			icon.append(img);
 
-			if (!img) icon.classList.add("hidden");
-			else icon.classList.remove("hidden");
+      if (img instanceof HTMLImageElement ? !img.src : !img) {
+        icon.classList.add('hidden');
+      } else {
+        icon.classList.remove('hidden');
+      }
 		}
 	}
 
