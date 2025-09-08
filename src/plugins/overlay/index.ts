@@ -783,7 +783,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 						if (!this.isOpened()) this.open();
 					},
 					onEsc: () => {
-						if (this.isOpened()) {
+						if (this.isOpened()  && this.hasAbilityToCloseOnBackdropClick) {
 							this.close();
 						}
 					},
@@ -837,7 +837,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 						if (!this.isOpened()) this.open();
 					},
 					onEsc: () => {
-						if (this.isOpened()) {
+						if (this.isOpened() && this.hasAbilityToCloseOnBackdropClick) {
 							this.close();
 						}
 					},
