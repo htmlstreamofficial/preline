@@ -216,7 +216,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private setInputValue(target: HTMLInputElement, dates: DatesArr) {
 		const dateFormat = this.dataOptions?.dateFormat;
 		// Extract separator from dateFormat if present
-		const extractedSeparator = dateFormat 
+		const extractedSeparator = dateFormat
 			? this.extractSeparatorFromFormat(dateFormat) 
 			: null;
 		const dateSeparator = extractedSeparator 
