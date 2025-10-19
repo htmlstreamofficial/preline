@@ -203,10 +203,25 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		};
 	}
 
+	/**
+	 * Extracts the separator from a date format string
+	 * @param format - Date format (e.g., "DD-MM-YYYY", "DD/MM/YYYY")
+	 * @returns The first non-alphanumeric character found, or "-" as fallback
+	 */
+	private extractSeparatorFromFormat(format: string): string {
+		const match = format.match(/[^A-Za-z0-9]/);
+		return match ? match[0] : "-";
+	}
+
 	private setInputValue(target: HTMLInputElement, dates: DatesArr) {
 		const dateFormat = this.dataOptions?.dateFormat;
-		const dateSeparator = this.dataOptions?.inputModeOptions?.dateSeparator ??
-			".";
+		// Extract separator from dateFormat if present
+		const extractedSeparator = dateFormat 
+			? this.extractSeparatorFromFormat(dateFormat) 
+			: null;
+		const dateSeparator = extractedSeparator 
+			?? this.dataOptions?.inputModeOptions?.dateSeparator 
+			?? "-";
 		const itemsSeparator = this.dataOptions?.inputModeOptions?.itemsSeparator ??
 			", ";
 		const selectionDatesMode = this.dataOptions?.selectionDatesMode ?? "single";
@@ -246,7 +261,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 	private changeDateSeparator(
 		date: string | number | Date,
-		separator = ".",
+		separator = "-",
 		defaultSeparator = "-",
 	) {
 		const dateObj = new Date(date);
@@ -796,8 +811,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		const dateLocale = this.dataOptions?.dateLocale || undefined;
 
 		if (!dateFormat) {
-			const dateSeparator = this.dataOptions?.inputModeOptions?.dateSeparator ??
-				".";
+			const dateSeparator = this.dataOptions?.inputModeOptions?.dateSeparator ?? "-";
 
 			return this.changeDateSeparator(date, dateSeparator);
 		}
