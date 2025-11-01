@@ -44,7 +44,7 @@
 		"watch:mjs": "webpack --config webpack.config.mjs.js --watch",
 		"build": "webpack --config webpack.config.js",
 		"build:mjs": "webpack --config webpack.config.mjs.js",
-		"pretty": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
+		"pretty": "prettier --write --cache \"./**/*.{js,jsx,ts,tsx,json}\"",
 		"generate-dts": "dts-bundle-generator --config dts-config.js"
 	},
 	"dependencies": {
