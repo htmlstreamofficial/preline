@@ -21,7 +21,10 @@ export interface IInputNumber {
 	options?: IInputNumberOptions;
 	destroy(): void;
 }
-declare class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputNumber {
+declare class HSInputNumber
+	extends HSBasePlugin<IInputNumberOptions>
+	implements IInputNumber
+{
 	private readonly input;
 	private readonly increment;
 	private readonly decrement;
@@ -47,15 +50,18 @@ declare class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements
 	private disableButtons;
 	private enableButtons;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSInputNumber | {
-		id: number;
-		element: HSInputNumber;
-	};
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	):
+		| HSInputNumber
+		| {
+				id: number;
+				element: HSInputNumber;
+		  };
 	static autoInit(): void;
 }
 
-export {
-	HSInputNumber as default,
-};
+export { HSInputNumber as default };
 
 export {};

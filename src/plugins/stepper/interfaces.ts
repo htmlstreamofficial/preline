@@ -6,7 +6,7 @@ export interface IStepperOptions {
 
 export interface IStepper {
 	options?: IStepperOptions;
-	
+
 	setProcessedNavItem(n?: number): void;
 	unsetProcessedNavItem(n?: number): void;
 	goToNext(): void;

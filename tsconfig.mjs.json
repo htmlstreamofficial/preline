@@ -1,22 +1,16 @@
 {
-  "compilerOptions": {
-    "module": "ESNext",
-    "target": "ES6",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "noImplicitAny": true,
-    "allowJs": true,
-    "baseUrl": ".",
-    "outDir": "./dist",
-    "allowSyntheticDefaultImports": true
-  },
-  "include": [
-    "src/**/*",
-    "./global.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ]
+	"compilerOptions": {
+		"module": "ESNext",
+		"target": "ES6",
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"sourceMap": true,
+		"noImplicitAny": true,
+		"allowJs": true,
+		"baseUrl": ".",
+		"outDir": "./dist",
+		"allowSyntheticDefaultImports": true
+	},
+	"include": ["src/**/*", "./global.d.ts"],
+	"exclude": ["node_modules", "**/*.spec.ts"]
 }

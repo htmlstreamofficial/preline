@@ -57,15 +57,20 @@ declare class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	hide(): void;
 	destroy(): void;
 	private static findInCollection;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSTooltip>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSTooltip>;
 	static autoInit(): void;
 	static show(target: HSTooltip | HTMLElement | string): void;
 	static hide(target: HSTooltip | HTMLElement | string): void;
-	static on(evt: string, target: HSTooltip | HTMLElement | string, cb: Function): void;
+	static on(
+		evt: string,
+		target: HSTooltip | HTMLElement | string,
+		cb: Function,
+	): void;
 }
 
-export {
-	HSTooltip as default,
-};
+export { HSTooltip as default };
 
 export {};

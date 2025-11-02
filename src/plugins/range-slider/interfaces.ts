@@ -1,6 +1,6 @@
-import type { Options } from "nouislider";
+import type { Options } from 'nouislider';
 
-import { TRangeSliderOptionsFormatterType } from "./types";
+import { TRangeSliderOptionsFormatterType } from './types';
 
 export interface IRangeSliderCssClassesObject {
 	[key: string]: any;

@@ -26,7 +26,10 @@ export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
 }
-declare class HSCopyMarkup extends HSBasePlugin<ICopyMarkupOptions> implements ICopyMarkup {
+declare class HSCopyMarkup
+	extends HSBasePlugin<ICopyMarkupOptions>
+	implements ICopyMarkup
+{
 	private readonly targetSelector;
 	private readonly wrapperSelector;
 	private readonly limit;
@@ -46,12 +49,13 @@ declare class HSCopyMarkup extends HSBasePlugin<ICopyMarkupOptions> implements I
 	private addToItems;
 	delete(target: HTMLElement): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSCopyMarkup | ICollectionItem<HSCopyMarkup>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HSCopyMarkup | ICollectionItem<HSCopyMarkup>;
 	static autoInit(): void;
 }
 
-export {
-	HSCopyMarkup as default,
-};
+export { HSCopyMarkup as default };
 
 export {};

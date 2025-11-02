@@ -8,12 +8,19 @@
 
 import { debounce } from '../../utils';
 
-import { IScrollNavOptions, IScrollNav, IScrollNavCurrentState } from './interfaces';
+import {
+	IScrollNavOptions,
+	IScrollNav,
+	IScrollNavCurrentState,
+} from './interfaces';
 
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
 
-class HSScrollNav extends HSBasePlugin<IScrollNavOptions> implements IScrollNav {
+class HSScrollNav
+	extends HSBasePlugin<IScrollNavOptions>
+	implements IScrollNav
+{
 	private readonly paging: boolean;
 	private readonly autoCentering: boolean;
 
@@ -43,9 +50,13 @@ class HSScrollNav extends HSBasePlugin<IScrollNavOptions> implements IScrollNav 
 		this.autoCentering = concatOptions.autoCentering ?? false;
 
 		this.body = this.el.querySelector('.hs-scroll-nav-body') as HTMLElement;
-		this.items = this.body ? Array.from(this.body.querySelectorAll(':scope > *')) : [];
-		this.prev = this.el.querySelector('.hs-scroll-nav-prev') as HTMLElement || null;
-		this.next = this.el.querySelector('.hs-scroll-nav-next') as HTMLElement || null;
+		this.items = this.body
+			? Array.from(this.body.querySelectorAll(':scope > *'))
+			: [];
+		this.prev =
+			(this.el.querySelector('.hs-scroll-nav-prev') as HTMLElement) || null;
+		this.next =
+			(this.el.querySelector('.hs-scroll-nav-next') as HTMLElement) || null;
 
 		this.setCurrentState();
 
@@ -69,19 +80,25 @@ class HSScrollNav extends HSBasePlugin<IScrollNavOptions> implements IScrollNav 
 
 		if (this.autoCentering) this.scrollToActiveElement();
 
-		this.body.addEventListener('scroll', debounce(() => this.setCurrentState(), 200));
+		this.body.addEventListener(
+			'scroll',
+			debounce(() => this.setCurrentState(), 200),
+		);
 
-		window.addEventListener('resize', debounce(() => {
-			this.setCurrentState();
-			if (this.autoCentering) this.scrollToActiveElement();
-		}, 200));
+		window.addEventListener(
+			'resize',
+			debounce(() => {
+				this.setCurrentState();
+				if (this.autoCentering) this.scrollToActiveElement();
+			}, 200),
+		);
 	}
 
 	private setCurrentState() {
 		this.currentState = {
 			first: this.getFirstVisibleItem(),
 			last: this.getLastVisibleItem(),
-			center: this.getCenterVisibleItem()
+			center: this.getCenterVisibleItem(),
 		};
 
 		if (this.prev) this.setPrevToDisabled();
@@ -180,7 +197,7 @@ class HSScrollNav extends HSBasePlugin<IScrollNavOptions> implements IScrollNav 
 		let minDistance = Infinity;
 
 		this.items.forEach((item: HTMLElement) => {
-			const itemCenter = item.offsetLeft + (item.offsetWidth / 2);
+			const itemCenter = item.offsetLeft + item.offsetWidth / 2;
 			const distance = Math.abs(itemCenter - containerCenter);
 
 			if (distance < minDistance) {
@@ -197,10 +214,9 @@ class HSScrollNav extends HSBasePlugin<IScrollNavOptions> implements IScrollNav 
 
 		for (let item of this.items) {
 			const itemRect = item.getBoundingClientRect();
-			const isFullyVisible = (
+			const isFullyVisible =
 				itemRect.left >= containerRect.left &&
-				itemRect.right <= containerRect.right
-			);
+				itemRect.right <= containerRect.right;
 
 			if (isFullyVisible) {
 				return item;
@@ -216,10 +232,9 @@ class HSScrollNav extends HSBasePlugin<IScrollNavOptions> implements IScrollNav 
 		for (let i = this.items.length - 1; i >= 0; i--) {
 			const item = this.items[i];
 			const itemRect = item.getBoundingClientRect();
-			const isPartiallyVisible = (
+			const isPartiallyVisible =
 				itemRect.left < containerRect.right &&
-				itemRect.right > containerRect.left
-			);
+				itemRect.right > containerRect.left;
 
 			if (isPartiallyVisible) {
 				return item;
@@ -264,36 +279,42 @@ class HSScrollNav extends HSBasePlugin<IScrollNavOptions> implements IScrollNav 
 		(el as HTMLElement).scrollIntoView({
 			behavior: 'smooth',
 			block: 'nearest',
-			inline: 'nearest'
+			inline: 'nearest',
 		});
 
-		const observer = new IntersectionObserver((entries, observerInstance) => {
-			entries.forEach(entry => {
-				if (entry.target === el && entry.isIntersecting) {
-					if (typeof cb === 'function') cb();
+		const observer = new IntersectionObserver(
+			(entries, observerInstance) => {
+				entries.forEach((entry) => {
+					if (entry.target === el && entry.isIntersecting) {
+						if (typeof cb === 'function') cb();
 
-					observerInstance.disconnect();
-				}
-			});
-		}, {
-			root: this.body,
-			threshold: 1.0
-		});
+						observerInstance.disconnect();
+					}
+				});
+			},
+			{
+				root: this.body,
+				threshold: 1.0,
+			},
+		);
 
 		observer.observe(el);
 	}
 
-	public centerElement(el: HTMLElement, behavior: ScrollBehavior = 'smooth'): void {
+	public centerElement(
+		el: HTMLElement,
+		behavior: ScrollBehavior = 'smooth',
+	): void {
 		if (!this.body.contains(el)) {
 			return;
 		}
 
-		const elementCenter = el.offsetLeft + (el.offsetWidth / 2);
-		const scrollTo = elementCenter - (this.body.clientWidth / 2);
+		const elementCenter = el.offsetLeft + el.offsetWidth / 2;
+		const scrollTo = elementCenter - this.body.clientWidth / 2;
 
 		this.body.scrollTo({
 			left: scrollTo,
-			behavior: behavior
+			behavior: behavior,
 		});
 	}
 
@@ -302,20 +323,34 @@ class HSScrollNav extends HSBasePlugin<IScrollNavOptions> implements IScrollNav 
 			if (this.prev) this.prev.removeEventListener('click', this.buildPrev);
 			if (this.next) this.next.removeEventListener('click', this.buildNext);
 		} else {
-			if (this.prev) this.prev.removeEventListener('click', this.buildPrevSingle);
-			if (this.next) this.next.removeEventListener('click', this.buildNextSingle);
+			if (this.prev)
+				this.prev.removeEventListener('click', this.buildPrevSingle);
+			if (this.next)
+				this.next.removeEventListener('click', this.buildNextSingle);
 		}
 
-		window.removeEventListener('resize', debounce(() => this.setCurrentState(), 200));
+		window.removeEventListener(
+			'resize',
+			debounce(() => this.setCurrentState(), 200),
+		);
 
-		window.$hsScrollNavCollection = window.$hsScrollNavCollection.filter(({ element }) => element.el !== this.el);
+		window.$hsScrollNavCollection = window.$hsScrollNavCollection.filter(
+			({ element }) => element.el !== this.el,
+		);
 	}
 
 	// Static method
 	static getInstance(target: HTMLElement, isInstance?: boolean) {
 		const elInCollection = window.$hsScrollNavCollection.find(
-			(el) => el.element.el === (typeof target === 'string' ? document.querySelector(target) : target) ||
-				el.element.el === (typeof target === 'string' ? document.querySelector(target) : target),
+			(el) =>
+				el.element.el ===
+					(typeof target === 'string'
+						? document.querySelector(target)
+						: target) ||
+				el.element.el ===
+					(typeof target === 'string'
+						? document.querySelector(target)
+						: target),
 		);
 
 		return elInCollection
@@ -328,12 +363,21 @@ class HSScrollNav extends HSBasePlugin<IScrollNavOptions> implements IScrollNav 
 	static autoInit() {
 		if (!window.$hsScrollNavCollection) window.$hsScrollNavCollection = [];
 
-		if (window.$hsScrollNavCollection) window.$hsRemoveElementCollection = window.$hsRemoveElementCollection.filter(({ element }) => document.contains(element.el));
+		if (window.$hsScrollNavCollection)
+			window.$hsRemoveElementCollection =
+				window.$hsRemoveElementCollection.filter(({ element }) =>
+					document.contains(element.el),
+				);
 
 		document
 			.querySelectorAll('[data-hs-scroll-nav]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
-				if (!window.$hsScrollNavCollection.find((elC) => (elC?.element?.el as HTMLElement) === el)) new HSScrollNav(el);
+				if (
+					!window.$hsScrollNavCollection.find(
+						(elC) => (elC?.element?.el as HTMLElement) === el,
+					)
+				)
+					new HSScrollNav(el);
 			});
 	}
 }

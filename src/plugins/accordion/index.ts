@@ -6,7 +6,12 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { getClassProperty, stringToBoolean, dispatch, afterTransition } from '../../utils';
+import {
+	getClassProperty,
+	stringToBoolean,
+	dispatch,
+	afterTransition,
+} from '../../utils';
 
 import {
 	IAccordionOptions,
@@ -20,7 +25,8 @@ import { ICollectionItem } from '../../interfaces';
 
 class HSAccordion
 	extends HSBasePlugin<IAccordionOptions>
-	implements IAccordion {
+	implements IAccordion
+{
 	private toggle: HTMLElement | null;
 	public content: HTMLElement | null;
 	private group: HTMLElement | null;
@@ -43,9 +49,11 @@ class HSAccordion
 		this.isToggleStopPropagated = stringToBoolean(
 			getClassProperty(this.toggle, '--stop-propagation', 'false') || 'false',
 		);
-		this.keepOneOpen = this.group ? stringToBoolean(
-			getClassProperty(this.group, '--keep-one-open', 'false') || 'false',
-		) : false;
+		this.keepOneOpen = this.group
+			? stringToBoolean(
+					getClassProperty(this.group, '--keep-one-open', 'false') || 'false',
+				)
+			: false;
 
 		if (this.toggle && this.content) this.init();
 	}
@@ -176,12 +184,17 @@ class HSAccordion
 	}
 
 	// Static methods
-	private static findInCollection(target: HSAccordion | HTMLElement | string): ICollectionItem<HSAccordion> | null {
-		return window.$hsAccordionCollection.find((el) => {
-			if (target instanceof HSAccordion) return el.element.el === target.el;
-			else if (typeof target === 'string') return el.element.el === document.querySelector(target);
-			else return el.element.el === target;
-		}) || null;
+	private static findInCollection(
+		target: HSAccordion | HTMLElement | string,
+	): ICollectionItem<HSAccordion> | null {
+		return (
+			window.$hsAccordionCollection.find((el) => {
+				if (target instanceof HSAccordion) return el.element.el === target.el;
+				else if (typeof target === 'string')
+					return el.element.el === document.querySelector(target);
+				else return el.element.el === target;
+			}) || null
+		);
 	}
 
 	static autoInit() {
@@ -222,20 +235,17 @@ class HSAccordion
 	static show(target: HSAccordion | HTMLElement | string) {
 		const instance = HSAccordion.findInCollection(target);
 
-		if (
-			instance &&
-			instance.element.content.style.display !== 'block'
-		) instance.element.show();
+		if (instance && instance.element.content.style.display !== 'block')
+			instance.element.show();
 	}
 
 	static hide(target: HSAccordion | HTMLElement | string) {
 		const instance = HSAccordion.findInCollection(target);
-		const style = instance ? window.getComputedStyle(instance.element.content) : null;
+		const style = instance
+			? window.getComputedStyle(instance.element.content)
+			: null;
 
-		if (
-			instance &&
-			style.display !== 'none'
-		) instance.element.hide();
+		if (instance && style.display !== 'none') instance.element.hide();
 	}
 
 	static onSelectableClick = (
@@ -297,7 +307,11 @@ class HSAccordion
 	}
 
 	// Backward compatibility
-	static on(evt: string, target: HSAccordion | HTMLElement | string, cb: Function) {
+	static on(
+		evt: string,
+		target: HSAccordion | HTMLElement | string,
+		cb: Function,
+	) {
 		const instance = HSAccordion.findInCollection(target);
 
 		if (instance) instance.element.events[evt] = cb;

@@ -6,37 +6,38 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { dispatch } from "../../utils";
-import { Calendar, DatesArr, Range } from "vanilla-calendar-pro";
+import { dispatch } from '../../utils';
+import { Calendar, DatesArr, Range } from 'vanilla-calendar-pro';
 
-import CustomVanillaCalendar from "./vanilla-datepicker-pro";
-import { templates } from "./templates";
-import { todayTranslations } from "./locale";
-import { classToClassList, htmlToElement } from "../../utils";
-import HSSelect from "../select";
-import { ISelectOptions } from "../select/interfaces";
+import CustomVanillaCalendar from './vanilla-datepicker-pro';
+import { templates } from './templates';
+import { todayTranslations } from './locale';
+import { classToClassList, htmlToElement } from '../../utils';
+import HSSelect from '../select';
+import { ISelectOptions } from '../select/interfaces';
 
-import { ICustomDatepickerOptions, IDatepicker } from "./interfaces";
+import { ICustomDatepickerOptions, IDatepicker } from './interfaces';
 
-import HSBasePlugin from "../base-plugin";
-import { ICollectionItem } from "../../interfaces";
+import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
 declare var _: any;
 
 class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private dataOptions: ICustomDatepickerOptions;
 	private concatOptions: ICustomDatepickerOptions;
-	private updatedStyles: ICustomDatepickerOptions["styles"];
+	private updatedStyles: ICustomDatepickerOptions['styles'];
 
 	private vanillaCalendar: Calendar;
 
 	constructor(el: HTMLElement, options?: {}, events?: {}) {
 		super(el, options, events);
 
-		const dataOptions: ICustomDatepickerOptions =
-			el.getAttribute("data-hs-datepicker")
-				? JSON.parse(el.getAttribute("data-hs-datepicker")!)
-				: {};
+		const dataOptions: ICustomDatepickerOptions = el.getAttribute(
+			'data-hs-datepicker',
+		)
+			? JSON.parse(el.getAttribute('data-hs-datepicker')!)
+			: {};
 
 		this.dataOptions = {
 			...dataOptions,
@@ -44,7 +45,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		};
 
 		const removeDefaultStyles =
-			typeof this.dataOptions?.removeDefaultStyles !== "undefined"
+			typeof this.dataOptions?.removeDefaultStyles !== 'undefined'
 				? this.dataOptions?.removeDefaultStyles
 				: false;
 
@@ -52,7 +53,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			removeDefaultStyles ? {} : CustomVanillaCalendar.defaultStyles,
 			this.dataOptions?.styles || {},
 			(a: any, b: any) => {
-				if (typeof a === "string" && typeof b === "string") {
+				if (typeof a === 'string' && typeof b === 'string') {
 					return `${a} ${b}`;
 				}
 			},
@@ -60,24 +61,23 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 		const today = new Date();
 		const defaults = {
-			selectedTheme: this.dataOptions.selectedTheme ?? "",
+			selectedTheme: this.dataOptions.selectedTheme ?? '',
 			styles: this.updatedStyles,
-			dateMin: this.dataOptions.dateMin ?? today.toISOString().split("T")[0],
-			dateMax: this.dataOptions.dateMax ?? "2470-12-31",
-			mode: this.dataOptions.mode ?? "default",
-			inputMode: typeof this.dataOptions.inputMode !== "undefined"
-				? this.dataOptions.inputMode
-				: true,
+			dateMin: this.dataOptions.dateMin ?? today.toISOString().split('T')[0],
+			dateMax: this.dataOptions.dateMax ?? '2470-12-31',
+			mode: this.dataOptions.mode ?? 'default',
+			inputMode:
+				typeof this.dataOptions.inputMode !== 'undefined'
+					? this.dataOptions.inputMode
+					: true,
 		};
 
-		const chainCallbacks = (
-			superCallback?: Function,
-			customCallback?: (self: Calendar) => void,
-		) =>
-		(self: Calendar) => {
-			superCallback?.(self);
-			customCallback?.(self);
-		};
+		const chainCallbacks =
+			(superCallback?: Function, customCallback?: (self: Calendar) => void) =>
+			(self: Calendar) => {
+				superCallback?.(self);
+				customCallback?.(self);
+			};
 		const initTime = (self: Calendar) => {
 			if (this.hasTime(self)) this.initCustomTime(self);
 		};
@@ -86,18 +86,18 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 				month: templates.month(defaults.selectedTheme),
 			},
 			onInit: chainCallbacks(this.dataOptions.onInit, (self) => {
-				if (defaults.mode === "custom-select" && !this.dataOptions.inputMode) {
+				if (defaults.mode === 'custom-select' && !this.dataOptions.inputMode) {
 					initTime(self);
 				}
 			}),
 			onShow: chainCallbacks(this.dataOptions.onShow, (self) => {
-				if (defaults.mode === "custom-select") {
+				if (defaults.mode === 'custom-select') {
 					this.updateCustomSelects(self);
 					initTime(self);
 				}
 			}),
 			onHide: chainCallbacks(this.dataOptions.onHide, (self) => {
-				if (defaults.mode === "custom-select") {
+				if (defaults.mode === 'custom-select') {
 					this.destroySelects(self.context.mainElement);
 				}
 			}),
@@ -107,7 +107,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			onCreateDateEls: chainCallbacks(
 				this.dataOptions.onCreateDateEls,
 				(self) => {
-					if (defaults.mode === "custom-select") this.updateCustomSelects(self);
+					if (defaults.mode === 'custom-select') this.updateCustomSelects(self);
 				},
 			),
 			onChangeToInput: chainCallbacks(
@@ -126,15 +126,15 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 						rest: self.context,
 					};
 
-					this.fireEvent("change", data);
-					dispatch("change.hs.datepicker", this.el, data);
+					this.fireEvent('change', data);
+					dispatch('change.hs.datepicker', this.el, data);
 				},
 			),
 			onChangeTime: chainCallbacks(this.dataOptions.onChangeTime, initTime),
 			onClickYear: chainCallbacks(this.dataOptions.onClickYear, initTime),
 			onClickMonth: chainCallbacks(this.dataOptions.onClickMonth, initTime),
 			onClickArrow: chainCallbacks(this.dataOptions.onClickArrow, (self) => {
-				if (defaults.mode === "custom-select") {
+				if (defaults.mode === 'custom-select') {
 					setTimeout(() => {
 						this.disableNav();
 						this.disableOptions();
@@ -151,15 +151,15 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			layouts: {
 				default: this.processCustomTemplate(
 					templates.default(defaults.selectedTheme),
-					"default",
+					'default',
 				),
 				multiple: this.processCustomTemplate(
 					templates.multiple(defaults.selectedTheme),
-					"multiple",
+					'multiple',
 				),
 				year: this.processCustomTemplate(
 					templates.year(defaults.selectedTheme),
-					"default",
+					'default',
 				),
 			},
 		};
@@ -187,8 +187,8 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	}
 
 	private getTimeParts(time: string) {
-		const [_time, meridiem] = time.split(" ");
-		const [hours, minutes] = _time.split(":");
+		const [_time, meridiem] = time.split(' ');
+		const [hours, minutes] = _time.split(':');
 
 		return [hours, minutes, meridiem];
 	}
@@ -198,28 +198,28 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		const currentYearHolder = el.querySelector('[data-vc="year"]');
 
 		return {
-			month: +currentMonthHolder.getAttribute("data-vc-month"),
-			year: +currentYearHolder.getAttribute("data-vc-year"),
+			month: +currentMonthHolder.getAttribute('data-vc-month'),
+			year: +currentYearHolder.getAttribute('data-vc-year'),
 		};
 	}
 
 	private setInputValue(target: HTMLInputElement, dates: DatesArr) {
 		const dateFormat = this.dataOptions?.dateFormat;
-		const dateSeparator = this.dataOptions?.inputModeOptions?.dateSeparator ??
-			".";
-		const itemsSeparator = this.dataOptions?.inputModeOptions?.itemsSeparator ??
-			", ";
-		const selectionDatesMode = this.dataOptions?.selectionDatesMode ?? "single";
+		const dateSeparator =
+			this.dataOptions?.inputModeOptions?.dateSeparator ?? '.';
+		const itemsSeparator =
+			this.dataOptions?.inputModeOptions?.itemsSeparator ?? ', ';
+		const selectionDatesMode = this.dataOptions?.selectionDatesMode ?? 'single';
 
 		if (dates.length && dates.length > 1) {
-			if (selectionDatesMode === "multiple") {
+			if (selectionDatesMode === 'multiple') {
 				const temp: string[] = [];
 				dates.forEach((date) =>
 					temp.push(
 						dateFormat
 							? this.formatDate(date, dateFormat)
 							: this.changeDateSeparator(date, dateSeparator),
-					)
+					),
 				);
 
 				target.value = temp.join(itemsSeparator);
@@ -237,17 +237,17 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			target.value = dateFormat
 				? this.formatDate(dates[0], dateFormat)
 				: this.changeDateSeparator(dates[0], dateSeparator);
-		} else target.value = "";
+		} else target.value = '';
 	}
 
 	private getLocalizedTodayText(locale?: string): string {
-		return todayTranslations[locale] || "Today";
+		return todayTranslations[locale] || 'Today';
 	}
 
 	private changeDateSeparator(
 		date: string | number | Date,
-		separator = ".",
-		defaultSeparator = "-",
+		separator = '.',
+		defaultSeparator = '-',
 	) {
 		const dateObj = new Date(date);
 
@@ -267,25 +267,25 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	}
 
 	private formatDateArrayToIndividualDates(dates: DatesArr): string[] {
-		const selectionDatesMode = this.dataOptions?.selectionDatesMode ?? "single";
+		const selectionDatesMode = this.dataOptions?.selectionDatesMode ?? 'single';
 		const expandDateRange = (start: string, end: string): string[] => {
 			const startDate = new Date(start);
 			const endDate = new Date(end);
 			const result: string[] = [];
 
 			while (startDate <= endDate) {
-				result.push(startDate.toISOString().split("T")[0]);
+				result.push(startDate.toISOString().split('T')[0]);
 				startDate.setDate(startDate.getDate() + 1);
 			}
 
 			return result;
 		};
 		const formatDate = (date: string | number | Date): string[] => {
-			if (typeof date === "string") {
-				if (date.toLowerCase() === "today") {
+			if (typeof date === 'string') {
+				if (date.toLowerCase() === 'today') {
 					const today = new Date();
 
-					return [today.toISOString().split("T")[0]];
+					return [today.toISOString().split('T')[0]];
 				}
 
 				const rangeMatch = date.match(
@@ -295,16 +295,16 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 				if (rangeMatch) {
 					const [_, start, end] = rangeMatch;
 
-					return selectionDatesMode === "multiple-ranged"
+					return selectionDatesMode === 'multiple-ranged'
 						? [start, end]
 						: expandDateRange(start.trim(), end.trim());
 				}
 
 				return [date];
-			} else if (typeof date === "number") {
-				return [new Date(date).toISOString().split("T")[0]];
+			} else if (typeof date === 'number') {
+				return [new Date(date).toISOString().split('T')[0]];
 			} else if (date instanceof Date) {
-				return [date.toISOString().split("T")[0]];
+				return [date.toISOString().split('T')[0]];
 			}
 
 			return [];
@@ -316,13 +316,13 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private hasTime(el: Calendar) {
 		const { mainElement } = el.context;
 		const hours = mainElement.querySelector(
-			"[data-hs-select].--hours",
+			'[data-hs-select].--hours',
 		) as HTMLElement;
 		const minutes = mainElement.querySelector(
-			"[data-hs-select].--minutes",
+			'[data-hs-select].--minutes',
 		) as HTMLElement;
 		const meridiem = mainElement.querySelector(
-			"[data-hs-select].--meridiem",
+			'[data-hs-select].--meridiem',
 		) as HTMLElement;
 
 		return hours && minutes && meridiem;
@@ -343,10 +343,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private concatObjectProperties<
 		T extends ISelectOptions,
 		U extends ISelectOptions,
-	>(
-		shared: T,
-		other: U,
-	): Partial<T & U> {
+	>(shared: T, other: U): Partial<T & U> {
 		const result: Partial<T & U> = {};
 		const allKeys = new Set<keyof T | keyof U>([
 			...Object.keys(shared || {}),
@@ -354,11 +351,12 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		] as Array<keyof T | keyof U>);
 
 		allKeys.forEach((key) => {
-			const sharedValue = shared[key as keyof T] || "";
-			const otherValue = other[key as keyof U] || "";
+			const sharedValue = shared[key as keyof T] || '';
+			const otherValue = other[key as keyof U] || '';
 
-			result[key as keyof T & keyof U] = `${sharedValue} ${otherValue}`
-				.trim() as T[keyof T & keyof U] & U[keyof T & keyof U];
+			result[key as keyof T & keyof U] =
+				`${sharedValue} ${otherValue}`.trim() as T[keyof T & keyof U] &
+					U[keyof T & keyof U];
 		});
 
 		return result;
@@ -386,16 +384,16 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 	private initCustomTime(self: Calendar) {
 		const { mainElement } = self.context;
-		const timeParts = this.getTimeParts(self.selectedTime ?? "12:00 PM");
+		const timeParts = this.getTimeParts(self.selectedTime ?? '12:00 PM');
 		const selectors = {
 			hours: mainElement.querySelector(
-				"[data-hs-select].--hours",
+				'[data-hs-select].--hours',
 			) as HTMLElement,
 			minutes: mainElement.querySelector(
-				"[data-hs-select].--minutes",
+				'[data-hs-select].--minutes',
 			) as HTMLElement,
 			meridiem: mainElement.querySelector(
-				"[data-hs-select].--meridiem",
+				'[data-hs-select].--meridiem',
 			) as HTMLElement,
 		};
 
@@ -404,24 +402,26 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 				const instance = new HSSelect(element);
 
 				instance.setValue(
-					timeParts[key === "meridiem" ? 2 : key === "minutes" ? 1 : 0],
+					timeParts[key === 'meridiem' ? 2 : key === 'minutes' ? 1 : 0],
 				);
-				instance.el.addEventListener("change.hs.select", (evt: CustomEvent) => {
+				instance.el.addEventListener('change.hs.select', (evt: CustomEvent) => {
 					this.destroySelects(mainElement);
 					const updatedTime = {
-						hours: key === "hours" ? evt.detail.payload : timeParts[0],
-						minutes: key === "minutes" ? evt.detail.payload : timeParts[1],
-						meridiem: key === "meridiem" ? evt.detail.payload : timeParts[2],
+						hours: key === 'hours' ? evt.detail.payload : timeParts[0],
+						minutes: key === 'minutes' ? evt.detail.payload : timeParts[1],
+						meridiem: key === 'meridiem' ? evt.detail.payload : timeParts[2],
 					};
 
-					self.set({
-						selectedTime:
-							`${updatedTime.hours}:${updatedTime.minutes} ${updatedTime.meridiem}`,
-					}, {
-						dates: false,
-						year: false,
-						month: false,
-					});
+					self.set(
+						{
+							selectedTime: `${updatedTime.hours}:${updatedTime.minutes} ${updatedTime.meridiem}`,
+						},
+						{
+							dates: false,
+							year: false,
+							month: false,
+						},
+					);
 				});
 			}
 		});
@@ -429,12 +429,12 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 	private initCustomMonths(self: Calendar) {
 		const { mainElement } = self.context;
-		const columns = Array.from(mainElement.querySelectorAll(".--single-month"));
+		const columns = Array.from(mainElement.querySelectorAll('.--single-month'));
 
 		if (columns.length) {
 			columns.forEach((column: HTMLElement, idx: number) => {
 				const _month = column.querySelector(
-					"[data-hs-select].--month",
+					'[data-hs-select].--month',
 				) as HTMLElement;
 				const isInstanceExists = HSSelect.getInstance(_month, true);
 
@@ -445,18 +445,22 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 				instance.setValue(`${month}`);
 
-				instance.el.addEventListener("change.hs.select", (evt: CustomEvent) => {
+				instance.el.addEventListener('change.hs.select', (evt: CustomEvent) => {
 					this.destroySelects(mainElement);
-					self.set({
-						selectedMonth: (+evt.detail.payload - idx < 0
-							? 11
-							: +evt.detail.payload - idx) as Range<12>,
-						selectedYear:
-							(+evt.detail.payload - idx < 0 ? +year - 1 : year) as number,
-					}, {
-						dates: false,
-						time: false,
-					});
+					self.set(
+						{
+							selectedMonth: (+evt.detail.payload - idx < 0
+								? 11
+								: +evt.detail.payload - idx) as Range<12>,
+							selectedYear: (+evt.detail.payload - idx < 0
+								? +year - 1
+								: year) as number,
+						},
+						{
+							dates: false,
+							time: false,
+						},
+					);
 				});
 			});
 		}
@@ -464,12 +468,12 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 	private initCustomYears(self: Calendar) {
 		const { mainElement } = self.context;
-		const columns = Array.from(mainElement.querySelectorAll(".--single-month"));
+		const columns = Array.from(mainElement.querySelectorAll('.--single-month'));
 
 		if (columns.length) {
 			columns.forEach((column: HTMLElement) => {
 				const _year = column.querySelector(
-					"[data-hs-select].--year",
+					'[data-hs-select].--year',
 				) as HTMLElement;
 				const isInstanceExists = HSSelect.getInstance(_year, true);
 
@@ -480,22 +484,25 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 				instance.setValue(`${year}`);
 
-				instance.el.addEventListener("change.hs.select", (evt: CustomEvent) => {
+				instance.el.addEventListener('change.hs.select', (evt: CustomEvent) => {
 					const { dateMax, displayMonthsCount } = this.vanillaCalendar.context;
 					const maxYear = new Date(dateMax).getFullYear();
 					const maxMonth = new Date(dateMax).getMonth();
 
 					this.destroySelects(mainElement);
-					self.set({
-						selectedMonth: ((month > maxMonth - displayMonthsCount) &&
-								+evt.detail.payload === maxYear
-							? maxMonth - displayMonthsCount + 1
-							: month) as Range<12>,
-						selectedYear: evt.detail.payload,
-					}, {
-						dates: false,
-						time: false,
-					});
+					self.set(
+						{
+							selectedMonth: (month > maxMonth - displayMonthsCount &&
+							+evt.detail.payload === maxYear
+								? maxMonth - displayMonthsCount + 1
+								: month) as Range<12>,
+							selectedYear: evt.detail.payload,
+						},
+						{
+							dates: false,
+							time: false,
+						},
+					);
 				});
 			});
 		}
@@ -505,31 +512,33 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		const customSelectOptions = this.updatedStyles?.customSelect;
 		const hours = customSelectOptions
 			? this.updateTemplate(
-				templates.hours(this.concatOptions.selectedTheme),
-				customSelectOptions?.shared || {} as ISelectOptions,
-				customSelectOptions?.hours || {} as ISelectOptions,
-			)
+					templates.hours(this.concatOptions.selectedTheme),
+					customSelectOptions?.shared || ({} as ISelectOptions),
+					customSelectOptions?.hours || ({} as ISelectOptions),
+				)
 			: templates.hours(this.concatOptions.selectedTheme);
 		const minutes = customSelectOptions
 			? this.updateTemplate(
-				templates.minutes(this.concatOptions.selectedTheme),
-				customSelectOptions?.shared || {} as ISelectOptions,
-				customSelectOptions?.minutes || {} as ISelectOptions,
-			)
+					templates.minutes(this.concatOptions.selectedTheme),
+					customSelectOptions?.shared || ({} as ISelectOptions),
+					customSelectOptions?.minutes || ({} as ISelectOptions),
+				)
 			: templates.minutes(this.concatOptions.selectedTheme);
 		const meridiem = customSelectOptions
 			? this.updateTemplate(
-				templates.meridiem(this.concatOptions.selectedTheme),
-				customSelectOptions?.shared || {} as ISelectOptions,
-				customSelectOptions?.meridiem || {} as ISelectOptions,
-			)
+					templates.meridiem(this.concatOptions.selectedTheme),
+					customSelectOptions?.shared || ({} as ISelectOptions),
+					customSelectOptions?.meridiem || ({} as ISelectOptions),
+				)
 			: templates.meridiem(this.concatOptions.selectedTheme);
-		const time = this?.dataOptions?.templates?.time ?? `
+		const time =
+			this?.dataOptions?.templates?.time ??
+			`
 			<div class="pt-3 flex justify-center items-center gap-x-2">
         ${hours}
         <span class="text-gray-800 ${
-			this.concatOptions.selectedTheme !== "light" ? "dark:text-white" : ""
-		}">:</span>
+					this.concatOptions.selectedTheme !== 'light' ? 'dark:text-white' : ''
+				}">:</span>
         ${minutes}
         ${meridiem}
       </div>
@@ -539,35 +548,35 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	}
 
 	private generateCustomMonthMarkup() {
-		const mode = this?.dataOptions?.mode ?? "default";
+		const mode = this?.dataOptions?.mode ?? 'default';
 		const customSelectOptions = this.updatedStyles?.customSelect;
 		const updatedTemplate = customSelectOptions
 			? this.updateTemplate(
-				templates.months(this.concatOptions.selectedTheme),
-				customSelectOptions?.shared || {} as ISelectOptions,
-				customSelectOptions?.months || {} as ISelectOptions,
-			)
+					templates.months(this.concatOptions.selectedTheme),
+					customSelectOptions?.shared || ({} as ISelectOptions),
+					customSelectOptions?.months || ({} as ISelectOptions),
+				)
 			: templates.months(this.concatOptions.selectedTheme);
-		const month = mode === "custom-select" ? updatedTemplate : "<#Month />";
+		const month = mode === 'custom-select' ? updatedTemplate : '<#Month />';
 
 		return month;
 	}
 
 	private generateCustomYearMarkup() {
-		const mode = this?.dataOptions?.mode ?? "default";
+		const mode = this?.dataOptions?.mode ?? 'default';
 
-		if (mode === "custom-select") {
+		if (mode === 'custom-select') {
 			const today = new Date();
-			const dateMin = this?.dataOptions?.dateMin ??
-				today.toISOString().split("T")[0];
-			const tempDateMax = this?.dataOptions?.dateMax ?? "2470-12-31";
+			const dateMin =
+				this?.dataOptions?.dateMin ?? today.toISOString().split('T')[0];
+			const tempDateMax = this?.dataOptions?.dateMax ?? '2470-12-31';
 			const dateMax = tempDateMax;
 			const startDate = new Date(dateMin);
 			const endDate = new Date(dateMax);
 			const startDateYear = startDate.getFullYear();
 			const endDateYear = endDate.getFullYear();
 			const generateOptions = () => {
-				let result = "";
+				let result = '';
 
 				for (let i = startDateYear; i <= endDateYear; i++) {
 					result += `<option value="${i}">${i}</option>`;
@@ -582,25 +591,25 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			const customSelectOptions = this.updatedStyles?.customSelect;
 			const updatedTemplate = customSelectOptions
 				? this.updateTemplate(
-					years,
-					customSelectOptions?.shared || {} as ISelectOptions,
-					customSelectOptions?.years || {} as ISelectOptions,
-				)
+						years,
+						customSelectOptions?.shared || ({} as ISelectOptions),
+						customSelectOptions?.years || ({} as ISelectOptions),
+					)
 				: years;
 
 			return updatedTemplate;
 		} else {
-			return "<#Year />";
+			return '<#Year />';
 		}
 	}
 
 	private generateCustomArrowPrevMarkup() {
 		const arrowPrev = this?.dataOptions?.templates?.arrowPrev
 			? this.createArrowFromTemplate(
-				this.dataOptions.templates.arrowPrev,
-				this.updatedStyles.arrowPrev,
-			)
-			: "<#ArrowPrev [month] />";
+					this.dataOptions.templates.arrowPrev,
+					this.updatedStyles.arrowPrev,
+				)
+			: '<#ArrowPrev [month] />';
 
 		return arrowPrev;
 	}
@@ -608,10 +617,10 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private generateCustomArrowNextMarkup() {
 		const arrowNext = this?.dataOptions?.templates?.arrowNext
 			? this.createArrowFromTemplate(
-				this.dataOptions.templates.arrowNext,
-				this.updatedStyles.arrowNext,
-			)
-			: "<#ArrowNext [month] />";
+					this.dataOptions.templates.arrowNext,
+					this.updatedStyles.arrowNext,
+				)
+			: '<#ArrowNext [month] />';
 
 		return arrowNext;
 	}
@@ -663,11 +672,12 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 	private processCustomTemplate(
 		template: string,
-		type: "default" | "multiple",
+		type: 'default' | 'multiple',
 	): string {
-		const templateAccordingToType = type === "default"
-			? this?.dataOptions?.layouts?.default
-			: this?.dataOptions?.layouts?.multiple;
+		const templateAccordingToType =
+			type === 'default'
+				? this?.dataOptions?.layouts?.default
+				: this?.dataOptions?.layouts?.multiple;
 		const processedCustomMonth = this.parseCustomMonth(
 			templateAccordingToType ?? template,
 		);
@@ -685,30 +695,32 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		const { mainElement, dateMax, displayMonthsCount } =
 			this.vanillaCalendar.context;
 		const maxDate = new Date(dateMax);
-		const columns = Array.from(mainElement.querySelectorAll(".--single-month"));
+		const columns = Array.from(mainElement.querySelectorAll('.--single-month'));
 
 		columns.forEach((column, idx) => {
-			const year = +column.querySelector('[data-vc="year"]')?.getAttribute(
-				"data-vc-year",
-			)!;
+			const year = +column
+				.querySelector('[data-vc="year"]')
+				?.getAttribute('data-vc-year')!;
 			const monthOptions = column.querySelectorAll(
-				"[data-hs-select].--month option",
+				'[data-hs-select].--month option',
 			);
 			const pseudoOptions = column.querySelectorAll(
-				"[data-hs-select-dropdown] [data-value]",
+				'[data-hs-select-dropdown] [data-value]',
 			);
 			const isDisabled = (option: HTMLOptionElement | HTMLElement) => {
-				const value = +option.getAttribute("data-value")!;
+				const value = +option.getAttribute('data-value')!;
 
-				return value > maxDate.getMonth() - displayMonthsCount + idx + 1 &&
-					year === maxDate.getFullYear();
+				return (
+					value > maxDate.getMonth() - displayMonthsCount + idx + 1 &&
+					year === maxDate.getFullYear()
+				);
 			};
 
 			Array.from(monthOptions).forEach((option: HTMLOptionElement) =>
-				option.toggleAttribute("disabled", isDisabled(option))
+				option.toggleAttribute('disabled', isDisabled(option)),
 			);
 			Array.from(pseudoOptions).forEach((option: HTMLOptionElement) =>
-				option.classList.toggle("disabled", isDisabled(option))
+				option.classList.toggle('disabled', isDisabled(option)),
 			);
 		});
 	}
@@ -727,43 +739,45 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		) as HTMLElement;
 
 		if (selectedYear === maxYear && selectedMonth + displayMonthsCount > 11) {
-			next.style.visibility = "hidden";
-		} else next.style.visibility = "";
+			next.style.visibility = 'hidden';
+		} else next.style.visibility = '';
 	}
 
 	private destroySelects(container: HTMLElement) {
-		const selects = Array.from(container.querySelectorAll("[data-hs-select]"));
+		const selects = Array.from(container.querySelectorAll('[data-hs-select]'));
 
 		selects.forEach((select: HTMLElement) => {
-			const instance = HSSelect.getInstance(select, true) as ICollectionItem<
-				HSSelect
-			>;
+			const instance = HSSelect.getInstance(
+				select,
+				true,
+			) as ICollectionItem<HSSelect>;
 
 			if (instance) instance.element.destroy();
 		});
 	}
 
 	private updateSelect(el: HTMLElement, value: string) {
-		const instance = HSSelect.getInstance(el, true) as ICollectionItem<
-			HSSelect
-		>;
+		const instance = HSSelect.getInstance(
+			el,
+			true,
+		) as ICollectionItem<HSSelect>;
 
 		if (instance) instance.element.setValue(value);
 	}
 
 	private updateCalendar(calendar: HTMLElement) {
-		const columns = calendar.querySelectorAll(".--single-month");
+		const columns = calendar.querySelectorAll('.--single-month');
 
 		if (columns.length) {
 			columns.forEach((column: HTMLElement) => {
 				const { month, year } = this.getCurrentMonthAndYear(column);
 
 				this.updateSelect(
-					column.querySelector("[data-hs-select].--month"),
+					column.querySelector('[data-hs-select].--month'),
 					`${month}`,
 				);
 				this.updateSelect(
-					column.querySelector("[data-hs-select].--year"),
+					column.querySelector('[data-hs-select].--year'),
 					`${year}`,
 				);
 			});
@@ -788,16 +802,13 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		};
 	}
 
-	public formatDate(
-		date: string | number | Date,
-		format?: string,
-	): string {
+	public formatDate(date: string | number | Date, format?: string): string {
 		const dateFormat = format || this.dataOptions?.dateFormat;
 		const dateLocale = this.dataOptions?.dateLocale || undefined;
 
 		if (!dateFormat) {
-			const dateSeparator = this.dataOptions?.inputModeOptions?.dateSeparator ??
-				".";
+			const dateSeparator =
+				this.dataOptions?.inputModeOptions?.dateSeparator ?? '.';
 
 			return this.changeDateSeparator(date, dateSeparator);
 		}
@@ -808,16 +819,16 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			return this.changeDateSeparator(date as string);
 		}
 
-		let result = "";
+		let result = '';
 		let i = 0;
 
 		while (i < dateFormat.length) {
-			if (dateFormat.slice(i, i + 4) === "YYYY") {
+			if (dateFormat.slice(i, i + 4) === 'YYYY') {
 				result += dateObj.getFullYear().toString();
 				i += 4;
-			} else if (dateFormat.slice(i, i + 4) === "dddd") {
+			} else if (dateFormat.slice(i, i + 4) === 'dddd') {
 				const dayName = dateObj.toLocaleDateString(dateLocale, {
-					weekday: "long",
+					weekday: 'long',
 				});
 
 				if (this.dataOptions?.replaceTodayWithText) {
@@ -833,12 +844,12 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 					result += dayName;
 				}
 				i += 4;
-			} else if (dateFormat.slice(i, i + 4) === "MMMM") {
-				result += dateObj.toLocaleDateString(dateLocale, { month: "long" });
+			} else if (dateFormat.slice(i, i + 4) === 'MMMM') {
+				result += dateObj.toLocaleDateString(dateLocale, { month: 'long' });
 				i += 4;
-			} else if (dateFormat.slice(i, i + 3) === "ddd") {
+			} else if (dateFormat.slice(i, i + 3) === 'ddd') {
 				const dayName = dateObj.toLocaleDateString(dateLocale, {
-					weekday: "short",
+					weekday: 'short',
 				});
 
 				if (this.dataOptions?.replaceTodayWithText) {
@@ -854,43 +865,43 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 					result += dayName;
 				}
 				i += 3;
-			} else if (dateFormat.slice(i, i + 3) === "MMM") {
-				result += dateObj.toLocaleDateString(dateLocale, { month: "short" });
+			} else if (dateFormat.slice(i, i + 3) === 'MMM') {
+				result += dateObj.toLocaleDateString(dateLocale, { month: 'short' });
 				i += 3;
-			} else if (dateFormat.slice(i, i + 2) === "YY") {
+			} else if (dateFormat.slice(i, i + 2) === 'YY') {
 				result += dateObj.getFullYear().toString().slice(-2);
 				i += 2;
-			} else if (dateFormat.slice(i, i + 2) === "MM") {
-				result += String(dateObj.getMonth() + 1).padStart(2, "0");
+			} else if (dateFormat.slice(i, i + 2) === 'MM') {
+				result += String(dateObj.getMonth() + 1).padStart(2, '0');
 				i += 2;
-			} else if (dateFormat.slice(i, i + 2) === "DD") {
-				result += String(dateObj.getDate()).padStart(2, "0");
+			} else if (dateFormat.slice(i, i + 2) === 'DD') {
+				result += String(dateObj.getDate()).padStart(2, '0');
 				i += 2;
-			} else if (dateFormat.slice(i, i + 2) === "HH") {
-				result += String(dateObj.getHours()).padStart(2, "0");
+			} else if (dateFormat.slice(i, i + 2) === 'HH') {
+				result += String(dateObj.getHours()).padStart(2, '0');
 				i += 2;
-			} else if (dateFormat.slice(i, i + 2) === "mm") {
-				result += String(dateObj.getMinutes()).padStart(2, "0");
+			} else if (dateFormat.slice(i, i + 2) === 'mm') {
+				result += String(dateObj.getMinutes()).padStart(2, '0');
 				i += 2;
-			} else if (dateFormat.slice(i, i + 2) === "ss") {
-				result += String(dateObj.getSeconds()).padStart(2, "0");
+			} else if (dateFormat.slice(i, i + 2) === 'ss') {
+				result += String(dateObj.getSeconds()).padStart(2, '0');
 				i += 2;
-			} else if (dateFormat[i] === "Y") {
+			} else if (dateFormat[i] === 'Y') {
 				result += dateObj.getFullYear().toString();
 				i += 1;
-			} else if (dateFormat[i] === "M") {
+			} else if (dateFormat[i] === 'M') {
 				result += String(dateObj.getMonth() + 1);
 				i += 1;
-			} else if (dateFormat[i] === "D") {
+			} else if (dateFormat[i] === 'D') {
 				result += String(dateObj.getDate());
 				i += 1;
-			} else if (dateFormat[i] === "H") {
+			} else if (dateFormat[i] === 'H') {
 				result += String(dateObj.getHours());
 				i += 1;
-			} else if (dateFormat[i] === "m") {
+			} else if (dateFormat[i] === 'm') {
 				result += String(dateObj.getMinutes());
 				i += 1;
-			} else if (dateFormat[i] === "s") {
+			} else if (dateFormat[i] === 's') {
 				result += String(dateObj.getSeconds());
 				i += 1;
 			} else {
@@ -918,13 +929,13 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		const elInCollection = window.$hsDatepickerCollection.find(
 			(el) =>
 				el.element.el ===
-					(typeof target === "string"
-						? document.querySelector(target)
-						: target),
+				(typeof target === 'string' ? document.querySelector(target) : target),
 		);
 
 		return elInCollection
-			? isInstance ? elInCollection : elInCollection.element.el
+			? isInstance
+				? elInCollection
+				: elInCollection.element.el
 			: null;
 	}
 
@@ -932,7 +943,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		if (!window.$hsDatepickerCollection) window.$hsDatepickerCollection = [];
 
 		document
-			.querySelectorAll(".hs-datepicker:not(.--prevent-on-load-init)")
+			.querySelectorAll('.hs-datepicker:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsDatepickerCollection.find(
@@ -952,14 +963,14 @@ declare global {
 	}
 }
 
-window.addEventListener("load", () => {
+window.addEventListener('load', () => {
 	HSDatepicker.autoInit();
 
 	// Uncomment for debug
 	// console.log('Datepicker collection:', window.$hsDatepickerCollection);
 });
 
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
 	window.HSDatepicker = HSDatepicker;
 }
 

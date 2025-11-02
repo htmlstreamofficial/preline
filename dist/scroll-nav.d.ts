@@ -32,7 +32,10 @@ export interface IScrollNav {
 	centerElement(el: HTMLElement, behavior: ScrollBehavior): void;
 	destroy(): void;
 }
-declare class HSScrollNav extends HSBasePlugin<IScrollNavOptions> implements IScrollNav {
+declare class HSScrollNav
+	extends HSBasePlugin<IScrollNavOptions>
+	implements IScrollNav
+{
 	private readonly paging;
 	private readonly autoCentering;
 	private body;
@@ -58,12 +61,13 @@ declare class HSScrollNav extends HSBasePlugin<IScrollNavOptions> implements ISc
 	goTo(el: Element, cb?: () => void): void;
 	centerElement(el: HTMLElement, behavior?: ScrollBehavior): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement, isInstance?: boolean): HTMLElement | ICollectionItem<HSScrollNav>;
+	static getInstance(
+		target: HTMLElement,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSScrollNav>;
 	static autoInit(): void;
 }
 
-export {
-	HSScrollNav as default,
-};
+export { HSScrollNav as default };
 
 export {};

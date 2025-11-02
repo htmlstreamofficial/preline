@@ -18,7 +18,10 @@ export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
 }
-export type TRangeSliderOptionsFormatterType = "integer" | "thousandsSeparatorAndDecimalPoints" | null;
+export type TRangeSliderOptionsFormatterType =
+	| 'integer'
+	| 'thousandsSeparatorAndDecimalPoints'
+	| null;
 export interface IRangeSliderOptionsFormatterOptions {
 	type?: TRangeSliderOptionsFormatterType;
 	prefix?: string;
@@ -28,7 +31,9 @@ export interface IRangeSliderOptions extends Options {
 	disabled?: boolean;
 	wrapper?: HTMLElement;
 	currentValue?: HTMLElement[];
-	formatter?: IRangeSliderOptionsFormatterOptions | TRangeSliderOptionsFormatterType;
+	formatter?:
+		| IRangeSliderOptionsFormatterOptions
+		| TRangeSliderOptionsFormatterType;
 	icons?: {
 		handle?: string;
 	};
@@ -37,7 +42,10 @@ export interface IRangeSlider {
 	options?: IRangeSliderOptions;
 	destroy(): void;
 }
-declare class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements IRangeSlider {
+declare class HSRangeSlider
+	extends HSBasePlugin<IRangeSliderOptions>
+	implements IRangeSlider
+{
 	private readonly concatOptions;
 	private readonly wrapper;
 	private readonly currentValue;
@@ -55,12 +63,13 @@ declare class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions> implements
 	private buildHandleIcon;
 	private updateCurrentValue;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSRangeSlider>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSRangeSlider>;
 	static autoInit(): void;
 }
 
-export {
-	HSRangeSlider as default,
-};
+export { HSRangeSlider as default };
 
 export {};

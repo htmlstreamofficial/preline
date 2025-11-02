@@ -133,12 +133,17 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 	}
 
 	// Static methods
-	private static findInCollection(target: HSCollapse | HTMLElement | string): ICollectionItem<HSCollapse> | null {
-		return window.$hsCollapseCollection.find((el) => {
-			if (target instanceof HSCollapse) return el.element.el === target.el;
-			else if (typeof target === 'string') return el.element.el === document.querySelector(target);
-			else return el.element.el === target;
-		}) || null;
+	private static findInCollection(
+		target: HSCollapse | HTMLElement | string,
+	): ICollectionItem<HSCollapse> | null {
+		return (
+			window.$hsCollapseCollection.find((el) => {
+				if (target instanceof HSCollapse) return el.element.el === target.el;
+				else if (typeof target === 'string')
+					return el.element.el === document.querySelector(target);
+				else return el.element.el === target;
+			}) || null
+		);
 	}
 
 	static getInstance(target: HTMLElement, isInstance = false) {
@@ -178,23 +183,23 @@ class HSCollapse extends HSBasePlugin<{}> implements ICollapse {
 	static show(target: HSCollapse | HTMLElement | string) {
 		const instance = HSCollapse.findInCollection(target);
 
-		if (
-			instance &&
-			instance.element.content.classList.contains('hidden')
-		) instance.element.show();
+		if (instance && instance.element.content.classList.contains('hidden'))
+			instance.element.show();
 	}
 
 	static hide(target: HSCollapse | HTMLElement | string) {
 		const instance = HSCollapse.findInCollection(target);
 
-		if (
-			instance &&
-			!instance.element.content.classList.contains('hidden')
-		) instance.element.hide();
+		if (instance && !instance.element.content.classList.contains('hidden'))
+			instance.element.hide();
 	}
 
 	// Backward compatibility
-	static on(evt: string, target: HSCollapse | HTMLElement | string, cb: Function) {
+	static on(
+		evt: string,
+		target: HSCollapse | HTMLElement | string,
+		cb: Function,
+	) {
 		const instance = HSCollapse.findInCollection(target);
 
 		if (instance) instance.element.events[evt] = cb;

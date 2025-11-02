@@ -6,20 +6,22 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import type { cssClasses, target } from "nouislider";
-import { htmlToElement } from "../../utils";
+import type { cssClasses, target } from 'nouislider';
+import { htmlToElement } from '../../utils';
 
 import {
 	IRangeSlider,
 	IRangeSliderCssClassesObject,
 	IRangeSliderOptions,
-} from "./interfaces";
+} from './interfaces';
 
-import HSBasePlugin from "../base-plugin";
-import { ICollectionItem } from "../../interfaces";
+import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
 
-class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions>
-	implements IRangeSlider {
+class HSRangeSlider
+	extends HSBasePlugin<IRangeSliderOptions>
+	implements IRangeSlider
+{
 	private readonly concatOptions: IRangeSliderOptions;
 	private readonly wrapper: HTMLElement | null;
 	private readonly currentValue: HTMLElement[] | null;
@@ -31,7 +33,7 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions>
 	constructor(el: HTMLElement, options?: IRangeSliderOptions, events?: {}) {
 		super(el, options, events);
 
-		const data = el.getAttribute("data-hs-range-slider");
+		const data = el.getAttribute('data-hs-range-slider');
 		const dataOptions: IRangeSliderOptions = data ? JSON.parse(data) : {};
 
 		this.concatOptions = {
@@ -43,14 +45,16 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions>
 			},
 		};
 
-		this.wrapper = this.concatOptions.wrapper ||
-			el.closest(".hs-range-slider-wrapper") || null;
+		this.wrapper =
+			this.concatOptions.wrapper ||
+			el.closest('.hs-range-slider-wrapper') ||
+			null;
 		this.currentValue = this.concatOptions.currentValue
 			? Array.from(this.concatOptions.currentValue)
 			: Array.from(
-				this.wrapper?.querySelectorAll(".hs-range-slider-current-value") ||
-					[],
-			);
+					this.wrapper?.querySelectorAll('.hs-range-slider-current-value') ||
+						[],
+				);
 		this.icons = this.concatOptions.icons || {};
 
 		this.init();
@@ -90,20 +94,20 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions>
 		this.createCollection(window.$hsRangeSliderCollection, this);
 
 		if (
-			typeof this.concatOptions?.formatter === "object"
+			typeof this.concatOptions?.formatter === 'object'
 				? this.concatOptions?.formatter?.type ===
-					"thousandsSeparatorAndDecimalPoints"
-				: this.concatOptions?.formatter === "thousandsSeparatorAndDecimalPoints"
+					'thousandsSeparatorAndDecimalPoints'
+				: this.concatOptions?.formatter === 'thousandsSeparatorAndDecimalPoints'
 		) {
 			this.thousandsSeparatorAndDecimalPointsFormatter();
 		} else if (
-			typeof this.concatOptions?.formatter === "object"
-				? this.concatOptions?.formatter?.type === "integer"
-				: this.concatOptions?.formatter === "integer"
+			typeof this.concatOptions?.formatter === 'object'
+				? this.concatOptions?.formatter?.type === 'integer'
+				: this.concatOptions?.formatter === 'integer'
 		) {
 			this.integerFormatter();
 		} else if (
-			typeof this.concatOptions?.formatter === "object" &&
+			typeof this.concatOptions?.formatter === 'object' &&
 			(this.concatOptions?.formatter?.prefix ||
 				this.concatOptions?.formatter?.postfix)
 		) {
@@ -114,7 +118,7 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions>
 
 		if (this.currentValue && this.currentValue.length > 0) {
 			(this.el as target).noUiSlider.on(
-				"update",
+				'update',
 				(values: (string | number)[]) => {
 					this.updateCurrentValue(values);
 				},
@@ -126,9 +130,9 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions>
 	}
 
 	private formatValue(val: number | string) {
-		let result = "";
+		let result = '';
 
-		if (typeof this.concatOptions?.formatter === "object") {
+		if (typeof this.concatOptions?.formatter === 'object') {
 			if (this.concatOptions?.formatter?.prefix) {
 				result += this.concatOptions?.formatter?.prefix;
 			}
@@ -163,26 +167,26 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions>
 		this.format = {
 			to: (val: number) =>
 				this.formatValue(
-					new Intl.NumberFormat("en-US", {
+					new Intl.NumberFormat('en-US', {
 						minimumFractionDigits: 2,
 						maximumFractionDigits: 2,
 					}).format(val),
 				),
-			from: (val: string) => parseFloat(val.replace(/,/g, "")),
+			from: (val: string) => parseFloat(val.replace(/,/g, '')),
 		};
 
 		if (this.concatOptions?.tooltips) this.concatOptions.tooltips = this.format;
 	}
 
 	private setDisabled() {
-		this.el.setAttribute("disabled", "disabled");
-		this.el.classList.add("disabled");
+		this.el.setAttribute('disabled', 'disabled');
+		this.el.classList.add('disabled');
 	}
 
 	private buildHandleIcon() {
 		if (!this.icons.handle) return false;
 
-		const handle = this.el.querySelector(".noUi-handle");
+		const handle = this.el.querySelector('.noUi-handle');
 
 		if (!handle) return false;
 
@@ -225,13 +229,13 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions>
 		const elInCollection = window.$hsRangeSliderCollection.find(
 			(el) =>
 				el.element.el ===
-					(typeof target === "string"
-						? document.querySelector(target)
-						: target),
+				(typeof target === 'string' ? document.querySelector(target) : target),
 		);
 
 		return elInCollection
-			? isInstance ? elInCollection : elInCollection.element.el
+			? isInstance
+				? elInCollection
+				: elInCollection.element.el
 			: null;
 	}
 
@@ -245,7 +249,7 @@ class HSRangeSlider extends HSBasePlugin<IRangeSliderOptions>
 		}
 
 		document
-			.querySelectorAll("[data-hs-range-slider]:not(.--prevent-on-load-init)")
+			.querySelectorAll('[data-hs-range-slider]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsRangeSliderCollection.find(
@@ -265,14 +269,14 @@ declare global {
 	}
 }
 
-window.addEventListener("load", () => {
+window.addEventListener('load', () => {
 	HSRangeSlider.autoInit();
 
 	// Uncomment for debug
 	// console.log('Range slider collection:', window.$hsRangeSliderCollection);
 });
 
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
 	window.HSRangeSlider = HSRangeSlider;
 }
 

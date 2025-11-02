@@ -28,7 +28,10 @@ export interface IDropdown {
 export interface IHTMLElementFloatingUI extends HTMLElement {
 	_floatingUI: any;
 }
-declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDropdown {
+declare class HSDropdown
+	extends HSBasePlugin<{}, IHTMLElementFloatingUI>
+	implements IDropdown
+{
 	private accessibilityComponent;
 	private readonly toggle;
 	private readonly closers;
@@ -72,28 +75,42 @@ declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implem
 	private selectCheckbox;
 	private selectRadio;
 	calculatePopperPosition(target?: VirtualElement | HTMLElement): string;
-	open(target?: VirtualElement | HTMLElement, openedViaKeyboard?: boolean): boolean;
+	open(
+		target?: VirtualElement | HTMLElement,
+		openedViaKeyboard?: boolean,
+	): boolean;
 	close(isAnimated?: boolean): boolean;
 	forceClearState(): void;
 	destroy(): void;
 	private static findInCollection;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSDropdown | ICollectionItem<HSDropdown>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HSDropdown | ICollectionItem<HSDropdown>;
 	static autoInit(): void;
-	static open(target: HSDropdown | HTMLElement | string, openedViaKeyboard?: boolean): void;
+	static open(
+		target: HSDropdown | HTMLElement | string,
+		openedViaKeyboard?: boolean,
+	): void;
 	static close(target: HSDropdown | HTMLElement | string): void;
-	static closeCurrentlyOpened(evtTarget?: HTMLElement | null, isAnimated?: boolean): void;
+	static closeCurrentlyOpened(
+		evtTarget?: HTMLElement | null,
+		isAnimated?: boolean,
+	): void;
 	private setupAccessibility;
 	private onFirstLetter;
 	private onArrowX;
 	private onStartEnd;
 	private focusMenuItem;
-	static on(evt: string, target: HSDropdown | HTMLElement | string, cb: Function): void;
+	static on(
+		evt: string,
+		target: HSDropdown | HTMLElement | string,
+		cb: Function,
+	): void;
 	isOpened(): boolean;
 	containsElement(element: HTMLElement): boolean;
 }
 
-export {
-	HSDropdown as default,
-};
+export { HSDropdown as default };
 
 export {};

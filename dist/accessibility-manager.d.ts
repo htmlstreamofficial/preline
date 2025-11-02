@@ -31,16 +31,24 @@ declare class HSAccessibilityObserver {
 	private handleGlobalFocusin;
 	private handleGlobalKeydown;
 	private findClosestOpenParent;
-	registerComponent(wrapper: HTMLElement, handlers: IAccessibilityKeyboardHandlers, isOpened?: boolean, name?: string, selector?: string, context?: HTMLElement): IAccessibilityComponent;
-	updateComponentState(component: IAccessibilityComponent, isOpened: boolean): void;
+	registerComponent(
+		wrapper: HTMLElement,
+		handlers: IAccessibilityKeyboardHandlers,
+		isOpened?: boolean,
+		name?: string,
+		selector?: string,
+		context?: HTMLElement,
+	): IAccessibilityComponent;
+	updateComponentState(
+		component: IAccessibilityComponent,
+		isOpened: boolean,
+	): void;
 	unregisterComponent(component: IAccessibilityComponent): void;
 	addAllowedKeybinding(key: string): void;
 	removeAllowedKeybinding(key: string): void;
 	getAllowedKeybindings(): string[];
 }
 
-export {
-	HSAccessibilityObserver as default,
-};
+export { HSAccessibilityObserver as default };
 
 export {};

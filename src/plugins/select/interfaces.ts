@@ -44,10 +44,12 @@ export interface ISelectOptions {
 	apiFieldsMap?: IApiFieldMap | null;
 	apiSelectedValues?: string | string[];
 	apiIconTag?: string | null;
-	apiLoadMore?: boolean | {
-		perPage: number;
-		scrollThreshold: number;
-	};
+	apiLoadMore?:
+		| boolean
+		| {
+				perPage: number;
+				scrollThreshold: number;
+		  };
 
 	toggleTag?: string;
 	toggleClasses?: string;
@@ -57,10 +59,10 @@ export interface ISelectOptions {
 	};
 	toggleCountText?: string | null;
 	toggleCountTextPlacement?:
-		| "postfix"
-		| "prefix"
-		| "postfix-no-space"
-		| "prefix-no-space";
+		| 'postfix'
+		| 'prefix'
+		| 'postfix-no-space'
+		| 'prefix-no-space';
 	toggleCountTextMinItems?: number;
 	toggleCountTextMode?: string;
 
@@ -77,8 +79,8 @@ export interface ISelectOptions {
 	};
 	dropdownSpace: number;
 	dropdownPlacement: string | null;
-	dropdownVerticalFixedPlacement: "top" | "bottom" | null;
-	dropdownScope: "window" | "parent";
+	dropdownVerticalFixedPlacement: 'top' | 'bottom' | null;
+	dropdownScope: 'window' | 'parent';
 
 	extraMarkup?: string | string[] | null;
 

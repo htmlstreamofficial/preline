@@ -23,7 +23,10 @@ export interface IScrollspy {
 	options?: IScrollspyOptions;
 	destroy(): void;
 }
-declare class HSScrollspy extends HSBasePlugin<IScrollspyOptions> implements IScrollspy {
+declare class HSScrollspy
+	extends HSBasePlugin<IScrollspyOptions>
+	implements IScrollspy
+{
 	private readonly ignoreScrollUp;
 	private readonly links;
 	private readonly sections;
@@ -41,12 +44,13 @@ declare class HSScrollspy extends HSBasePlugin<IScrollspyOptions> implements ISc
 	private update;
 	private scrollTo;
 	destroy(): void;
-	static getInstance(target: HTMLElement, isInstance?: boolean): HTMLElement | ICollectionItem<HSScrollspy>;
+	static getInstance(
+		target: HTMLElement,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSScrollspy>;
 	static autoInit(): void;
 }
 
-export {
-	HSScrollspy as default,
-};
+export { HSScrollspy as default };
 
 export {};

@@ -5,7 +5,11 @@ export interface IThemeSwitchOptions {
 
 export interface IThemeSwitch {
 	options?: IThemeSwitchOptions;
-	
-	setAppearance(theme: string, isSaveToLocalStorage: boolean, isSetDispatchEvent: boolean): void;
+
+	setAppearance(
+		theme: string,
+		isSaveToLocalStorage: boolean,
+		isSetDispatchEvent: boolean,
+	): void;
 	destroy(): void;
 }

@@ -31,7 +31,7 @@ export interface IOverlay {
 	close(forceClose: boolean, cb: Function | null): void;
 	destroy(): void;
 }
-export type TOverlayOptionsAutoCloseEqualityType = "less-than" | "more-than";
+export type TOverlayOptionsAutoCloseEqualityType = 'less-than' | 'more-than';
 declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private accessibilityComponent;
 	private lastFocusedToggle;
@@ -89,18 +89,26 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	updateToggles(): void;
 	destroy(): void;
 	private static findInCollection;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSOverlay>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSOverlay>;
 	static autoInit(): void;
 	static open(target: HSOverlay | HTMLElement | string): void;
 	static close(target: HSOverlay | HTMLElement | string): void;
-	static minify(target: HSOverlay | HTMLElement | string, isMinified: boolean): void;
+	static minify(
+		target: HSOverlay | HTMLElement | string,
+		isMinified: boolean,
+	): void;
 	static setOpened(breakpoint: number, el: ICollectionItem<HSOverlay>): void;
 	private setupAccessibility;
-	static on(evt: string, target: HSOverlay | HTMLElement | string, cb: Function): void;
+	static on(
+		evt: string,
+		target: HSOverlay | HTMLElement | string,
+		cb: Function,
+	): void;
 }
 
-export {
-	HSOverlay as default,
-};
+export { HSOverlay as default };
 
 export {};

@@ -6,14 +6,14 @@
  * Copyright 2024 Preline Labs Ltd.
  */
 
-import { classToClassList, debounce, htmlToElement } from "../../utils";
+import { classToClassList, debounce, htmlToElement } from '../../utils';
 
-import { ICarousel, ICarouselOptions } from "./interfaces";
-import { TCarouselOptionsSlidesQty } from "./types";
+import { ICarousel, ICarouselOptions } from './interfaces';
+import { TCarouselOptionsSlidesQty } from './types';
 
-import HSBasePlugin from "../base-plugin";
-import { ICollectionItem } from "../../interfaces";
-import { BREAKPOINTS } from "../../constants";
+import HSBasePlugin from '../base-plugin';
+import { ICollectionItem } from '../../interfaces';
+import { BREAKPOINTS } from '../../constants';
 
 class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	private currentIndex: number;
@@ -86,7 +86,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	constructor(el: HTMLElement, options?: ICarouselOptions) {
 		super(el, options);
 
-		const data = el.getAttribute("data-hs-carousel");
+		const data = el.getAttribute('data-hs-carousel');
 		const dataOptions: ICarouselOptions = data ? JSON.parse(data) : {};
 		const concatOptions = {
 			...dataOptions,
@@ -95,60 +95,66 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 
 		this.currentIndex = concatOptions.currentIndex || 0;
 		this.loadingClasses = concatOptions.loadingClasses
-			? `${concatOptions.loadingClasses}`.split(",")
+			? `${concatOptions.loadingClasses}`.split(',')
 			: null;
 		this.dotsItemClasses = concatOptions.dotsItemClasses
 			? concatOptions.dotsItemClasses
 			: null;
-		this.isAutoHeight = typeof concatOptions.isAutoHeight !== "undefined"
-			? concatOptions.isAutoHeight
-			: false;
-		this.isAutoPlay = typeof concatOptions.isAutoPlay !== "undefined"
-			? concatOptions.isAutoPlay
-			: false;
-		this.isCentered = typeof concatOptions.isCentered !== "undefined"
-			? concatOptions.isCentered
-			: false;
-		this.isDraggable = typeof concatOptions.isDraggable !== "undefined"
-			? concatOptions.isDraggable
-			: false;
-		this.isInfiniteLoop = typeof concatOptions.isInfiniteLoop !== "undefined"
-			? concatOptions.isInfiniteLoop
-			: false;
-		this.isRTL = typeof concatOptions.isRTL !== "undefined"
-			? concatOptions.isRTL
-			: false;
-		this.isSnap = typeof concatOptions.isSnap !== "undefined"
-			? concatOptions.isSnap
-			: false;
-		this.hasSnapSpacers = typeof concatOptions.hasSnapSpacers !== "undefined"
-			? concatOptions.hasSnapSpacers
-			: true;
+		this.isAutoHeight =
+			typeof concatOptions.isAutoHeight !== 'undefined'
+				? concatOptions.isAutoHeight
+				: false;
+		this.isAutoPlay =
+			typeof concatOptions.isAutoPlay !== 'undefined'
+				? concatOptions.isAutoPlay
+				: false;
+		this.isCentered =
+			typeof concatOptions.isCentered !== 'undefined'
+				? concatOptions.isCentered
+				: false;
+		this.isDraggable =
+			typeof concatOptions.isDraggable !== 'undefined'
+				? concatOptions.isDraggable
+				: false;
+		this.isInfiniteLoop =
+			typeof concatOptions.isInfiniteLoop !== 'undefined'
+				? concatOptions.isInfiniteLoop
+				: false;
+		this.isRTL =
+			typeof concatOptions.isRTL !== 'undefined' ? concatOptions.isRTL : false;
+		this.isSnap =
+			typeof concatOptions.isSnap !== 'undefined'
+				? concatOptions.isSnap
+				: false;
+		this.hasSnapSpacers =
+			typeof concatOptions.hasSnapSpacers !== 'undefined'
+				? concatOptions.hasSnapSpacers
+				: true;
 		this.speed = concatOptions.speed || 4000;
 		this.updateDelay = concatOptions.updateDelay || 0;
 		this.slidesQty = concatOptions.slidesQty || 1;
 
 		this.loadingClassesRemove = this.loadingClasses?.[0]
-			? this.loadingClasses[0].split(" ")
-			: "opacity-0";
+			? this.loadingClasses[0].split(' ')
+			: 'opacity-0';
 		this.loadingClassesAdd = this.loadingClasses?.[1]
-			? this.loadingClasses[1].split(" ")
-			: "";
+			? this.loadingClasses[1].split(' ')
+			: '';
 		this.afterLoadingClassesAdd = this.loadingClasses?.[2]
-			? this.loadingClasses[2].split(" ")
-			: "";
+			? this.loadingClasses[2].split(' ')
+			: '';
 
-		this.container = this.el.querySelector(".hs-carousel") || null;
-		this.inner = this.el.querySelector(".hs-carousel-body") || null;
-		this.slides = this.el.querySelectorAll(".hs-carousel-slide") || [];
-		this.prev = this.el.querySelector(".hs-carousel-prev") || null;
-		this.next = this.el.querySelector(".hs-carousel-next") || null;
-		this.dots = this.el.querySelector(".hs-carousel-pagination") || null;
-		this.info = this.el.querySelector(".hs-carousel-info") || null;
-		this.infoTotal = this?.info?.querySelector(".hs-carousel-info-total") ||
-			null;
-		this.infoCurrent = this?.info?.querySelector(".hs-carousel-info-current") ||
-			null;
+		this.container = this.el.querySelector('.hs-carousel') || null;
+		this.inner = this.el.querySelector('.hs-carousel-body') || null;
+		this.slides = this.el.querySelectorAll('.hs-carousel-slide') || [];
+		this.prev = this.el.querySelector('.hs-carousel-prev') || null;
+		this.next = this.el.querySelector('.hs-carousel-next') || null;
+		this.dots = this.el.querySelector('.hs-carousel-pagination') || null;
+		this.info = this.el.querySelector('.hs-carousel-info') || null;
+		this.infoTotal =
+			this?.info?.querySelector('.hs-carousel-info-total') || null;
+		this.infoCurrent =
+			this?.info?.querySelector('.hs-carousel-info-current') || null;
 
 		this.sliderWidth = this.el.getBoundingClientRect().width;
 
@@ -168,7 +174,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		};
 
 		// Resize events' help variables
-		this.resizeContainer = document.querySelector("body");
+		this.resizeContainer = document.querySelector('body');
 		this.resizeContainerWidth = 0;
 
 		this.init();
@@ -185,8 +191,8 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		Array.from(this.inner.children).forEach((child: HTMLElement) => {
 			const childRect = child.getBoundingClientRect();
 			const innerContainerRect = this.inner.getBoundingClientRect();
-			const childCenter = childRect.left + childRect.width / 2 -
-				innerContainerRect.left;
+			const childCenter =
+				childRect.left + childRect.width / 2 - innerContainerRect.left;
 			const distance = Math.abs(
 				containerCenter - (innerContainerRect.left + childCenter),
 			);
@@ -289,13 +295,13 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		if (this.prev) {
 			this.onPrevClickListener = () => this.prevClick();
 
-			this.prev.addEventListener("click", this.onPrevClickListener);
+			this.prev.addEventListener('click', this.onPrevClickListener);
 		}
 
 		if (this.next) {
 			this.onNextClickListener = () => this.nextClick();
 
-			this.next.addEventListener("click", this.onNextClickListener);
+			this.next.addEventListener('click', this.onNextClickListener);
 		}
 
 		if (this.dots) this.initDots();
@@ -310,19 +316,19 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			if (this.isSnap) this.setIsSnap();
 
 			if (this.loadingClassesRemove) {
-				if (typeof this.loadingClassesRemove === "string") {
+				if (typeof this.loadingClassesRemove === 'string') {
 					this.inner.classList.remove(this.loadingClassesRemove);
 				} else this.inner.classList.remove(...this.loadingClassesRemove);
 			}
 			if (this.loadingClassesAdd) {
-				if (typeof this.loadingClassesAdd === "string") {
+				if (typeof this.loadingClassesAdd === 'string') {
 					this.inner.classList.add(this.loadingClassesAdd);
 				} else this.inner.classList.add(...this.loadingClassesAdd);
 			}
 
 			if (this.inner && this.afterLoadingClassesAdd) {
 				setTimeout(() => {
-					if (typeof this.afterLoadingClassesAdd === "string") {
+					if (typeof this.afterLoadingClassesAdd === 'string') {
 						this.inner.classList.add(this.afterLoadingClassesAdd);
 					} else this.inner.classList.add(...this.afterLoadingClassesAdd);
 				});
@@ -332,10 +338,10 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		if (this.isSnap) {
 			this.onContainerScrollListener = () => this.containerScroll();
 
-			this.container.addEventListener("scroll", this.onContainerScrollListener);
+			this.container.addEventListener('scroll', this.onContainerScrollListener);
 		}
 
-		this.el.classList.add("init");
+		this.el.classList.add('init');
 
 		if (!this.isSnap) {
 			this.onElementTouchStartListener = (evt: TouchEvent) =>
@@ -343,9 +349,9 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			this.onElementTouchEndListener = (evt: TouchEvent) =>
 				this.elementTouchEnd(evt);
 
-			this.el.addEventListener("touchstart", this.onElementTouchStartListener);
+			this.el.addEventListener('touchstart', this.onElementTouchStartListener);
 
-			this.el.addEventListener("touchend", this.onElementTouchEndListener);
+			this.el.addEventListener('touchend', this.onElementTouchEndListener);
 		}
 
 		this.observeResize();
@@ -363,32 +369,32 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 
 		if (scrollableElement) {
 			scrollableElement.addEventListener(
-				"mousedown",
+				'mousedown',
 				this.onInnerMouseDownListener,
 			);
 			scrollableElement.addEventListener(
-				"touchstart",
+				'touchstart',
 				this.onInnerTouchStartListener,
 				{ passive: true },
 			);
 
-			document.addEventListener("mousemove", this.onDocumentMouseMoveListener);
-			document.addEventListener("touchmove", this.onDocumentTouchMoveListener, {
+			document.addEventListener('mousemove', this.onDocumentMouseMoveListener);
+			document.addEventListener('touchmove', this.onDocumentTouchMoveListener, {
 				passive: false,
 			});
 
-			document.addEventListener("mouseup", this.onDocumentMouseUpListener);
-			document.addEventListener("touchend", this.onDocumentTouchEndListener);
+			document.addEventListener('mouseup', this.onDocumentMouseUpListener);
+			document.addEventListener('touchend', this.onDocumentTouchEndListener);
 		}
 	}
 
 	private getTranslateXValue(): number {
 		const transformMatrix = window.getComputedStyle(this.inner).transform;
 
-		if (transformMatrix !== "none") {
+		if (transformMatrix !== 'none') {
 			const matrixValues = transformMatrix
 				.match(/matrix.*\((.+)\)/)?.[1]
-				.split(", ");
+				.split(', ');
 
 			if (matrixValues) {
 				let translateX = parseFloat(
@@ -415,15 +421,15 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			? this.getTranslateXValue()
 			: -this.getTranslateXValue();
 
-		this.inner.classList.add("dragging");
+		this.inner.classList.add('dragging');
 	}
 
 	private handleDragMove(evt: MouseEvent | TouchEvent): void {
 		if (!this.isDragging) return;
 
-		this.inner.querySelectorAll("a:not(.prevented-click)").forEach((el) => {
-			el.classList.add("prevented-click");
-			el.addEventListener("click", this.removeClickEventWhileDragging);
+		this.inner.querySelectorAll('a:not(.prevented-click)').forEach((el) => {
+			el.classList.add('prevented-click');
+			el.addEventListener('click', this.removeClickEventWhileDragging);
 		});
 
 		const currentX = this.getEventX(evt);
@@ -465,7 +471,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		let closestIndex = Math.round(currentTranslateX / itemWidth);
 		if (this.isRTL) closestIndex = Math.round(currentTranslateX / itemWidth);
 
-		this.inner.classList.remove("dragging");
+		this.inner.classList.remove('dragging');
 
 		setTimeout(() => {
 			this.calculateTransform(closestIndex);
@@ -474,9 +480,9 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			this.dragStartX = null;
 			this.initialTranslateX = null;
 
-			this.inner.querySelectorAll("a.prevented-click").forEach((el) => {
-				el.classList.remove("prevented-click");
-				el.removeEventListener("click", this.removeClickEventWhileDragging);
+			this.inner.querySelectorAll('a.prevented-click').forEach((el) => {
+				el.classList.remove('prevented-click');
+				el.removeEventListener('click', this.removeClickEventWhileDragging);
 			});
 		});
 	}
@@ -488,16 +494,16 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	}
 
 	private getCurrentSlidesQty(): number {
-		if (typeof this.slidesQty === "object") {
+		if (typeof this.slidesQty === 'object') {
 			const windowWidth = document.body.clientWidth;
 			let currentRes = 0;
 
 			Object.keys(this.slidesQty).forEach((key: string) => {
 				if (
 					windowWidth >=
-						(typeof key + 1 === "number"
-							? (this.slidesQty as TCarouselOptionsSlidesQty)[key]
-							: BREAKPOINTS[key])
+					(typeof key + 1 === 'number'
+						? (this.slidesQty as TCarouselOptionsSlidesQty)[key]
+						: BREAKPOINTS[key])
 				) {
 					currentRes = (this.slidesQty as TCarouselOptionsSlidesQty)[key];
 				}
@@ -510,8 +516,8 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	}
 
 	private buildSnapSpacers() {
-		const existingBefore = this.inner.querySelector(".hs-snap-before");
-		const existingAfter = this.inner.querySelector(".hs-snap-after");
+		const existingBefore = this.inner.querySelector('.hs-snap-before');
+		const existingAfter = this.inner.querySelector('.hs-snap-after');
 		if (existingBefore) existingBefore.remove();
 		if (existingAfter) existingAfter.remove();
 
@@ -531,7 +537,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	}
 
 	private initDots() {
-		if (this.el.querySelectorAll(".hs-carousel-pagination-item").length) {
+		if (this.el.querySelectorAll('.hs-carousel-pagination-item').length) {
 			this.setDots();
 		} else this.buildDots();
 
@@ -539,11 +545,12 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	}
 
 	private buildDots() {
-		this.dots.innerHTML = "";
+		this.dots.innerHTML = '';
 
-		const slidesQty = !this.isCentered && this.slidesQty
-			? this.slides.length - (this.getCurrentSlidesQty() - 1)
-			: this.slides.length;
+		const slidesQty =
+			!this.isCentered && this.slidesQty
+				? this.slides.length - (this.getCurrentSlidesQty() - 1)
+				: this.slides.length;
 
 		for (let i = 0; i < slidesQty; i++) {
 			const singleDot = this.buildSingleDot(i);
@@ -553,11 +560,11 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	}
 
 	private setDots() {
-		this.dotsItems = this.dots.querySelectorAll(".hs-carousel-pagination-item");
+		this.dotsItems = this.dots.querySelectorAll('.hs-carousel-pagination-item');
 
 		this.dotsItems.forEach((dot, ind) => {
 			const targetIndex = dot.getAttribute(
-				"data-carousel-pagination-item-target",
+				'data-carousel-pagination-item-target',
 			);
 
 			this.singleDotEvents(dot, targetIndex ? +targetIndex : ind);
@@ -599,7 +606,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		container.scrollTo({
 			left: scrollLeft,
 			top: scrollTop,
-			behavior: "smooth",
+			behavior: 'smooth',
 		});
 	}
 
@@ -617,7 +624,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	}
 
 	private buildSingleDot(ind: number) {
-		const singleDot = htmlToElement("<span></span>");
+		const singleDot = htmlToElement('<span></span>');
 		if (this.dotsItemClasses) classToClassList(this.dotsItemClasses, singleDot);
 
 		this.singleDotEvents(singleDot, ind);
@@ -628,7 +635,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	private singleDotEvents(dot: HTMLElement, ind: number) {
 		this.onDotClickListener = () => this.dotClick(ind);
 
-		dot.addEventListener("click", this.onDotClickListener);
+		dot.addEventListener('click', this.onDotClickListener);
 	}
 
 	private observeResize() {
@@ -676,8 +683,8 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 					i <= this.currentIndex + itemsQty &&
 					i >= this.currentIndex - itemsQty
 				) {
-					slide.classList.add("active");
-				} else slide.classList.remove("active");
+					slide.classList.add('active');
+				} else slide.classList.remove('active');
 			}
 		} else {
 			const maxIndex = this.isCentered
@@ -688,9 +695,9 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 
 			this.slides.forEach((el, i) => {
 				if (i >= this.currentIndex && i < maxIndex) {
-					el.classList.add("active");
+					el.classList.add('active');
 				} else {
-					el.classList.remove("active");
+					el.classList.remove('active');
 				}
 			});
 		}
@@ -702,43 +709,44 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			const itemsQty = Math.floor(this.getCurrentSlidesQty() / 2);
 
 			if (this.isSnap && !this.hasSnapSpacers) {
-				statement = i ===
+				statement =
+					i ===
 					(this.getCurrentSlidesQty() % 2 === 0
 						? this.currentIndex - itemsQty + 1
 						: this.currentIndex - itemsQty);
 			} else statement = i === this.currentIndex;
 
-			if (statement) el.classList.add("active");
-			else el.classList.remove("active");
+			if (statement) el.classList.add('active');
+			else el.classList.remove('active');
 		};
 
 		if (this.dotsItems) {
 			this.dotsItems.forEach((el, i) => toggleDotActive(el, i));
 		} else {
 			this.dots
-				.querySelectorAll(":scope > *")
+				.querySelectorAll(':scope > *')
 				.forEach((el, i) => toggleDotActive(el, i));
 		}
 	}
 
 	private setElementToDisabled(el: HTMLElement) {
-		el.classList.add("disabled");
-		if (el.tagName === "BUTTON" || el.tagName === "INPUT") {
-			el.setAttribute("disabled", "disabled");
+		el.classList.add('disabled');
+		if (el.tagName === 'BUTTON' || el.tagName === 'INPUT') {
+			el.setAttribute('disabled', 'disabled');
 		}
 	}
 
 	private unsetElementToDisabled(el: HTMLElement) {
-		el.classList.remove("disabled");
-		if (el.tagName === "BUTTON" || el.tagName === "INPUT") {
-			el.removeAttribute("disabled");
+		el.classList.remove('disabled');
+		if (el.tagName === 'BUTTON' || el.tagName === 'INPUT') {
+			el.removeAttribute('disabled');
 		}
 	}
 
 	private addDisabledClass() {
 		if (!this.prev || !this.next) return false;
 
-		const gapValue = getComputedStyle(this.inner).getPropertyValue("gap");
+		const gapValue = getComputedStyle(this.inner).getPropertyValue('gap');
 		const itemsQty = Math.floor(this.getCurrentSlidesQty() / 2);
 		let currentIndex = 0;
 		let maxIndex = 0;
@@ -753,12 +761,13 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			statementPrev = this.hasSnapSpacers
 				? currentIndex === 0
 				: this.getCurrentSlidesQty() % 2 === 0
-				? currentIndex - itemsQty < 0
-				: currentIndex - itemsQty === 0;
-			statementNext = currentIndex >= maxIndex &&
+					? currentIndex - itemsQty < 0
+					: currentIndex - itemsQty === 0;
+			statementNext =
+				currentIndex >= maxIndex &&
 				this.container.scrollLeft +
-							this.container.clientWidth +
-							(parseFloat(gapValue) || 0) >=
+					this.container.clientWidth +
+					(parseFloat(gapValue) || 0) >=
 					this.container.scrollWidth;
 		} else {
 			currentIndex = this.currentIndex;
@@ -816,10 +825,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			) {
 				this.goToNext();
 			}
-			if (
-				!isSwipeToNext &&
-				this.currentIndex > 0
-			) {
+			if (!isSwipeToNext && this.currentIndex > 0) {
 				this.goToPrev();
 			}
 		} else {
@@ -850,9 +856,9 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			if (this.currentIndex === 0) translateX = -centeredOffset;
 			else if (
 				this.currentIndex >=
-					this.slides.length -
-						this.getCurrentSlidesQty() +
-						(this.getCurrentSlidesQty() - 1)
+				this.slides.length -
+					this.getCurrentSlidesQty() +
+					(this.getCurrentSlidesQty() - 1)
 			) {
 				const totalSlideWidth = this.slides.length * itemWidth;
 
@@ -881,7 +887,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			this.inner.style.transform = this.isRTL
 				? `translate(${val}px, 0px)`
 				: `translate(${-val}px, 0px)`;
-		} else this.inner.style.transform = "translate(0px, 0px)";
+		} else this.inner.style.transform = 'translate(0px, 0px)';
 	}
 
 	private setTranslate(val: number) {
@@ -905,7 +911,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 
 		if (
 			this.sliderWidth !==
-				this.inner.parentElement.getBoundingClientRect().width
+			this.inner.parentElement.getBoundingClientRect().width
 		) {
 			this.recalculateWidth();
 		}
@@ -918,14 +924,14 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			this.currentIndex = this.slides.length - this.getCurrentSlidesQty();
 		}
 
-		this.fireEvent("update", this.currentIndex);
+		this.fireEvent('update', this.currentIndex);
 
 		if (this.isSnap) {
 			const itemWidth = this.sliderWidth / this.getCurrentSlidesQty();
 
 			this.container.scrollBy({
 				left: Math.max(-this.container.scrollLeft, -itemWidth),
-				behavior: "smooth",
+				behavior: 'smooth',
 			});
 
 			this.addCurrentClass();
@@ -948,16 +954,16 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 			this.currentIndex = 0;
 		}
 
-		this.fireEvent("update", this.currentIndex);
+		this.fireEvent('update', this.currentIndex);
 
 		if (this.isSnap) {
 			const itemWidth = this.sliderWidth / this.getCurrentSlidesQty();
-			const maxScrollLeft = this.container.scrollWidth -
-				this.container.clientWidth;
+			const maxScrollLeft =
+				this.container.scrollWidth - this.container.clientWidth;
 
 			this.container.scrollBy({
 				left: Math.min(itemWidth, maxScrollLeft - this.container.scrollLeft),
-				behavior: "smooth",
+				behavior: 'smooth',
 			});
 
 			this.addCurrentClass();
@@ -971,20 +977,22 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		const currentIndex = this.currentIndex;
 		this.currentIndex = i;
 
-		this.fireEvent("update", this.currentIndex);
+		this.fireEvent('update', this.currentIndex);
 
 		if (this.isSnap) {
 			const itemWidth = this.sliderWidth / this.getCurrentSlidesQty();
-			const index = currentIndex > this.currentIndex
-				? currentIndex - this.currentIndex
-				: this.currentIndex - currentIndex;
-			const width = currentIndex > this.currentIndex
-				? -(itemWidth * index)
-				: itemWidth * index;
+			const index =
+				currentIndex > this.currentIndex
+					? currentIndex - this.currentIndex
+					: this.currentIndex - currentIndex;
+			const width =
+				currentIndex > this.currentIndex
+					? -(itemWidth * index)
+					: itemWidth * index;
 
 			this.container.scrollBy({
 				left: width,
-				behavior: "smooth",
+				behavior: 'smooth',
 			});
 
 			this.addCurrentClass();
@@ -997,70 +1005,70 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	public destroy() {
 		// Remove classes
 		if (this.loadingClassesAdd) {
-			if (typeof this.loadingClassesAdd === "string") {
+			if (typeof this.loadingClassesAdd === 'string') {
 				this.inner.classList.remove(this.loadingClassesAdd);
 			} else this.inner.classList.remove(...this.loadingClassesAdd);
 		}
 		if (this.inner && this.afterLoadingClassesAdd) {
 			setTimeout(() => {
-				if (typeof this.afterLoadingClassesAdd === "string") {
+				if (typeof this.afterLoadingClassesAdd === 'string') {
 					this.inner.classList.remove(this.afterLoadingClassesAdd);
 				} else this.inner.classList.remove(...this.afterLoadingClassesAdd);
 			});
 		}
-		this.el.classList.remove("init");
-		this.inner.classList.remove("dragging");
-		this.slides.forEach((el) => el.classList.remove("active"));
+		this.el.classList.remove('init');
+		this.inner.classList.remove('dragging');
+		this.slides.forEach((el) => el.classList.remove('active'));
 		if (this?.dotsItems?.length) {
-			this.dotsItems.forEach((el) => el.classList.remove("active"));
+			this.dotsItems.forEach((el) => el.classList.remove('active'));
 		}
-		this.prev.classList.remove("disabled");
-		this.next.classList.remove("disabled");
+		this.prev.classList.remove('disabled');
+		this.next.classList.remove('disabled');
 
 		// Remove styles
-		this.inner.style.width = "";
-		this.slides.forEach((el) => (el.style.width = ""));
-		if (!this.isSnap) this.inner.style.transform = "";
-		if (this.isAutoHeight) this.inner.style.height = "";
+		this.inner.style.width = '';
+		this.slides.forEach((el) => (el.style.width = ''));
+		if (!this.isSnap) this.inner.style.transform = '';
+		if (this.isAutoHeight) this.inner.style.height = '';
 
 		// Remove listeners
-		this.prev.removeEventListener("click", this.onPrevClickListener);
-		this.next.removeEventListener("click", this.onNextClickListener);
+		this.prev.removeEventListener('click', this.onPrevClickListener);
+		this.next.removeEventListener('click', this.onNextClickListener);
 		this.container.removeEventListener(
-			"scroll",
+			'scroll',
 			this.onContainerScrollListener,
 		);
-		this.el.removeEventListener("touchstart", this.onElementTouchStartListener);
-		this.el.removeEventListener("touchend", this.onElementTouchEndListener);
-		this.inner.removeEventListener("mousedown", this.onInnerMouseDownListener);
+		this.el.removeEventListener('touchstart', this.onElementTouchStartListener);
+		this.el.removeEventListener('touchend', this.onElementTouchEndListener);
+		this.inner.removeEventListener('mousedown', this.onInnerMouseDownListener);
 		this.inner.removeEventListener(
-			"touchstart",
+			'touchstart',
 			this.onInnerTouchStartListener,
 		);
-		document.removeEventListener("mousemove", this.onDocumentMouseMoveListener);
-		document.removeEventListener("touchmove", this.onDocumentTouchMoveListener);
-		document.removeEventListener("mouseup", this.onDocumentMouseUpListener);
-		document.removeEventListener("touchend", this.onDocumentTouchEndListener);
-		this.inner.querySelectorAll("a:not(.prevented-click)").forEach((el) => {
-			el.classList.remove("prevented-click");
-			el.removeEventListener("click", this.removeClickEventWhileDragging);
+		document.removeEventListener('mousemove', this.onDocumentMouseMoveListener);
+		document.removeEventListener('touchmove', this.onDocumentTouchMoveListener);
+		document.removeEventListener('mouseup', this.onDocumentMouseUpListener);
+		document.removeEventListener('touchend', this.onDocumentTouchEndListener);
+		this.inner.querySelectorAll('a:not(.prevented-click)').forEach((el) => {
+			el.classList.remove('prevented-click');
+			el.removeEventListener('click', this.removeClickEventWhileDragging);
 		});
 		if (
 			this?.dotsItems?.length ||
-			this.dots.querySelectorAll(":scope > *").length
+			this.dots.querySelectorAll(':scope > *').length
 		) {
-			const dots = this?.dotsItems || this.dots.querySelectorAll(":scope > *");
+			const dots = this?.dotsItems || this.dots.querySelectorAll(':scope > *');
 
 			dots.forEach((el) =>
-				el.removeEventListener("click", this.onDotClickListener)
+				el.removeEventListener('click', this.onDotClickListener),
 			);
 
 			this.dots.innerHTML = null;
 		}
 
 		// Remove elements
-		this.inner.querySelector(".hs-snap-before").remove();
-		this.inner.querySelector(".hs-snap-after").remove();
+		this.inner.querySelector('.hs-snap-before').remove();
+		this.inner.querySelector('.hs-snap-after').remove();
 
 		this.dotsItems = null;
 
@@ -1078,13 +1086,13 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		const elInCollection = window.$hsCarouselCollection.find(
 			(el) =>
 				el.element.el ===
-					(typeof target === "string"
-						? document.querySelector(target)
-						: target),
+				(typeof target === 'string' ? document.querySelector(target) : target),
 		);
 
 		return elInCollection
-			? isInstance ? elInCollection : elInCollection.element
+			? isInstance
+				? elInCollection
+				: elInCollection.element
 			: null;
 	}
 
@@ -1098,7 +1106,7 @@ class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 		}
 
 		document
-			.querySelectorAll("[data-hs-carousel]:not(.--prevent-on-load-init)")
+			.querySelectorAll('[data-hs-carousel]:not(.--prevent-on-load-init)')
 			.forEach((el: HTMLElement) => {
 				if (
 					!window.$hsCarouselCollection.find(
@@ -1118,14 +1126,14 @@ declare global {
 	}
 }
 
-window.addEventListener("load", () => {
+window.addEventListener('load', () => {
 	HSCarousel.autoInit();
 
 	// Uncomment for debug
 	// console.log('Carousel collection:', window.$hsCarouselCollection);
 });
 
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
 	window.HSCarousel = HSCarousel;
 }
 

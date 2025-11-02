@@ -23,7 +23,10 @@ export interface IPinInput {
 	options?: IPinInputOptions;
 	destroy(): void;
 }
-declare class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
+declare class HSPinInput
+	extends HSBasePlugin<IPinInputOptions>
+	implements IPinInput
+{
 	private items;
 	private currentItem;
 	private currentValue;
@@ -53,12 +56,13 @@ declare class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinI
 	private onFocusOut;
 	private onPaste;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSPinInput | ICollectionItem<HSPinInput>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HSPinInput | ICollectionItem<HSPinInput>;
 	static autoInit(): void;
 }
 
-export {
-	HSPinInput as default,
-};
+export { HSPinInput as default };
 
 export {};

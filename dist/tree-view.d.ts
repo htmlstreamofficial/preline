@@ -16,7 +16,7 @@ export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
 }
-export type ITreeViewOptionsControlBy = "checkbox" | "button";
+export type ITreeViewOptionsControlBy = 'checkbox' | 'button';
 export interface ITreeViewItem {
 	id: string;
 	value: string;
@@ -37,7 +37,10 @@ export interface ITreeView {
 	changeItemProp(id: string, prop: string, val: any): void;
 	destroy(): void;
 }
-declare class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
+declare class HSTreeView
+	extends HSBasePlugin<ITreeViewOptions>
+	implements ITreeView
+{
 	private items;
 	private readonly controlBy;
 	private readonly autoSelectChildren;
@@ -63,13 +66,18 @@ declare class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITree
 	changeItemProp(id: string, prop: string, val: any): void;
 	destroy(): void;
 	private static findInCollection;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSTreeView>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSTreeView>;
 	static autoInit(): void;
-	static on(evt: string, target: HSTreeView | HTMLElement | string, cb: Function): void;
+	static on(
+		evt: string,
+		target: HSTreeView | HTMLElement | string,
+		cb: Function,
+	): void;
 }
 
-export {
-	HSTreeView as default,
-};
+export { HSTreeView as default };
 
 export {};

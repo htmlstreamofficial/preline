@@ -1,9 +1,225 @@
-!function(e,t){if("object"==typeof exports&&"object"==typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var i=t();for(var n in i)("object"==typeof exports?exports:e)[n]=i[n]}}(self,(()=>(()=>{"use strict";var e={144:function(e,t,i){
-/*
- * HSTextareaAutoHeight
- * @version: 3.2.3
- * @author: Preline Labs Ltd.
- * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
- * Copyright 2024 Preline Labs Ltd.
- */
-var n=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});const o=n(i(961));class l extends o.default{constructor(e,t){super(e,t);const i=e.getAttribute("data-hs-copy-markup"),n=i?JSON.parse(i):{},o=Object.assign(Object.assign({},n),t);this.defaultHeight=(null==o?void 0:o.defaultHeight)||0,this.init()}elementInput(){this.textareaSetHeight(3)}init(){this.createCollection(window.$hsTextareaAutoHeightCollection,this),this.setAutoHeight()}setAutoHeight(){this.isParentHidden()?this.callbackAccordingToType():this.textareaSetHeight(3),this.onElementInputListener=()=>this.elementInput(),this.el.addEventListener("input",this.onElementInputListener)}textareaSetHeight(e=0){this.el.style.height="auto",this.el.style.height=this.checkIfOneLine()&&this.defaultHeight?`${this.defaultHeight}px`:`${this.el.scrollHeight+e}px`}checkIfOneLine(){const e=this.el.clientHeight;return!(this.el.scrollHeight>e)}isParentHidden(){return this.el.closest(".hs-overlay.hidden")||this.el.closest('[role="tabpanel"].hidden')||this.el.closest(".hs-collapse.hidden")}parentType(){return this.el.closest(".hs-collapse")?"collapse":this.el.closest(".hs-overlay")?"overlay":!!this.el.closest('[role="tabpanel"]')&&"tabs"}callbackAccordingToType(){var e;if("collapse"===this.parentType()){const e=this.el.closest(".hs-collapse").id,{element:t}=window.HSCollapse.getInstance(`[data-hs-collapse="#${e}"]`,!0);t.on("beforeOpen",(()=>{if(!this.el)return!1;this.textareaSetHeight(3)}))}else if("overlay"===this.parentType()){const e=window.HSOverlay.getInstance(this.el.closest(".hs-overlay"),!0);e.element.on("open",(()=>{window.$hsTextareaAutoHeightCollection.filter((({element:t})=>t.el.closest(".hs-overlay")===e.element.el)).forEach((({element:e})=>e.textareaSetHeight(3)))}))}else{if("tabs"!==this.parentType())return!1;{const t=null===(e=this.el.closest('[role="tabpanel"]'))||void 0===e?void 0:e.id,i=document.querySelector(`[data-hs-tab="#${t}"]`).closest('[role="tablist"]'),{element:n}=window.HSTabs.getInstance(i,!0)||null;n.on("change",(e=>{const t=document.querySelectorAll(`${e.current} [data-hs-textarea-auto-height]`);if(!t.length)return!1;t.forEach((e=>{const t=window.HSTextareaAutoHeight.getInstance(e,!0)||null;t&&t.element.textareaSetHeight(3)}))}))}}}destroy(){this.el.removeEventListener("input",this.onElementInputListener),window.$hsTextareaAutoHeightCollection=window.$hsTextareaAutoHeightCollection.filter((({element:e})=>e.el!==this.el))}static getInstance(e,t){const i=window.$hsTextareaAutoHeightCollection.find((t=>t.element.el===("string"==typeof e?document.querySelector(e):e)));return i?t?i:i.element:null}static autoInit(){window.$hsTextareaAutoHeightCollection||(window.$hsTextareaAutoHeightCollection=[]),window.$hsTextareaAutoHeightCollection&&(window.$hsTextareaAutoHeightCollection=window.$hsTextareaAutoHeightCollection.filter((({element:e})=>document.contains(e.el)))),document.querySelectorAll("[data-hs-textarea-auto-height]:not(.--prevent-on-load-init)").forEach((e=>{if(!window.$hsTextareaAutoHeightCollection.find((t=>{var i;return(null===(i=null==t?void 0:t.element)||void 0===i?void 0:i.el)===e}))){const t=e.getAttribute("data-hs-textarea-auto-height"),i=t?JSON.parse(t):{};new l(e,i)}}))}}window.addEventListener("load",(()=>{l.autoInit()})),"undefined"!=typeof window&&(window.HSTextareaAutoHeight=l),t.default=l},961:(e,t)=>{Object.defineProperty(t,"__esModule",{value:!0});t.default=class{constructor(e,t,i){this.el=e,this.options=t,this.events=i,this.el=e,this.options=t,this.events={}}createCollection(e,t){var i;e.push({id:(null===(i=null==t?void 0:t.el)||void 0===i?void 0:i.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}}},t={};var i=function i(n){var o=t[n];if(void 0!==o)return o.exports;var l=t[n]={exports:{}};return e[n].call(l.exports,l,l.exports,i),l.exports}(144);return i})()));
+!(function (e, t) {
+	if ('object' == typeof exports && 'object' == typeof module)
+		module.exports = t();
+	else if ('function' == typeof define && define.amd) define([], t);
+	else {
+		var i = t();
+		for (var n in i) ('object' == typeof exports ? exports : e)[n] = i[n];
+	}
+})(self, () =>
+	(() => {
+		'use strict';
+		var e = {
+				144: function (e, t, i) {
+					/*
+					 * HSTextareaAutoHeight
+					 * @version: 3.2.3
+					 * @author: Preline Labs Ltd.
+					 * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+					 * Copyright 2024 Preline Labs Ltd.
+					 */
+					var n =
+						(this && this.__importDefault) ||
+						function (e) {
+							return e && e.__esModule ? e : { default: e };
+						};
+					Object.defineProperty(t, '__esModule', { value: !0 });
+					const o = n(i(961));
+					class l extends o.default {
+						constructor(e, t) {
+							super(e, t);
+							const i = e.getAttribute('data-hs-copy-markup'),
+								n = i ? JSON.parse(i) : {},
+								o = Object.assign(Object.assign({}, n), t);
+							((this.defaultHeight =
+								(null == o ? void 0 : o.defaultHeight) || 0),
+								this.init());
+						}
+						elementInput() {
+							this.textareaSetHeight(3);
+						}
+						init() {
+							(this.createCollection(
+								window.$hsTextareaAutoHeightCollection,
+								this,
+							),
+								this.setAutoHeight());
+						}
+						setAutoHeight() {
+							(this.isParentHidden()
+								? this.callbackAccordingToType()
+								: this.textareaSetHeight(3),
+								(this.onElementInputListener = () => this.elementInput()),
+								this.el.addEventListener('input', this.onElementInputListener));
+						}
+						textareaSetHeight(e = 0) {
+							((this.el.style.height = 'auto'),
+								(this.el.style.height =
+									this.checkIfOneLine() && this.defaultHeight
+										? `${this.defaultHeight}px`
+										: `${this.el.scrollHeight + e}px`));
+						}
+						checkIfOneLine() {
+							const e = this.el.clientHeight;
+							return !(this.el.scrollHeight > e);
+						}
+						isParentHidden() {
+							return (
+								this.el.closest('.hs-overlay.hidden') ||
+								this.el.closest('[role="tabpanel"].hidden') ||
+								this.el.closest('.hs-collapse.hidden')
+							);
+						}
+						parentType() {
+							return this.el.closest('.hs-collapse')
+								? 'collapse'
+								: this.el.closest('.hs-overlay')
+									? 'overlay'
+									: !!this.el.closest('[role="tabpanel"]') && 'tabs';
+						}
+						callbackAccordingToType() {
+							var e;
+							if ('collapse' === this.parentType()) {
+								const e = this.el.closest('.hs-collapse').id,
+									{ element: t } = window.HSCollapse.getInstance(
+										`[data-hs-collapse="#${e}"]`,
+										!0,
+									);
+								t.on('beforeOpen', () => {
+									if (!this.el) return !1;
+									this.textareaSetHeight(3);
+								});
+							} else if ('overlay' === this.parentType()) {
+								const e = window.HSOverlay.getInstance(
+									this.el.closest('.hs-overlay'),
+									!0,
+								);
+								e.element.on('open', () => {
+									window.$hsTextareaAutoHeightCollection
+										.filter(
+											({ element: t }) =>
+												t.el.closest('.hs-overlay') === e.element.el,
+										)
+										.forEach(({ element: e }) => e.textareaSetHeight(3));
+								});
+							} else {
+								if ('tabs' !== this.parentType()) return !1;
+								{
+									const t =
+											null === (e = this.el.closest('[role="tabpanel"]')) ||
+											void 0 === e
+												? void 0
+												: e.id,
+										i = document
+											.querySelector(`[data-hs-tab="#${t}"]`)
+											.closest('[role="tablist"]'),
+										{ element: n } = window.HSTabs.getInstance(i, !0) || null;
+									n.on('change', (e) => {
+										const t = document.querySelectorAll(
+											`${e.current} [data-hs-textarea-auto-height]`,
+										);
+										if (!t.length) return !1;
+										t.forEach((e) => {
+											const t =
+												window.HSTextareaAutoHeight.getInstance(e, !0) || null;
+											t && t.element.textareaSetHeight(3);
+										});
+									});
+								}
+							}
+						}
+						destroy() {
+							(this.el.removeEventListener(
+								'input',
+								this.onElementInputListener,
+							),
+								(window.$hsTextareaAutoHeightCollection =
+									window.$hsTextareaAutoHeightCollection.filter(
+										({ element: e }) => e.el !== this.el,
+									)));
+						}
+						static getInstance(e, t) {
+							const i = window.$hsTextareaAutoHeightCollection.find(
+								(t) =>
+									t.element.el ===
+									('string' == typeof e ? document.querySelector(e) : e),
+							);
+							return i ? (t ? i : i.element) : null;
+						}
+						static autoInit() {
+							(window.$hsTextareaAutoHeightCollection ||
+								(window.$hsTextareaAutoHeightCollection = []),
+								window.$hsTextareaAutoHeightCollection &&
+									(window.$hsTextareaAutoHeightCollection =
+										window.$hsTextareaAutoHeightCollection.filter(
+											({ element: e }) => document.contains(e.el),
+										)),
+								document
+									.querySelectorAll(
+										'[data-hs-textarea-auto-height]:not(.--prevent-on-load-init)',
+									)
+									.forEach((e) => {
+										if (
+											!window.$hsTextareaAutoHeightCollection.find((t) => {
+												var i;
+												return (
+													(null === (i = null == t ? void 0 : t.element) ||
+													void 0 === i
+														? void 0
+														: i.el) === e
+												);
+											})
+										) {
+											const t = e.getAttribute('data-hs-textarea-auto-height'),
+												i = t ? JSON.parse(t) : {};
+											new l(e, i);
+										}
+									}));
+						}
+					}
+					(window.addEventListener('load', () => {
+						l.autoInit();
+					}),
+						'undefined' != typeof window && (window.HSTextareaAutoHeight = l),
+						(t.default = l));
+				},
+				961: (e, t) => {
+					Object.defineProperty(t, '__esModule', { value: !0 });
+					t.default = class {
+						constructor(e, t, i) {
+							((this.el = e),
+								(this.options = t),
+								(this.events = i),
+								(this.el = e),
+								(this.options = t),
+								(this.events = {}));
+						}
+						createCollection(e, t) {
+							var i;
+							e.push({
+								id:
+									(null === (i = null == t ? void 0 : t.el) || void 0 === i
+										? void 0
+										: i.id) || e.length + 1,
+								element: t,
+							});
+						}
+						fireEvent(e, t = null) {
+							if (this.events.hasOwnProperty(e)) return this.events[e](t);
+						}
+						on(e, t) {
+							this.events[e] = t;
+						}
+					};
+				},
+			},
+			t = {};
+		var i = (function i(n) {
+			var o = t[n];
+			if (void 0 !== o) return o.exports;
+			var l = (t[n] = { exports: {} });
+			return (e[n].call(l.exports, l, l.exports, i), l.exports);
+		})(144);
+		return i;
+	})(),
+);

@@ -11,7 +11,7 @@ export interface IStrongPasswordOptions {
 
 export interface IStrongPassword {
 	options?: IStrongPasswordOptions;
-	
+
 	recalculateDirection(): void;
 	destroy(): void;
 }

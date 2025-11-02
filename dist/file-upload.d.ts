@@ -27,7 +27,10 @@ export interface IFileUpload {
 	options?: IFileUploadOptions;
 	destroy(): void;
 }
-declare class HSFileUpload extends HSBasePlugin<IFileUploadOptions> implements IFileUpload {
+declare class HSFileUpload
+	extends HSBasePlugin<IFileUploadOptions>
+	implements IFileUpload
+{
 	private concatOptions;
 	private previewTemplate;
 	private extensions;
@@ -50,12 +53,13 @@ declare class HSFileUpload extends HSBasePlugin<IFileUploadOptions> implements I
 	private createIcon;
 	private formatFileSize;
 	private splitFileName;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSFileUpload>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSFileUpload>;
 	static autoInit(): void;
 }
 
-export {
-	HSFileUpload as default,
-};
+export { HSFileUpload as default };
 
 export {};

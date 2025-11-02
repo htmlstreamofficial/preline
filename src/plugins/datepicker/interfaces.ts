@@ -7,12 +7,12 @@ export interface ICustomDatepickerOptions extends Options {
 	inputModeOptions?: {
 		dateSeparator?: string;
 		itemsSeparator?: string;
-	},
+	};
 	templates?: {
-		time?: string,
-		arrowPrev?: string,
-		arrowNext?: string
-	},
+		time?: string;
+		arrowPrev?: string;
+		arrowNext?: string;
+	};
 	styles?: Options['styles'] & {
 		customSelect?: {
 			shared?: ISelectOptions;
@@ -21,7 +21,7 @@ export interface ICustomDatepickerOptions extends Options {
 			hours?: ISelectOptions;
 			minutes?: ISelectOptions;
 			meridiem?: ISelectOptions;
-		}
+		};
 	};
 	dateFormat?: string;
 	dateLocale?: string;

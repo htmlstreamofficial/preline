@@ -23,7 +23,7 @@ export interface ICarouselOptions {
 	currentIndex: number;
 	loadingClasses?: string | string[];
 	dotsItemClasses?: string;
-	mode?: "default" | "scroll-nav";
+	mode?: 'default' | 'scroll-nav';
 	isAutoHeight?: boolean;
 	isAutoPlay?: boolean;
 	isCentered?: boolean;
@@ -44,7 +44,10 @@ export interface ICarousel {
 	goTo(i: number): void;
 	destroy(): void;
 }
-declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
+declare class HSCarousel
+	extends HSBasePlugin<ICarouselOptions>
+	implements ICarousel
+{
 	private currentIndex;
 	private readonly loadingClasses;
 	private readonly dotsItemClasses;
@@ -147,12 +150,13 @@ declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICaro
 	goToNext(): void;
 	goTo(i: number): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSCarousel | ICollectionItem<HSCarousel>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HSCarousel | ICollectionItem<HSCarousel>;
 	static autoInit(): void;
 }
 
-export {
-	HSCarousel as default,
-};
+export { HSCarousel as default };
 
 export {};

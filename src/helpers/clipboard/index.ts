@@ -7,7 +7,7 @@
 
 declare var ClipboardJS: any;
 
-const clipboardSelector = window?.HS_CLIPBOARD_SELECTOR ?? ".js-clipboard";
+const clipboardSelector = window?.HS_CLIPBOARD_SELECTOR ?? '.js-clipboard';
 
 function clipboardHelper(selector: string) {
 	const $clipboards = document.querySelectorAll(selector);
@@ -28,20 +28,20 @@ function clipboardHelper(selector: string) {
 					| HTMLTextAreaElement = document.querySelector(clipboardTarget);
 
 				if (
-					$element.tagName === "SELECT" ||
-					$element.tagName === "INPUT" ||
-					$element.tagName === "TEXTAREA"
+					$element.tagName === 'SELECT' ||
+					$element.tagName === 'INPUT' ||
+					$element.tagName === 'TEXTAREA'
 				) {
 					return $element.value;
 				} else return $element.textContent;
 			},
 		});
-		clipboard.on("success", () => {
-			const $default: HTMLElement = el.querySelector(".js-clipboard-default");
-			const $success: HTMLElement = el.querySelector(".js-clipboard-success");
-			const $successText = el.querySelector(".js-clipboard-success-text");
-			const successText = el.dataset.clipboardSuccessText || "";
-			const tooltip = el.closest(".hs-tooltip");
+		clipboard.on('success', () => {
+			const $default: HTMLElement = el.querySelector('.js-clipboard-default');
+			const $success: HTMLElement = el.querySelector('.js-clipboard-success');
+			const $successText = el.querySelector('.js-clipboard-success-text');
+			const successText = el.dataset.clipboardSuccessText || '';
+			const tooltip = el.closest('.hs-tooltip');
 			let oldSuccessText: string;
 
 			if ($successText) {
@@ -49,8 +49,8 @@ function clipboardHelper(selector: string) {
 				$successText.textContent = successText;
 			}
 			if ($default && $success) {
-				$default.style.display = "none";
-				$success.style.display = "block";
+				$default.style.display = 'none';
+				$success.style.display = 'block';
 			}
 			if (tooltip) (window.HSTooltip as any).show(tooltip);
 
@@ -60,15 +60,15 @@ function clipboardHelper(selector: string) {
 				}
 				if (tooltip) (window.HSTooltip as any).hide(tooltip);
 				if ($default && $success) {
-					$success.style.display = "";
-					$default.style.display = "";
+					$success.style.display = '';
+					$default.style.display = '';
 				}
 			}, 800);
 		});
 	});
 }
 
-window.addEventListener("load", () => {
+window.addEventListener('load', () => {
 	clipboardHelper(clipboardSelector);
 });
 

@@ -23,7 +23,10 @@ export interface ITextareaAutoHeight {
 	options?: ITextareaAutoHeightOptions;
 	destroy(): void;
 }
-declare class HSTextareaAutoHeight extends HSBasePlugin<ITextareaAutoHeightOptions> implements ITextareaAutoHeight {
+declare class HSTextareaAutoHeight
+	extends HSBasePlugin<ITextareaAutoHeightOptions>
+	implements ITextareaAutoHeight
+{
 	private readonly defaultHeight;
 	private onElementInputListener;
 	constructor(el: HTMLTextAreaElement, options?: ITextareaAutoHeightOptions);
@@ -36,12 +39,13 @@ declare class HSTextareaAutoHeight extends HSBasePlugin<ITextareaAutoHeightOptio
 	private parentType;
 	private callbackAccordingToType;
 	destroy(): void;
-	static getInstance(target: HTMLTextAreaElement | string, isInstance?: boolean): HSTextareaAutoHeight | ICollectionItem<HSTextareaAutoHeight>;
+	static getInstance(
+		target: HTMLTextAreaElement | string,
+		isInstance?: boolean,
+	): HSTextareaAutoHeight | ICollectionItem<HSTextareaAutoHeight>;
 	static autoInit(): void;
 }
 
-export {
-	HSTextareaAutoHeight as default,
-};
+export { HSTextareaAutoHeight as default };
 
 export {};

@@ -48,10 +48,12 @@ export interface ISelectOptions {
 	apiFieldsMap?: IApiFieldMap | null;
 	apiSelectedValues?: string | string[];
 	apiIconTag?: string | null;
-	apiLoadMore?: boolean | {
-		perPage: number;
-		scrollThreshold: number;
-	};
+	apiLoadMore?:
+		| boolean
+		| {
+				perPage: number;
+				scrollThreshold: number;
+		  };
 	toggleTag?: string;
 	toggleClasses?: string;
 	toggleSeparators?: {
@@ -59,7 +61,11 @@ export interface ISelectOptions {
 		betweenItemsAndCounter?: string;
 	};
 	toggleCountText?: string | null;
-	toggleCountTextPlacement?: "postfix" | "prefix" | "postfix-no-space" | "prefix-no-space";
+	toggleCountTextPlacement?:
+		| 'postfix'
+		| 'prefix'
+		| 'postfix-no-space'
+		| 'prefix-no-space';
 	toggleCountTextMinItems?: number;
 	toggleCountTextMode?: string;
 	tagsItemTemplate?: string;
@@ -74,8 +80,8 @@ export interface ISelectOptions {
 	};
 	dropdownSpace: number;
 	dropdownPlacement: string | null;
-	dropdownVerticalFixedPlacement: "top" | "bottom" | null;
-	dropdownScope: "window" | "parent";
+	dropdownVerticalFixedPlacement: 'top' | 'bottom' | null;
+	dropdownScope: 'window' | 'parent';
 	extraMarkup?: string | string[] | null;
 	searchTemplate?: string;
 	searchWrapperTemplate?: string;
@@ -100,7 +106,7 @@ export interface ISelectOptions {
 }
 export interface ICustomDatepickerOptions extends Options {
 	removeDefaultStyles?: boolean;
-	mode?: "custom-select" | "default";
+	mode?: 'custom-select' | 'default';
 	inputModeOptions?: {
 		dateSeparator?: string;
 		itemsSeparator?: string;
@@ -110,7 +116,7 @@ export interface ICustomDatepickerOptions extends Options {
 		arrowPrev?: string;
 		arrowNext?: string;
 	};
-	styles?: Options["styles"] & {
+	styles?: Options['styles'] & {
 		customSelect?: {
 			shared?: ISelectOptions;
 			years?: ISelectOptions;
@@ -171,12 +177,13 @@ declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	};
 	formatDate(date: string | number | Date, format?: string): string;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSDatepicker>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSDatepicker>;
 	static autoInit(): void;
 }
 
-export {
-	HSDatepicker as default,
-};
+export { HSDatepicker as default };
 
 export {};

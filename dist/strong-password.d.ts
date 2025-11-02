@@ -31,7 +31,10 @@ export interface IStrongPassword {
 	recalculateDirection(): void;
 	destroy(): void;
 }
-declare class HSStrongPassword extends HSBasePlugin<IStrongPasswordOptions> implements IStrongPassword {
+declare class HSStrongPassword
+	extends HSBasePlugin<IStrongPasswordOptions>
+	implements IStrongPassword
+{
 	private readonly target;
 	private readonly hints;
 	private readonly stripClasses;
@@ -72,12 +75,13 @@ declare class HSStrongPassword extends HSBasePlugin<IStrongPasswordOptions> impl
 	private hideStrips;
 	recalculateDirection(): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSStrongPassword>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSStrongPassword>;
 	static autoInit(): void;
 }
 
-export {
-	HSStrongPassword as default,
-};
+export { HSStrongPassword as default };
 
 export {};

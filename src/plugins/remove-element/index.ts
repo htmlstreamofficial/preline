@@ -18,7 +18,8 @@ import { ICollectionItem } from '../../interfaces';
 
 class HSRemoveElement
 	extends HSBasePlugin<IRemoveElementOptions>
-	implements IRemoveElement {
+	implements IRemoveElement
+{
 	private readonly removeTargetId: string | null;
 	private readonly removeTarget: HTMLElement | null;
 	private readonly removeTargetAnimationClass: string;
@@ -84,13 +85,13 @@ class HSRemoveElement
 		const elInCollection = window.$hsRemoveElementCollection.find(
 			(el) =>
 				el.element.el ===
-				(typeof target === 'string'
-					? document.querySelector(target)
-					: target) ||
+					(typeof target === 'string'
+						? document.querySelector(target)
+						: target) ||
 				el.element.el ===
-				(typeof target === 'string'
-					? document.querySelector(target)
-					: target),
+					(typeof target === 'string'
+						? document.querySelector(target)
+						: target),
 		);
 
 		return elInCollection

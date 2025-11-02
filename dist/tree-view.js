@@ -1,16 +1,498 @@
-!function(e,t){if("object"==typeof exports&&"object"==typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var i=t();for(var n in i)("object"==typeof exports?exports:e)[n]=i[n]}}(self,(()=>(()=>{"use strict";var e={292:function(e,t){
-/*
- * @version: 3.2.3
- * @author: Preline Labs Ltd.
- * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
- * Copyright 2024 Preline Labs Ltd.
- */
-Object.defineProperty(t,"__esModule",{value:!0}),t.stringToBoolean=t.menuSearchHistory=t.isScrollable=t.isParentOrElementHidden=t.isJson=t.isIpadOS=t.isIOS=t.isFormElement=t.isFocused=t.isEnoughSpace=t.isDirectChild=t.htmlToElement=t.getZIndex=t.getHighestZIndex=t.getClassPropertyAlt=t.getClassProperty=t.dispatch=t.debounce=t.classToClassList=t.afterTransition=void 0;t.stringToBoolean=e=>"true"===e;t.getClassProperty=(e,t,i="")=>(window.getComputedStyle(e).getPropertyValue(t)||i).replace(" ","");t.getClassPropertyAlt=(e,t,i="")=>{let n="";return e.classList.forEach((e=>{e.includes(t)&&(n=e)})),n.match(/:(.*)]/)?n.match(/:(.*)]/)[1]:i};const i=e=>window.getComputedStyle(e).getPropertyValue("z-index");t.getZIndex=i;t.getHighestZIndex=e=>{let t=Number.NEGATIVE_INFINITY;return e.forEach((e=>{let n=i(e);"auto"!==n&&(n=parseInt(n,10),n>t&&(t=n))})),t};t.isDirectChild=(e,t)=>{const i=e.children;for(let e=0;e<i.length;e++)if(i[e]===t)return!0;return!1};t.isEnoughSpace=(e,t,i="auto",n=10,s=null)=>{const o=t.getBoundingClientRect(),l=s?s.getBoundingClientRect():null,r=window.innerHeight,c=l?o.top-l.top:o.top,a=(s?l.bottom:r)-o.bottom,d=e.clientHeight+n;return"bottom"===i?a>=d:"top"===i?c>=d:c>=d||a>=d};t.isFocused=e=>document.activeElement===e;t.isFormElement=e=>e instanceof HTMLInputElement||e instanceof HTMLTextAreaElement||e instanceof HTMLSelectElement;t.isIOS=()=>!!/iPad|iPhone|iPod/.test(navigator.platform)||navigator.maxTouchPoints&&navigator.maxTouchPoints>2&&/MacIntel/.test(navigator.platform);t.isIpadOS=()=>navigator.maxTouchPoints&&navigator.maxTouchPoints>2&&/MacIntel/.test(navigator.platform);t.isJson=e=>{if("string"!=typeof e)return!1;const t=e.trim()[0],i=e.trim().slice(-1);if("{"===t&&"}"===i||"["===t&&"]"===i)try{return JSON.parse(e),!0}catch(e){return!1}return!1};const n=e=>{if(!e)return!1;return"none"===window.getComputedStyle(e).display||n(e.parentElement)};t.isParentOrElementHidden=n;t.isScrollable=e=>{const t=window.getComputedStyle(e),i=t.overflowY,n=t.overflowX,s=("scroll"===i||"auto"===i)&&e.scrollHeight>e.clientHeight,o=("scroll"===n||"auto"===n)&&e.scrollWidth>e.clientWidth;return s||o};t.debounce=(e,t=200)=>{let i;return(...n)=>{clearTimeout(i),i=setTimeout((()=>{e.apply(this,n)}),t)}};t.dispatch=(e,t,i=null)=>{const n=new CustomEvent(e,{detail:{payload:i},bubbles:!0,cancelable:!0,composed:!1});t.dispatchEvent(n)};t.afterTransition=(e,t)=>{const i=()=>{t(),e.removeEventListener("transitionend",i,!0)},n=window.getComputedStyle(e),s=n.getPropertyValue("transition-duration");"none"!==n.getPropertyValue("transition-property")&&parseFloat(s)>0?e.addEventListener("transitionend",i,!0):t()};t.htmlToElement=e=>{const t=document.createElement("template");return e=e.trim(),t.innerHTML=e,t.content.firstChild};t.classToClassList=(e,t,i=" ",n="add")=>{e.split(i).forEach((e=>{e.trim()&&("add"===n?t.classList.add(e):t.classList.remove(e))}))};const s={historyIndex:-1,addHistory(e){this.historyIndex=e},existsInHistory(e){return e>this.historyIndex},clearHistory(){this.historyIndex=-1}};t.menuSearchHistory=s},772:function(e,t,i){
-/*
- * HSTreeView
- * @version: 3.2.3
- * @author: Preline Labs Ltd.
- * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
- * Copyright 2024 Preline Labs Ltd.
- */
-var n=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});const s=i(292),o=n(i(961));class l extends o.default{constructor(e,t,i){super(e,t,i),this.items=[];const n=e.getAttribute("data-hs-tree-view"),s=n?JSON.parse(n):{},o=Object.assign(Object.assign({},s),t);this.controlBy=(null==o?void 0:o.controlBy)||"button",this.autoSelectChildren=(null==o?void 0:o.autoSelectChildren)||!1,this.isIndeterminate=(null==o?void 0:o.isIndeterminate)||!0,this.onElementClickListener=[],this.onControlChangeListener=[],this.init()}elementClick(e,t,i){if(e.stopPropagation(),t.classList.contains("disabled"))return!1;e.metaKey||e.shiftKey||this.unselectItem(i),this.selectItem(t,i),this.fireEvent("click",{el:t,data:i}),(0,s.dispatch)("click.hs.treeView",this.el,{el:t,data:i})}controlChange(e,t){this.autoSelectChildren?(this.selectItem(e,t),t.isDir&&this.selectChildren(e,t),this.toggleParent(e)):this.selectItem(e,t)}init(){this.createCollection(window.$hsTreeViewCollection,this),l.group+=1,this.initItems()}initItems(){this.el.querySelectorAll("[data-hs-tree-view-item]").forEach(((e,t)=>{var i,n;const s=JSON.parse(e.getAttribute("data-hs-tree-view-item"));e.id||(e.id=`tree-view-item-${l.group}-${t}`);const o=Object.assign(Object.assign({},s),{id:null!==(i=s.id)&&void 0!==i?i:e.id,path:this.getPath(e),isSelected:null!==(n=s.isSelected)&&void 0!==n&&n});this.items.push(o),"checkbox"===this.controlBy?this.controlByCheckbox(e,o):this.controlByButton(e,o)}))}controlByButton(e,t){this.onElementClickListener.push({el:e,fn:i=>this.elementClick(i,e,t)}),e.addEventListener("click",this.onElementClickListener.find((t=>t.el===e)).fn)}controlByCheckbox(e,t){const i=e.querySelector(`input[value="${t.value}"]`);i&&(this.onControlChangeListener.push({el:i,fn:()=>this.controlChange(e,t)}),i.addEventListener("change",this.onControlChangeListener.find((e=>e.el===i)).fn))}getItem(e){return this.items.find((t=>t.id===e))}getPath(e){var t;const i=[];let n=e.closest("[data-hs-tree-view-item]");for(;n;){const e=JSON.parse(n.getAttribute("data-hs-tree-view-item"));i.push(e.value),n=null===(t=n.parentElement)||void 0===t?void 0:t.closest("[data-hs-tree-view-item]")}return i.reverse().join("/")}unselectItem(e=null){let t=this.getSelectedItems();e&&(t=t.filter((t=>t.id!==e.id))),t.length&&t.forEach((e=>{document.querySelector(`#${e.id}`).classList.remove("selected"),this.changeItemProp(e.id,"isSelected",!1)}))}selectItem(e,t){t.isSelected?(e.classList.remove("selected"),this.changeItemProp(t.id,"isSelected",!1)):(e.classList.add("selected"),this.changeItemProp(t.id,"isSelected",!0))}selectChildren(e,t){const i=e.querySelectorAll("[data-hs-tree-view-item]");Array.from(i).filter((e=>!e.classList.contains("disabled"))).forEach((e=>{const i=e.id?this.getItem(e.id):null;if(!i)return!1;t.isSelected?(e.classList.add("selected"),this.changeItemProp(i.id,"isSelected",!0)):(e.classList.remove("selected"),this.changeItemProp(i.id,"isSelected",!1));const n=this.getItem(e.id),s=e.querySelector(`input[value="${n.value}"]`);this.isIndeterminate&&(s.indeterminate=!1),n.isSelected?s.checked=!0:s.checked=!1}))}toggleParent(e){var t,i;let n=null===(t=e.parentElement)||void 0===t?void 0:t.closest("[data-hs-tree-view-item]");for(;n;){const e=n.querySelectorAll("[data-hs-tree-view-item]:not(.disabled)"),t=JSON.parse(n.getAttribute("data-hs-tree-view-item")),s=n.querySelector(`input[value="${t.value}"]`);let o=!1,l=0;e.forEach((e=>{const t=this.getItem(e.id);t.isSelected&&(l+=1),t.isSelected||(o=!0)})),o?(n.classList.remove("selected"),this.changeItemProp(n.id,"isSelected",!1),s.checked=!1):(n.classList.add("selected"),this.changeItemProp(n.id,"isSelected",!0),s.checked=!0),this.isIndeterminate&&(l>0&&l<e.length?s.indeterminate=!0:s.indeterminate=!1),n=null===(i=n.parentElement)||void 0===i?void 0:i.closest("[data-hs-tree-view-item]")}}update(){this.items.map((e=>{const t=document.querySelector(`#${e.id}`);return e.path!==this.getPath(t)&&(e.path=this.getPath(t)),e}))}getSelectedItems(){return this.items.filter((e=>e.isSelected))}changeItemProp(e,t,i){this.items.map((n=>(n.id===e&&(n[t]=i),n)))}destroy(){this.onElementClickListener.forEach((({el:e,fn:t})=>{e.removeEventListener("click",t)})),this.onControlChangeListener.length&&this.onElementClickListener.forEach((({el:e,fn:t})=>{e.removeEventListener("change",t)})),this.unselectItem(),this.items=[],window.$hsTreeViewCollection=window.$hsTreeViewCollection.filter((({element:e})=>e.el!==this.el)),l.group-=1}static findInCollection(e){return window.$hsTreeViewCollection.find((t=>e instanceof l?t.element.el===e.el:"string"==typeof e?t.element.el===document.querySelector(e):t.element.el===e))||null}static getInstance(e,t){const i=window.$hsTreeViewCollection.find((t=>t.element.el===("string"==typeof e?document.querySelector(e):e)));return i?t?i:i.element.el:null}static autoInit(){window.$hsTreeViewCollection||(window.$hsTreeViewCollection=[]),window.$hsTreeViewCollection&&(window.$hsTreeViewCollection=window.$hsTreeViewCollection.filter((({element:e})=>document.contains(e.el)))),document.querySelectorAll("[data-hs-tree-view]:not(.--prevent-on-load-init)").forEach((e=>{window.$hsTreeViewCollection.find((t=>{var i;return(null===(i=null==t?void 0:t.element)||void 0===i?void 0:i.el)===e}))||new l(e)}))}static on(e,t,i){const n=l.findInCollection(t);n&&(n.element.events[e]=i)}}l.group=0,window.addEventListener("load",(()=>{l.autoInit()})),"undefined"!=typeof window&&(window.HSTreeView=l),t.default=l},961:(e,t)=>{Object.defineProperty(t,"__esModule",{value:!0});t.default=class{constructor(e,t,i){this.el=e,this.options=t,this.events=i,this.el=e,this.options=t,this.events={}}createCollection(e,t){var i;e.push({id:(null===(i=null==t?void 0:t.el)||void 0===i?void 0:i.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}}},t={};var i=function i(n){var s=t[n];if(void 0!==s)return s.exports;var o=t[n]={exports:{}};return e[n].call(o.exports,o,o.exports,i),o.exports}(772);return i})()));
+!(function (e, t) {
+	if ('object' == typeof exports && 'object' == typeof module)
+		module.exports = t();
+	else if ('function' == typeof define && define.amd) define([], t);
+	else {
+		var i = t();
+		for (var n in i) ('object' == typeof exports ? exports : e)[n] = i[n];
+	}
+})(self, () =>
+	(() => {
+		'use strict';
+		var e = {
+				292: function (e, t) {
+					/*
+					 * @version: 3.2.3
+					 * @author: Preline Labs Ltd.
+					 * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+					 * Copyright 2024 Preline Labs Ltd.
+					 */
+					(Object.defineProperty(t, '__esModule', { value: !0 }),
+						(t.stringToBoolean =
+							t.menuSearchHistory =
+							t.isScrollable =
+							t.isParentOrElementHidden =
+							t.isJson =
+							t.isIpadOS =
+							t.isIOS =
+							t.isFormElement =
+							t.isFocused =
+							t.isEnoughSpace =
+							t.isDirectChild =
+							t.htmlToElement =
+							t.getZIndex =
+							t.getHighestZIndex =
+							t.getClassPropertyAlt =
+							t.getClassProperty =
+							t.dispatch =
+							t.debounce =
+							t.classToClassList =
+							t.afterTransition =
+								void 0));
+					t.stringToBoolean = (e) => 'true' === e;
+					t.getClassProperty = (e, t, i = '') =>
+						(window.getComputedStyle(e).getPropertyValue(t) || i).replace(
+							' ',
+							'',
+						);
+					t.getClassPropertyAlt = (e, t, i = '') => {
+						let n = '';
+						return (
+							e.classList.forEach((e) => {
+								e.includes(t) && (n = e);
+							}),
+							n.match(/:(.*)]/) ? n.match(/:(.*)]/)[1] : i
+						);
+					};
+					const i = (e) =>
+						window.getComputedStyle(e).getPropertyValue('z-index');
+					t.getZIndex = i;
+					t.getHighestZIndex = (e) => {
+						let t = Number.NEGATIVE_INFINITY;
+						return (
+							e.forEach((e) => {
+								let n = i(e);
+								'auto' !== n && ((n = parseInt(n, 10)), n > t && (t = n));
+							}),
+							t
+						);
+					};
+					t.isDirectChild = (e, t) => {
+						const i = e.children;
+						for (let e = 0; e < i.length; e++) if (i[e] === t) return !0;
+						return !1;
+					};
+					t.isEnoughSpace = (e, t, i = 'auto', n = 10, s = null) => {
+						const o = t.getBoundingClientRect(),
+							l = s ? s.getBoundingClientRect() : null,
+							r = window.innerHeight,
+							c = l ? o.top - l.top : o.top,
+							a = (s ? l.bottom : r) - o.bottom,
+							d = e.clientHeight + n;
+						return 'bottom' === i
+							? a >= d
+							: 'top' === i
+								? c >= d
+								: c >= d || a >= d;
+					};
+					t.isFocused = (e) => document.activeElement === e;
+					t.isFormElement = (e) =>
+						e instanceof HTMLInputElement ||
+						e instanceof HTMLTextAreaElement ||
+						e instanceof HTMLSelectElement;
+					t.isIOS = () =>
+						!!/iPad|iPhone|iPod/.test(navigator.platform) ||
+						(navigator.maxTouchPoints &&
+							navigator.maxTouchPoints > 2 &&
+							/MacIntel/.test(navigator.platform));
+					t.isIpadOS = () =>
+						navigator.maxTouchPoints &&
+						navigator.maxTouchPoints > 2 &&
+						/MacIntel/.test(navigator.platform);
+					t.isJson = (e) => {
+						if ('string' != typeof e) return !1;
+						const t = e.trim()[0],
+							i = e.trim().slice(-1);
+						if (('{' === t && '}' === i) || ('[' === t && ']' === i))
+							try {
+								return (JSON.parse(e), !0);
+							} catch (e) {
+								return !1;
+							}
+						return !1;
+					};
+					const n = (e) => {
+						if (!e) return !1;
+						return (
+							'none' === window.getComputedStyle(e).display ||
+							n(e.parentElement)
+						);
+					};
+					t.isParentOrElementHidden = n;
+					t.isScrollable = (e) => {
+						const t = window.getComputedStyle(e),
+							i = t.overflowY,
+							n = t.overflowX,
+							s =
+								('scroll' === i || 'auto' === i) &&
+								e.scrollHeight > e.clientHeight,
+							o =
+								('scroll' === n || 'auto' === n) &&
+								e.scrollWidth > e.clientWidth;
+						return s || o;
+					};
+					t.debounce = (e, t = 200) => {
+						let i;
+						return (...n) => {
+							(clearTimeout(i),
+								(i = setTimeout(() => {
+									e.apply(this, n);
+								}, t)));
+						};
+					};
+					t.dispatch = (e, t, i = null) => {
+						const n = new CustomEvent(e, {
+							detail: { payload: i },
+							bubbles: !0,
+							cancelable: !0,
+							composed: !1,
+						});
+						t.dispatchEvent(n);
+					};
+					t.afterTransition = (e, t) => {
+						const i = () => {
+								(t(), e.removeEventListener('transitionend', i, !0));
+							},
+							n = window.getComputedStyle(e),
+							s = n.getPropertyValue('transition-duration');
+						'none' !== n.getPropertyValue('transition-property') &&
+						parseFloat(s) > 0
+							? e.addEventListener('transitionend', i, !0)
+							: t();
+					};
+					t.htmlToElement = (e) => {
+						const t = document.createElement('template');
+						return ((e = e.trim()), (t.innerHTML = e), t.content.firstChild);
+					};
+					t.classToClassList = (e, t, i = ' ', n = 'add') => {
+						e.split(i).forEach((e) => {
+							e.trim() &&
+								('add' === n ? t.classList.add(e) : t.classList.remove(e));
+						});
+					};
+					const s = {
+						historyIndex: -1,
+						addHistory(e) {
+							this.historyIndex = e;
+						},
+						existsInHistory(e) {
+							return e > this.historyIndex;
+						},
+						clearHistory() {
+							this.historyIndex = -1;
+						},
+					};
+					t.menuSearchHistory = s;
+				},
+				772: function (e, t, i) {
+					/*
+					 * HSTreeView
+					 * @version: 3.2.3
+					 * @author: Preline Labs Ltd.
+					 * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+					 * Copyright 2024 Preline Labs Ltd.
+					 */
+					var n =
+						(this && this.__importDefault) ||
+						function (e) {
+							return e && e.__esModule ? e : { default: e };
+						};
+					Object.defineProperty(t, '__esModule', { value: !0 });
+					const s = i(292),
+						o = n(i(961));
+					class l extends o.default {
+						constructor(e, t, i) {
+							(super(e, t, i), (this.items = []));
+							const n = e.getAttribute('data-hs-tree-view'),
+								s = n ? JSON.parse(n) : {},
+								o = Object.assign(Object.assign({}, s), t);
+							((this.controlBy =
+								(null == o ? void 0 : o.controlBy) || 'button'),
+								(this.autoSelectChildren =
+									(null == o ? void 0 : o.autoSelectChildren) || !1),
+								(this.isIndeterminate =
+									(null == o ? void 0 : o.isIndeterminate) || !0),
+								(this.onElementClickListener = []),
+								(this.onControlChangeListener = []),
+								this.init());
+						}
+						elementClick(e, t, i) {
+							if ((e.stopPropagation(), t.classList.contains('disabled')))
+								return !1;
+							(e.metaKey || e.shiftKey || this.unselectItem(i),
+								this.selectItem(t, i),
+								this.fireEvent('click', { el: t, data: i }),
+								(0, s.dispatch)('click.hs.treeView', this.el, {
+									el: t,
+									data: i,
+								}));
+						}
+						controlChange(e, t) {
+							this.autoSelectChildren
+								? (this.selectItem(e, t),
+									t.isDir && this.selectChildren(e, t),
+									this.toggleParent(e))
+								: this.selectItem(e, t);
+						}
+						init() {
+							(this.createCollection(window.$hsTreeViewCollection, this),
+								(l.group += 1),
+								this.initItems());
+						}
+						initItems() {
+							this.el
+								.querySelectorAll('[data-hs-tree-view-item]')
+								.forEach((e, t) => {
+									var i, n;
+									const s = JSON.parse(
+										e.getAttribute('data-hs-tree-view-item'),
+									);
+									e.id || (e.id = `tree-view-item-${l.group}-${t}`);
+									const o = Object.assign(Object.assign({}, s), {
+										id: null !== (i = s.id) && void 0 !== i ? i : e.id,
+										path: this.getPath(e),
+										isSelected:
+											null !== (n = s.isSelected) && void 0 !== n && n,
+									});
+									(this.items.push(o),
+										'checkbox' === this.controlBy
+											? this.controlByCheckbox(e, o)
+											: this.controlByButton(e, o));
+								});
+						}
+						controlByButton(e, t) {
+							(this.onElementClickListener.push({
+								el: e,
+								fn: (i) => this.elementClick(i, e, t),
+							}),
+								e.addEventListener(
+									'click',
+									this.onElementClickListener.find((t) => t.el === e).fn,
+								));
+						}
+						controlByCheckbox(e, t) {
+							const i = e.querySelector(`input[value="${t.value}"]`);
+							i &&
+								(this.onControlChangeListener.push({
+									el: i,
+									fn: () => this.controlChange(e, t),
+								}),
+								i.addEventListener(
+									'change',
+									this.onControlChangeListener.find((e) => e.el === i).fn,
+								));
+						}
+						getItem(e) {
+							return this.items.find((t) => t.id === e);
+						}
+						getPath(e) {
+							var t;
+							const i = [];
+							let n = e.closest('[data-hs-tree-view-item]');
+							for (; n; ) {
+								const e = JSON.parse(n.getAttribute('data-hs-tree-view-item'));
+								(i.push(e.value),
+									(n =
+										null === (t = n.parentElement) || void 0 === t
+											? void 0
+											: t.closest('[data-hs-tree-view-item]')));
+							}
+							return i.reverse().join('/');
+						}
+						unselectItem(e = null) {
+							let t = this.getSelectedItems();
+							(e && (t = t.filter((t) => t.id !== e.id)),
+								t.length &&
+									t.forEach((e) => {
+										(document
+											.querySelector(`#${e.id}`)
+											.classList.remove('selected'),
+											this.changeItemProp(e.id, 'isSelected', !1));
+									}));
+						}
+						selectItem(e, t) {
+							t.isSelected
+								? (e.classList.remove('selected'),
+									this.changeItemProp(t.id, 'isSelected', !1))
+								: (e.classList.add('selected'),
+									this.changeItemProp(t.id, 'isSelected', !0));
+						}
+						selectChildren(e, t) {
+							const i = e.querySelectorAll('[data-hs-tree-view-item]');
+							Array.from(i)
+								.filter((e) => !e.classList.contains('disabled'))
+								.forEach((e) => {
+									const i = e.id ? this.getItem(e.id) : null;
+									if (!i) return !1;
+									t.isSelected
+										? (e.classList.add('selected'),
+											this.changeItemProp(i.id, 'isSelected', !0))
+										: (e.classList.remove('selected'),
+											this.changeItemProp(i.id, 'isSelected', !1));
+									const n = this.getItem(e.id),
+										s = e.querySelector(`input[value="${n.value}"]`);
+									(this.isIndeterminate && (s.indeterminate = !1),
+										n.isSelected ? (s.checked = !0) : (s.checked = !1));
+								});
+						}
+						toggleParent(e) {
+							var t, i;
+							let n =
+								null === (t = e.parentElement) || void 0 === t
+									? void 0
+									: t.closest('[data-hs-tree-view-item]');
+							for (; n; ) {
+								const e = n.querySelectorAll(
+										'[data-hs-tree-view-item]:not(.disabled)',
+									),
+									t = JSON.parse(n.getAttribute('data-hs-tree-view-item')),
+									s = n.querySelector(`input[value="${t.value}"]`);
+								let o = !1,
+									l = 0;
+								(e.forEach((e) => {
+									const t = this.getItem(e.id);
+									(t.isSelected && (l += 1), t.isSelected || (o = !0));
+								}),
+									o
+										? (n.classList.remove('selected'),
+											this.changeItemProp(n.id, 'isSelected', !1),
+											(s.checked = !1))
+										: (n.classList.add('selected'),
+											this.changeItemProp(n.id, 'isSelected', !0),
+											(s.checked = !0)),
+									this.isIndeterminate &&
+										(l > 0 && l < e.length
+											? (s.indeterminate = !0)
+											: (s.indeterminate = !1)),
+									(n =
+										null === (i = n.parentElement) || void 0 === i
+											? void 0
+											: i.closest('[data-hs-tree-view-item]')));
+							}
+						}
+						update() {
+							this.items.map((e) => {
+								const t = document.querySelector(`#${e.id}`);
+								return (
+									e.path !== this.getPath(t) && (e.path = this.getPath(t)),
+									e
+								);
+							});
+						}
+						getSelectedItems() {
+							return this.items.filter((e) => e.isSelected);
+						}
+						changeItemProp(e, t, i) {
+							this.items.map((n) => (n.id === e && (n[t] = i), n));
+						}
+						destroy() {
+							(this.onElementClickListener.forEach(({ el: e, fn: t }) => {
+								e.removeEventListener('click', t);
+							}),
+								this.onControlChangeListener.length &&
+									this.onElementClickListener.forEach(({ el: e, fn: t }) => {
+										e.removeEventListener('change', t);
+									}),
+								this.unselectItem(),
+								(this.items = []),
+								(window.$hsTreeViewCollection =
+									window.$hsTreeViewCollection.filter(
+										({ element: e }) => e.el !== this.el,
+									)),
+								(l.group -= 1));
+						}
+						static findInCollection(e) {
+							return (
+								window.$hsTreeViewCollection.find((t) =>
+									e instanceof l
+										? t.element.el === e.el
+										: 'string' == typeof e
+											? t.element.el === document.querySelector(e)
+											: t.element.el === e,
+								) || null
+							);
+						}
+						static getInstance(e, t) {
+							const i = window.$hsTreeViewCollection.find(
+								(t) =>
+									t.element.el ===
+									('string' == typeof e ? document.querySelector(e) : e),
+							);
+							return i ? (t ? i : i.element.el) : null;
+						}
+						static autoInit() {
+							(window.$hsTreeViewCollection ||
+								(window.$hsTreeViewCollection = []),
+								window.$hsTreeViewCollection &&
+									(window.$hsTreeViewCollection =
+										window.$hsTreeViewCollection.filter(({ element: e }) =>
+											document.contains(e.el),
+										)),
+								document
+									.querySelectorAll(
+										'[data-hs-tree-view]:not(.--prevent-on-load-init)',
+									)
+									.forEach((e) => {
+										window.$hsTreeViewCollection.find((t) => {
+											var i;
+											return (
+												(null === (i = null == t ? void 0 : t.element) ||
+												void 0 === i
+													? void 0
+													: i.el) === e
+											);
+										}) || new l(e);
+									}));
+						}
+						static on(e, t, i) {
+							const n = l.findInCollection(t);
+							n && (n.element.events[e] = i);
+						}
+					}
+					((l.group = 0),
+						window.addEventListener('load', () => {
+							l.autoInit();
+						}),
+						'undefined' != typeof window && (window.HSTreeView = l),
+						(t.default = l));
+				},
+				961: (e, t) => {
+					Object.defineProperty(t, '__esModule', { value: !0 });
+					t.default = class {
+						constructor(e, t, i) {
+							((this.el = e),
+								(this.options = t),
+								(this.events = i),
+								(this.el = e),
+								(this.options = t),
+								(this.events = {}));
+						}
+						createCollection(e, t) {
+							var i;
+							e.push({
+								id:
+									(null === (i = null == t ? void 0 : t.el) || void 0 === i
+										? void 0
+										: i.id) || e.length + 1,
+								element: t,
+							});
+						}
+						fireEvent(e, t = null) {
+							if (this.events.hasOwnProperty(e)) return this.events[e](t);
+						}
+						on(e, t) {
+							this.events[e] = t;
+						}
+					};
+				},
+			},
+			t = {};
+		var i = (function i(n) {
+			var s = t[n];
+			if (void 0 !== s) return s.exports;
+			var o = (t[n] = { exports: {} });
+			return (e[n].call(o.exports, o, o.exports, i), o.exports);
+		})(772);
+		return i;
+	})(),
+);

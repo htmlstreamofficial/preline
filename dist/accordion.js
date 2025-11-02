@@ -1,16 +1,494 @@
-!function(e,t){if("object"==typeof exports&&"object"==typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var o=t();for(var i in o)("object"==typeof exports?exports:e)[i]=o[i]}}(self,(()=>(()=>{"use strict";var e={292:function(e,t){
-/*
- * @version: 3.2.3
- * @author: Preline Labs Ltd.
- * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
- * Copyright 2024 Preline Labs Ltd.
- */
-Object.defineProperty(t,"__esModule",{value:!0}),t.stringToBoolean=t.menuSearchHistory=t.isScrollable=t.isParentOrElementHidden=t.isJson=t.isIpadOS=t.isIOS=t.isFormElement=t.isFocused=t.isEnoughSpace=t.isDirectChild=t.htmlToElement=t.getZIndex=t.getHighestZIndex=t.getClassPropertyAlt=t.getClassProperty=t.dispatch=t.debounce=t.classToClassList=t.afterTransition=void 0;t.stringToBoolean=e=>"true"===e;t.getClassProperty=(e,t,o="")=>(window.getComputedStyle(e).getPropertyValue(t)||o).replace(" ","");t.getClassPropertyAlt=(e,t,o="")=>{let i="";return e.classList.forEach((e=>{e.includes(t)&&(i=e)})),i.match(/:(.*)]/)?i.match(/:(.*)]/)[1]:o};const o=e=>window.getComputedStyle(e).getPropertyValue("z-index");t.getZIndex=o;t.getHighestZIndex=e=>{let t=Number.NEGATIVE_INFINITY;return e.forEach((e=>{let i=o(e);"auto"!==i&&(i=parseInt(i,10),i>t&&(t=i))})),t};t.isDirectChild=(e,t)=>{const o=e.children;for(let e=0;e<o.length;e++)if(o[e]===t)return!0;return!1};t.isEnoughSpace=(e,t,o="auto",i=10,n=null)=>{const s=t.getBoundingClientRect(),l=n?n.getBoundingClientRect():null,r=window.innerHeight,c=l?s.top-l.top:s.top,a=(n?l.bottom:r)-s.bottom,d=e.clientHeight+i;return"bottom"===o?a>=d:"top"===o?c>=d:c>=d||a>=d};t.isFocused=e=>document.activeElement===e;t.isFormElement=e=>e instanceof HTMLInputElement||e instanceof HTMLTextAreaElement||e instanceof HTMLSelectElement;t.isIOS=()=>!!/iPad|iPhone|iPod/.test(navigator.platform)||navigator.maxTouchPoints&&navigator.maxTouchPoints>2&&/MacIntel/.test(navigator.platform);t.isIpadOS=()=>navigator.maxTouchPoints&&navigator.maxTouchPoints>2&&/MacIntel/.test(navigator.platform);t.isJson=e=>{if("string"!=typeof e)return!1;const t=e.trim()[0],o=e.trim().slice(-1);if("{"===t&&"}"===o||"["===t&&"]"===o)try{return JSON.parse(e),!0}catch(e){return!1}return!1};const i=e=>{if(!e)return!1;return"none"===window.getComputedStyle(e).display||i(e.parentElement)};t.isParentOrElementHidden=i;t.isScrollable=e=>{const t=window.getComputedStyle(e),o=t.overflowY,i=t.overflowX,n=("scroll"===o||"auto"===o)&&e.scrollHeight>e.clientHeight,s=("scroll"===i||"auto"===i)&&e.scrollWidth>e.clientWidth;return n||s};t.debounce=(e,t=200)=>{let o;return(...i)=>{clearTimeout(o),o=setTimeout((()=>{e.apply(this,i)}),t)}};t.dispatch=(e,t,o=null)=>{const i=new CustomEvent(e,{detail:{payload:o},bubbles:!0,cancelable:!0,composed:!1});t.dispatchEvent(i)};t.afterTransition=(e,t)=>{const o=()=>{t(),e.removeEventListener("transitionend",o,!0)},i=window.getComputedStyle(e),n=i.getPropertyValue("transition-duration");"none"!==i.getPropertyValue("transition-property")&&parseFloat(n)>0?e.addEventListener("transitionend",o,!0):t()};t.htmlToElement=e=>{const t=document.createElement("template");return e=e.trim(),t.innerHTML=e,t.content.firstChild};t.classToClassList=(e,t,o=" ",i="add")=>{e.split(o).forEach((e=>{e.trim()&&("add"===i?t.classList.add(e):t.classList.remove(e))}))};const n={historyIndex:-1,addHistory(e){this.historyIndex=e},existsInHistory(e){return e>this.historyIndex},clearHistory(){this.historyIndex=-1}};t.menuSearchHistory=n},740:function(e,t,o){
-/*
- * HSAccordion
- * @version: 3.2.3
- * @author: Preline Labs Ltd.
- * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
- * Copyright 2024 Preline Labs Ltd.
- */
-var i=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});const n=o(292),s=i(o(961));class l extends s.default{constructor(e,t,o){super(e,t,o),this.toggle=this.el.querySelector(".hs-accordion-toggle")||null,this.content=this.el.querySelector(".hs-accordion-content")||null,this.group=this.el.closest(".hs-accordion-group")||null,this.update(),this.isToggleStopPropagated=(0,n.stringToBoolean)((0,n.getClassProperty)(this.toggle,"--stop-propagation","false")||"false"),this.keepOneOpen=!!this.group&&(0,n.stringToBoolean)((0,n.getClassProperty)(this.group,"--keep-one-open","false")||"false"),this.toggle&&this.content&&this.init()}init(){this.createCollection(window.$hsAccordionCollection,this),this.onToggleClickListener=e=>this.toggleClick(e),this.toggle.addEventListener("click",this.onToggleClickListener)}toggleClick(e){if(this.el.classList.contains("active")&&this.keepOneOpen)return!1;this.isToggleStopPropagated&&e.stopPropagation(),this.el.classList.contains("active")?this.hide():this.show()}show(){var e;if(this.group&&!this.isAlwaysOpened&&this.group.querySelector(":scope > .hs-accordion.active")&&this.group.querySelector(":scope > .hs-accordion.active")!==this.el){window.$hsAccordionCollection.find((e=>e.element.el===this.group.querySelector(":scope > .hs-accordion.active"))).element.hide()}if(this.el.classList.contains("active"))return!1;this.el.classList.add("active"),(null===(e=null==this?void 0:this.toggle)||void 0===e?void 0:e.ariaExpanded)&&(this.toggle.ariaExpanded="true"),this.fireEvent("beforeOpen",this.el),(0,n.dispatch)("beforeOpen.hs.accordion",this.el,this.el),this.content.style.display="block",this.content.style.height="0",setTimeout((()=>{this.content.style.height=`${this.content.scrollHeight}px`,(0,n.afterTransition)(this.content,(()=>{this.content.style.display="block",this.content.style.height="",this.fireEvent("open",this.el),(0,n.dispatch)("open.hs.accordion",this.el,this.el)}))}))}hide(){var e;if(!this.el.classList.contains("active"))return!1;this.el.classList.remove("active"),(null===(e=null==this?void 0:this.toggle)||void 0===e?void 0:e.ariaExpanded)&&(this.toggle.ariaExpanded="false"),this.fireEvent("beforeClose",this.el),(0,n.dispatch)("beforeClose.hs.accordion",this.el,this.el),this.content.style.height=`${this.content.scrollHeight}px`,setTimeout((()=>{this.content.style.height="0"})),(0,n.afterTransition)(this.content,(()=>{this.content.style.display="none",this.content.style.height="",this.fireEvent("close",this.el),(0,n.dispatch)("close.hs.accordion",this.el,this.el)}))}update(){if(this.group=this.el.closest(".hs-accordion-group")||null,!this.group)return!1;this.isAlwaysOpened=this.group.hasAttribute("data-hs-accordion-always-open")||!1,window.$hsAccordionCollection.map((e=>(e.id===this.el.id&&(e.element.group=this.group,e.element.isAlwaysOpened=this.isAlwaysOpened),e)))}destroy(){var e;(null===(e=null==l?void 0:l.selectable)||void 0===e?void 0:e.length)&&l.selectable.forEach((e=>{e.listeners.forEach((({el:e,listener:t})=>{e.removeEventListener("click",t)}))})),this.onToggleClickListener&&this.toggle.removeEventListener("click",this.onToggleClickListener),this.toggle=null,this.content=null,this.group=null,this.onToggleClickListener=null,window.$hsAccordionCollection=window.$hsAccordionCollection.filter((({element:e})=>e.el!==this.el))}static findInCollection(e){return window.$hsAccordionCollection.find((t=>e instanceof l?t.element.el===e.el:"string"==typeof e?t.element.el===document.querySelector(e):t.element.el===e))||null}static autoInit(){window.$hsAccordionCollection||(window.$hsAccordionCollection=[]),window.$hsAccordionCollection&&(window.$hsAccordionCollection=window.$hsAccordionCollection.filter((({element:e})=>document.contains(e.el)))),document.querySelectorAll(".hs-accordion:not(.--prevent-on-load-init)").forEach((e=>{window.$hsAccordionCollection.find((t=>{var o;return(null===(o=null==t?void 0:t.element)||void 0===o?void 0:o.el)===e}))||new l(e)}))}static getInstance(e,t){const o=window.$hsAccordionCollection.find((t=>t.element.el===("string"==typeof e?document.querySelector(e):e)));return o?t?o:o.element.el:null}static show(e){const t=l.findInCollection(e);t&&"block"!==t.element.content.style.display&&t.element.show()}static hide(e){const t=l.findInCollection(e),o=t?window.getComputedStyle(t.element.content):null;t&&"none"!==o.display&&t.element.hide()}static treeView(){if(!document.querySelectorAll(".hs-accordion-treeview-root").length)return!1;this.selectable=[],document.querySelectorAll(".hs-accordion-treeview-root").forEach((e=>{const t=null==e?void 0:e.getAttribute("data-hs-accordion-options"),o=t?JSON.parse(t):{};this.selectable.push({el:e,options:Object.assign({},o),listeners:[]})})),this.selectable.length&&this.selectable.forEach((e=>{const{el:t}=e;t.querySelectorAll(".hs-accordion-selectable").forEach((t=>{const o=o=>this.onSelectableClick(o,e,t);t.addEventListener("click",o),e.listeners.push({el:t,listener:o})}))}))}static toggleSelected(e,t){t.classList.contains("selected")?t.classList.remove("selected"):(e.el.querySelectorAll(".hs-accordion-selectable").forEach((e=>e.classList.remove("selected"))),t.classList.add("selected"))}static on(e,t,o){const i=l.findInCollection(t);i&&(i.element.events[e]=o)}}l.onSelectableClick=(e,t,o)=>{e.stopPropagation(),l.toggleSelected(t,o)},window.addEventListener("load",(()=>{l.autoInit(),document.querySelectorAll(".hs-accordion-treeview-root").length&&l.treeView()})),"undefined"!=typeof window&&(window.HSAccordion=l),t.default=l},961:(e,t)=>{Object.defineProperty(t,"__esModule",{value:!0});t.default=class{constructor(e,t,o){this.el=e,this.options=t,this.events=o,this.el=e,this.options=t,this.events={}}createCollection(e,t){var o;e.push({id:(null===(o=null==t?void 0:t.el)||void 0===o?void 0:o.id)||e.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}}},t={};var o=function o(i){var n=t[i];if(void 0!==n)return n.exports;var s=t[i]={exports:{}};return e[i].call(s.exports,s,s.exports,o),s.exports}(740);return o})()));
+!(function (e, t) {
+	if ('object' == typeof exports && 'object' == typeof module)
+		module.exports = t();
+	else if ('function' == typeof define && define.amd) define([], t);
+	else {
+		var o = t();
+		for (var i in o) ('object' == typeof exports ? exports : e)[i] = o[i];
+	}
+})(self, () =>
+	(() => {
+		'use strict';
+		var e = {
+				292: function (e, t) {
+					/*
+					 * @version: 3.2.3
+					 * @author: Preline Labs Ltd.
+					 * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+					 * Copyright 2024 Preline Labs Ltd.
+					 */
+					(Object.defineProperty(t, '__esModule', { value: !0 }),
+						(t.stringToBoolean =
+							t.menuSearchHistory =
+							t.isScrollable =
+							t.isParentOrElementHidden =
+							t.isJson =
+							t.isIpadOS =
+							t.isIOS =
+							t.isFormElement =
+							t.isFocused =
+							t.isEnoughSpace =
+							t.isDirectChild =
+							t.htmlToElement =
+							t.getZIndex =
+							t.getHighestZIndex =
+							t.getClassPropertyAlt =
+							t.getClassProperty =
+							t.dispatch =
+							t.debounce =
+							t.classToClassList =
+							t.afterTransition =
+								void 0));
+					t.stringToBoolean = (e) => 'true' === e;
+					t.getClassProperty = (e, t, o = '') =>
+						(window.getComputedStyle(e).getPropertyValue(t) || o).replace(
+							' ',
+							'',
+						);
+					t.getClassPropertyAlt = (e, t, o = '') => {
+						let i = '';
+						return (
+							e.classList.forEach((e) => {
+								e.includes(t) && (i = e);
+							}),
+							i.match(/:(.*)]/) ? i.match(/:(.*)]/)[1] : o
+						);
+					};
+					const o = (e) =>
+						window.getComputedStyle(e).getPropertyValue('z-index');
+					t.getZIndex = o;
+					t.getHighestZIndex = (e) => {
+						let t = Number.NEGATIVE_INFINITY;
+						return (
+							e.forEach((e) => {
+								let i = o(e);
+								'auto' !== i && ((i = parseInt(i, 10)), i > t && (t = i));
+							}),
+							t
+						);
+					};
+					t.isDirectChild = (e, t) => {
+						const o = e.children;
+						for (let e = 0; e < o.length; e++) if (o[e] === t) return !0;
+						return !1;
+					};
+					t.isEnoughSpace = (e, t, o = 'auto', i = 10, n = null) => {
+						const s = t.getBoundingClientRect(),
+							l = n ? n.getBoundingClientRect() : null,
+							r = window.innerHeight,
+							c = l ? s.top - l.top : s.top,
+							a = (n ? l.bottom : r) - s.bottom,
+							d = e.clientHeight + i;
+						return 'bottom' === o
+							? a >= d
+							: 'top' === o
+								? c >= d
+								: c >= d || a >= d;
+					};
+					t.isFocused = (e) => document.activeElement === e;
+					t.isFormElement = (e) =>
+						e instanceof HTMLInputElement ||
+						e instanceof HTMLTextAreaElement ||
+						e instanceof HTMLSelectElement;
+					t.isIOS = () =>
+						!!/iPad|iPhone|iPod/.test(navigator.platform) ||
+						(navigator.maxTouchPoints &&
+							navigator.maxTouchPoints > 2 &&
+							/MacIntel/.test(navigator.platform));
+					t.isIpadOS = () =>
+						navigator.maxTouchPoints &&
+						navigator.maxTouchPoints > 2 &&
+						/MacIntel/.test(navigator.platform);
+					t.isJson = (e) => {
+						if ('string' != typeof e) return !1;
+						const t = e.trim()[0],
+							o = e.trim().slice(-1);
+						if (('{' === t && '}' === o) || ('[' === t && ']' === o))
+							try {
+								return (JSON.parse(e), !0);
+							} catch (e) {
+								return !1;
+							}
+						return !1;
+					};
+					const i = (e) => {
+						if (!e) return !1;
+						return (
+							'none' === window.getComputedStyle(e).display ||
+							i(e.parentElement)
+						);
+					};
+					t.isParentOrElementHidden = i;
+					t.isScrollable = (e) => {
+						const t = window.getComputedStyle(e),
+							o = t.overflowY,
+							i = t.overflowX,
+							n =
+								('scroll' === o || 'auto' === o) &&
+								e.scrollHeight > e.clientHeight,
+							s =
+								('scroll' === i || 'auto' === i) &&
+								e.scrollWidth > e.clientWidth;
+						return n || s;
+					};
+					t.debounce = (e, t = 200) => {
+						let o;
+						return (...i) => {
+							(clearTimeout(o),
+								(o = setTimeout(() => {
+									e.apply(this, i);
+								}, t)));
+						};
+					};
+					t.dispatch = (e, t, o = null) => {
+						const i = new CustomEvent(e, {
+							detail: { payload: o },
+							bubbles: !0,
+							cancelable: !0,
+							composed: !1,
+						});
+						t.dispatchEvent(i);
+					};
+					t.afterTransition = (e, t) => {
+						const o = () => {
+								(t(), e.removeEventListener('transitionend', o, !0));
+							},
+							i = window.getComputedStyle(e),
+							n = i.getPropertyValue('transition-duration');
+						'none' !== i.getPropertyValue('transition-property') &&
+						parseFloat(n) > 0
+							? e.addEventListener('transitionend', o, !0)
+							: t();
+					};
+					t.htmlToElement = (e) => {
+						const t = document.createElement('template');
+						return ((e = e.trim()), (t.innerHTML = e), t.content.firstChild);
+					};
+					t.classToClassList = (e, t, o = ' ', i = 'add') => {
+						e.split(o).forEach((e) => {
+							e.trim() &&
+								('add' === i ? t.classList.add(e) : t.classList.remove(e));
+						});
+					};
+					const n = {
+						historyIndex: -1,
+						addHistory(e) {
+							this.historyIndex = e;
+						},
+						existsInHistory(e) {
+							return e > this.historyIndex;
+						},
+						clearHistory() {
+							this.historyIndex = -1;
+						},
+					};
+					t.menuSearchHistory = n;
+				},
+				740: function (e, t, o) {
+					/*
+					 * HSAccordion
+					 * @version: 3.2.3
+					 * @author: Preline Labs Ltd.
+					 * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+					 * Copyright 2024 Preline Labs Ltd.
+					 */
+					var i =
+						(this && this.__importDefault) ||
+						function (e) {
+							return e && e.__esModule ? e : { default: e };
+						};
+					Object.defineProperty(t, '__esModule', { value: !0 });
+					const n = o(292),
+						s = i(o(961));
+					class l extends s.default {
+						constructor(e, t, o) {
+							(super(e, t, o),
+								(this.toggle =
+									this.el.querySelector('.hs-accordion-toggle') || null),
+								(this.content =
+									this.el.querySelector('.hs-accordion-content') || null),
+								(this.group = this.el.closest('.hs-accordion-group') || null),
+								this.update(),
+								(this.isToggleStopPropagated = (0, n.stringToBoolean)(
+									(0, n.getClassProperty)(
+										this.toggle,
+										'--stop-propagation',
+										'false',
+									) || 'false',
+								)),
+								(this.keepOneOpen =
+									!!this.group &&
+									(0, n.stringToBoolean)(
+										(0, n.getClassProperty)(
+											this.group,
+											'--keep-one-open',
+											'false',
+										) || 'false',
+									)),
+								this.toggle && this.content && this.init());
+						}
+						init() {
+							(this.createCollection(window.$hsAccordionCollection, this),
+								(this.onToggleClickListener = (e) => this.toggleClick(e)),
+								this.toggle.addEventListener(
+									'click',
+									this.onToggleClickListener,
+								));
+						}
+						toggleClick(e) {
+							if (this.el.classList.contains('active') && this.keepOneOpen)
+								return !1;
+							(this.isToggleStopPropagated && e.stopPropagation(),
+								this.el.classList.contains('active')
+									? this.hide()
+									: this.show());
+						}
+						show() {
+							var e;
+							if (
+								this.group &&
+								!this.isAlwaysOpened &&
+								this.group.querySelector(':scope > .hs-accordion.active') &&
+								this.group.querySelector(':scope > .hs-accordion.active') !==
+									this.el
+							) {
+								window.$hsAccordionCollection
+									.find(
+										(e) =>
+											e.element.el ===
+											this.group.querySelector(':scope > .hs-accordion.active'),
+									)
+									.element.hide();
+							}
+							if (this.el.classList.contains('active')) return !1;
+							(this.el.classList.add('active'),
+								(null === (e = null == this ? void 0 : this.toggle) ||
+								void 0 === e
+									? void 0
+									: e.ariaExpanded) && (this.toggle.ariaExpanded = 'true'),
+								this.fireEvent('beforeOpen', this.el),
+								(0, n.dispatch)('beforeOpen.hs.accordion', this.el, this.el),
+								(this.content.style.display = 'block'),
+								(this.content.style.height = '0'),
+								setTimeout(() => {
+									((this.content.style.height = `${this.content.scrollHeight}px`),
+										(0, n.afterTransition)(this.content, () => {
+											((this.content.style.display = 'block'),
+												(this.content.style.height = ''),
+												this.fireEvent('open', this.el),
+												(0, n.dispatch)('open.hs.accordion', this.el, this.el));
+										}));
+								}));
+						}
+						hide() {
+							var e;
+							if (!this.el.classList.contains('active')) return !1;
+							(this.el.classList.remove('active'),
+								(null === (e = null == this ? void 0 : this.toggle) ||
+								void 0 === e
+									? void 0
+									: e.ariaExpanded) && (this.toggle.ariaExpanded = 'false'),
+								this.fireEvent('beforeClose', this.el),
+								(0, n.dispatch)('beforeClose.hs.accordion', this.el, this.el),
+								(this.content.style.height = `${this.content.scrollHeight}px`),
+								setTimeout(() => {
+									this.content.style.height = '0';
+								}),
+								(0, n.afterTransition)(this.content, () => {
+									((this.content.style.display = 'none'),
+										(this.content.style.height = ''),
+										this.fireEvent('close', this.el),
+										(0, n.dispatch)('close.hs.accordion', this.el, this.el));
+								}));
+						}
+						update() {
+							if (
+								((this.group = this.el.closest('.hs-accordion-group') || null),
+								!this.group)
+							)
+								return !1;
+							((this.isAlwaysOpened =
+								this.group.hasAttribute('data-hs-accordion-always-open') || !1),
+								window.$hsAccordionCollection.map(
+									(e) => (
+										e.id === this.el.id &&
+											((e.element.group = this.group),
+											(e.element.isAlwaysOpened = this.isAlwaysOpened)),
+										e
+									),
+								));
+						}
+						destroy() {
+							var e;
+							((null === (e = null == l ? void 0 : l.selectable) || void 0 === e
+								? void 0
+								: e.length) &&
+								l.selectable.forEach((e) => {
+									e.listeners.forEach(({ el: e, listener: t }) => {
+										e.removeEventListener('click', t);
+									});
+								}),
+								this.onToggleClickListener &&
+									this.toggle.removeEventListener(
+										'click',
+										this.onToggleClickListener,
+									),
+								(this.toggle = null),
+								(this.content = null),
+								(this.group = null),
+								(this.onToggleClickListener = null),
+								(window.$hsAccordionCollection =
+									window.$hsAccordionCollection.filter(
+										({ element: e }) => e.el !== this.el,
+									)));
+						}
+						static findInCollection(e) {
+							return (
+								window.$hsAccordionCollection.find((t) =>
+									e instanceof l
+										? t.element.el === e.el
+										: 'string' == typeof e
+											? t.element.el === document.querySelector(e)
+											: t.element.el === e,
+								) || null
+							);
+						}
+						static autoInit() {
+							(window.$hsAccordionCollection ||
+								(window.$hsAccordionCollection = []),
+								window.$hsAccordionCollection &&
+									(window.$hsAccordionCollection =
+										window.$hsAccordionCollection.filter(({ element: e }) =>
+											document.contains(e.el),
+										)),
+								document
+									.querySelectorAll(
+										'.hs-accordion:not(.--prevent-on-load-init)',
+									)
+									.forEach((e) => {
+										window.$hsAccordionCollection.find((t) => {
+											var o;
+											return (
+												(null === (o = null == t ? void 0 : t.element) ||
+												void 0 === o
+													? void 0
+													: o.el) === e
+											);
+										}) || new l(e);
+									}));
+						}
+						static getInstance(e, t) {
+							const o = window.$hsAccordionCollection.find(
+								(t) =>
+									t.element.el ===
+									('string' == typeof e ? document.querySelector(e) : e),
+							);
+							return o ? (t ? o : o.element.el) : null;
+						}
+						static show(e) {
+							const t = l.findInCollection(e);
+							t &&
+								'block' !== t.element.content.style.display &&
+								t.element.show();
+						}
+						static hide(e) {
+							const t = l.findInCollection(e),
+								o = t ? window.getComputedStyle(t.element.content) : null;
+							t && 'none' !== o.display && t.element.hide();
+						}
+						static treeView() {
+							if (
+								!document.querySelectorAll('.hs-accordion-treeview-root').length
+							)
+								return !1;
+							((this.selectable = []),
+								document
+									.querySelectorAll('.hs-accordion-treeview-root')
+									.forEach((e) => {
+										const t =
+												null == e
+													? void 0
+													: e.getAttribute('data-hs-accordion-options'),
+											o = t ? JSON.parse(t) : {};
+										this.selectable.push({
+											el: e,
+											options: Object.assign({}, o),
+											listeners: [],
+										});
+									}),
+								this.selectable.length &&
+									this.selectable.forEach((e) => {
+										const { el: t } = e;
+										t.querySelectorAll('.hs-accordion-selectable').forEach(
+											(t) => {
+												const o = (o) => this.onSelectableClick(o, e, t);
+												(t.addEventListener('click', o),
+													e.listeners.push({ el: t, listener: o }));
+											},
+										);
+									}));
+						}
+						static toggleSelected(e, t) {
+							t.classList.contains('selected')
+								? t.classList.remove('selected')
+								: (e.el
+										.querySelectorAll('.hs-accordion-selectable')
+										.forEach((e) => e.classList.remove('selected')),
+									t.classList.add('selected'));
+						}
+						static on(e, t, o) {
+							const i = l.findInCollection(t);
+							i && (i.element.events[e] = o);
+						}
+					}
+					((l.onSelectableClick = (e, t, o) => {
+						(e.stopPropagation(), l.toggleSelected(t, o));
+					}),
+						window.addEventListener('load', () => {
+							(l.autoInit(),
+								document.querySelectorAll('.hs-accordion-treeview-root')
+									.length && l.treeView());
+						}),
+						'undefined' != typeof window && (window.HSAccordion = l),
+						(t.default = l));
+				},
+				961: (e, t) => {
+					Object.defineProperty(t, '__esModule', { value: !0 });
+					t.default = class {
+						constructor(e, t, o) {
+							((this.el = e),
+								(this.options = t),
+								(this.events = o),
+								(this.el = e),
+								(this.options = t),
+								(this.events = {}));
+						}
+						createCollection(e, t) {
+							var o;
+							e.push({
+								id:
+									(null === (o = null == t ? void 0 : t.el) || void 0 === o
+										? void 0
+										: o.id) || e.length + 1,
+								element: t,
+							});
+						}
+						fireEvent(e, t = null) {
+							if (this.events.hasOwnProperty(e)) return this.events[e](t);
+						}
+						on(e, t) {
+							this.events[e] = t;
+						}
+					};
+				},
+			},
+			t = {};
+		var o = (function o(i) {
+			var n = t[i];
+			if (void 0 !== n) return n.exports;
+			var s = (t[i] = { exports: {} });
+			return (e[i].call(s.exports, s, s.exports, o), s.exports);
+		})(740);
+		return o;
+	})(),
+);

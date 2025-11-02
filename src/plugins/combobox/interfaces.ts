@@ -14,7 +14,7 @@ export interface IComboBoxOptions {
 	outputItemTemplate?: string | null;
 	outputEmptyTemplate?: string | null;
 	outputLoaderTemplate?: string | null;
-	groupingType?: "default" | "tabs" | null;
+	groupingType?: 'default' | 'tabs' | null;
 	groupingTitleTemplate?: string | null;
 	tabsWrapperTemplate?: string | null;
 	preventSelection?: boolean;

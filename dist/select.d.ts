@@ -56,10 +56,12 @@ export interface ISelectOptions {
 	apiFieldsMap?: IApiFieldMap | null;
 	apiSelectedValues?: string | string[];
 	apiIconTag?: string | null;
-	apiLoadMore?: boolean | {
-		perPage: number;
-		scrollThreshold: number;
-	};
+	apiLoadMore?:
+		| boolean
+		| {
+				perPage: number;
+				scrollThreshold: number;
+		  };
 	toggleTag?: string;
 	toggleClasses?: string;
 	toggleSeparators?: {
@@ -67,7 +69,11 @@ export interface ISelectOptions {
 		betweenItemsAndCounter?: string;
 	};
 	toggleCountText?: string | null;
-	toggleCountTextPlacement?: "postfix" | "prefix" | "postfix-no-space" | "prefix-no-space";
+	toggleCountTextPlacement?:
+		| 'postfix'
+		| 'prefix'
+		| 'postfix-no-space'
+		| 'prefix-no-space';
 	toggleCountTextMinItems?: number;
 	toggleCountTextMode?: string;
 	tagsItemTemplate?: string;
@@ -82,8 +88,8 @@ export interface ISelectOptions {
 	};
 	dropdownSpace: number;
 	dropdownPlacement: string | null;
-	dropdownVerticalFixedPlacement: "top" | "bottom" | null;
-	dropdownScope: "window" | "parent";
+	dropdownVerticalFixedPlacement: 'top' | 'bottom' | null;
+	dropdownScope: 'window' | 'parent';
 	extraMarkup?: string | string[] | null;
 	searchTemplate?: string;
 	searchWrapperTemplate?: string;
@@ -156,8 +162,8 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	dropdownSpace: number | null;
 	readonly dropdownPlacement: string | null;
 	private readonly dropdownAutoPlacement;
-	readonly dropdownVerticalFixedPlacement: "top" | "bottom" | null;
-	readonly dropdownScope: "window" | "parent";
+	readonly dropdownVerticalFixedPlacement: 'top' | 'bottom' | null;
+	readonly dropdownScope: 'window' | 'parent';
 	private readonly searchTemplate;
 	private readonly searchWrapperTemplate;
 	private readonly searchPlaceholder;
@@ -276,15 +282,16 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	isOpened(): boolean;
 	containsElement(element: HTMLElement): boolean;
 	private static findInCollection;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSSelect | ICollectionItem<HSSelect>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HSSelect | ICollectionItem<HSSelect>;
 	static autoInit(): void;
 	static open(target: HSSelect | HTMLElement | string): void;
 	static close(target: HSSelect | HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;
 }
 
-export {
-	HSSelect as default,
-};
+export { HSSelect as default };
 
 export {};

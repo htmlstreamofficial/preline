@@ -33,7 +33,10 @@ export interface IDataTable {
 	options?: IDataTableOptions;
 	destroy(): void;
 }
-declare class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable {
+declare class HSDataTable
+	extends HSBasePlugin<IDataTableOptions>
+	implements IDataTable
+{
 	private concatOptions;
 	private dataTable;
 	private readonly table;
@@ -89,12 +92,13 @@ declare class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDa
 	private onSelectAllChange;
 	private updateSelectAllCheckbox;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSDataTable>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSDataTable>;
 	static autoInit(): void;
 }
 
-export {
-	HSDataTable as default,
-};
+export { HSDataTable as default };
 
 export {};

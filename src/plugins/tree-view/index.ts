@@ -27,15 +27,15 @@ class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 
 	private onElementClickListener:
 		| {
-			el: Element;
-			fn: (evt: PointerEvent) => void;
-		}[]
+				el: Element;
+				fn: (evt: PointerEvent) => void;
+		  }[]
 		| null;
 	private onControlChangeListener:
 		| {
-			el: Element;
-			fn: () => void;
-		}[]
+				el: Element;
+				fn: () => void;
+		  }[]
 		| null;
 
 	constructor(el: HTMLElement, options?: ITreeViewOptions, events?: {}) {
@@ -299,12 +299,17 @@ class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 	}
 
 	// Static methods
-	private static findInCollection(target: HSTreeView | HTMLElement | string): ICollectionItem<HSTreeView> | null {
-		return window.$hsTreeViewCollection.find((el) => {
-			if (target instanceof HSTreeView) return el.element.el === target.el;
-			else if (typeof target === 'string') return el.element.el === document.querySelector(target);
-			else return el.element.el === target;
-		}) || null;
+	private static findInCollection(
+		target: HSTreeView | HTMLElement | string,
+	): ICollectionItem<HSTreeView> | null {
+		return (
+			window.$hsTreeViewCollection.find((el) => {
+				if (target instanceof HSTreeView) return el.element.el === target.el;
+				else if (typeof target === 'string')
+					return el.element.el === document.querySelector(target);
+				else return el.element.el === target;
+			}) || null
+		);
 	}
 
 	static getInstance(target: HTMLElement | string, isInstance?: boolean) {
@@ -342,7 +347,11 @@ class HSTreeView extends HSBasePlugin<ITreeViewOptions> implements ITreeView {
 	}
 
 	// Backward compatibility
-	static on(evt: string, target: HSTreeView | HTMLElement | string, cb: Function) {
+	static on(
+		evt: string,
+		target: HSTreeView | HTMLElement | string,
+		cb: Function,
+	) {
 		const instance = HSTreeView.findInCollection(target);
 
 		if (instance) instance.element.events[evt] = cb;

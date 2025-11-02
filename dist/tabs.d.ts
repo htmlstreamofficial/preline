@@ -17,7 +17,7 @@ export interface ICollectionItem<T> {
 	element: T;
 }
 export interface ITabsOptions {
-	eventType: "click" | "hover";
+	eventType: 'click' | 'hover';
 	preventNavigationResolution: string | number | null;
 }
 export interface ITabs {
@@ -49,14 +49,15 @@ declare class HSTabs extends HSBasePlugin<ITabsOptions> implements ITabs {
 	private onArrow;
 	private onStartEnd;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSTabs | ICollectionItem<HSTabs>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HSTabs | ICollectionItem<HSTabs>;
 	static autoInit(): void;
 	static open(target: HTMLElement): void;
 	static on(evt: string, target: HTMLElement, cb: Function): void;
 }
 
-export {
-	HSTabs as default,
-};
+export { HSTabs as default };
 
 export {};

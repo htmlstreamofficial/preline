@@ -1,6 +1,6 @@
 export interface IDropdown {
 	options?: {};
-	
+
 	open(): void;
 	close(isAnimated: boolean): void;
 	forceClearState(): void;

@@ -16,8 +16,7 @@ export interface ICollectionItem<T> {
 	id: string | number;
 	element: T;
 }
-export interface IAccordionTreeViewStaticOptions {
-}
+export interface IAccordionTreeViewStaticOptions {}
 export interface IAccordionTreeView {
 	el: HTMLElement | null;
 	options?: IAccordionTreeViewStaticOptions;
@@ -26,8 +25,7 @@ export interface IAccordionTreeView {
 		listener: (evt: Event) => void;
 	}[];
 }
-export interface IAccordionOptions {
-}
+export interface IAccordionOptions {}
 export interface IAccordion {
 	options?: IAccordionOptions;
 	toggleClick(evt: Event): void;
@@ -36,7 +34,10 @@ export interface IAccordion {
 	update(): void;
 	destroy(): void;
 }
-declare class HSAccordion extends HSBasePlugin<IAccordionOptions> implements IAccordion {
+declare class HSAccordion
+	extends HSBasePlugin<IAccordionOptions>
+	implements IAccordion
+{
 	private toggle;
 	content: HTMLElement | null;
 	private group;
@@ -54,17 +55,26 @@ declare class HSAccordion extends HSBasePlugin<IAccordionOptions> implements IAc
 	destroy(): void;
 	private static findInCollection;
 	static autoInit(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSAccordion>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSAccordion>;
 	static show(target: HSAccordion | HTMLElement | string): void;
 	static hide(target: HSAccordion | HTMLElement | string): void;
-	static onSelectableClick: (evt: Event, item: IAccordionTreeView, el: HTMLElement) => void;
+	static onSelectableClick: (
+		evt: Event,
+		item: IAccordionTreeView,
+		el: HTMLElement,
+	) => void;
 	static treeView(): boolean;
 	static toggleSelected(root: IAccordionTreeView, item: HTMLElement): void;
-	static on(evt: string, target: HSAccordion | HTMLElement | string, cb: Function): void;
+	static on(
+		evt: string,
+		target: HSAccordion | HTMLElement | string,
+		cb: Function,
+	): void;
 }
 
-export {
-	HSAccordion as default,
-};
+export { HSAccordion as default };
 
 export {};

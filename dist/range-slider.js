@@ -1,9 +1,346 @@
-!function(t,e){if("object"==typeof exports&&"object"==typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var o=e();for(var i in o)("object"==typeof exports?exports:t)[i]=o[i]}}(self,(()=>(()=>{"use strict";var t={347:function(t,e,o){
-/*
- * HSRangeSlider
- * @version: 3.2.3
- * @author: Preline Labs Ltd.
- * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
- * Copyright 2024 Preline Labs Ltd.
- */
-var i=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(e,"__esModule",{value:!0});const n=i(o(961));class s extends n.default{constructor(t,e,o){var i;super(t,e,o);const n=t.getAttribute("data-hs-range-slider"),s=n?JSON.parse(n):{};this.concatOptions=Object.assign(Object.assign(Object.assign({},s),e),{cssClasses:Object.assign(Object.assign({},noUiSlider.cssClasses),this.processClasses(s.cssClasses))}),this.wrapper=this.concatOptions.wrapper||t.closest(".hs-range-slider-wrapper")||null,this.currentValue=this.concatOptions.currentValue?Array.from(this.concatOptions.currentValue):Array.from((null===(i=this.wrapper)||void 0===i?void 0:i.querySelectorAll(".hs-range-slider-current-value"))||[]),this.icons=this.concatOptions.icons||{},this.init()}get formattedValue(){const t=this.el.noUiSlider.get();if(Array.isArray(t)&&this.format){const e=[];return t.forEach((t=>{e.push(this.format.to(t))})),e}return this.format?this.format.to(t):t}processClasses(t){const e={};return Object.keys(t).forEach((o=>{o&&(e[o]=`${noUiSlider.cssClasses[o]} ${t[o]}`)})),e}init(){var t,e,o,i,n,s,r,l,a,d,c,u,h;this.createCollection(window.$hsRangeSliderCollection,this),("object"==typeof(null===(t=this.concatOptions)||void 0===t?void 0:t.formatter)?"thousandsSeparatorAndDecimalPoints"===(null===(o=null===(e=this.concatOptions)||void 0===e?void 0:e.formatter)||void 0===o?void 0:o.type):"thousandsSeparatorAndDecimalPoints"===(null===(i=this.concatOptions)||void 0===i?void 0:i.formatter))?this.thousandsSeparatorAndDecimalPointsFormatter():("object"==typeof(null===(n=this.concatOptions)||void 0===n?void 0:n.formatter)?"integer"===(null===(r=null===(s=this.concatOptions)||void 0===s?void 0:s.formatter)||void 0===r?void 0:r.type):"integer"===(null===(l=this.concatOptions)||void 0===l?void 0:l.formatter))?this.integerFormatter():"object"==typeof(null===(a=this.concatOptions)||void 0===a?void 0:a.formatter)&&((null===(c=null===(d=this.concatOptions)||void 0===d?void 0:d.formatter)||void 0===c?void 0:c.prefix)||(null===(h=null===(u=this.concatOptions)||void 0===u?void 0:u.formatter)||void 0===h?void 0:h.postfix))&&this.prefixOrPostfixFormatter(),noUiSlider.create(this.el,this.concatOptions),this.currentValue&&this.currentValue.length>0&&this.el.noUiSlider.on("update",(t=>{this.updateCurrentValue(t)})),this.concatOptions.disabled&&this.setDisabled(),this.icons.handle&&this.buildHandleIcon()}formatValue(t){var e,o,i,n,s,r,l,a,d;let c="";return"object"==typeof(null===(e=this.concatOptions)||void 0===e?void 0:e.formatter)?((null===(i=null===(o=this.concatOptions)||void 0===o?void 0:o.formatter)||void 0===i?void 0:i.prefix)&&(c+=null===(s=null===(n=this.concatOptions)||void 0===n?void 0:n.formatter)||void 0===s?void 0:s.prefix),c+=t,(null===(l=null===(r=this.concatOptions)||void 0===r?void 0:r.formatter)||void 0===l?void 0:l.postfix)&&(c+=null===(d=null===(a=this.concatOptions)||void 0===a?void 0:a.formatter)||void 0===d?void 0:d.postfix)):c+=t,c}integerFormatter(){var t;this.format={to:t=>this.formatValue(Math.round(t)),from:t=>Math.round(+t)},(null===(t=this.concatOptions)||void 0===t?void 0:t.tooltips)&&(this.concatOptions.tooltips=this.format)}prefixOrPostfixFormatter(){var t;this.format={to:t=>this.formatValue(t),from:t=>+t},(null===(t=this.concatOptions)||void 0===t?void 0:t.tooltips)&&(this.concatOptions.tooltips=this.format)}thousandsSeparatorAndDecimalPointsFormatter(){var t;this.format={to:t=>this.formatValue(new Intl.NumberFormat("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}).format(t)),from:t=>parseFloat(t.replace(/,/g,""))},(null===(t=this.concatOptions)||void 0===t?void 0:t.tooltips)&&(this.concatOptions.tooltips=this.format)}setDisabled(){this.el.setAttribute("disabled","disabled"),this.el.classList.add("disabled")}buildHandleIcon(){if(!this.icons.handle)return!1;const t=this.el.querySelector(".noUi-handle");if(!t)return!1;t.innerHTML=this.icons.handle}updateCurrentValue(t){this.currentValue&&0!==this.currentValue.length&&t.forEach(((t,e)=>{var o;const i=null===(o=this.currentValue)||void 0===o?void 0:o[e];if(!i)return;const n=this.format?this.format.to(t).toString():t.toString();i instanceof HTMLInputElement?i.value=n:i.textContent=n}))}destroy(){this.el.noUiSlider.destroy(),this.format=null,window.$hsRangeSliderCollection=window.$hsRangeSliderCollection.filter((({element:t})=>t.el!==this.el))}static getInstance(t,e=!1){const o=window.$hsRangeSliderCollection.find((e=>e.element.el===("string"==typeof t?document.querySelector(t):t)));return o?e?o:o.element.el:null}static autoInit(){window.$hsRangeSliderCollection||(window.$hsRangeSliderCollection=[]),window.$hsRangeSliderCollection&&(window.$hsRangeSliderCollection=window.$hsRangeSliderCollection.filter((({element:t})=>document.contains(t.el)))),document.querySelectorAll("[data-hs-range-slider]:not(.--prevent-on-load-init)").forEach((t=>{window.$hsRangeSliderCollection.find((e=>{var o;return(null===(o=null==e?void 0:e.element)||void 0===o?void 0:o.el)===t}))||new s(t)}))}}window.addEventListener("load",(()=>{s.autoInit()})),"undefined"!=typeof window&&(window.HSRangeSlider=s),e.default=s},961:(t,e)=>{Object.defineProperty(e,"__esModule",{value:!0});e.default=class{constructor(t,e,o){this.el=t,this.options=e,this.events=o,this.el=t,this.options=e,this.events={}}createCollection(t,e){var o;t.push({id:(null===(o=null==e?void 0:e.el)||void 0===o?void 0:o.id)||t.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}}},e={};var o=function o(i){var n=e[i];if(void 0!==n)return n.exports;var s=e[i]={exports:{}};return t[i].call(s.exports,s,s.exports,o),s.exports}(347);return o})()));
+!(function (t, e) {
+	if ('object' == typeof exports && 'object' == typeof module)
+		module.exports = e();
+	else if ('function' == typeof define && define.amd) define([], e);
+	else {
+		var o = e();
+		for (var i in o) ('object' == typeof exports ? exports : t)[i] = o[i];
+	}
+})(self, () =>
+	(() => {
+		'use strict';
+		var t = {
+				347: function (t, e, o) {
+					/*
+					 * HSRangeSlider
+					 * @version: 3.2.3
+					 * @author: Preline Labs Ltd.
+					 * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
+					 * Copyright 2024 Preline Labs Ltd.
+					 */
+					var i =
+						(this && this.__importDefault) ||
+						function (t) {
+							return t && t.__esModule ? t : { default: t };
+						};
+					Object.defineProperty(e, '__esModule', { value: !0 });
+					const n = i(o(961));
+					class s extends n.default {
+						constructor(t, e, o) {
+							var i;
+							super(t, e, o);
+							const n = t.getAttribute('data-hs-range-slider'),
+								s = n ? JSON.parse(n) : {};
+							((this.concatOptions = Object.assign(
+								Object.assign(Object.assign({}, s), e),
+								{
+									cssClasses: Object.assign(
+										Object.assign({}, noUiSlider.cssClasses),
+										this.processClasses(s.cssClasses),
+									),
+								},
+							)),
+								(this.wrapper =
+									this.concatOptions.wrapper ||
+									t.closest('.hs-range-slider-wrapper') ||
+									null),
+								(this.currentValue = this.concatOptions.currentValue
+									? Array.from(this.concatOptions.currentValue)
+									: Array.from(
+											(null === (i = this.wrapper) || void 0 === i
+												? void 0
+												: i.querySelectorAll(
+														'.hs-range-slider-current-value',
+													)) || [],
+										)),
+								(this.icons = this.concatOptions.icons || {}),
+								this.init());
+						}
+						get formattedValue() {
+							const t = this.el.noUiSlider.get();
+							if (Array.isArray(t) && this.format) {
+								const e = [];
+								return (
+									t.forEach((t) => {
+										e.push(this.format.to(t));
+									}),
+									e
+								);
+							}
+							return this.format ? this.format.to(t) : t;
+						}
+						processClasses(t) {
+							const e = {};
+							return (
+								Object.keys(t).forEach((o) => {
+									o && (e[o] = `${noUiSlider.cssClasses[o]} ${t[o]}`);
+								}),
+								e
+							);
+						}
+						init() {
+							var t, e, o, i, n, s, r, l, a, d, c, u, h;
+							(this.createCollection(window.$hsRangeSliderCollection, this),
+								(
+									'object' ==
+									typeof (null === (t = this.concatOptions) || void 0 === t
+										? void 0
+										: t.formatter)
+										? 'thousandsSeparatorAndDecimalPoints' ===
+											(null ===
+												(o =
+													null === (e = this.concatOptions) || void 0 === e
+														? void 0
+														: e.formatter) || void 0 === o
+												? void 0
+												: o.type)
+										: 'thousandsSeparatorAndDecimalPoints' ===
+											(null === (i = this.concatOptions) || void 0 === i
+												? void 0
+												: i.formatter)
+								)
+									? this.thousandsSeparatorAndDecimalPointsFormatter()
+									: (
+												'object' ==
+												typeof (null === (n = this.concatOptions) ||
+												void 0 === n
+													? void 0
+													: n.formatter)
+													? 'integer' ===
+														(null ===
+															(r =
+																null === (s = this.concatOptions) ||
+																void 0 === s
+																	? void 0
+																	: s.formatter) || void 0 === r
+															? void 0
+															: r.type)
+													: 'integer' ===
+														(null === (l = this.concatOptions) || void 0 === l
+															? void 0
+															: l.formatter)
+										  )
+										? this.integerFormatter()
+										: 'object' ==
+												typeof (null === (a = this.concatOptions) ||
+												void 0 === a
+													? void 0
+													: a.formatter) &&
+											((null ===
+												(c =
+													null === (d = this.concatOptions) || void 0 === d
+														? void 0
+														: d.formatter) || void 0 === c
+												? void 0
+												: c.prefix) ||
+												(null ===
+													(h =
+														null === (u = this.concatOptions) || void 0 === u
+															? void 0
+															: u.formatter) || void 0 === h
+													? void 0
+													: h.postfix)) &&
+											this.prefixOrPostfixFormatter(),
+								noUiSlider.create(this.el, this.concatOptions),
+								this.currentValue &&
+									this.currentValue.length > 0 &&
+									this.el.noUiSlider.on('update', (t) => {
+										this.updateCurrentValue(t);
+									}),
+								this.concatOptions.disabled && this.setDisabled(),
+								this.icons.handle && this.buildHandleIcon());
+						}
+						formatValue(t) {
+							var e, o, i, n, s, r, l, a, d;
+							let c = '';
+							return (
+								'object' ==
+								typeof (null === (e = this.concatOptions) || void 0 === e
+									? void 0
+									: e.formatter)
+									? ((null ===
+											(i =
+												null === (o = this.concatOptions) || void 0 === o
+													? void 0
+													: o.formatter) || void 0 === i
+											? void 0
+											: i.prefix) &&
+											(c +=
+												null ===
+													(s =
+														null === (n = this.concatOptions) || void 0 === n
+															? void 0
+															: n.formatter) || void 0 === s
+													? void 0
+													: s.prefix),
+										(c += t),
+										(null ===
+											(l =
+												null === (r = this.concatOptions) || void 0 === r
+													? void 0
+													: r.formatter) || void 0 === l
+											? void 0
+											: l.postfix) &&
+											(c +=
+												null ===
+													(d =
+														null === (a = this.concatOptions) || void 0 === a
+															? void 0
+															: a.formatter) || void 0 === d
+													? void 0
+													: d.postfix))
+									: (c += t),
+								c
+							);
+						}
+						integerFormatter() {
+							var t;
+							((this.format = {
+								to: (t) => this.formatValue(Math.round(t)),
+								from: (t) => Math.round(+t),
+							}),
+								(null === (t = this.concatOptions) || void 0 === t
+									? void 0
+									: t.tooltips) && (this.concatOptions.tooltips = this.format));
+						}
+						prefixOrPostfixFormatter() {
+							var t;
+							((this.format = {
+								to: (t) => this.formatValue(t),
+								from: (t) => +t,
+							}),
+								(null === (t = this.concatOptions) || void 0 === t
+									? void 0
+									: t.tooltips) && (this.concatOptions.tooltips = this.format));
+						}
+						thousandsSeparatorAndDecimalPointsFormatter() {
+							var t;
+							((this.format = {
+								to: (t) =>
+									this.formatValue(
+										new Intl.NumberFormat('en-US', {
+											minimumFractionDigits: 2,
+											maximumFractionDigits: 2,
+										}).format(t),
+									),
+								from: (t) => parseFloat(t.replace(/,/g, '')),
+							}),
+								(null === (t = this.concatOptions) || void 0 === t
+									? void 0
+									: t.tooltips) && (this.concatOptions.tooltips = this.format));
+						}
+						setDisabled() {
+							(this.el.setAttribute('disabled', 'disabled'),
+								this.el.classList.add('disabled'));
+						}
+						buildHandleIcon() {
+							if (!this.icons.handle) return !1;
+							const t = this.el.querySelector('.noUi-handle');
+							if (!t) return !1;
+							t.innerHTML = this.icons.handle;
+						}
+						updateCurrentValue(t) {
+							this.currentValue &&
+								0 !== this.currentValue.length &&
+								t.forEach((t, e) => {
+									var o;
+									const i =
+										null === (o = this.currentValue) || void 0 === o
+											? void 0
+											: o[e];
+									if (!i) return;
+									const n = this.format
+										? this.format.to(t).toString()
+										: t.toString();
+									i instanceof HTMLInputElement
+										? (i.value = n)
+										: (i.textContent = n);
+								});
+						}
+						destroy() {
+							(this.el.noUiSlider.destroy(),
+								(this.format = null),
+								(window.$hsRangeSliderCollection =
+									window.$hsRangeSliderCollection.filter(
+										({ element: t }) => t.el !== this.el,
+									)));
+						}
+						static getInstance(t, e = !1) {
+							const o = window.$hsRangeSliderCollection.find(
+								(e) =>
+									e.element.el ===
+									('string' == typeof t ? document.querySelector(t) : t),
+							);
+							return o ? (e ? o : o.element.el) : null;
+						}
+						static autoInit() {
+							(window.$hsRangeSliderCollection ||
+								(window.$hsRangeSliderCollection = []),
+								window.$hsRangeSliderCollection &&
+									(window.$hsRangeSliderCollection =
+										window.$hsRangeSliderCollection.filter(({ element: t }) =>
+											document.contains(t.el),
+										)),
+								document
+									.querySelectorAll(
+										'[data-hs-range-slider]:not(.--prevent-on-load-init)',
+									)
+									.forEach((t) => {
+										window.$hsRangeSliderCollection.find((e) => {
+											var o;
+											return (
+												(null === (o = null == e ? void 0 : e.element) ||
+												void 0 === o
+													? void 0
+													: o.el) === t
+											);
+										}) || new s(t);
+									}));
+						}
+					}
+					(window.addEventListener('load', () => {
+						s.autoInit();
+					}),
+						'undefined' != typeof window && (window.HSRangeSlider = s),
+						(e.default = s));
+				},
+				961: (t, e) => {
+					Object.defineProperty(e, '__esModule', { value: !0 });
+					e.default = class {
+						constructor(t, e, o) {
+							((this.el = t),
+								(this.options = e),
+								(this.events = o),
+								(this.el = t),
+								(this.options = e),
+								(this.events = {}));
+						}
+						createCollection(t, e) {
+							var o;
+							t.push({
+								id:
+									(null === (o = null == e ? void 0 : e.el) || void 0 === o
+										? void 0
+										: o.id) || t.length + 1,
+								element: e,
+							});
+						}
+						fireEvent(t, e = null) {
+							if (this.events.hasOwnProperty(t)) return this.events[t](e);
+						}
+						on(t, e) {
+							this.events[t] = e;
+						}
+					};
+				},
+			},
+			e = {};
+		var o = (function o(i) {
+			var n = e[i];
+			if (void 0 !== n) return n.exports;
+			var s = (e[i] = { exports: {} });
+			return (t[i].call(s.exports, s, s.exports, o), s.exports);
+		})(347);
+		return o;
+	})(),
+);

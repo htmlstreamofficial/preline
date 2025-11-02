@@ -7,7 +7,7 @@ export interface IToggleCountOptions {
 
 export interface IToggleCount {
 	options?: IToggleCountOptions;
-	
+
 	countUp(): void;
 	countDown(): void;
 	destroy(): void;

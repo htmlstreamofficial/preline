@@ -23,7 +23,10 @@ export interface IRemoveElement {
 	options?: IRemoveElementOptions;
 	destroy(): void;
 }
-declare class HSRemoveElement extends HSBasePlugin<IRemoveElementOptions> implements IRemoveElement {
+declare class HSRemoveElement
+	extends HSBasePlugin<IRemoveElementOptions>
+	implements IRemoveElement
+{
 	private readonly removeTargetId;
 	private readonly removeTarget;
 	private readonly removeTargetAnimationClass;
@@ -33,12 +36,13 @@ declare class HSRemoveElement extends HSBasePlugin<IRemoveElementOptions> implem
 	private init;
 	private remove;
 	destroy(): void;
-	static getInstance(target: HTMLElement, isInstance?: boolean): HTMLElement | ICollectionItem<HSRemoveElement>;
+	static getInstance(
+		target: HTMLElement,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSRemoveElement>;
 	static autoInit(): void;
 }
 
-export {
-	HSRemoveElement as default,
-};
+export { HSRemoveElement as default };
 
 export {};

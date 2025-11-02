@@ -17,21 +17,31 @@ export interface ICollectionItem<T> {
 	element: T;
 }
 export interface IThemeSwitchOptions {
-	theme?: "dark" | "light" | "default";
-	type?: "change" | "click";
+	theme?: 'dark' | 'light' | 'default';
+	type?: 'change' | 'click';
 }
 export interface IThemeSwitch {
 	options?: IThemeSwitchOptions;
-	setAppearance(theme: string, isSaveToLocalStorage: boolean, isSetDispatchEvent: boolean): void;
+	setAppearance(
+		theme: string,
+		isSaveToLocalStorage: boolean,
+		isSetDispatchEvent: boolean,
+	): void;
 	destroy(): void;
 }
-declare class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements IThemeSwitch {
+declare class HSThemeSwitch
+	extends HSBasePlugin<IThemeSwitchOptions>
+	implements IThemeSwitch
+{
 	theme: string;
-	type: "change" | "click";
+	type: 'change' | 'click';
 	private onElementChangeListener;
 	private onElementClickListener;
 	private static systemThemeObserver;
-	constructor(el: HTMLElement | HTMLInputElement, options?: IThemeSwitchOptions);
+	constructor(
+		el: HTMLElement | HTMLInputElement,
+		options?: IThemeSwitchOptions,
+	);
 	private elementChange;
 	private elementClick;
 	private init;
@@ -41,14 +51,19 @@ declare class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements
 	private addSystemThemeObserver;
 	private removeSystemThemeObserver;
 	private toggleObserveSystemTheme;
-	setAppearance(theme?: string, isSaveToLocalStorage?: boolean, isSetDispatchEvent?: boolean): void;
+	setAppearance(
+		theme?: string,
+		isSaveToLocalStorage?: boolean,
+		isSetDispatchEvent?: boolean,
+	): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSThemeSwitch>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSThemeSwitch>;
 	static autoInit(): void;
 }
 
-export {
-	HSThemeSwitch as default,
-};
+export { HSThemeSwitch as default };
 
 export {};

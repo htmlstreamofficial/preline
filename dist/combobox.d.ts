@@ -32,7 +32,7 @@ export interface IComboBoxOptions {
 	outputItemTemplate?: string | null;
 	outputEmptyTemplate?: string | null;
 	outputLoaderTemplate?: string | null;
-	groupingType?: "default" | "tabs" | null;
+	groupingType?: 'default' | 'tabs' | null;
 	groupingTitleTemplate?: string | null;
 	tabsWrapperTemplate?: string | null;
 	preventSelection?: boolean;
@@ -50,7 +50,10 @@ export interface IComboBox {
 	recalculateDirection(): void;
 	destroy(): void;
 }
-declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
+declare class HSComboBox
+	extends HSBasePlugin<IComboBoxOptions>
+	implements IComboBox
+{
 	gap: number;
 	viewport: string | HTMLElement | null;
 	preventVisibility: boolean;
@@ -66,7 +69,7 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	outputItemTemplate: string | null;
 	outputEmptyTemplate: string | null;
 	outputLoaderTemplate: string | null;
-	groupingType: "default" | "tabs" | null;
+	groupingType: 'default' | 'tabs' | null;
 	groupingTitleTemplate: string | null;
 	tabsWrapperTemplate: string | null;
 	preventSelection: boolean;
@@ -153,14 +156,15 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	close(val?: string | null, data?: {} | null): boolean;
 	recalculateDirection(): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSComboBox | ICollectionItem<HSComboBox>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HSComboBox | ICollectionItem<HSComboBox>;
 	static autoInit(): void;
 	static close(target: HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;
 }
 
-export {
-	HSComboBox as default,
-};
+export { HSComboBox as default };
 
 export {};

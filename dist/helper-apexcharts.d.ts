@@ -41,8 +41,7 @@ export interface IBuildTooltipHelperSingleOptions {
 export interface IChartProps {
 	dataPointIndex: number;
 	seriesIndex: number;
-	series: [
-	][];
+	series: [][];
 	ctx: {
 		opts: ApexCharts.ApexOptions;
 	};
@@ -59,23 +58,48 @@ export interface IChartDonutProps {
 		globals: ApexCharts.ApexOptions;
 	};
 }
-export declare function buildTooltip(props: IChartProps, options: IBuildTooltipHelperOptions): string;
-export declare function buildHeatmapTooltip(props: IChartProps, options: IBuildTooltipHelperSingleOptions): string;
-export declare function buildTooltipCompareTwo(props: IChartProps, options: IBuildTooltipHelperOptions): string;
-export declare function buildTooltipCompareTwoAlt(props: IChartProps, options: IBuildTooltipHelperOptions): string;
-export declare function buildTooltipForDonut({ series, seriesIndex, w }: IChartDonutProps, textColor: string[]): string;
-export declare function buildChart(id: string, shared: Function, light: string, dark: string): any;
-export declare function fullBarHoverEffect(chartCtx: ApexCharts & {
-	el: HTMLElement;
-	w: {
-		config: {
-			xaxis?: {
-				categories?: any[];
+export declare function buildTooltip(
+	props: IChartProps,
+	options: IBuildTooltipHelperOptions,
+): string;
+export declare function buildHeatmapTooltip(
+	props: IChartProps,
+	options: IBuildTooltipHelperSingleOptions,
+): string;
+export declare function buildTooltipCompareTwo(
+	props: IChartProps,
+	options: IBuildTooltipHelperOptions,
+): string;
+export declare function buildTooltipCompareTwoAlt(
+	props: IChartProps,
+	options: IBuildTooltipHelperOptions,
+): string;
+export declare function buildTooltipForDonut(
+	{ series, seriesIndex, w }: IChartDonutProps,
+	textColor: string[],
+): string;
+export declare function buildChart(
+	id: string,
+	shared: Function,
+	light: string,
+	dark: string,
+): any;
+export declare function fullBarHoverEffect(
+	chartCtx: ApexCharts & {
+		el: HTMLElement;
+		w: {
+			config: {
+				xaxis?: {
+					categories?: any[];
+				};
 			};
 		};
-	};
-}, { shadowClasses, }?: {
-	shadowClasses?: string;
-}): void;
+	},
+	{
+		shadowClasses,
+	}?: {
+		shadowClasses?: string;
+	},
+): void;
 
 export {};

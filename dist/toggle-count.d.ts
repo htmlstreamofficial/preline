@@ -28,7 +28,10 @@ export interface IToggleCount {
 	countDown(): void;
 	destroy(): void;
 }
-declare class HSToggleCount extends HSBasePlugin<IToggleCountOptions> implements IToggleCount {
+declare class HSToggleCount
+	extends HSBasePlugin<IToggleCountOptions>
+	implements IToggleCount
+{
 	private readonly target;
 	private readonly min;
 	private readonly max;
@@ -43,12 +46,13 @@ declare class HSToggleCount extends HSBasePlugin<IToggleCountOptions> implements
 	countUp(): void;
 	countDown(): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSToggleCount | ICollectionItem<HSToggleCount>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HSToggleCount | ICollectionItem<HSToggleCount>;
 	static autoInit(): void;
 }
 
-export {
-	HSToggleCount as default,
-};
+export { HSToggleCount as default };
 
 export {};

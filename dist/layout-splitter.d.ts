@@ -25,7 +25,7 @@ export interface ILayoutSplitterOptions {
 }
 export interface IControlLayoutSplitter {
 	el: HTMLElement;
-	direction: "horizontal" | "vertical";
+	direction: 'horizontal' | 'vertical';
 	prev: HTMLElement | null;
 	next: HTMLElement | null;
 }
@@ -34,13 +34,18 @@ export interface ILayoutSplitter {
 	getSplitterItemSingleParam(item: HTMLElement, name: string): any;
 	getData(el: HTMLElement): any;
 	setSplitterItemSize(el: HTMLElement, size: number): void;
-	updateFlexValues(data: Array<{
-		id: string;
-		breakpoints: Record<number, number>;
-	}>): void;
+	updateFlexValues(
+		data: Array<{
+			id: string;
+			breakpoints: Record<number, number>;
+		}>,
+	): void;
 	destroy(): void;
 }
-declare class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements ILayoutSplitter {
+declare class HSLayoutSplitter
+	extends HSBasePlugin<ILayoutSplitterOptions>
+	implements ILayoutSplitter
+{
 	static isListenersInitialized: boolean;
 	private readonly horizontalSplitterClasses;
 	private readonly horizontalSplitterTemplate;
@@ -82,19 +87,26 @@ declare class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> impl
 	getSplitterItemSingleParam(item: HTMLElement, name: string): any;
 	getData(el: HTMLElement): any;
 	setSplitterItemSize(el: HTMLElement, size: number): void;
-	updateFlexValues(data: Array<{
-		id: string;
-		breakpoints: Record<number, number>;
-	}>): void;
+	updateFlexValues(
+		data: Array<{
+			id: string;
+			breakpoints: Record<number, number>;
+		}>,
+	): void;
 	destroy(): void;
 	private static findInCollection;
 	static autoInit(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSLayoutSplitter>;
-	static on(evt: string, target: HSLayoutSplitter | HTMLElement | string, cb: Function): void;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HTMLElement | ICollectionItem<HSLayoutSplitter>;
+	static on(
+		evt: string,
+		target: HSLayoutSplitter | HTMLElement | string,
+		cb: Function,
+	): void;
 }
 
-export {
-	HSLayoutSplitter as default,
-};
+export { HSLayoutSplitter as default };
 
 export {};

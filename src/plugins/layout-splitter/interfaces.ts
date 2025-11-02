@@ -24,9 +24,11 @@ export interface ILayoutSplitter {
 	getSplitterItemSingleParam(item: HTMLElement, name: string): any;
 	getData(el: HTMLElement): any;
 	setSplitterItemSize(el: HTMLElement, size: number): void;
-	updateFlexValues(data: Array<{
-		id: string;
-		breakpoints: Record<number, number>;
-	}>): void;
+	updateFlexValues(
+		data: Array<{
+			id: string;
+			breakpoints: Record<number, number>;
+		}>,
+	): void;
 	destroy(): void;
 }

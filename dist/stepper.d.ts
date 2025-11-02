@@ -120,12 +120,13 @@ declare class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	enableButtons(): void;
 	setErrorNavItem(n?: number): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSStepper | ICollectionItem<HSStepper>;
+	static getInstance(
+		target: HTMLElement | string,
+		isInstance?: boolean,
+	): HSStepper | ICollectionItem<HSStepper>;
 	static autoInit(): void;
 }
 
-export {
-	HSStepper as default,
-};
+export { HSStepper as default };
 
 export {};
