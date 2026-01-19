@@ -1214,7 +1214,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			const key = this.apiSearchQueryKey ?? "q";
 			const trimmed = (val ?? "").trim().toLowerCase();
 
-			if (trimmed !== "") queryParams.set(key, encodeURIComponent(trimmed));
+			if (trimmed !== "") queryParams.set(key, trimmed);
 
 			if (this.apiLoadMore) {
 				const perPage = typeof this.apiLoadMore === "object"
