@@ -395,16 +395,10 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		else input.focus();
 	}
 
-	private getScrollbarSize() {
-		let div = document.createElement("div");
-		div.style.overflow = "scroll";
-		div.style.width = "100px";
-		div.style.height = "100px";
-		document.body.appendChild(div);
-
-		let scrollbarSize = div.offsetWidth - div.clientWidth;
-
-		document.body.removeChild(div);
+	private getBodyCurrentScrollbarSize() {
+		const bodyWidth = parseFloat(getComputedStyle(document.body).width);
+		let scrollbarSize = window.innerWidth - bodyWidth;
+		scrollbarSize = Math.max(scrollbarSize, 0);
 
 		return scrollbarSize;
 	}
@@ -503,10 +497,10 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 		}
 
 		if (disabledScroll) {
-			document.body.style.overflow = "hidden";
 			if (this.emulateScrollbarSpace) {
-				document.body.style.paddingRight = `${this.getScrollbarSize()}px`;
+				document.body.style.paddingRight = `${this.getBodyCurrentScrollbarSize()}px`;
 			}
+			document.body.style.overflow = "hidden";
 		}
 
 		this.buildBackdrop();
