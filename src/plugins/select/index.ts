@@ -547,20 +547,24 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 				this.apiUrl && this.apiIconTag
 					? this.apiIconTag || ""
 					: item?.options?.icon || "",
-			) as HTMLImageElement;
+			);
 			if (
 				this.value &&
 				this.apiUrl &&
 				this.apiIconTag &&
-				item[this.apiFieldsMap.icon]
+				item[this.apiFieldsMap.icon] &&
+				img instanceof HTMLImageElement
 			) {
 				img.src = (item[this.apiFieldsMap.icon] as string) || "";
 			}
 
 			icon.append(img);
 
-			if (!img?.src) icon.classList.add("hidden");
-			else icon.classList.remove("hidden");
+      if (img instanceof HTMLImageElement ? !img.src : !img) {
+        icon.classList.add('hidden');
+      } else {
+        icon.classList.remove('hidden');
+      }
 		}
 	}
 
