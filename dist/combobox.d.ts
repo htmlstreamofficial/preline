@@ -95,6 +95,8 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	isCurrent: boolean;
 	private animationInProcess;
 	private isSearchLengthExceeded;
+	private lastQuery;
+	private queryAbortController?;
 	private onInputFocusListener;
 	private onInputInputListener;
 	private onToggleClickListener;
@@ -141,7 +143,6 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	private appendItemsToWrapper;
 	private resultItems;
 	private destroyOutputPlaceholder;
-	private getPreparedItems;
 	private setHighlighted;
 	private setupAccessibility;
 	private onEnter;

@@ -4,6 +4,7 @@ import { ISelectOptions } from '../select/interfaces';
 export interface ICustomDatepickerOptions extends Options {
 	removeDefaultStyles?: boolean;
 	mode?: 'custom-select' | 'default';
+  applyUtilityClasses?: boolean;
 	inputModeOptions?: {
 		dateSeparator?: string;
 		itemsSeparator?: string;
@@ -31,4 +32,16 @@ export interface ICustomDatepickerOptions extends Options {
 export interface IDatepicker {
 	options?: ICustomDatepickerOptions;
 	formatDate(date: string | number | Date, format?: string): string;
+}
+
+export interface ITemplates {
+  default: (theme: string | boolean) => string;
+  multiple: (theme: string | boolean) => string;
+  year: (theme: string | boolean) => string;
+  month: (theme: string | boolean) => string;
+  years: (options: string, theme: string | boolean) => string;
+  months: (theme: string | boolean) => string;
+  hours: (theme: string | boolean) => string;
+  minutes: (theme: string | boolean) => string;
+  meridiem: (theme: string | boolean) => string;
 }

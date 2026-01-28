@@ -1,6 +1,10 @@
 export interface ISingleOptionOptions {
-	description: string;
-	icon: string;
+	description?: string;
+	icon?: string;
+	additionalClasses?: [string, string[]][];
+	apiFields?: {
+		[key: string]: unknown;
+	};
 }
 
 export interface ISingleOption {
@@ -9,6 +13,7 @@ export interface ISingleOption {
 	disabled?: boolean;
 	selected?: boolean;
 	options?: ISingleOptionOptions | null;
+	optgroupName?: string | null;
 }
 
 export interface IApiFieldMap {
@@ -20,6 +25,8 @@ export interface IApiFieldMap {
 	page?: string;
 	offset?: string;
 	limit?: string;
+	pageStart?: string;
+	totalPath?: string;
 	[key: string]: unknown;
 }
 
@@ -30,7 +37,9 @@ export interface ISelectOptions {
 	hasSearch?: boolean;
 	minSearchLength?: number;
 	preventSearchFocus?: boolean;
+	preventSearchInsideDescription?: boolean;
 	mode?: string;
+	scrollToSelected?: boolean;
 
 	viewport?: string;
 
@@ -44,10 +53,15 @@ export interface ISelectOptions {
 	apiFieldsMap?: IApiFieldMap | null;
 	apiSelectedValues?: string | string[];
 	apiIconTag?: string | null;
-	apiLoadMore?: boolean | {
-		perPage: number;
-		scrollThreshold: number;
-	};
+	apiLoadMore?:
+		| boolean
+		| {
+				perPage: number;
+				scrollThreshold: number;
+		  };
+	apiPageStart?: number;
+	apiTotalPath?: string | null;
+	useTagsInputAsSearch?: boolean;
 
 	toggleTag?: string;
 	toggleClasses?: string;
@@ -57,10 +71,10 @@ export interface ISelectOptions {
 	};
 	toggleCountText?: string | null;
 	toggleCountTextPlacement?:
-		| "postfix"
-		| "prefix"
-		| "postfix-no-space"
-		| "prefix-no-space";
+		| 'postfix'
+		| 'prefix'
+		| 'postfix-no-space'
+		| 'prefix-no-space';
 	toggleCountTextMinItems?: number;
 	toggleCountTextMode?: string;
 
@@ -77,8 +91,8 @@ export interface ISelectOptions {
 	};
 	dropdownSpace: number;
 	dropdownPlacement: string | null;
-	dropdownVerticalFixedPlacement: "top" | "bottom" | null;
-	dropdownScope: "window" | "parent";
+	dropdownVerticalFixedPlacement: 'top' | 'bottom' | null;
+	dropdownScope: 'window' | 'parent';
 
 	extraMarkup?: string | string[] | null;
 
@@ -98,6 +112,9 @@ export interface ISelectOptions {
 	optionTemplate?: string;
 	optionTag?: string;
 	optionClasses?: string;
+
+	optgroupTag?: string;
+	optgroupClasses?: string;
 
 	descriptionClasses?: string;
 

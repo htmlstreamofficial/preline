@@ -1,0 +1,302 @@
+@import "tailwindcss";
+
+.vc {
+  @apply bg-white border border-gray-200 shadow-lg rounded-xl;
+
+  &[data-vc-input] {
+    @apply absolute;
+  }
+
+  &[data-vc-type="default"] {
+    @apply p-3;
+  }
+
+  &[data-vc-type="multiple"] {
+    @apply w-80 sm:w-160 py-3;
+  }
+
+  &[data-vc-calendar-hidden] {
+    @apply hidden;
+  }
+}
+
+.dark .vc:not([data-vc-theme="light"]) {
+  @apply bg-neutral-900 border-neutral-700;
+}
+
+.vc-week {
+  @apply flex pb-1.5;
+}
+
+.vc-week__day {
+  @apply m-px w-10 block font-normal text-center text-sm text-gray-500;
+
+  &:focus {
+    @apply outline-hidden;
+  }
+}
+
+/* Dark theme for week day */
+.dark .vc:not([data-vc-theme="light"]) .vc-week__day {
+  @apply text-neutral-500;
+}
+
+.vc-dates {
+  @apply grid grid-cols-7 gap-y-0.5;
+}
+
+.vc-date {
+  @apply relative size-10.5 flex justify-center items-center text-sm text-gray-800 rounded-full;
+
+  &:empty {
+    @apply invisible;
+  }
+
+  &:hover {
+    @apply text-primary-600;
+
+    &::before {
+      @apply border-primary-600;
+    }
+  }
+
+  &:nth-child(7n) {
+    @apply rounded-r-full;
+  }
+
+  &:nth-child(7n+1) {
+    @apply rounded-l-full;
+  }
+
+  &::before {
+    content: "";
+    @apply absolute inset-0 size-full border-[1.5px] border-transparent rounded-full;
+  }
+
+  button {
+    @apply relative size-full rounded-full;
+  }
+
+  &[data-vc-date-month="prev"],
+  &[data-vc-date-month="next"] {
+    @apply text-gray-400;
+  }
+
+  &[data-vc-date-today] {
+    @apply bg-primary-600 text-white;
+  }
+
+  &[data-vc-date-selected] {
+    @apply bg-primary-600;
+
+    &:not([data-vc-date-selected="middle"]) {
+      @apply text-white;
+    }
+
+    &[data-vc-date-hover="first-and-last"] {
+      @apply rounded-full;
+    }
+  }
+
+  &[data-vc-date-hover="first"],
+  &[data-vc-date-selected="first"] {
+    @apply rounded-l-full rounded-r-none;
+
+    &::before {
+      @apply rounded-l-full rounded-r-none;
+    }
+  }
+
+  &[data-vc-date-hover="last"],
+  &[data-vc-date-selected="last"] {
+    @apply rounded-r-full rounded-l-none;
+
+    &::before {
+      @apply rounded-r-full rounded-l-none;
+    }
+  }
+
+  &[data-vc-date-hover="first"][data-vc-date-selected],
+  &[data-vc-date-hover="last"][data-vc-date-selected],
+  &[data-vc-date-selected="first"],
+  &[data-vc-date-selected="last"] {
+    @apply text-white;
+
+    &::before {
+      @apply bg-primary-600;
+    }
+  }
+
+  &[data-vc-date-hover],
+  &[data-vc-date-selected="middle"] {
+    &:not([data-vc-date-hover="first"]):not([data-vc-date-hover="last"]):not([data-vc-date-hover="first-and-last"]) {
+      @apply rounded-none;
+    }
+
+    &:not([data-vc-date-today]):not([data-vc-date-hover="first-and-last"]) {
+      @apply bg-gray-100;
+    }
+  }
+}
+
+/* Dark theme for dates */
+.dark .vc:not([data-vc-theme="light"]) .vc-date {
+  @apply text-neutral-200;
+
+  &[data-vc-date-month="prev"],
+  &[data-vc-date-month="next"] {
+    @apply text-neutral-600;
+  }
+
+  &[data-vc-date-hover],
+  &[data-vc-date-selected="middle"] {
+    &:not([data-vc-date-today]):not([data-vc-date-hover="first-and-last"]) {
+      @apply bg-neutral-800;
+    }
+  }
+}
+
+.vc-months {
+  @apply grid grid-cols-4 gap-3;
+}
+
+.vc-months__month {
+  @apply py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800;
+
+  &:hover {
+    @apply border-gray-300 text-gray-500;
+  }
+
+  &:focus {
+    @apply outline-none border-gray-300 text-gray-500;
+  }
+
+  &:disabled,
+  &.disabled {
+    @apply opacity-50 pointer-events-none;
+  }
+
+  &[data-vc-months-month-selected] {
+    @apply bg-primary-600 border-primary-600 text-white;
+  }
+}
+
+/* Dark theme for months */
+.dark .vc:not([data-vc-theme="light"]) .vc-months__month {
+  @apply border-neutral-700 text-neutral-200;
+
+  &:hover,
+  &:focus {
+    @apply border-neutral-600 text-neutral-500;
+  }
+
+  &[data-vc-months-month-selected] {
+    @apply bg-primary-500 border-primary-500;
+  }
+}
+
+.vc-month {
+  @apply text-gray-800;
+
+  &:hover,
+  &:focus {
+    @apply text-gray-600;
+  }
+}
+
+/* Dark theme for month */
+.dark .vc:not([data-vc-theme="light"]) .vc-month {
+  @apply text-neutral-200;
+
+  &:hover,
+  &:focus {
+    @apply text-neutral-300;
+  }
+}
+
+.vc-years {
+  @apply grid grid-cols-5 gap-2;
+}
+
+.vc-years__year {
+  @apply py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-gray-800;
+
+  &:hover,
+  &:focus {
+    @apply border-gray-300 text-gray-500;
+  }
+
+  &:focus {
+    @apply outline-none;
+  }
+
+  &:disabled,
+  &.disabled {
+    @apply opacity-50 pointer-events-none;
+  }
+
+  &[data-vc-years-year-selected] {
+    @apply bg-primary-600 border-primary-600 text-white;
+  }
+}
+
+/* Dark theme for years */
+.dark .vc:not([data-vc-theme="light"]) .vc-years__year {
+  @apply border-neutral-700 text-neutral-200;
+
+  &:hover,
+  &:focus {
+    @apply border-neutral-600 text-neutral-500;
+  }
+
+  &[data-vc-years-year-selected] {
+    @apply bg-primary-500 border-primary-500;
+  }
+}
+
+.vc-year {
+  @apply text-gray-800;
+
+  &:hover,
+  &:focus {
+    @apply text-gray-600;
+  }
+}
+
+/* Dark theme for year */
+.dark .vc:not([data-vc-theme="light"]) .vc-year {
+  @apply text-neutral-200;
+
+  &:hover,
+  &:focus {
+    @apply text-neutral-300;
+  }
+}
+
+.vc-arrow {
+  @apply size-8 flex justify-center items-center text-gray-800 rounded-full;
+
+  &:hover,
+  &:focus {
+    @apply bg-gray-100;
+  }
+
+  &:focus {
+    @apply outline-hidden;
+  }
+
+  &:disabled,
+  &.disabled {
+    @apply opacity-50 pointer-events-none;
+  }
+}
+
+/* Dark theme for arrow */
+.dark .vc:not([data-vc-theme="light"]) .vc-arrow {
+  @apply text-neutral-400;
+
+  &:hover,
+  &:focus {
+    @apply bg-neutral-800;
+  }
+}

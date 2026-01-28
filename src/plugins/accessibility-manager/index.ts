@@ -2,6 +2,7 @@ import {
   IAccessibilityComponent,
   IAccessibilityKeyboardHandlers,
 } from "./interfaces";
+import { isFormElement } from "../../utils";
 
 class HSAccessibilityObserver {
   private components: IAccessibilityComponent[] = [];
@@ -118,8 +119,11 @@ class HSAccessibilityObserver {
       case "Enter":
         if (this.activeComponent.handlers.onEnter) {
           this.activeComponent.handlers.onEnter();
-          evt.preventDefault();
-          evt.stopPropagation();
+
+          if (!isFormElement(target)) {
+            evt.stopPropagation();
+            evt.preventDefault();
+          }
         }
         break;
       case " ":
@@ -155,7 +159,7 @@ class HSAccessibilityObserver {
           ? this.activeComponent.handlers.onShiftTab
           : this.activeComponent.handlers.onTab;
 
-        if (handler) handler();
+        if (handler) handler(evt);
 
         break;
       case "Home":
@@ -179,8 +183,13 @@ class HSAccessibilityObserver {
           /^[a-zA-Z]$/.test(evt.key)
         ) {
           this.activeComponent.handlers.onFirstLetter(evt.key);
-          evt.preventDefault();
-          evt.stopPropagation();
+          
+          if (!this.activeComponent.stopPropagation?.onFirstLetter) {
+            return;
+          } else {
+            evt.preventDefault();
+            evt.stopPropagation();
+          }
         }
         break;
     }
@@ -213,6 +222,9 @@ class HSAccessibilityObserver {
     name: string = "",
     selector: string = "",
     context?: HTMLElement,
+    stopPropagation?: {
+      [key: string]: boolean;
+    },
   ): IAccessibilityComponent {
     const component: IAccessibilityComponent = {
       wrapper,
@@ -222,6 +234,7 @@ class HSAccessibilityObserver {
       selector,
       context,
       isRegistered: true,
+      stopPropagation,
     };
 
     this.components.push(component);

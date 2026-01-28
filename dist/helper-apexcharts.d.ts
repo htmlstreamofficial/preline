@@ -46,6 +46,9 @@ export interface IChartProps {
 	ctx: {
 		opts: ApexCharts.ApexOptions;
 	};
+	w: {
+		globals: ApexCharts.ApexOptions;
+	};
 }
 export interface IChartPropsSeries {
 	name: string;
@@ -64,7 +67,7 @@ export declare function buildHeatmapTooltip(props: IChartProps, options: IBuildT
 export declare function buildTooltipCompareTwo(props: IChartProps, options: IBuildTooltipHelperOptions): string;
 export declare function buildTooltipCompareTwoAlt(props: IChartProps, options: IBuildTooltipHelperOptions): string;
 export declare function buildTooltipForDonut({ series, seriesIndex, w }: IChartDonutProps, textColor: string[]): string;
-export declare function buildChart(id: string, shared: Function, light: string, dark: string): any;
+export declare function buildChart(id: string, shared: Function, light: string | Function, dark: string | Function): any;
 export declare function fullBarHoverEffect(chartCtx: ApexCharts & {
 	el: HTMLElement;
 	w: {
@@ -74,8 +77,9 @@ export declare function fullBarHoverEffect(chartCtx: ApexCharts & {
 			};
 		};
 	};
-}, { shadowClasses, }?: {
+}, { shadowClasses }?: {
 	shadowClasses?: string;
 }): void;
+export declare function cssVarToValue(name: string, context?: HTMLElement): string | null;
 
 export {};

@@ -17,8 +17,15 @@ export interface ICollectionItem<T> {
 	element: T;
 }
 export interface ISingleOptionOptions {
-	description: string;
-	icon: string;
+	description?: string;
+	icon?: string;
+	additionalClasses?: [
+		string,
+		string[]
+	][];
+	apiFields?: {
+		[key: string]: unknown;
+	};
 }
 export interface ISingleOption {
 	title: string;
@@ -26,6 +33,7 @@ export interface ISingleOption {
 	disabled?: boolean;
 	selected?: boolean;
 	options?: ISingleOptionOptions | null;
+	optgroupName?: string | null;
 }
 export interface IApiFieldMap {
 	id: string;
@@ -36,6 +44,8 @@ export interface IApiFieldMap {
 	page?: string;
 	offset?: string;
 	limit?: string;
+	pageStart?: string;
+	totalPath?: string;
 	[key: string]: unknown;
 }
 export interface ISelectOptions {
@@ -45,7 +55,9 @@ export interface ISelectOptions {
 	hasSearch?: boolean;
 	minSearchLength?: number;
 	preventSearchFocus?: boolean;
+	preventSearchInsideDescription?: boolean;
 	mode?: string;
+	scrollToSelected?: boolean;
 	viewport?: string;
 	wrapperClasses?: string;
 	apiUrl?: string | null;
@@ -60,6 +72,9 @@ export interface ISelectOptions {
 		perPage: number;
 		scrollThreshold: number;
 	};
+	apiPageStart?: number;
+	apiTotalPath?: string | null;
+	useTagsInputAsSearch?: boolean;
 	toggleTag?: string;
 	toggleClasses?: string;
 	toggleSeparators?: {
@@ -100,6 +115,8 @@ export interface ISelectOptions {
 	optionTemplate?: string;
 	optionTag?: string;
 	optionClasses?: string;
+	optgroupTag?: string;
+	optgroupClasses?: string;
 	descriptionClasses?: string;
 	iconClasses?: string;
 	isAddTagOnEnter?: boolean;
@@ -123,8 +140,10 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly hasSearch;
 	private readonly minSearchLength;
 	private readonly preventSearchFocus;
+	private readonly preventSearchInsideDescription;
 	private readonly mode;
 	private readonly viewport;
+	private readonly scrollToSelected;
 	private _isOpened;
 	isMultiple: boolean | null;
 	isDisabled: boolean | null;
@@ -173,12 +192,15 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly optionTag;
 	private readonly optionTemplate;
 	private readonly optionClasses;
+	private readonly optgroupTag;
+	private readonly optgroupClasses;
 	private readonly descriptionClasses;
 	private readonly iconClasses;
 	private animationInProcess;
 	private currentPage;
 	private isLoading;
 	private hasMore;
+	private hasOptgroup;
 	private wrapper;
 	private toggle;
 	private toggleTextWrapper;
@@ -189,11 +211,18 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private search;
 	private searchNoResult;
 	private selectOptions;
+	private staticOptions;
 	private extraMarkup;
 	private readonly isAddTagOnEnter;
 	private tagsInputHelper;
 	private remoteOptions;
 	private disabledObserver;
+	private remoteSearchAbortController;
+	private loadMoreAbortController;
+	private requestId;
+	private lastQuery;
+	private readonly apiPageStart?;
+	private readonly apiTotalPath?;
 	private optionId;
 	private onWrapperClickListener;
 	private onToggleClickListener;
@@ -216,6 +245,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private hasValue;
 	private init;
 	private build;
+	private setOptions;
 	private buildWrapper;
 	private buildExtraMarkup;
 	private buildToggle;
@@ -228,6 +258,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private setTagsItems;
 	private buildTagsInput;
 	private buildDropdown;
+	private buildOptgroup;
 	private setupInfiniteScroll;
 	private handleScroll;
 	private loadMore;
@@ -237,10 +268,12 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private buildOption;
 	private buildOptionFromRemoteData;
 	private buildOptionsFromRemoteData;
+	private mergeRemoteDataIntoStaticOption;
 	private optionsFromRemoteData;
 	private apiRequest;
 	private sortElements;
 	private remoteSearch;
+	private filterStaticOptions;
 	private destroyOption;
 	private buildOriginalOption;
 	private destroyOriginalOption;

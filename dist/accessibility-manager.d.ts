@@ -3,8 +3,8 @@ export interface IAccessibilityKeyboardHandlers {
 	onEsc?: () => void;
 	onSpace?: () => void;
 	onArrow?: (event: KeyboardEvent) => void;
-	onTab?: () => void;
-	onShiftTab?: () => void;
+	onTab?: (event: KeyboardEvent) => void;
+	onShiftTab?: (event: KeyboardEvent) => void;
 	onHome?: () => void;
 	onEnd?: () => void;
 	onFirstLetter?: (key: string) => void;
@@ -18,6 +18,9 @@ export interface IAccessibilityComponent {
 	selector: string;
 	context?: HTMLElement;
 	isRegistered: boolean;
+	stopPropagation?: {
+		[key: string]: boolean;
+	};
 }
 declare class HSAccessibilityObserver {
 	private components;
@@ -31,7 +34,9 @@ declare class HSAccessibilityObserver {
 	private handleGlobalFocusin;
 	private handleGlobalKeydown;
 	private findClosestOpenParent;
-	registerComponent(wrapper: HTMLElement, handlers: IAccessibilityKeyboardHandlers, isOpened?: boolean, name?: string, selector?: string, context?: HTMLElement): IAccessibilityComponent;
+	registerComponent(wrapper: HTMLElement, handlers: IAccessibilityKeyboardHandlers, isOpened?: boolean, name?: string, selector?: string, context?: HTMLElement, stopPropagation?: {
+		[key: string]: boolean;
+	}): IAccessibilityComponent;
 	updateComponentState(component: IAccessibilityComponent, isOpened: boolean): void;
 	unregisterComponent(component: IAccessibilityComponent): void;
 	addAllowedKeybinding(key: string): void;

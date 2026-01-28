@@ -24,17 +24,40 @@ First, you need to make sure that you have a working <a href="https://tailwindcs
 
 ### Require via NPM
 
-1. Install <code>preline</code> via npm
+1. Install `preline` via npm
 
-<pre><code>npm i preline</code></pre>
+```bash
+npm i preline
+```
 
-2. Import the Preline UI CSS Variants file <code>variants.css</code> into your Tailwind CSS file, ensuring it comes after the <code>tailwindcss</code> import.
+2. Import the Preline UI CSS Variants file `variants.css` into your Tailwind CSS file, ensuring it comes after the `tailwindcss` import.
 
-<pre><code>@import "./node_modules/preline/variants.css";</code></pre>
+```css
+@import "tailwindcss";
 
-3. Include the JavaScript <code><script></code> that powers the interactive elements near the end of your <code>&lt;body&gt;</code> tag:
+/* Preline UI */
+@source "./node_modules/preline/dist/*.js";
+@import "./node_modules/preline/variants.css";
 
-<pre><code><script src="./node_modules/preline/dist/preline.js"></script></code></pre>
+/* Preline Themes */
+@import "./themes/theme.css";
+```
+
+3. Include the JavaScript `<script>` that powers the interactive elements near the end of your `<body>` tag:
+
+```html
+<script src="./node_modules/preline/dist/preline.js"></script>
+```
+
+## Agent Skills
+
+Preline UI includes Agent Skills for agentic coding tools (Cursor, Claude Code, Gemini CLI, etc.) that enable automated theme generation. Install via CLI:
+
+```bash
+npx skills add https://github.com/htmlstreamofficial/preline --skill theme-generator
+```
+
+Learn more in the [Agent Skills documentation](https://preline.co/docs/agent-skills.html).
 
 ## Documentation
 
@@ -46,7 +69,7 @@ For help, discussion about best practices, or any other conversation that would 
 
 ## License
 
-Preline UI is free for both personal and commercial projects, released under dual license terms [MIT](https://preline.co/docs/license.html) and [Preline UI Fair Use License](https://preline.co/docs/license.html), and copyrighted 2024 by Preline Labs Ltd.
+Preline UI is free for both personal and commercial projects, released under dual license terms [MIT](https://preline.co/docs/license.html) and [Preline UI Fair Use License](https://preline.co/docs/license.html), and copyrighted 2026 by Preline Labs Ltd.
 
 Preline UI Figma is free for both commercial and personal projects, learn more [here](https://preline.co/license.html).
   

@@ -1,6 +1,6 @@
 /*
  * HSStaticMethods
- * @version: 3.2.3
+ * @version: 4.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

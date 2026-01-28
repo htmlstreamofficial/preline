@@ -16,6 +16,7 @@ export interface IInputNumberOptions {
 	min?: number;
 	max?: number;
 	step?: number;
+	forceBlankValue?: boolean;
 }
 export interface IInputNumber {
 	options?: IInputNumberOptions;
@@ -29,6 +30,7 @@ declare class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements
 	private readonly minInputValue;
 	private readonly maxInputValue;
 	private readonly step;
+	private readonly forceBlankValue;
 	private onInputInputListener;
 	private onIncrementClickListener;
 	private onDecrementClickListener;

@@ -335,6 +335,8 @@ export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implement
 	isCurrent: boolean;
 	private animationInProcess;
 	private isSearchLengthExceeded;
+	private lastQuery;
+	private queryAbortController?;
 	private onInputFocusListener;
 	private onInputInputListener;
 	private onToggleClickListener;
@@ -381,7 +383,6 @@ export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implement
 	private appendItemsToWrapper;
 	private resultItems;
 	private destroyOutputPlaceholder;
-	private getPreparedItems;
 	private setHighlighted;
 	private setupAccessibility;
 	private onEnter;
@@ -475,6 +476,7 @@ export interface IInputNumberOptions {
 	min?: number;
 	max?: number;
 	step?: number;
+	forceBlankValue?: boolean;
 }
 export interface IInputNumber {
 	options?: IInputNumberOptions;
@@ -488,6 +490,7 @@ export declare class HSInputNumber extends HSBasePlugin<IInputNumberOptions> imp
 	private readonly minInputValue;
 	private readonly maxInputValue;
 	private readonly step;
+	private readonly forceBlankValue;
 	private onInputInputListener;
 	private onIncrementClickListener;
 	private onDecrementClickListener;
@@ -652,7 +655,7 @@ export declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private buildBackdrop;
 	private destroyBackdrop;
 	private focusElement;
-	private getScrollbarSize;
+	private getBodyCurrentScrollbarSize;
 	private collectToggleParameters;
 	private isElementVisible;
 	private isOpened;
@@ -804,8 +807,15 @@ export declare class HSScrollspy extends HSBasePlugin<IScrollspyOptions> impleme
 	static autoInit(): void;
 }
 export interface ISingleOptionOptions {
-	description: string;
-	icon: string;
+	description?: string;
+	icon?: string;
+	additionalClasses?: [
+		string,
+		string[]
+	][];
+	apiFields?: {
+		[key: string]: unknown;
+	};
 }
 export interface ISingleOption {
 	title: string;
@@ -813,6 +823,7 @@ export interface ISingleOption {
 	disabled?: boolean;
 	selected?: boolean;
 	options?: ISingleOptionOptions | null;
+	optgroupName?: string | null;
 }
 export interface IApiFieldMap {
 	id: string;
@@ -823,6 +834,8 @@ export interface IApiFieldMap {
 	page?: string;
 	offset?: string;
 	limit?: string;
+	pageStart?: string;
+	totalPath?: string;
 	[key: string]: unknown;
 }
 export interface ISelectOptions {
@@ -832,7 +845,9 @@ export interface ISelectOptions {
 	hasSearch?: boolean;
 	minSearchLength?: number;
 	preventSearchFocus?: boolean;
+	preventSearchInsideDescription?: boolean;
 	mode?: string;
+	scrollToSelected?: boolean;
 	viewport?: string;
 	wrapperClasses?: string;
 	apiUrl?: string | null;
@@ -847,6 +862,9 @@ export interface ISelectOptions {
 		perPage: number;
 		scrollThreshold: number;
 	};
+	apiPageStart?: number;
+	apiTotalPath?: string | null;
+	useTagsInputAsSearch?: boolean;
 	toggleTag?: string;
 	toggleClasses?: string;
 	toggleSeparators?: {
@@ -887,6 +905,8 @@ export interface ISelectOptions {
 	optionTemplate?: string;
 	optionTag?: string;
 	optionClasses?: string;
+	optgroupTag?: string;
+	optgroupClasses?: string;
 	descriptionClasses?: string;
 	iconClasses?: string;
 	isAddTagOnEnter?: boolean;
@@ -910,8 +930,10 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private readonly hasSearch;
 	private readonly minSearchLength;
 	private readonly preventSearchFocus;
+	private readonly preventSearchInsideDescription;
 	private readonly mode;
 	private readonly viewport;
+	private readonly scrollToSelected;
 	private _isOpened;
 	isMultiple: boolean | null;
 	isDisabled: boolean | null;
@@ -960,12 +982,15 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private readonly optionTag;
 	private readonly optionTemplate;
 	private readonly optionClasses;
+	private readonly optgroupTag;
+	private readonly optgroupClasses;
 	private readonly descriptionClasses;
 	private readonly iconClasses;
 	private animationInProcess;
 	private currentPage;
 	private isLoading;
 	private hasMore;
+	private hasOptgroup;
 	private wrapper;
 	private toggle;
 	private toggleTextWrapper;
@@ -976,11 +1001,18 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private search;
 	private searchNoResult;
 	private selectOptions;
+	private staticOptions;
 	private extraMarkup;
 	private readonly isAddTagOnEnter;
 	private tagsInputHelper;
 	private remoteOptions;
 	private disabledObserver;
+	private remoteSearchAbortController;
+	private loadMoreAbortController;
+	private requestId;
+	private lastQuery;
+	private readonly apiPageStart?;
+	private readonly apiTotalPath?;
 	private optionId;
 	private onWrapperClickListener;
 	private onToggleClickListener;
@@ -1003,6 +1035,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private hasValue;
 	private init;
 	private build;
+	private setOptions;
 	private buildWrapper;
 	private buildExtraMarkup;
 	private buildToggle;
@@ -1015,6 +1048,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private setTagsItems;
 	private buildTagsInput;
 	private buildDropdown;
+	private buildOptgroup;
 	private setupInfiniteScroll;
 	private handleScroll;
 	private loadMore;
@@ -1024,10 +1058,12 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private buildOption;
 	private buildOptionFromRemoteData;
 	private buildOptionsFromRemoteData;
+	private mergeRemoteDataIntoStaticOption;
 	private optionsFromRemoteData;
 	private apiRequest;
 	private sortElements;
 	private remoteSearch;
+	private filterStaticOptions;
 	private destroyOption;
 	private buildOriginalOption;
 	private destroyOriginalOption;

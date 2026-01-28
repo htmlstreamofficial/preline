@@ -1,4 +1,6 @@
-export const templates = {
+import { ITemplates } from "./interfaces";
+
+export const templates: ITemplates = {
   default: (theme: string | boolean = false) =>
     `<div class="--single-month flex flex-col overflow-hidden">
     <div class="grid grid-cols-5 items-center gap-x-3 mx-1.5 pb-3" data-vc="header">

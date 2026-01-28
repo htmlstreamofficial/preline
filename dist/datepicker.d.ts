@@ -28,6 +28,8 @@ export interface IApiFieldMap {
 	page?: string;
 	offset?: string;
 	limit?: string;
+	pageStart?: string;
+	totalPath?: string;
 	[key: string]: unknown;
 }
 export interface ISelectOptions {
@@ -37,7 +39,9 @@ export interface ISelectOptions {
 	hasSearch?: boolean;
 	minSearchLength?: number;
 	preventSearchFocus?: boolean;
+	preventSearchInsideDescription?: boolean;
 	mode?: string;
+	scrollToSelected?: boolean;
 	viewport?: string;
 	wrapperClasses?: string;
 	apiUrl?: string | null;
@@ -52,6 +56,9 @@ export interface ISelectOptions {
 		perPage: number;
 		scrollThreshold: number;
 	};
+	apiPageStart?: number;
+	apiTotalPath?: string | null;
+	useTagsInputAsSearch?: boolean;
 	toggleTag?: string;
 	toggleClasses?: string;
 	toggleSeparators?: {
@@ -92,6 +99,8 @@ export interface ISelectOptions {
 	optionTemplate?: string;
 	optionTag?: string;
 	optionClasses?: string;
+	optgroupTag?: string;
+	optgroupClasses?: string;
 	descriptionClasses?: string;
 	iconClasses?: string;
 	isAddTagOnEnter?: boolean;
@@ -101,6 +110,7 @@ export interface ISelectOptions {
 export interface ICustomDatepickerOptions extends Options {
 	removeDefaultStyles?: boolean;
 	mode?: "custom-select" | "default";
+	applyUtilityClasses?: boolean;
 	inputModeOptions?: {
 		dateSeparator?: string;
 		itemsSeparator?: string;
@@ -132,11 +142,14 @@ declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private dataOptions;
 	private concatOptions;
 	private updatedStyles;
+	private applyUtilityClasses;
+	private templatesByType;
 	private vanillaCalendar;
 	constructor(el: HTMLElement, options?: {}, events?: {});
 	private init;
 	private getTimeParts;
 	private getCurrentMonthAndYear;
+	private extractSeparatorFromFormat;
 	private setInputValue;
 	private getLocalizedTodayText;
 	private changeDateSeparator;

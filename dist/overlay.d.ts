@@ -80,7 +80,7 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private buildBackdrop;
 	private destroyBackdrop;
 	private focusElement;
-	private getScrollbarSize;
+	private getBodyCurrentScrollbarSize;
 	private collectToggleParameters;
 	private isElementVisible;
 	private isOpened;

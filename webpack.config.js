@@ -35,6 +35,7 @@ module.exports = {
 		'tree-view': './src/plugins/tree-view/index.ts',
 
 		// Helpers
+    'helper-shared': './src/helpers/shared/index.ts',
 		'helper-apexcharts': './src/helpers/apexcharts/index.ts',
 		'helper-clipboard': './src/helpers/clipboard/index.ts',
 	},

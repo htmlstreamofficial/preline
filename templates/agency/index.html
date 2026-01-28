@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <!-- Required Meta Tags Always Come First -->
   <meta charset="utf-8">
@@ -30,36 +30,38 @@
   <link rel="shortcut icon" href="../../favicon.ico">
 
   <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Kode+Mono:wght@400..700&display=swap" rel="stylesheet">
 
   <!-- Theme Check and Update -->
   <script>
-    const html = document.querySelector('html');
-    const isLightOrAuto = localStorage.getItem('hs_theme') === 'light' || (localStorage.getItem('hs_theme') === 'auto' && !window.matchMedia('(prefers-color-scheme: dark)').matches);
-    const isDarkOrAuto = localStorage.getItem('hs_theme') === 'dark' || (localStorage.getItem('hs_theme') === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    (function () {
+      const html = document.querySelector('html');
+      const isLightOrAuto = localStorage.getItem('hs_theme') === 'light' || (localStorage.getItem('hs_theme') === 'auto' && !window.matchMedia('(prefers-color-scheme: dark)').matches);
+      const isDarkOrAuto = localStorage.getItem('hs_theme') === 'dark' || (localStorage.getItem('hs_theme') === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-    if (isLightOrAuto && html.classList.contains('dark')) html.classList.remove('dark');
-    else if (isDarkOrAuto && html.classList.contains('light')) html.classList.remove('light');
-    else if (isDarkOrAuto && !html.classList.contains('dark')) html.classList.add('dark');
-    else if (isLightOrAuto && !html.classList.contains('light')) html.classList.add('light');
+      if (isLightOrAuto && html.classList.contains('dark')) html.classList.remove('dark');
+      else if (isDarkOrAuto && html.classList.contains('light')) html.classList.remove('light');
+      else if (isDarkOrAuto && !html.classList.contains('dark')) html.classList.add('dark');
+      else if (isLightOrAuto && !html.classList.contains('light')) html.classList.add('light');
+    })();
   </script>
 
   <!-- CSS Preline -->
-  <link rel="stylesheet" href="https://preline.co/assets/css/main.css?v=3.0.1">
+  <link rel="stylesheet" href="https://preline.co/assets/css/main.css?v=4.0.0">
 </head>
 
-<body class="bg-neutral-900">
+<body class="bg-background">
   <!-- ========== HEADER ========== -->
-  <header class="sticky top-4 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full before:absolute before:inset-0 before:max-w-5xl before:mx-2 lg:before:mx-auto before:rounded-[26px] before:bg-neutral-800/30 before:backdrop-blur-md">
+  <header class="sticky top-4 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full before:absolute before:inset-0 before:max-w-5xl before:mx-2 lg:before:mx-auto before:rounded before:rounded-[26px] before:bg-navbar before:border before:border-navbar-line">
     <nav class="relative max-w-5xl w-full flex flex-wrap md:flex-nowrap basis-full items-center justify-between py-2 ps-5 pe-2 md:py-0 mx-2 lg:mx-auto">
       <div class="flex items-center">
         <!-- Logo -->
-        <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="https://preline.co/templates/agency/index.html" aria-label="Preline">
+        <a class="flex-none rounded-md text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80" href="index.html" aria-label="Preline">
           <svg class="w-28 h-auto" width="116" height="32" viewBox="0 0 116 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M33.5696 30.8182V11.3182H37.4474V13.7003H37.6229C37.7952 13.3187 38.0445 12.9309 38.3707 12.5369C38.7031 12.1368 39.134 11.8045 39.6634 11.5398C40.1989 11.2689 40.8636 11.1335 41.6577 11.1335C42.6918 11.1335 43.6458 11.4044 44.5199 11.946C45.3939 12.4815 46.0926 13.291 46.6158 14.3743C47.139 15.4515 47.4006 16.8026 47.4006 18.4276C47.4006 20.0095 47.1451 21.3452 46.6342 22.4347C46.1295 23.518 45.4401 24.3397 44.5661 24.8999C43.6982 25.4538 42.7256 25.7308 41.6484 25.7308C40.8852 25.7308 40.2358 25.6046 39.7003 25.3523C39.1709 25.0999 38.737 24.7829 38.3984 24.4013C38.0599 24.0135 37.8014 23.6226 37.6229 23.2287H37.5028V30.8182H33.5696ZM37.4197 18.4091C37.4197 19.2524 37.5367 19.9879 37.7706 20.6158C38.0045 21.2436 38.343 21.733 38.7862 22.0838C39.2294 22.4285 39.768 22.6009 40.402 22.6009C41.0421 22.6009 41.5838 22.4254 42.027 22.0746C42.4702 21.7176 42.8056 21.2251 43.0334 20.5973C43.2673 19.9633 43.3842 19.2339 43.3842 18.4091C43.3842 17.5904 43.2704 16.8703 43.0426 16.2486C42.8149 15.6269 42.4794 15.1406 42.0362 14.7898C41.593 14.4389 41.0483 14.2635 40.402 14.2635C39.7618 14.2635 39.2202 14.4328 38.777 14.7713C38.34 15.1098 38.0045 15.59 37.7706 16.2116C37.5367 16.8333 37.4197 17.5658 37.4197 18.4091ZM49.2427 25.5V11.3182H53.0559V13.7926H53.2037C53.4622 12.9124 53.8961 12.2476 54.5055 11.7983C55.1149 11.3428 55.8166 11.1151 56.6106 11.1151C56.8076 11.1151 57.02 11.1274 57.2477 11.152C57.4754 11.1766 57.6755 11.2105 57.8478 11.2536V14.7436C57.6632 14.6882 57.4077 14.639 57.0815 14.5959C56.7553 14.5528 56.4567 14.5312 56.1859 14.5312C55.6073 14.5312 55.0903 14.6574 54.6348 14.9098C54.1854 15.156 53.8284 15.5007 53.5638 15.9439C53.3052 16.3871 53.176 16.898 53.176 17.4766V25.5H49.2427ZM64.9043 25.777C63.4455 25.777 62.1898 25.4815 61.1373 24.8906C60.0909 24.2936 59.2845 23.4503 58.7182 22.3608C58.1519 21.2652 57.8688 19.9695 57.8688 18.4737C57.8688 17.0149 58.1519 15.7346 58.7182 14.6328C59.2845 13.531 60.0816 12.6723 61.1096 12.0568C62.1437 11.4413 63.3563 11.1335 64.7474 11.1335C65.683 11.1335 66.5539 11.2843 67.3603 11.5859C68.1728 11.8814 68.8806 12.3277 69.4839 12.9247C70.0932 13.5218 70.5672 14.2727 70.9057 15.1776C71.2443 16.0762 71.4135 17.1288 71.4135 18.3352V19.4155H59.4384V16.978H67.7111C67.7111 16.4117 67.588 15.91 67.3418 15.473C67.0956 15.036 66.754 14.6944 66.317 14.4482C65.8861 14.1958 65.3844 14.0696 64.812 14.0696C64.2149 14.0696 63.6856 14.2081 63.2239 14.4851C62.7684 14.7559 62.4114 15.1222 62.1529 15.5838C61.8944 16.0393 61.762 16.5471 61.7559 17.1072V19.4247C61.7559 20.1264 61.8851 20.7327 62.1437 21.2436C62.4083 21.7545 62.7807 22.1484 63.2608 22.4254C63.741 22.7024 64.3103 22.8409 64.9689 22.8409C65.406 22.8409 65.8061 22.7794 66.1692 22.6562C66.5324 22.5331 66.8432 22.3485 67.1018 22.1023C67.3603 21.8561 67.5572 21.5545 67.6927 21.1974L71.3304 21.4375C71.1458 22.3116 70.7672 23.0748 70.1948 23.7273C69.6285 24.3736 68.896 24.8783 67.9974 25.2415C67.1048 25.5985 66.0738 25.777 64.9043 25.777ZM77.1335 6.59091V25.5H73.2003V6.59091H77.1335ZM79.5043 25.5V11.3182H83.4375V25.5H79.5043ZM81.4801 9.49006C80.8954 9.49006 80.3937 9.29616 79.9752 8.90838C79.5628 8.51444 79.3566 8.04356 79.3566 7.49574C79.3566 6.95407 79.5628 6.48935 79.9752 6.10156C80.3937 5.70762 80.8954 5.51065 81.4801 5.51065C82.0649 5.51065 82.5635 5.70762 82.9759 6.10156C83.3944 6.48935 83.6037 6.95407 83.6037 7.49574C83.6037 8.04356 83.3944 8.51444 82.9759 8.90838C82.5635 9.29616 82.0649 9.49006 81.4801 9.49006ZM89.7415 17.3011V25.5H85.8083V11.3182H89.5569V13.8203H89.723C90.037 12.9955 90.5632 12.343 91.3019 11.8629C92.0405 11.3767 92.9361 11.1335 93.9887 11.1335C94.9735 11.1335 95.8322 11.349 96.5647 11.7798C97.2971 12.2107 97.8665 12.8262 98.2728 13.6264C98.679 14.4205 98.8821 15.3684 98.8821 16.4702V25.5H94.9489V17.1719C94.9551 16.304 94.7335 15.6269 94.2841 15.1406C93.8348 14.6482 93.2162 14.402 92.4283 14.402C91.8989 14.402 91.4311 14.5159 91.0249 14.7436C90.6248 14.9714 90.3109 15.3037 90.0831 15.7408C89.8615 16.1716 89.7477 16.6918 89.7415 17.3011ZM107.665 25.777C106.206 25.777 104.951 25.4815 103.898 24.8906C102.852 24.2936 102.045 23.4503 101.479 22.3608C100.913 21.2652 100.63 19.9695 100.63 18.4737C100.63 17.0149 100.913 15.7346 101.479 14.6328C102.045 13.531 102.842 12.6723 103.87 12.0568C104.905 11.4413 106.117 11.1335 107.508 11.1335C108.444 11.1335 109.315 11.2843 110.121 11.5859C110.934 11.8814 111.641 12.3277 112.245 12.9247C112.854 13.5218 113.328 14.2727 113.667 15.1776C114.005 16.0762 114.174 17.1288 114.174 18.3352V19.4155H102.199V16.978H110.472C110.472 16.4117 110.349 15.91 110.103 15.473C109.856 15.036 109.515 14.6944 109.078 14.4482C108.647 14.1958 108.145 14.0696 107.573 14.0696C106.976 14.0696 106.446 14.2081 105.985 14.4851C105.529 14.7559 105.172 15.1222 104.914 15.5838C104.655 16.0393 104.523 16.5471 104.517 17.1072V19.4247C104.517 20.1264 104.646 20.7327 104.905 21.2436C105.169 21.7545 105.542 22.1484 106.022 22.4254C106.502 22.7024 107.071 22.8409 107.73 22.8409C108.167 22.8409 108.567 22.7794 108.93 22.6562C109.293 22.5331 109.604 22.3485 109.863 22.1023C110.121 21.8561 110.318 21.5545 110.454 21.1974L114.091 21.4375C113.907 22.3116 113.528 23.0748 112.956 23.7273C112.389 24.3736 111.657 24.8783 110.758 25.2415C109.866 25.5985 108.835 25.777 107.665 25.777Z" class="fill-white" fill="currentColor" />
-            <path d="M1 29.5V16.5C1 9.87258 6.37258 4.5 13 4.5C19.6274 4.5 25 9.87258 25 16.5C25 23.1274 19.6274 28.5 13 28.5H12" class="stroke-white" stroke="currentColor" stroke-width="2" />
-            <path d="M5 29.5V16.66C5 12.1534 8.58172 8.5 13 8.5C17.4183 8.5 21 12.1534 21 16.66C21 21.1666 17.4183 24.82 13 24.82H12" class="stroke-white" stroke="currentColor" stroke-width="2" />
-            <circle cx="13" cy="16.5214" r="5" class="fill-white" fill="currentColor" />
+            <path d="M33.5696 30.8182V11.3182H37.4474V13.7003H37.6229C37.7952 13.3187 38.0445 12.9309 38.3707 12.5369C38.7031 12.1368 39.134 11.8045 39.6634 11.5398C40.1989 11.2689 40.8636 11.1335 41.6577 11.1335C42.6918 11.1335 43.6458 11.4044 44.5199 11.946C45.3939 12.4815 46.0926 13.291 46.6158 14.3743C47.139 15.4515 47.4006 16.8026 47.4006 18.4276C47.4006 20.0095 47.1451 21.3452 46.6342 22.4347C46.1295 23.518 45.4401 24.3397 44.5661 24.8999C43.6982 25.4538 42.7256 25.7308 41.6484 25.7308C40.8852 25.7308 40.2358 25.6046 39.7003 25.3523C39.1709 25.0999 38.737 24.7829 38.3984 24.4013C38.0599 24.0135 37.8014 23.6226 37.6229 23.2287H37.5028V30.8182H33.5696ZM37.4197 18.4091C37.4197 19.2524 37.5367 19.9879 37.7706 20.6158C38.0045 21.2436 38.343 21.733 38.7862 22.0838C39.2294 22.4285 39.768 22.6009 40.402 22.6009C41.0421 22.6009 41.5838 22.4254 42.027 22.0746C42.4702 21.7176 42.8056 21.2251 43.0334 20.5973C43.2673 19.9633 43.3842 19.2339 43.3842 18.4091C43.3842 17.5904 43.2704 16.8703 43.0426 16.2486C42.8149 15.6269 42.4794 15.1406 42.0362 14.7898C41.593 14.4389 41.0483 14.2635 40.402 14.2635C39.7618 14.2635 39.2202 14.4328 38.777 14.7713C38.34 15.1098 38.0045 15.59 37.7706 16.2116C37.5367 16.8333 37.4197 17.5658 37.4197 18.4091ZM49.2427 25.5V11.3182H53.0559V13.7926H53.2037C53.4622 12.9124 53.8961 12.2476 54.5055 11.7983C55.1149 11.3428 55.8166 11.1151 56.6106 11.1151C56.8076 11.1151 57.02 11.1274 57.2477 11.152C57.4754 11.1766 57.6755 11.2105 57.8478 11.2536V14.7436C57.6632 14.6882 57.4077 14.639 57.0815 14.5959C56.7553 14.5528 56.4567 14.5312 56.1859 14.5312C55.6073 14.5312 55.0903 14.6574 54.6348 14.9098C54.1854 15.156 53.8284 15.5007 53.5638 15.9439C53.3052 16.3871 53.176 16.898 53.176 17.4766V25.5H49.2427ZM64.9043 25.777C63.4455 25.777 62.1898 25.4815 61.1373 24.8906C60.0909 24.2936 59.2845 23.4503 58.7182 22.3608C58.1519 21.2652 57.8688 19.9695 57.8688 18.4737C57.8688 17.0149 58.1519 15.7346 58.7182 14.6328C59.2845 13.531 60.0816 12.6723 61.1096 12.0568C62.1437 11.4413 63.3563 11.1335 64.7474 11.1335C65.683 11.1335 66.5539 11.2843 67.3603 11.5859C68.1728 11.8814 68.8806 12.3277 69.4839 12.9247C70.0932 13.5218 70.5672 14.2727 70.9057 15.1776C71.2443 16.0762 71.4135 17.1288 71.4135 18.3352V19.4155H59.4384V16.978H67.7111C67.7111 16.4117 67.588 15.91 67.3418 15.473C67.0956 15.036 66.754 14.6944 66.317 14.4482C65.8861 14.1958 65.3844 14.0696 64.812 14.0696C64.2149 14.0696 63.6856 14.2081 63.2239 14.4851C62.7684 14.7559 62.4114 15.1222 62.1529 15.5838C61.8944 16.0393 61.762 16.5471 61.7559 17.1072V19.4247C61.7559 20.1264 61.8851 20.7327 62.1437 21.2436C62.4083 21.7545 62.7807 22.1484 63.2608 22.4254C63.741 22.7024 64.3103 22.8409 64.9689 22.8409C65.406 22.8409 65.8061 22.7794 66.1692 22.6562C66.5324 22.5331 66.8432 22.3485 67.1018 22.1023C67.3603 21.8561 67.5572 21.5545 67.6927 21.1974L71.3304 21.4375C71.1458 22.3116 70.7672 23.0748 70.1948 23.7273C69.6285 24.3736 68.896 24.8783 67.9974 25.2415C67.1048 25.5985 66.0738 25.777 64.9043 25.777ZM77.1335 6.59091V25.5H73.2003V6.59091H77.1335ZM79.5043 25.5V11.3182H83.4375V25.5H79.5043ZM81.4801 9.49006C80.8954 9.49006 80.3937 9.29616 79.9752 8.90838C79.5628 8.51444 79.3566 8.04356 79.3566 7.49574C79.3566 6.95407 79.5628 6.48935 79.9752 6.10156C80.3937 5.70762 80.8954 5.51065 81.4801 5.51065C82.0649 5.51065 82.5635 5.70762 82.9759 6.10156C83.3944 6.48935 83.6037 6.95407 83.6037 7.49574C83.6037 8.04356 83.3944 8.51444 82.9759 8.90838C82.5635 9.29616 82.0649 9.49006 81.4801 9.49006ZM89.7415 17.3011V25.5H85.8083V11.3182H89.5569V13.8203H89.723C90.037 12.9955 90.5632 12.343 91.3019 11.8629C92.0405 11.3767 92.9361 11.1335 93.9887 11.1335C94.9735 11.1335 95.8322 11.349 96.5647 11.7798C97.2971 12.2107 97.8665 12.8262 98.2728 13.6264C98.679 14.4205 98.8821 15.3684 98.8821 16.4702V25.5H94.9489V17.1719C94.9551 16.304 94.7335 15.6269 94.2841 15.1406C93.8348 14.6482 93.2162 14.402 92.4283 14.402C91.8989 14.402 91.4311 14.5159 91.0249 14.7436C90.6248 14.9714 90.3109 15.3037 90.0831 15.7408C89.8615 16.1716 89.7477 16.6918 89.7415 17.3011ZM107.665 25.777C106.206 25.777 104.951 25.4815 103.898 24.8906C102.852 24.2936 102.045 23.4503 101.479 22.3608C100.913 21.2652 100.63 19.9695 100.63 18.4737C100.63 17.0149 100.913 15.7346 101.479 14.6328C102.045 13.531 102.842 12.6723 103.87 12.0568C104.905 11.4413 106.117 11.1335 107.508 11.1335C108.444 11.1335 109.315 11.2843 110.121 11.5859C110.934 11.8814 111.641 12.3277 112.245 12.9247C112.854 13.5218 113.328 14.2727 113.667 15.1776C114.005 16.0762 114.174 17.1288 114.174 18.3352V19.4155H102.199V16.978H110.472C110.472 16.4117 110.349 15.91 110.103 15.473C109.856 15.036 109.515 14.6944 109.078 14.4482C108.647 14.1958 108.145 14.0696 107.573 14.0696C106.976 14.0696 106.446 14.2081 105.985 14.4851C105.529 14.7559 105.172 15.1222 104.914 15.5838C104.655 16.0393 104.523 16.5471 104.517 17.1072V19.4247C104.517 20.1264 104.646 20.7327 104.905 21.2436C105.169 21.7545 105.542 22.1484 106.022 22.4254C106.502 22.7024 107.071 22.8409 107.73 22.8409C108.167 22.8409 108.567 22.7794 108.93 22.6562C109.293 22.5331 109.604 22.3485 109.863 22.1023C110.121 21.8561 110.318 21.5545 110.454 21.1974L114.091 21.4375C113.907 22.3116 113.528 23.0748 112.956 23.7273C112.389 24.3736 111.657 24.8783 110.758 25.2415C109.866 25.5985 108.835 25.777 107.665 25.777Z" class="fill-primary" fill="currentColor" />
+            <path d="M1 29.5V16.5C1 9.87258 6.37258 4.5 13 4.5C19.6274 4.5 25 9.87258 25 16.5C25 23.1274 19.6274 28.5 13 28.5H12" class="stroke-primary" stroke="currentColor" stroke-width="2" />
+            <path d="M5 29.5V16.66C5 12.1534 8.58172 8.5 13 8.5C17.4183 8.5 21 12.1534 21 16.66C21 21.1666 17.4183 24.82 13 24.82H12" class="stroke-primary" stroke="currentColor" stroke-width="2" />
+            <circle cx="13" cy="16.5214" r="5" class="fill-primary" fill="currentColor" />
           </svg>
         </a>
         <!-- End Logo -->
@@ -68,13 +70,13 @@
       <!-- Button Group -->
       <div class="md:order-3 flex items-center gap-x-3">
         <div class="md:ps-3">
-          <a class="group inline-flex items-center gap-x-2 py-2 px-3 bg-[#ff0] font-medium text-sm text-nowrap text-neutral-800 rounded-full focus:outline-hidden" href="#">
+          <a class="group inline-flex items-center gap-x-2 py-2 px-3 bg-primary border border-primary-line text-primary-foreground font-medium text-sm text-nowrap rounded rounded-[26px] focus:outline-hidden" href="#">
             Request demo
           </a>
         </div>
 
         <div class="md:hidden">
-          <button type="button" class="hs-collapse-toggle size-9 flex justify-center items-center text-sm font-semibold rounded-full bg-neutral-800 text-white disabled:opacity-50 disabled:pointer-events-none" id="hs-navbar-floating-dark-collapse" aria-expanded="false" aria-controls="hs-navbar-floating-dark" aria-label="Toggle navigation" data-hs-collapse="#hs-navbar-floating-dark">
+          <button type="button" class="hs-collapse-toggle size-9 flex justify-center items-center text-sm font-semibold rounded-full bg-layer border border-layer-line text-layer-foreground disabled:opacity-50 disabled:pointer-events-none" id="hs-pro-an-collapse" aria-expanded="false" aria-controls="hs-pro-an" aria-label="Toggle navigation" data-hs-collapse="#hs-pro-an">
             <svg class="hs-collapse-open:hidden shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="3" x2="21" y1="6" y2="6" />
               <line x1="3" x2="21" y1="12" y2="12" />
@@ -90,161 +92,231 @@
       <!-- End Button Group -->
 
       <!-- Collapse -->
-      <div id="hs-navbar-floating-dark" class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow md:block" aria-labelledby="hs-navbar-floating-dark-collapse">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-end gap-y-3 py-2 md:py-0 md:ps-7">
-          <a class="pe-3 ps-px sm:px-3 md:py-4 text-sm text-white hover:text-neutral-300 focus:outline-hidden focus:text-neutral-300" href="https://preline.co/templates/agency/index.html" aria-current="page">Home</a>
-          <a class="pe-3 ps-px sm:px-3 md:py-4 text-sm text-white hover:text-neutral-300 focus:outline-hidden focus:text-neutral-300" href="#">Stories</a>
-          <a class="pe-3 ps-px sm:px-3 md:py-4 text-sm text-white hover:text-neutral-300 focus:outline-hidden focus:text-neutral-300" href="#">Reviews</a>
-          <a class="pe-3 ps-px sm:px-3 md:py-4 text-sm text-white hover:text-neutral-300 focus:outline-hidden focus:text-neutral-300" href="#">Approach</a>
+      <div id="hs-pro-an" class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow md:block" aria-labelledby="hs-pro-an-collapse" role="region">
+        <!-- Nav -->
+        <div class="overflow-hidden overflow-y-auto max-h-[75vh] [&::-webkit-scrollbar]:w-0">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-end gap-y-3 pt-6 pb-2 md:py-0 md:ps-7">
+            <a class="md:px-3 md:py-4 text-sm text-navbar-2-nav-foreground hover:text-navbar-2-nav-foreground-hover focus:outline-hidden focus:text-navbar-2-nav-foreground-focus" href="index.html" aria-current="page">Home</a>
 
-          <!-- Dropdown Link -->
-          <div class="hs-dropdown [--strategy:static] md:[--strategy:absolute] [--adaptive:none] md:[--trigger:hover] [--auto-close:inside] md:inline-block">
-            <!-- Link Button -->
-            <button id="hs-pro-anpd" type="button" class="hs-dropdown-toggle md:px-3 md:py-4 w-full md:w-auto flex items-center text-sm text-white hover:text-neutral-300 focus:outline-hidden focus:text-neutral-300" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
-              Product
-              <svg class="hs-dropdown-open:-rotate-180 md:hs-dropdown-open:rotate-0 duration-300 ms-auto md:ms-1 shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </button>
-            <!-- End Link Button -->
+            <!-- Dropdown Link -->
+            <div class="hs-dropdown [--strategy:static] md:[--strategy:absolute] [--adaptive:none] md:[--trigger:hover] [--auto-close:inside] md:inline-block">
+              <!-- Link Button -->
+              <button id="hs-pro-ancpd" type="button" class="hs-dropdown-toggle md:px-3 md:py-4 w-full md:w-auto flex items-center text-sm text-navbar-2-nav-foreground hover:text-navbar-2-nav-foreground-hover focus:outline-hidden focus:text-navbar-2-nav-foreground-focus" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
+                Company
+                <svg class="hs-dropdown-open:-rotate-180 md:hs-dropdown-open:rotate-0 duration-300 ms-auto md:ms-1 shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+              <!-- End Link Button -->
 
-            <!-- Dropdown Menu -->
-            <div class="hs-dropdown-menu transition-[opacity,margin] duration-[0.1ms] lg:duration-[150ms] hs-dropdown-open:opacity-100 opacity-0 relative w-full md:w-150 hidden z-10 top-full end-0 rounded-2xl bg-neutral-800 p-1 before:absolute before:-top-4 before:start-0 before:w-full before:h-5 md:after:hidden mt-2 md:mt-0" role="menu" aria-orientation="vertical" aria-labelledby="hs-pro-anpd">
-              <div class="flex flex-col gap-y-1">
-                <!-- Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-1">
-                  <div class="p-5 min-h-50 flex flex-col justify-between bg-neutral-900 rounded-t-xl md:rounded-tr-none md:rounded-tl-xl">
-                    <!-- Heading -->
-                    <div class="mb-5">
-                      <a class="group flex items-center gap-x-2 font-medium text-sm text-neutral-200 hover:text-[#ff0] focus:text-[#ff0] focus:outline-hidden" href="#">
-                        Build
-                        <span class="ms-auto size-6 flex shrink-0 justify-center items-center bg-[#ff0] text-black rounded-sm">
-                          <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M5 12h14"></path>
-                            <path d="m12 5 7 7-7 7"></path>
-                          </svg>
-                        </span>
-                      </a>
-                    </div>
-                    <!-- End Heading -->
-
-                    <!-- List -->
-                    <ul class="flex flex-col">
-                      <li class="py-2 first:pt-0 last:pb-0 first:border-t-0 border-t border-neutral-800">
-                        <a class="group flex items-center gap-x-2 font-medium text-sm text-neutral-200 hover:text-[#ff0] focus:text-[#ff0] focus:outline-hidden" href="#">
-                          <span class="size-1 bg-[#ff0] rounded-full"></span>
-                          Websites
-                          <span class="ms-auto size-6 flex shrink-0 justify-center items-center">
-                            <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                              <path d="M5 12h14"></path>
-                              <path d="m12 5 7 7-7 7"></path>
-                            </svg>
-                          </span>
-                        </a>
-                      </li>
-
-                      <li class="py-2 first:pt-0 last:pb-0 first:border-t-0 border-t border-neutral-800">
-                        <a class="group flex items-center gap-x-2 font-medium text-sm text-neutral-200 hover:text-[#ff0] focus:text-[#ff0] focus:outline-hidden" href="#">
-                          <span class="size-1 bg-[#ff0] rounded-full"></span>
-                          Mobile apps
-                          <span class="ms-auto size-6 flex shrink-0 justify-center items-center">
-                            <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                              <path d="M5 12h14"></path>
-                              <path d="m12 5 7 7-7 7"></path>
-                            </svg>
-                          </span>
-                        </a>
-                      </li>
-
-                      <li class="py-2 first:pt-0 last:pb-0 first:border-t-0 border-t border-neutral-800">
-                        <a class="group flex items-center gap-x-2 font-medium text-sm text-neutral-200 hover:text-[#ff0] focus:text-[#ff0] focus:outline-hidden" href="#">
-                          <span class="size-1 bg-[#ff0] rounded-full"></span>
-                          Pages
-                          <span class="ms-auto size-6 flex shrink-0 justify-center items-center">
-                            <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                              <path d="M5 12h14"></path>
-                              <path d="m12 5 7 7-7 7"></path>
-                            </svg>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                    <!-- End List -->
-                  </div>
-                  <!-- End Col -->
-
-                  <div class="p-5 min-h-50 flex flex-col justify-between bg-neutral-900 md:rounded-tr-xl">
-                    <!-- Heading -->
-                    <div class="mb-5">
-                      <a class="group flex items-center gap-x-3 font-medium text-sm text-neutral-200 hover:text-[#ff0] focus:text-[#ff0] focus:outline-hidden" href="#">
-                        Resources
-                        <span class="ms-auto size-6 flex shrink-0 justify-center items-center bg-[#ff0] text-black rounded-sm">
-                          <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M5 12h14"></path>
-                            <path d="m12 5 7 7-7 7"></path>
-                          </svg>
-                        </span>
-                      </a>
-                    </div>
-                    <!-- End Heading -->
-
-                    <!-- List -->
-                    <ul class="flex flex-col">
-                      <li class="py-2 first:pt-0 last:pb-0 first:border-t-0 border-t border-neutral-800">
-                        <a class="group flex items-center gap-x-2 font-medium text-sm text-neutral-200 hover:text-[#ff0] focus:text-[#ff0] focus:outline-hidden" href="#">
-                          <span class="size-1 bg-[#ff0] rounded-full"></span>
-                          Documentation
-                          <span class="ms-auto size-6 flex shrink-0 justify-center items-center">
-                            <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                              <path d="M5 12h14"></path>
-                              <path d="m12 5 7 7-7 7"></path>
-                            </svg>
-                          </span>
-                        </a>
-                      </li>
-
-                      <li class="py-2 first:pt-0 last:pb-0 first:border-t-0 border-t border-neutral-800">
-                        <a class="group flex items-center gap-x-2 font-medium text-sm text-neutral-200 hover:text-[#ff0] focus:text-[#ff0] focus:outline-hidden" href="#">
-                          <span class="size-1 bg-[#ff0] rounded-full"></span>
-                          Support
-                          <span class="ms-auto size-6 flex shrink-0 justify-center items-center">
-                            <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                              <path d="M5 12h14"></path>
-                              <path d="m12 5 7 7-7 7"></path>
-                            </svg>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                    <!-- End List -->
-                  </div>
-                  <!-- End Col -->
+              <!-- Dropdown Menu -->
+              <div class="hs-dropdown-menu transition-[opacity,margin] duration-[0.1ms] lg:duration-[150ms] hs-dropdown-open:opacity-100 opacity-0 relative w-full md:w-50 hidden z-10 top-full rounded-2xl bg-dropdown border-4 border-dropdown-line md:shadow-xl before:absolute before:-top-4 before:start-0 before:w-full before:h-5 md:after:hidden mt-2 md:mt-0" role="menu" aria-orientation="vertical" aria-labelledby="hs-pro-ancpd">
+                <div class="p-5 flex flex-col gap-y-3">
+                  <a class="text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:outline-hidden focus:text-primary-focus" href="#">About</a>
+                  <a class="text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:outline-hidden focus:text-primary-focus" href="#">Services</a>
+                  <a class="text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:outline-hidden focus:text-primary-focus" href="#">Careers</a>
+                  <a class="text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:outline-hidden focus:text-primary-focus" href="#">Careers: Job Details</a>
+                  <a class="text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:outline-hidden focus:text-primary-focus" href="#">Careers: Apply</a>
                 </div>
-                <!-- End Grid -->
-
-                <!-- Footer -->
-                <div class="p-2 bg-neutral-900 rounded-b-xl">
-                  <div class="flex flex-wrap justify-between items-center gap-1">
-                    <a class="py-1.5 ps-3 pe-2 group flex items-center gap-x-1 font-medium text-sm text-neutral-200 hover:text-[#ff0] focus:text-[#ff0] focus:outline-hidden" href="#">
-                      Sessions 2025 &dash; Watch the product keynote live
-                      <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12h14"></path>
-                        <path d="m12 5 7 7-7 7"></path>
-                      </svg>
-                    </a>
-
-                    <a class="py-1.5 px-3 font-medium text-sm text-[#ff0] rounded-full hover:bg-neutral-800 focus:outline-hidden focus:bg-neutral-800" href="#">
-                      Changelog
-                    </a>
-                  </div>
-                </div>
-                <!-- End Footer -->
               </div>
+              <!-- End Dropdown Menu -->
             </div>
-            <!-- End Dropdown Menu -->
+            <!-- End Dropdown Link -->
+
+            <!-- Dropdown Link -->
+            <div class="hs-dropdown [--strategy:static] md:[--strategy:absolute] [--adaptive:none] md:[--trigger:hover] [--auto-close:inside] md:inline-block">
+              <!-- Link Button -->
+              <button id="hs-pro-anstd" type="button" class="hs-dropdown-toggle md:px-3 md:py-4 w-full md:w-auto flex items-center text-sm text-navbar-2-nav-foreground hover:text-navbar-2-nav-foreground-hover focus:outline-hidden focus:text-navbar-2-nav-foreground-focus" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
+                Stories
+                <svg class="hs-dropdown-open:-rotate-180 md:hs-dropdown-open:rotate-0 duration-300 ms-auto md:ms-1 shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+              <!-- End Link Button -->
+
+              <!-- Dropdown Menu -->
+              <div class="hs-dropdown-menu transition-[opacity,margin] duration-[0.1ms] lg:duration-[150ms] hs-dropdown-open:opacity-100 opacity-0 relative w-full md:w-50 hidden z-10 top-full rounded-2xl bg-dropdown border-4 border-dropdown-line md:shadow-xl before:absolute before:-top-4 before:start-0 before:w-full before:h-5 md:after:hidden mt-2 md:mt-0" role="menu" aria-orientation="vertical" aria-labelledby="hs-pro-anstd">
+                <div class="p-5 flex flex-col gap-y-3">
+                  <a class="text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:outline-hidden focus:text-primary-focus" href="#">Case Study</a>
+                  <a class="text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:outline-hidden focus:text-primary-focus" href="#">Case Study Details</a>
+                </div>
+              </div>
+              <!-- End Dropdown Menu -->
+            </div>
+            <!-- End Dropdown Link -->
+
+            <!-- Dropdown Link -->
+            <div class="hs-dropdown [--strategy:static] md:[--strategy:absolute] [--adaptive:none] md:[--trigger:hover] [--auto-close:inside] md:inline-block">
+              <!-- Link Button -->
+              <button id="hs-pro-anbld" type="button" class="hs-dropdown-toggle md:px-3 md:py-4 w-full md:w-auto flex items-center text-sm text-navbar-2-nav-foreground hover:text-navbar-2-nav-foreground-hover focus:outline-hidden focus:text-navbar-2-nav-foreground-focus" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
+                News
+                <svg class="hs-dropdown-open:-rotate-180 md:hs-dropdown-open:rotate-0 duration-300 ms-auto md:ms-1 shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+              <!-- End Link Button -->
+
+              <!-- Dropdown Menu -->
+              <div class="hs-dropdown-menu transition-[opacity,margin] duration-[0.1ms] lg:duration-[150ms] hs-dropdown-open:opacity-100 opacity-0 relative w-full md:w-50 hidden z-10 top-full rounded-2xl bg-dropdown border-4 border-dropdown-line md:shadow-xl before:absolute before:-top-4 before:start-0 before:w-full before:h-5 md:after:hidden mt-2 md:mt-0" role="menu" aria-orientation="vertical" aria-labelledby="hs-pro-anbld">
+                <div class="p-5 flex flex-col gap-y-3">
+                  <a class="text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:outline-hidden focus:text-primary-focus" href="#">News</a>
+                  <a class="text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:outline-hidden focus:text-primary-focus" href="#">News Details</a>
+                </div>
+              </div>
+              <!-- End Dropdown Menu -->
+            </div>
+            <!-- End Dropdown Link -->
+
+            <!-- Dropdown Link -->
+            <div class="hs-dropdown [--strategy:static] md:[--strategy:absolute] [--adaptive:none] md:[--trigger:hover] [--auto-close:inside] md:inline-block">
+              <!-- Link Button -->
+              <button id="hs-pro-anpd" type="button" class="hs-dropdown-toggle md:px-3 md:py-4 w-full md:w-auto flex items-center text-sm text-navbar-2-nav-foreground hover:text-navbar-2-nav-foreground-hover focus:outline-hidden focus:text-navbar-2-nav-foreground-focus" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
+                Product
+                <svg class="hs-dropdown-open:-rotate-180 md:hs-dropdown-open:rotate-0 duration-300 ms-auto md:ms-1 shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+              <!-- End Link Button -->
+
+              <!-- Dropdown Menu -->
+              <div class="hs-dropdown-menu transition-[opacity,margin] duration-[0.1ms] lg:duration-[150ms] hs-dropdown-open:opacity-100 opacity-0 relative w-full md:w-150 hidden z-10 top-full end-0 rounded-2xl bg-dropdown border-4 border-dropdown-line md:shadow-xl before:absolute before:-top-4 before:start-0 before:w-full before:h-5 md:after:hidden mt-2 md:mt-0" role="menu" aria-orientation="vertical" aria-labelledby="hs-pro-anpd">
+                <div class="flex flex-col gap-y-1">
+                  <!-- Grid -->
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-1">
+                    <div class="p-5 md:min-h-50 flex flex-col justify-between bg-layer rounded-t-xl md:rounded-tr-none md:rounded-tl-xl">
+                      <!-- Heading -->
+                      <div class="mb-5">
+                        <a class="group flex items-center gap-x-2 font-medium text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:text-primary-focus focus:outline-hidden" href="#">
+                          Build
+                          <span class="ms-auto size-6 flex shrink-0 justify-center items-center bg-primary text-primary-foreground rounded-sm">
+                            <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M5 12h14"></path>
+                              <path d="m12 5 7 7-7 7"></path>
+                            </svg>
+                          </span>
+                        </a>
+                      </div>
+                      <!-- End Heading -->
+
+                      <!-- List -->
+                      <ul class="flex flex-col">
+                        <li class="py-2 first:pt-0 last:pb-0 first:border-t-0 border-t border-line-1">
+                          <a class="group flex items-center gap-x-2 font-medium text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:text-primary-focus focus:outline-hidden" href="#">
+                            <span class="size-1 bg-primary rounded-full"></span>
+                            Websites
+                            <span class="ms-auto size-6 flex shrink-0 justify-center items-center">
+                              <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                              </svg>
+                            </span>
+                          </a>
+                        </li>
+
+                        <li class="py-2 first:pt-0 last:pb-0 first:border-t-0 border-t border-line-1">
+                          <a class="group flex items-center gap-x-2 font-medium text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:text-primary-focus focus:outline-hidden" href="#">
+                            <span class="size-1 bg-primary rounded-full"></span>
+                            Mobile apps
+                            <span class="ms-auto size-6 flex shrink-0 justify-center items-center">
+                              <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                              </svg>
+                            </span>
+                          </a>
+                        </li>
+
+                        <li class="py-2 first:pt-0 last:pb-0 first:border-t-0 border-t border-line-1">
+                          <a class="group flex items-center gap-x-2 font-medium text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:text-primary-focus focus:outline-hidden" href="#">
+                            <span class="size-1 bg-primary rounded-full"></span>
+                            Pages
+                            <span class="ms-auto size-6 flex shrink-0 justify-center items-center">
+                              <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                              </svg>
+                            </span>
+                          </a>
+                        </li>
+                      </ul>
+                      <!-- End List -->
+                    </div>
+                    <!-- End Col -->
+
+                    <div class="p-5 md:min-h-50 flex flex-col justify-between bg-layer md:rounded-tr-xl">
+                      <!-- Heading -->
+                      <div class="mb-5">
+                        <a class="group flex items-center gap-x-3 font-medium text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:text-primary-focus focus:outline-hidden" href="#">
+                          Resources
+                          <span class="ms-auto size-6 flex shrink-0 justify-center items-center bg-primary text-primary-foreground rounded-sm">
+                            <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M5 12h14"></path>
+                              <path d="m12 5 7 7-7 7"></path>
+                            </svg>
+                          </span>
+                        </a>
+                      </div>
+                      <!-- End Heading -->
+
+                      <!-- List -->
+                      <ul class="flex flex-col">
+                        <li class="py-2 first:pt-0 last:pb-0 first:border-t-0 border-t border-line-1">
+                          <a class="group flex items-center gap-x-2 font-medium text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:text-primary-focus focus:outline-hidden" href="#">
+                            <span class="size-1 bg-primary rounded-full"></span>
+                            Documentation
+                            <span class="ms-auto size-6 flex shrink-0 justify-center items-center">
+                              <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                              </svg>
+                            </span>
+                          </a>
+                        </li>
+
+                        <li class="py-2 first:pt-0 last:pb-0 first:border-t-0 border-t border-line-1">
+                          <a class="group flex items-center gap-x-2 font-medium text-sm text-navbar-2-nav-foreground hover:text-primary-hover focus:text-primary-focus focus:outline-hidden" href="#">
+                            <span class="size-1 bg-primary rounded-full"></span>
+                            Support
+                            <span class="ms-auto size-6 flex shrink-0 justify-center items-center">
+                              <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                              </svg>
+                            </span>
+                          </a>
+                        </li>
+                      </ul>
+                      <!-- End List -->
+                    </div>
+                    <!-- End Col -->
+                  </div>
+                  <!-- End Grid -->
+
+                  <!-- Footer -->
+                  <div class="p-2 bg-layer rounded-b-xl">
+                    <div class="flex flex-wrap justify-between items-center gap-1">
+                      <a class="py-1.5 ps-3 pe-2 group flex items-center gap-x-1 font-medium text-sm text-foreground hover:text-primary-hover focus:text-primary-focus focus:outline-hidden" href="#">
+                        Sessions 2025 &dash; Watch the product keynote live
+                        <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </a>
+
+                      <a class="py-1.5 px-3 font-medium text-sm text-primary rounded-full hover:bg-muted-hover focus:outline-hidden focus:bg-muted-focus" href="#">
+                        Changelog
+                      </a>
+                    </div>
+                  </div>
+                  <!-- End Footer -->
+                </div>
+              </div>
+              <!-- End Dropdown Menu -->
+            </div>
+            <!-- End Dropdown Link -->
           </div>
-          <!-- End Dropdown Link -->
         </div>
+        <!-- End Nav -->
       </div>
       <!-- End Collapse -->
     </nav>
@@ -254,13 +326,13 @@
   <!-- ========== MAIN CONTENT ========== -->
   <main id="content">
     <!-- Hero -->
-    <div class="overflow-hidden bg-neutral-900">
+    <div class="overflow-hidden bg-background">
       <div class="max-w-5xl mx-auto px-4 xl:px-0 pt-24 lg:pt-32 pb-24">
-        <h1 class="font-semibold text-white text-5xl md:text-6xl">
-          <span class="text-[#ff0] ">Preline Agency:</span> Transforming ideas into reality
+        <h1 class="font-semibold text-foreground text-5xl md:text-6xl">
+          <span class="text-primary">Preline Agency:</span> Transforming ideas into reality
         </h1>
         <div class="mt-5 max-w-4xl">
-          <p class="text-neutral-400 text-lg">
+          <p class="text-muted-foreground-1 text-lg">
             It is a creative hub where imagination meets craftsmanship to transform ideas into tangible realities. At Preline Agency, we specialize in turning conceptual visions into concrete forms, whether it be through design, artistry, or technological innovation.
           </p>
         </div>
@@ -269,56 +341,56 @@
     <!-- End Hero -->
 
     <!-- Clients -->
-    <div class="relative overflow-hidden pt-4 bg-neutral-900">
+    <div class="relative overflow-hidden pt-4 bg-background">
       <svg class="absolute -bottom-20 start-1/2 w-[1900px] transform -translate-x-1/2" width="2745" height="488" viewBox="0 0 2745 488" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0.5 330.864C232.505 403.801 853.749 527.683 1482.69 439.719C2111.63 351.756 2585.54 434.588 2743.87 487" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 308.873C232.505 381.81 853.749 505.692 1482.69 417.728C2111.63 329.765 2585.54 412.597 2743.87 465.009" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 286.882C232.505 359.819 853.749 483.701 1482.69 395.738C2111.63 307.774 2585.54 390.606 2743.87 443.018" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 264.891C232.505 337.828 853.749 461.71 1482.69 373.747C2111.63 285.783 2585.54 368.615 2743.87 421.027" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 242.9C232.505 315.837 853.749 439.719 1482.69 351.756C2111.63 263.792 2585.54 346.624 2743.87 399.036" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 220.909C232.505 293.846 853.749 417.728 1482.69 329.765C2111.63 241.801 2585.54 324.633 2743.87 377.045" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 198.918C232.505 271.855 853.749 395.737 1482.69 307.774C2111.63 219.81 2585.54 302.642 2743.87 355.054" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 176.927C232.505 249.864 853.749 373.746 1482.69 285.783C2111.63 197.819 2585.54 280.651 2743.87 333.063" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 154.937C232.505 227.873 853.749 351.756 1482.69 263.792C2111.63 175.828 2585.54 258.661 2743.87 311.072" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 132.946C232.505 205.882 853.749 329.765 1482.69 241.801C2111.63 153.837 2585.54 236.67 2743.87 289.082" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 110.955C232.505 183.891 853.749 307.774 1482.69 219.81C2111.63 131.846 2585.54 214.679 2743.87 267.091" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 88.9639C232.505 161.901 853.749 285.783 1482.69 197.819C2111.63 109.855 2585.54 192.688 2743.87 245.1" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 66.9729C232.505 139.91 853.749 263.792 1482.69 175.828C2111.63 87.8643 2585.54 170.697 2743.87 223.109" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 44.9819C232.505 117.919 853.749 241.801 1482.69 153.837C2111.63 65.8733 2585.54 148.706 2743.87 201.118" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 22.991C232.505 95.9276 853.749 219.81 1482.69 131.846C2111.63 43.8824 2585.54 126.715 2743.87 179.127" class="stroke-neutral-700/50" stroke="currentColor" />
-        <path d="M0.5 1C232.505 73.9367 853.749 197.819 1482.69 109.855C2111.63 21.8914 2585.54 104.724 2743.87 157.136" class="stroke-neutral-700/50" stroke="currentColor" />
+        <path d="M0.5 330.864C232.505 403.801 853.749 527.683 1482.69 439.719C2111.63 351.756 2585.54 434.588 2743.87 487" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 308.873C232.505 381.81 853.749 505.692 1482.69 417.728C2111.63 329.765 2585.54 412.597 2743.87 465.009" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 286.882C232.505 359.819 853.749 483.701 1482.69 395.738C2111.63 307.774 2585.54 390.606 2743.87 443.018" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 264.891C232.505 337.828 853.749 461.71 1482.69 373.747C2111.63 285.783 2585.54 368.615 2743.87 421.027" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 242.9C232.505 315.837 853.749 439.719 1482.69 351.756C2111.63 263.792 2585.54 346.624 2743.87 399.036" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 220.909C232.505 293.846 853.749 417.728 1482.69 329.765C2111.63 241.801 2585.54 324.633 2743.87 377.045" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 198.918C232.505 271.855 853.749 395.737 1482.69 307.774C2111.63 219.81 2585.54 302.642 2743.87 355.054" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 176.927C232.505 249.864 853.749 373.746 1482.69 285.783C2111.63 197.819 2585.54 280.651 2743.87 333.063" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 154.937C232.505 227.873 853.749 351.756 1482.69 263.792C2111.63 175.828 2585.54 258.661 2743.87 311.072" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 132.946C232.505 205.882 853.749 329.765 1482.69 241.801C2111.63 153.837 2585.54 236.67 2743.87 289.082" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 110.955C232.505 183.891 853.749 307.774 1482.69 219.81C2111.63 131.846 2585.54 214.679 2743.87 267.091" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 88.9639C232.505 161.901 853.749 285.783 1482.69 197.819C2111.63 109.855 2585.54 192.688 2743.87 245.1" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 66.9729C232.505 139.91 853.749 263.792 1482.69 175.828C2111.63 87.8643 2585.54 170.697 2743.87 223.109" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 44.9819C232.505 117.919 853.749 241.801 1482.69 153.837C2111.63 65.8733 2585.54 148.706 2743.87 201.118" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 22.991C232.505 95.9276 853.749 219.81 1482.69 131.846C2111.63 43.8824 2585.54 126.715 2743.87 179.127" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+        <path d="M0.5 1C232.505 73.9367 853.749 197.819 1482.69 109.855C2111.63 21.8914 2585.54 104.724 2743.87 157.136" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
       </svg>
 
       <div class="relative z-10">
         <div class="max-w-5xl px-4 xl:px-0 mx-auto">
           <div class="mb-4">
-            <h2 class="text-neutral-400">Trusted by Open Source, enterprise, and more than 99,000 of you</h2>
+            <h2 class="text-muted-foreground-1">Trusted by Open Source, enterprise, and more than 99,000 of you</h2>
           </div>
 
           <div class="flex justify-between gap-6">
-            <svg class="py-3 lg:py-5 w-16 h-auto md:w-20 lg:w-24 text-neutral-400" enable-background="new 0 0 2499 614" viewBox="0 0 2499 614" xmlns="http://www.w3.org/2000/svg">
+            <svg class="py-3 lg:py-5 w-16 h-auto md:w-20 lg:w-24 text-muted-foreground-1" enable-background="new 0 0 2499 614" viewBox="0 0 2499 614" xmlns="http://www.w3.org/2000/svg">
               <path d="m431.7 0h-235.5v317.8h317.8v-235.5c0-45.6-36.7-82.3-82.3-82.3zm-308.9 0h-40.5c-45.6 0-82.3 36.7-82.3 82.3v40.5h122.8zm-122.8 196.2h122.8v122.8h-122.8zm392.5 317.8h40.5c45.6 0 82.3-36.7 82.3-82.3v-39.2h-122.8zm-196.3-121.5h122.8v122.8h-122.8zm-196.2 0v40.5c0 45.6 36.7 82.3 82.3 82.3h40.5v-122.8zm828-359.6h-48.1v449.4h254.5v-43h-206.4zm360.8 119c-93.7 0-159.5 69.6-159.5 169.6v11.5c1.3 43 20.3 83.6 51.9 113.9 30.4 27.9 69.6 44.3 111.4 44.3h6.3c44.3 0 86.1-16.5 119-44.3l1.3-1.3-21.5-35.4-2.5 1.3c-26.6 24.1-59.5 38-94.9 38-58.2 0-117.7-38-121.5-122.8h243.1v-2.5s1.3-15.2 1.3-22.8c-.3-91.2-53.4-149.5-134.4-149.5zm-108.9 134.2c10.1-57 51.9-93.7 106.3-93.7 40.5 0 84.8 24.1 88.6 93.7zm521.6-96.2v16.5c-20.3-34.2-58.2-55.7-97.5-55.7h-3.8c-86.1 0-145.6 68.4-145.6 168.4 0 101.3 57 169.6 141.8 169.6 67.1 0 97.5-40.5 107.6-58.2v49.4h45.6v-447h-46.8v157zm-98.8 257c-59.5 0-98.7-50.6-98.7-126.6 0-73.4 41.8-125.3 100-125.3 49.4 0 98.7 39.2 98.7 125.3 0 93.7-51.9 126.6-100 126.6zm424.1-250.7v2.5c-8.9-15.2-36.7-48.1-103.8-48.1-84.8 0-140.5 64.6-140.5 163.3s58.2 165.8 144.3 165.8c46.8 0 78.5-16.5 100-50.6v44.3c0 62-39.2 97.5-108.9 97.5-29.1 0-59.5-7.6-86.1-21.5l-2.5-1.3-17.7 39.2 2.5 1.3c32.9 16.5 69.6 25.3 105.1 25.3 74.7 0 154.4-38 154.4-143.1v-311.3h-46.8zm-93.7 241.8c-62 0-102.5-48.1-102.5-122.8 0-76 35.4-119 96.2-119 67.1 0 98.7 39.2 98.7 119 1.3 78.5-31.6 122.8-92.4 122.8zm331.7-286.1c-93.7 0-158.2 69.6-158.2 168.4v11.4c1.3 43 20.3 83.6 51.9 113.9 30.4 27.9 69.6 44.3 111.4 44.3h6.3c44.3 0 86.1-16.5 119-44.3l1.3-1.3-22.8-35.4-2.5 1.3c-26.6 24.1-59.5 38-94.9 38-58.2 0-117.7-38-121.5-122.8h244.2v-2.5s1.3-15.2 1.3-22.8c0-89.9-53.2-148.2-135.5-148.2zm-107.6 134.2c10.1-57 51.9-93.7 106.3-93.7 40.5 0 84.8 24.1 88.6 93.7zm440.6-127.9c-6.3-1.3-11.4-1.3-17.7-2.5-44.3 0-81 27.9-100 74.7v-72.2h-46.8l1.3 320.3v2.5h48.1v-135.4c0-20.3 2.5-41.8 8.9-60.8 15.2-49.4 49.4-81 89.9-81 5.1 0 10.1 0 15.2 1.3h2.5v-46.8z" fill="currentColor" />
             </svg>
 
-            <svg class="py-3 lg:py-5 w-16 h-auto md:w-20 lg:w-24 text-neutral-400" xmlns="http://www.w3.org/2000/svg" viewBox="-4.126838974812941 0.900767442746961 939.436838974813 230.18142889845947" width="2500" height="607">
+            <svg class="py-3 lg:py-5 w-16 h-auto md:w-20 lg:w-24 text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" viewBox="-4.126838974812941 0.900767442746961 939.436838974813 230.18142889845947" width="2500" height="607">
               <path d="M667.21 90.58c-13.76 0-23.58 4.7-28.4 13.6l-2.59 4.82V92.9h-22.39v97.86h23.55v-58.22c0-13.91 7.56-21.89 20.73-21.89 12.56 0 19.76 7.77 19.76 21.31v58.8h23.56v-63c0-23.3-12.79-37.18-34.22-37.18zm-114.21 0c-27.79 0-45 17.34-45 45.25v13.74c0 26.84 17.41 43.51 45.44 43.51 18.75 0 31.89-6.87 40.16-21l-14.6-8.4c-6.11 8.15-15.87 13.2-25.55 13.2-14.19 0-22.66-8.76-22.66-23.44v-3.89h65.73v-16.23c0-26-17.07-42.74-43.5-42.74zm22.09 43.15h-44.38v-2.35c0-16.11 7.91-25 22.27-25 13.83 0 22.09 8.76 22.09 23.44zm360.22-56.94V58.07h-81.46v18.72h28.56V172h-28.56v18.72h81.46V172h-28.57V76.79zM317.65 55.37c-36.38 0-59 22.67-59 59.18v19.74c0 36.5 22.61 59.18 59 59.18s59-22.68 59-59.18v-19.74c-.01-36.55-22.65-59.18-59-59.18zm34.66 80.27c0 24.24-12.63 38.14-34.66 38.14S283 159.88 283 135.64v-22.45c0-24.24 12.64-38.14 34.66-38.14s34.66 13.9 34.66 38.14zm98.31-45.06c-12.36 0-23.06 5.12-28.64 13.69l-2.53 3.9V92.9h-22.4v131.53h23.56v-47.64l2.52 3.74c5.3 7.86 15.65 12.55 27.69 12.55 20.31 0 40.8-13.27 40.8-42.93v-16.64c0-21.37-12.63-42.93-41-42.93zM468.06 149c0 15.77-9.2 25.57-24 25.57-13.8 0-23.43-10.36-23.43-25.18v-14.72c0-15 9.71-25.56 23.63-25.56 14.69 0 23.82 9.79 23.82 25.56zm298.47-90.92L719 190.76h23.93l9.1-28.44h54.64l.09.28 9 28.16h23.92L792.07 58.07zm-8.66 85.53l21.44-67.08 21.22 67.08zM212.59 95.12a57.27 57.27 0 0 0-4.92-47.05 58 58 0 0 0-62.4-27.79A57.29 57.29 0 0 0 102.06 1a57.94 57.94 0 0 0-55.27 40.14A57.31 57.31 0 0 0 8.5 68.93a58 58 0 0 0 7.13 67.94 57.31 57.31 0 0 0 4.92 47A58 58 0 0 0 83 211.72 57.31 57.31 0 0 0 126.16 231a57.94 57.94 0 0 0 55.27-40.14 57.3 57.3 0 0 0 38.28-27.79 57.92 57.92 0 0 0-7.12-67.95zM126.16 216a42.93 42.93 0 0 1-27.58-10c.34-.19 1-.52 1.38-.77l45.8-26.44a7.43 7.43 0 0 0 3.76-6.51V107.7l19.35 11.17a.67.67 0 0 1 .38.54v53.45A43.14 43.14 0 0 1 126.16 216zm-92.59-39.54a43 43 0 0 1-5.15-28.88c.34.21.94.57 1.36.81l45.81 26.45a7.44 7.44 0 0 0 7.52 0L139 142.52v22.34a.67.67 0 0 1-.27.6l-46.3 26.72a43.14 43.14 0 0 1-58.86-15.77zm-12-100A42.92 42.92 0 0 1 44 57.56V112a7.45 7.45 0 0 0 3.76 6.51l55.9 32.28L84.24 162a.68.68 0 0 1-.65.06L37.3 135.33a43.13 43.13 0 0 1-15.77-58.87zm159 37l-55.9-32.28L144 70a.69.69 0 0 1 .65-.06l46.29 26.73a43.1 43.1 0 0 1-6.66 77.76V120a7.44 7.44 0 0 0-3.74-6.54zm19.27-29c-.34-.21-.94-.57-1.36-.81L152.67 57.2a7.44 7.44 0 0 0-7.52 0l-55.9 32.27V67.14a.73.73 0 0 1 .28-.6l46.29-26.72a43.1 43.1 0 0 1 64 44.65zM78.7 124.3l-19.36-11.17a.73.73 0 0 1-.37-.54V59.14A43.09 43.09 0 0 1 129.64 26c-.34.19-.95.52-1.38.77l-45.8 26.44a7.45 7.45 0 0 0-3.76 6.51zm10.51-22.67l24.9-14.38L139 101.63v28.74l-24.9 14.38-24.9-14.38z" fill="currentColor" />
             </svg>
 
-            <svg class="py-3 lg:py-5 w-16 h-auto md:w-20 lg:w-24 text-neutral-400" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2428 1002">
+            <svg class="py-3 lg:py-5 w-16 h-auto md:w-20 lg:w-24 text-muted-foreground-1" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2428 1002">
               <path fill-rule="evenodd" clip-rule="evenodd" d="M311.5 389.8h191.8l67 117.5 77.8-117.5h178.3L682.7 590.7l154 220.7H648.1l-77.8-135.8-91.7 135.8h-175l153.2-220.7-145.3-200.9Z" fill="currentColor" />
               <path fill-rule="evenodd" clip-rule="evenodd" d="M1279.3 640.7H955.4c2.9 26 10 45.2 21 58a76.5 76.5 0 0 0 61.1 27.3c16 0 31.5-4 45.3-12 8.8-5 18.2-13.7 28.2-26.5l159.2 14.7c-24.4 42.4-53.7 72.7-88 91.2-34.5 18.2-83.8 27.5-148.2 27.5-55.8 0-99.7-7.9-131.8-23.6a193.2 193.2 0 0 1-79.6-75c-21-34.4-31.6-74.6-31.6-121 0-65.8 21.2-119.2 63.3-159.8 42.3-40.8 100.6-61.3 175-61.3 60.3 0 108 9.2 142.8 27.5a184 184 0 0 1 79.8 79.3c18.3 34.7 27.4 79.8 27.4 135.3v18.4ZM1115 563.3c-3.2-31.3-11.6-53.7-25.2-67.1a73.1 73.1 0 0 0-53.8-20.3 73.6 73.6 0 0 0-61.6 30.6c-9.7 12.7-16 31.6-18.5 56.8H1115Zm137-173.5h168.3l81.9 267.1 84.5-267H1750l-179.1 421.5h-143.3L1252 389.8Zm463.2 212c0-64.3 21.7-117.4 65-159 43.5-41.7 102-62.6 176-62.6 84.4 0 148.2 24.5 191.3 73.5 34.6 39.4 52 88 52 145.8 0 64.7-21.5 117.8-64.5 159.3-43 41.3-102.4 62-178.5 62-67.7 0-122.5-17.1-164.3-51.5-51.4-42.6-77-98.4-77-167.6Zm162-.5c0 37.7 7.5 65.5 22.8 83.4a72 72 0 0 0 57.3 27.1c23.4 0 42.5-9 57.4-26.7 15-17.8 22.5-46 22.5-85.4 0-36.4-7.6-63.7-22.7-81.5a70.5 70.5 0 0 0-56-26.7c-23.5 0-43 9-58.3 27-15.4 18.2-23 45.9-23 82.8ZM2363.1.1a64 64 0 0 1 0 127.9 64 64 0 0 1 0-128Z" fill="currentColor" />
               <path fill-rule="evenodd" clip-rule="evenodd" d="M1912.1 671.5c220.3-135 326.4-327 334-419.2 8.7-106.7-71-235.9-358.9-238-345 3.6-790 158.3-1163.6 360.4h138c315.8-152.6 672-266.2 1000.8-275.2 287.7-7.8 304.4 149.2 302 199-3.6 71-74.7 234.5-252.3 373Zm-1315.7-222-36 22.7 10 17.5 26-40.1ZM419.8 567.5C212 717 57 873.2.8 1001.9 77.8 897.1 217 771 394.9 647l40.4-58.1-15.5-21.4Z" fill="currentColor" />
               <path fill-rule="evenodd" clip-rule="evenodd" d="M2036.3 580a819.8 819.8 0 0 0 114.2-122.8l-3-3.5c-8-9.2-17-17.5-26.5-25-21 39.8-50 83.7-88.2 128.3 1.6 7 2.8 14.7 3.5 23Z" fill="currentColor" />
             </svg>
 
-            <svg class="py-3 lg:py-5 w-16 h-auto md:w-20 lg:w-24 text-neutral-400" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127 33">
+            <svg class="py-3 lg:py-5 w-16 h-auto md:w-20 lg:w-24 text-muted-foreground-1" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127 33">
               <path d="M9.3 16.5C9.3 9 14.3 2.7 21.2.7a16.5 16.5 0 1 0 0 31.6c-6.9-2-11.9-8.3-11.9-15.8Z" fill="currentColor" />
               <path d="M21.7 10c4 0 7.4 2.8 8.5 6.4a8.9 8.9 0 1 0-17 0c1-3.6 4.4-6.3 8.5-6.3Z" fill="currentColor" />
               <path d="M24.8 19.4c0 3-2 5.5-4.8 6.3A6.6 6.6 0 1 0 20 13c2.8.8 4.8 3.4 4.8 6.4Z" fill="currentColor" />
               <path d="M39.6 13.5A4.4 4.4 0 0 1 44 9.1h1.3v2.7l-1 .2-1 .6-.2.4-.1.5h2.3v3H43v9.2h-3.4v-9.3h-1.3v-2.9h1.3ZM55.7 13.5h3.4v6.1a6.9 6.9 0 0 1-1.7 4.6 6 6 0 0 1-4.5 1.8c-1 0-1.8-.1-2.5-.5a6 6 0 0 1-3.2-3.4c-.3-.8-.4-1.6-.4-2.5v-6H50v6c0 .5 0 1 .2 1.3l.5 1c.2.4.5.6.9.8.3.2.8.3 1.2.3a2.6 2.6 0 0 0 2.1-1c.3-.3.4-.7.5-1l.2-1.4v-6ZM61.2 25.7V9.5h3.4v16.2h-3.4ZM66.9 25.7V9.5h3.3v16.2H67ZM78.5 21.2l3.3-7.7h3.7l-5.7 12.2h-2.7l-5.6-12.2H75l3.4 7.7ZM87 13.5h3.3v12.2H87V13.5Zm1.6-5 .8.1.6.4.4.7.2.7a1.9 1.9 0 0 1-.6 1.4l-.6.4a2 2 0 0 1-.8.1c-.5 0-1-.2-1.3-.5a2 2 0 0 1-.4-2.1c0-.3.2-.5.4-.7l.6-.4.7-.1ZM98.8 13.2a6.7 6.7 0 0 1 4.8 1.9 6.3 6.3 0 0 1 1.9 5.7h-9.8a3.3 3.3 0 0 0 3.2 2.2c.5 0 1-.1 1.4-.4.5-.2.9-.5 1.2-1h3.7c-.2.7-.5 1.3-1 1.8a6.1 6.1 0 0 1-3.3 2.3 7 7 0 0 1-6.9-1.6 6.1 6.1 0 0 1-2-4.5 6.1 6.1 0 0 1 2-4.5c.7-.6 1.4-1 2.2-1.4.8-.3 1.7-.5 2.6-.5Zm3.2 5.2c-.3-.6-.7-1.1-1.2-1.5-.6-.4-1.3-.7-2-.7s-1.4.3-2 .7c-.5.4-.9.9-1.1 1.5h6.3ZM123 13.5h3.6l-5 12.2H119l-2.5-6.5-2.5 6.5h-2.7l-5-12.2h3.6l2.7 7 2.8-7h2.2l2.8 7 2.7-7Z" fill="currentColor" />
             </svg>
 
-            <svg class="py-3 lg:py-5 w-16 h-auto md:w-20 lg:w-24 text-neutral-400" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 88 22" xml:space="preserve" enable-background="new 0 0 88 22">
+            <svg class="py-3 lg:py-5 w-16 h-auto md:w-20 lg:w-24 text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 88 22" xml:space="preserve" enable-background="new 0 0 88 22">
               <path d="M36.3 14.6a7.3 7.3 0 0 1-5.6 2.8c-3.8 0-6.8-2.7-6.8-6.2a6 6 0 0 1 2-4.5A6 6 0 0 1 30.5 5c2.2 0 4.3 1 5.6 2.8l-2.5 1.8a3.7 3.7 0 0 0-3.1-1.8 3.5 3.5 0 0 0-3.5 3.5c.1 2 1.7 3.5 3.6 3.5 1.3 0 2.5-.6 3.2-1.7l2.5 1.5z" fill="currentColor" />
               <path d="M37.7 0H40.8V17.1H37.7z" fill="currentColor" />
               <path d="M49.1 14.7c2 0 3.7-1.6 3.8-3.6-.1-2-1.8-3.6-3.8-3.6s-3.7 1.6-3.8 3.6c.1 2 1.7 3.6 3.8 3.6m0-9.8c1.7-.1 3.4.5 4.7 1.7 1.3 1.2 2 2.8 2.1 4.5a6.4 6.4 0 0 1-2.1 4.5 6.4 6.4 0 0 1-4.7 1.7c-3.8 0-6.8-2.7-6.8-6.2s3-6.2 6.8-6.2" fill="currentColor" />
@@ -333,19 +405,19 @@
     <!-- End Clients -->
 
     <!-- Case Stories -->
-    <div class="bg-neutral-900 bg-linear-to-t from-black to-transparent">
+    <div class="bg-background bg-linear-to-t from-background-1 to-transparent">
       <div class="max-w-5xl px-4 xl:px-0 py-24 mx-auto">
         <!-- Title -->
         <div class="max-w-3xl mb-10 lg:mb-14">
-          <h2 class="text-white font-semibold text-2xl md:text-4xl md:leading-tight">Success stories</h2>
-          <p class="mt-1 text-neutral-400">Global brands see measurable success when they collaborate with us. From higher conversion and payment approval rates to faster processing speeds. Discover their stories here.</p>
+          <h2 class="text-foreground font-semibold text-2xl md:text-4xl md:leading-tight">Success stories</h2>
+          <p class="mt-1 text-muted-foreground-1">Global brands see measurable success when they collaborate with us. From higher conversion and payment approval rates to faster processing speeds. Discover their stories here.</p>
         </div>
         <!-- End Title -->
 
         <!-- Card Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 items-center border border-neutral-700 divide-y lg:divide-y-0 lg:divide-x divide-neutral-700 rounded-xl">
+        <div class="grid grid-cols-1 lg:grid-cols-3 items-center border border-card-line divide-y lg:divide-y-0 lg:divide-x divide-card-line rounded-xl">
           <!-- Card -->
-          <a class="group relative z-10 p-4 md:p-6 h-full flex flex-col bg-neutral-900 focus:outline-hidden first:rounded-t-xl last:rounded-b-xl lg:first:rounded-l-xl lg:first:rounded-tr-none lg:last:rounded-r-xl lg:last:rounded-bl-none before:absolute before:inset-0 before:bg-linear-to-b hover:before:from-transparent hover:before:via-transparent hover:before:to-[#ff0]/10 before:via-80% focus:before:from-transparent focus:before:via-transparent focus:before:to-[#ff0]/10 before:-z-1 last:before:rounded-b-xl lg:first:before:rounded-s-xl lg:last:before:rounded-e-xl lg:last:before:rounded-bl-none before:opacity-0 hover:before:opacity-100 focus:before:opacity-100" href="#">
+          <a class="group relative z-10 p-4 md:p-6 h-full flex flex-col bg-card first:rounded-t-xl last:rounded-b-xl lg:first:rounded-l-xl lg:first:rounded-tr-none lg:last:rounded-r-xl lg:last:rounded-bl-none last:before:rounded-b-xl lg:first:before:rounded-s-xl lg:last:before:rounded-e-xl lg:last:before:rounded-bl-none focus:outline-hidden before:absolute before:inset-0 before:bg-linear-to-b hover:before:from-transparent hover:before:via-transparent hover:before:to-primary/10 before:via-80% focus:before:from-transparent focus:before:via-transparent focus:before:to-primary/10 before:-z-1 before:opacity-0 hover:before:opacity-100 focus:before:opacity-100" href="case-study-details.html">
             <div class="mb-5">
               <svg class="shrink-0 size-8" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_11766_122079)">
@@ -361,13 +433,14 @@
               </svg>
 
               <div class="mt-5">
-                <p class="font-semibold text-5xl text-white">43%</p>
-                <h3 class="mt-5 font-medium text-lg text-white">Enhancement in Customer Engagement</h3>
-                <p class="mt-1 text-neutral-400">With the aim of optimizing customer interactions and boosting brand loyalty, the team at Preline leveraged Mailchimp's powerful tools and expertise to deliver exceptional results.</p>
+                <p class="font-semibold text-5xl text-foreground">43%</p>
+                <h3 class="mt-5 font-semibold text-xl text-foreground">Enhancement in Customer Engagement</h3>
+                <p class="mt-1 text-muted-foreground-1">With the aim of optimizing customer interactions and boosting brand loyalty, the team at Preline leveraged Mailchimp's powerful tools and expertise to deliver exceptional results.</p>
               </div>
             </div>
+
             <p class="mt-auto">
-              <span class="font-medium text-sm text-[#ff0] pb-1 border-b-2 border-neutral-700 group-hover:border-[#ff0] group-focus:border-[#ff0] transition focus:outline-hidden">
+              <span class="font-medium text-sm text-primary pb-1 border-b-2 border-line-2 group-hover:border-primary-hover group-focus:border-primary-focus transition focus:outline-hidden">
                 Case study
               </span>
             </p>
@@ -375,7 +448,7 @@
           <!-- End Card -->
 
           <!-- Card -->
-          <a class="group relative z-10 p-4 md:p-6 h-full flex flex-col bg-neutral-900 focus:outline-hidden first:rounded-t-xl last:rounded-b-xl lg:first:rounded-l-xl lg:first:rounded-tr-none lg:last:rounded-r-xl lg:last:rounded-bl-none before:absolute before:inset-0 before:bg-linear-to-b hover:before:from-transparent hover:before:via-transparent hover:before:to-[#ff0]/10 before:via-80% focus:before:from-transparent focus:before:via-transparent focus:before:to-[#ff0]/10 before:-z-1 last:before:rounded-b-xl lg:first:before:rounded-s-xl lg:last:before:rounded-e-xl lg:last:before:rounded-bl-none before:opacity-0 hover:before:opacity-100 focus:before:opacity-100" href="#">
+          <a class="group relative z-10 p-4 md:p-6 h-full flex flex-col bg-card first:rounded-t-xl last:rounded-b-xl lg:first:rounded-l-xl lg:first:rounded-tr-none lg:last:rounded-r-xl lg:last:rounded-bl-none last:before:rounded-b-xl lg:first:before:rounded-s-xl lg:last:before:rounded-e-xl lg:last:before:rounded-bl-none focus:outline-hidden before:absolute before:inset-0 before:bg-linear-to-b hover:before:from-transparent hover:before:via-transparent hover:before:to-primary/10 before:via-80% focus:before:from-transparent focus:before:via-transparent focus:before:to-primary/10 before:-z-1 before:opacity-0 hover:before:opacity-100 focus:before:opacity-100" href="case-study-details.html">
             <div class="mb-5">
               <svg class="shrink-0 size-8" width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M27.462 6.28384C27.44 6.12384 27.2998 6.03529 27.184 6.02554C27.0684 6.01589 24.6215 5.83452 24.6215 5.83452C24.6215 5.83452 22.9221 4.1474 22.7355 3.96066C22.5489 3.77403 22.1844 3.8308 22.0429 3.87244C22.0221 3.87858 21.6716 3.98674 21.0919 4.16614C20.5243 2.53261 19.5224 1.03145 17.7599 1.03145C17.7112 1.03145 17.6611 1.03343 17.611 1.03628C17.1098 0.373373 16.4889 0.0853729 15.9525 0.0853729C11.8468 0.0853729 9.88524 5.21798 9.27023 7.82619C7.67483 8.32055 6.54146 8.672 6.39669 8.71748C5.50617 8.99682 5.47801 9.02488 5.36108 9.864C5.27308 10.4993 2.94299 28.5189 2.94299 28.5189L21.0995 31.9208L30.9373 29.7925C30.9373 29.7925 27.4837 6.44384 27.462 6.28384ZM20.0884 4.4765L18.5521 4.952C18.5526 4.84373 18.5532 4.73721 18.5532 4.62072C18.5532 3.60548 18.4123 2.78806 18.1862 2.14006C19.0943 2.25403 19.6992 3.28735 20.0884 4.4765ZM17.0596 2.34137C17.3121 2.97403 17.4763 3.88198 17.4763 5.10718C17.4763 5.16987 17.4757 5.22718 17.4752 5.28515C16.476 5.59463 15.3903 5.93063 14.3022 6.26773C14.9132 3.90981 16.0584 2.77096 17.0596 2.34137ZM15.8398 1.18663C16.017 1.18663 16.1955 1.2468 16.3663 1.36439C15.0505 1.98356 13.6401 3.54302 13.0445 6.65721L10.5364 7.43398C11.2341 5.05863 12.8907 1.18663 15.8398 1.18663Z" fill="#95BF46" />
@@ -384,13 +457,14 @@
               </svg>
 
               <div class="mt-5">
-                <p class="font-semibold text-5xl text-white">20%</p>
-                <h3 class="mt-5 font-medium text-lg text-white">Rise in E-commerce</h3>
-                <p class="mt-1 text-neutral-400">In collaboration with Shopify, Preline embarked on a mission to revolutionize the e-commerce experience for a fictitious fashion brand, "StyleAura.".</p>
+                <p class="font-semibold text-5xl text-foreground">20%</p>
+                <h3 class="mt-5 font-semibold text-xl text-foreground">Rise in E-commerce</h3>
+                <p class="mt-1 text-muted-foreground-1">In collaboration with Shopify, Preline embarked&nbsp;on a mission to revolutionize the e-commerce experience for a fictitious fashion brand, 'StyleAura'.</p>
               </div>
             </div>
+
             <p class="mt-auto">
-              <span class="font-medium text-sm text-[#ff0] pb-1 border-b-2 border-neutral-700 group-hover:border-[#ff0] group-focus:border-[#ff0] transition focus:outline-hidden">
+              <span class="font-medium text-sm text-primary pb-1 border-b-2 border-line-2 group-hover:border-primary-hover group-focus:border-primary-focus transition focus:outline-hidden">
                 Case study
               </span>
             </p>
@@ -398,23 +472,24 @@
           <!-- End Card -->
 
           <!-- Card -->
-          <a class="group relative z-10 p-4 md:p-6 h-full flex flex-col bg-neutral-900 focus:outline-hidden first:rounded-t-xl last:rounded-b-xl lg:first:rounded-l-xl lg:first:rounded-tr-none lg:last:rounded-r-xl lg:last:rounded-bl-none before:absolute before:inset-0 before:bg-linear-to-b hover:before:from-transparent hover:before:via-transparent hover:before:to-[#ff0]/10 before:via-80% focus:before:from-transparent focus:before:via-transparent focus:before:to-[#ff0]/10 before:-z-1 last:before:rounded-b-xl lg:first:before:rounded-s-xl lg:last:before:rounded-e-xl lg:last:before:rounded-bl-none before:opacity-0 hover:before:opacity-100 focus:before:opacity-100" href="#">
+          <a class="group relative z-10 p-4 md:p-6 h-full flex flex-col bg-card first:rounded-t-xl last:rounded-b-xl lg:first:rounded-l-xl lg:first:rounded-tr-none lg:last:rounded-r-xl lg:last:rounded-bl-none last:before:rounded-b-xl lg:first:before:rounded-s-xl lg:last:before:rounded-e-xl lg:last:before:rounded-bl-none focus:outline-hidden before:absolute before:inset-0 before:bg-linear-to-b hover:before:from-transparent hover:before:via-transparent hover:before:to-primary/10 before:via-80% focus:before:from-transparent focus:before:via-transparent focus:before:to-primary/10 before:-z-1 before:opacity-0 hover:before:opacity-100 focus:before:opacity-100" href="case-study-details.html">
             <div class="mb-5">
               <svg class="shrink-0 size-8" width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M32.8875 15.3054C32.9242 16.2093 32.8209 17.1099 32.5811 17.9792C32.3447 18.8486 31.9716 19.6695 31.4787 20.4141C30.989 21.1593 30.3861 21.8167 29.6935 22.3607L29.6769 22.3745L23.019 27.563L19.7451 30.1433L17.7501 31.7089C17.6335 31.8024 17.5036 31.8716 17.3671 31.9201C17.2305 31.9686 17.084 31.9929 16.9374 31.9929C16.7942 31.9929 16.6477 31.9686 16.5111 31.9201C16.3745 31.8716 16.2447 31.8024 16.1281 31.7089L14.1331 30.1433L10.8591 27.563L4.24125 22.4057L4.20129 22.378L4.18796 22.3641C3.49187 21.8203 2.88904 21.1623 2.39611 20.4176C1.90319 19.6729 1.53016 18.8486 1.29036 17.9792C1.05056 17.1099 0.947313 16.2059 0.98395 15.3019C1.02392 14.3979 1.20044 13.5078 1.51018 12.6626L1.55348 12.5414L5.90654 0.747936C5.92875 0.69021 5.95539 0.634792 5.98648 0.581684C6.01534 0.528576 6.04976 0.478931 6.08972 0.43275C6.12747 0.38426 6.16855 0.339234 6.21295 0.297671C6.25736 0.258417 6.30399 0.221472 6.35284 0.186836C6.45609 0.121028 6.56267 0.0725381 6.67924 0.0448295C6.79248 0.0136573 6.91238 -0.000196993 7.02895 0.00673016C7.14885 0.0136573 7.26542 0.0379024 7.37533 0.0829289C7.48524 0.124492 7.59181 0.186836 7.68507 0.263035C7.72948 0.302289 7.77278 0.343852 7.81496 0.387724C7.85493 0.433905 7.89046 0.483549 7.92154 0.536658C7.95485 0.587457 7.98371 0.641719 8.00814 0.699446C8.03256 0.754863 8.05254 0.812589 8.06809 0.872625L11.0023 10.2139H22.8792L25.8134 0.872625C25.8289 0.812589 25.85 0.754863 25.8767 0.699446C25.9011 0.644029 25.93 0.589766 25.9633 0.536658C25.9944 0.485858 26.0299 0.437368 26.0699 0.391187C26.1098 0.345006 26.1531 0.302289 26.1997 0.263035C26.293 0.186836 26.3962 0.127955 26.5062 0.0829289C26.6194 0.0413659 26.736 0.0171209 26.8525 0.0101937C26.9724 0.00326659 27.089 0.0136573 27.2056 0.0448295C27.3188 0.0760017 27.4287 0.124492 27.5286 0.1903C27.5797 0.222627 27.6275 0.259571 27.6719 0.301134C27.7163 0.340388 27.7573 0.38426 27.7951 0.43275C27.8328 0.48124 27.8673 0.532039 27.8983 0.585148C27.9272 0.638256 27.9527 0.693673 27.9749 0.751399L32.3213 12.5483L32.3646 12.6696C32.6744 13.5112 32.8509 14.4014 32.8875 15.3054Z" fill="#E24329" />
-                <path d="M32.8909 15.309C32.9275 16.2095 32.8243 17.1135 32.5845 17.9829C32.3447 18.8523 31.9717 19.6766 31.4787 20.4213C30.9858 21.1659 30.383 21.824 29.6902 22.3678L29.6736 22.3816L23.0157 27.5701C23.0157 27.5701 20.1881 25.3499 16.9374 22.7903L26.4795 15.2813C26.9092 14.9453 27.3588 14.6371 27.8218 14.3531C28.2847 14.0656 28.7643 13.8093 29.2539 13.5807C29.7468 13.3521 30.2498 13.1477 30.7593 12.978C31.2722 12.8049 31.7918 12.6628 32.3214 12.5485L32.3647 12.6698C32.6744 13.5149 32.8509 14.405 32.8909 15.309Z" fill="#FC6D26" />
+                <path d="M32.8909 15.309C32.9275 16.2095 32.8243 17.1135 32.5845 17.9829C32.3447 18.8523 31.9717 19.6766 31.4787 20.4213C30.9858 21.1659 30.383 21.824 29.6902 22.3678L29.6736 22.3816L23.0157 27.5701C23.0157 27.5701 20.1881 25.3499 16.9374 22.7903L26.4795 15.2813C26.9092 14.9453 27.3588 14.6371 27.8218 14.3531C28.2847 14.0656 28.7643 13.8093 29.2539 13.5807C29.7468 13.3521 30.2498 13.1477 30.7593 12.978C31.2722 12.8048 31.7918 12.6628 32.3214 12.5485L32.3647 12.6698C32.6744 13.5149 32.8509 14.405 32.8909 15.309Z" fill="#FC6D26" />
                 <path d="M16.9374 22.7903C20.1881 25.343 23.0191 27.5701 23.0191 27.5701L19.7451 30.1504L17.7501 31.716C17.6335 31.8095 17.5036 31.8788 17.3671 31.9273C17.2305 31.9758 17.084 32 16.9374 32C16.7942 32 16.6477 31.9758 16.5111 31.9273C16.3746 31.8788 16.2447 31.8095 16.1281 31.716L14.1331 30.1504L10.8591 27.5701C10.8591 27.5701 13.6868 25.343 16.9374 22.7903Z" fill="#FCA326" />
-                <path d="M16.9374 22.7834C13.6834 25.343 10.8591 27.5632 10.8591 27.5632L4.24125 22.4059L4.20129 22.3782L4.18796 22.3643C3.49187 21.8205 2.88904 21.1625 2.39611 20.4178C1.90319 19.6731 1.53016 18.8488 1.29036 17.9794C1.05056 17.1101 0.947313 16.2061 0.98395 15.3021C1.02392 14.3981 1.20044 13.508 1.51018 12.6628L1.55348 12.5416C2.08304 12.6559 2.60261 12.7979 3.11552 12.9711C3.6251 13.1443 4.12801 13.3452 4.62094 13.5772C5.11053 13.8058 5.59014 14.0656 6.05309 14.3496C6.51604 14.6336 6.96233 14.9453 7.39531 15.2813L16.9374 22.7834Z" fill="#FC6D26" />
+                <path d="M16.9374 22.7834C13.6834 25.343 10.8591 27.5631 10.8591 27.5631L4.24125 22.4059L4.20129 22.3782L4.18796 22.3643C3.49187 21.8205 2.88904 21.1625 2.39611 20.4178C1.90319 19.6731 1.53016 18.8488 1.29036 17.9794C1.05056 17.1101 0.947313 16.2061 0.98395 15.3021C1.02392 14.3981 1.20044 13.5079 1.51018 12.6628L1.55348 12.5416C2.08304 12.6559 2.60261 12.7979 3.11552 12.9711C3.6251 13.1443 4.12801 13.3452 4.62094 13.5772C5.11053 13.8058 5.59014 14.0656 6.05309 14.3496C6.51604 14.6336 6.96233 14.9453 7.39531 15.2813L16.9374 22.7834Z" fill="#FC6D26" />
               </svg>
 
               <div class="mt-5">
-                <p class="font-semibold text-5xl text-white">12%</p>
-                <h3 class="mt-5 font-medium text-lg text-white">Streamlining Development</h3>
-                <p class="mt-1 text-neutral-400"> With the goal of accelerating project delivery and enhancing collaboration among development teams, Preline leveraged GitLab's comprehensive suite of tools and Preline's expertise in digital product development.</p>
+                <p class="font-semibold text-5xl text-foreground">12%</p>
+                <h3 class="mt-5 font-semibold text-xl text-foreground">Streamlining Development</h3>
+                <p class="mt-1 text-muted-foreground-1">With the goal of accelerating project delivery and enhancing collaboration among development teams, Preline leveraged GitLab's comprehensive suite of tools and Preline's expertise in digital product development.</p>
               </div>
             </div>
+
             <p class="mt-auto">
-              <span class="font-medium text-sm text-[#ff0] pb-1 border-b-2 border-neutral-700 group-hover:border-[#ff0] group-focus:border-[#ff0] transition focus:outline-hidden">
+              <span class="font-medium text-sm text-primary pb-1 border-b-2 border-line-2 group-hover:border-primary-hover group-focus:border-primary-focus transition focus:outline-hidden">
                 Case study
               </span>
             </p>
@@ -422,17 +497,51 @@
           <!-- End Card -->
         </div>
         <!-- End Card Grid -->
+
+        <div class="mt-5">
+          <!-- Quick Action -->
+          <a class="py-1 px-3 group inline-flex items-center gap-x-1.5 bg-layer border border-layer-line text-layer-foreground text-sm rounded-full focus:outline-hidden" href="case-study.html">
+            <div class="flex items-center -space-x-2">
+              <div class="size-6 flex shrink-0 justify-center items-center bg-layer rounded-full">
+                <svg class="shrink-0 size-3.5" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M11.7326 0C9.96372 0.00130479 8.53211 1.43397 8.53342 3.19935C8.53211 4.96473 9.96503 6.39739 11.7339 6.39869H14.9345V3.20065C14.9358 1.43527 13.5029 0.00260958 11.7326 0C11.7339 0 11.7339 0 11.7326 0M11.7326 8.53333H3.20053C1.43161 8.53464 -0.00130383 9.9673 3.57297e-06 11.7327C-0.00261123 13.4981 1.4303 14.9307 3.19922 14.9333H11.7326C13.5016 14.932 14.9345 13.4994 14.9332 11.734C14.9345 9.9673 13.5016 8.53464 11.7326 8.53333V8.53333Z" fill="#36C5F0"></path>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M32 11.7327C32.0013 9.9673 30.5684 8.53464 28.7995 8.53333C27.0306 8.53464 25.5976 9.9673 25.5989 11.7327V14.9333H28.7995C30.5684 14.932 32.0013 13.4994 32 11.7327ZM23.4666 11.7327V3.19935C23.4679 1.43527 22.0363 0.00260958 20.2674 0C18.4984 0.00130479 17.0655 1.43397 17.0668 3.19935V11.7327C17.0642 13.4981 18.4971 14.9307 20.2661 14.9333C22.035 14.932 23.4679 13.4994 23.4666 11.7327Z" fill="#2EB67D"></path>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M20.2661 32C22.035 31.9987 23.4679 30.566 23.4666 28.8007C23.4679 27.0353 22.035 25.6026 20.2661 25.6013H17.0656V28.8007C17.0642 30.5647 18.4972 31.9974 20.2661 32ZM20.2661 23.4654H28.7995C30.5684 23.4641 32.0013 22.0314 32 20.266C32.0026 18.5006 30.5697 17.068 28.8008 17.0654H20.2674C18.4985 17.0667 17.0656 18.4993 17.0669 20.2647C17.0656 22.0314 18.4972 23.4641 20.2661 23.4654V23.4654Z" fill="#ECB22E"></path>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M8.93953e-07 20.266C-0.00130651 22.0314 1.43161 23.4641 3.20052 23.4654C4.96944 23.4641 6.40235 22.0314 6.40105 20.266V17.0667H3.20052C1.43161 17.068 -0.00130651 18.5006 8.93953e-07 20.266ZM8.53342 20.266V28.7993C8.53081 30.5647 9.96372 31.9974 11.7326 32C13.5016 31.9987 14.9345 30.566 14.9332 28.8007V20.2686C14.9358 18.5032 13.5029 17.0706 11.7339 17.068C9.96372 17.068 8.53211 18.5006 8.53342 20.266C8.53342 20.2673 8.53342 20.266 8.53342 20.266Z" fill="#E01E5A"></path>
+                </svg>
+              </div>
+              <div class="size-6 flex shrink-0 justify-center items-center bg-layer rounded-full">
+                <svg class="shrink-0 size-3.5" width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_12670_125260)">
+                    <path d="M20.9373 16.007C20.9379 17.1608 20.7297 18.3053 20.3229 19.385C19.2428 19.7917 18.0981 20.0002 16.9439 20.0004H16.9304C15.7419 19.9989 14.6032 19.7816 13.5524 19.3855C13.1454 18.3056 12.937 17.161 12.9374 16.007V15.993C12.9369 14.8394 13.1448 13.6952 13.5512 12.6155C14.6313 12.208 15.7762 11.9995 16.9306 12H16.9441C18.0983 11.9994 19.2431 12.2079 20.3231 12.6154C20.7299 13.6949 20.938 14.8392 20.9374 15.9929V16.0069L20.9373 16.007ZM32.7152 13.3334H23.3757L29.9793 6.72925C29.461 6.00115 28.8828 5.31757 28.2508 4.68563V4.68512C27.6188 4.05386 26.9354 3.47621 26.2077 2.95813L19.6036 9.56225V0.22275C18.7252 0.074991 17.8361 0.000484612 16.9454 0L16.9289 0C16.0229 0.0005 15.1356 0.0775 14.2708 0.22275V9.56225L7.66669 2.95813C6.93887 3.47607 6.25577 4.05413 5.62456 4.68625L5.62106 4.68875C4.99013 5.3199 4.41277 6.00242 3.89494 6.72925L10.4996 13.3334H1.16019C1.16019 13.3334 0.937439 15.0875 0.937439 15.9945V16.0055C0.937439 16.9125 1.01431 17.8014 1.16019 18.6666H10.4997L3.89506 25.2708C4.93402 26.7288 6.20869 28.0034 7.66669 29.0424L14.2708 22.4377V31.7778C15.1482 31.9248 16.0362 31.9991 16.9258 32H16.9484C17.8381 31.9992 18.7261 31.9249 19.6034 31.7778V22.4377L26.2082 29.0424C26.9357 28.5241 27.619 27.9463 28.2508 27.3149L28.2523 27.3134C28.8835 26.6814 29.4611 25.9982 29.9793 25.2708L23.3747 18.6666H32.7152C32.8606 17.8029 32.9364 16.9166 32.9374 16.0116V15.9884C32.9364 15.0834 32.8606 14.1971 32.7152 13.3334Z" fill="#FF4A00"></path>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_12670_125260">
+                      <rect width="32" height="32" fill="white" transform="translate(0.937439)"></rect>
+                    </clipPath>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+            Explore stories
+            <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </a>
+          <!-- End Quick Action -->
+        </div>
       </div>
     </div>
     <!-- End Case Stories -->
 
     <!-- Testimonials -->
-    <div class="bg-neutral-900">
+    <div class="bg-background">
       <div class="max-w-5xl px-4 xl:px-0 py-10 lg:py-20 mx-auto">
         <!-- Title -->
         <div class="max-w-3xl mb-10 lg:mb-14">
-          <h2 class="text-white font-semibold text-2xl md:text-4xl md:leading-tight">Preline reviews</h2>
-          <p class="mt-1 text-neutral-400">With over 30 awards, and achievements, we proudly demonstrate our unwavering dedication to excellence and client success.</p>
+          <h2 class="text-foreground font-semibold text-2xl md:text-4xl md:leading-tight">Preline reviews</h2>
+          <p class="mt-1 text-muted-foreground-1">With over 30 awards, and achievements, we proudly demonstrate our unwavering dedication to excellence and client success.</p>
         </div>
         <!-- End Title -->
 
@@ -441,7 +550,7 @@
           <div>
             <!-- Blockquote -->
             <blockquote>
-              <p class="font-medium text-xl text-white md:text-2xl md:leading-normal xl:text-3xl xl:leading-normal">
+              <p class="font-medium text-xl text-foreground md:text-2xl md:leading-normal xl:text-3xl xl:leading-normal">
                 To say that switching to Preline has been life-changing is an understatement. My business has tripled since then.
               </p>
 
@@ -451,8 +560,8 @@
                     <img class="size-12 rounded-full" src="https://images.unsplash.com/photo-1671725501928-b7d85698ccd8?q=80&w=320&h=320&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Avatar">
                   </div>
                   <div class="ms-4 md:ms-0">
-                    <div class="text-base font-semibold text-white">Nicole Grazioso</div>
-                    <div class="text-xs text-neutral-400">Director Payments & Risk | Airbnb</div>
+                    <div class="text-base font-semibold text-foreground">Nicole Grazioso</div>
+                    <div class="text-xs text-muted-foreground-1">Director Payments & Risk | Airbnb</div>
                   </div>
                 </div>
               </footer>
@@ -472,14 +581,14 @@
     <!-- End Testimonials -->
 
     <!-- Stats -->
-    <div class="bg-neutral-900">
+    <div class="bg-background">
       <div class="max-w-5xl px-4 xl:px-0 py-10 mx-auto">
-        <div class="border border-neutral-800 rounded-xl">
-          <div class="p-4 lg:p-8 bg-linear-to-bl from-neutral-800 via-neutral-900 to-neutral-950 rounded-xl">
+        <div class="border border-line-2 rounded-xl">
+          <div class="p-4 lg:p-8 bg-linear-to-bl from-layer via-background to-background-1 rounded-xl">
             <div class="grid grid-cols-1 sm:grid-cols-3 items-center gap-y-20 gap-x-12">
               <!-- Stats -->
-              <div class="relative text-center first:before:hidden before:absolute before:-top-full sm:before:top-1/2 before:start-1/2 sm:before:-start-6 before:w-px before:h-20 before:bg-neutral-800 before:rotate-[60deg] sm:before:rotate-12 before:transform sm:before:-translate-y-1/2 before:-translate-x-1/2 sm:before:-translate-x-0 before:mt-3.5 sm:before:mt-0">
-                <svg class="shrink-0 size-6 sm:size-8 text-[#ff0] mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <div class="relative text-center first:before:hidden before:absolute before:-top-full sm:before:top-1/2 before:start-1/2 sm:before:-start-6 before:h-20 before:border-s before:border-line-2 before:rotate-[60deg] sm:before:rotate-12 before:transform sm:before:-translate-y-1/2 before:-translate-x-1/2 sm:before:-translate-x-0 before:mt-3.5 sm:before:mt-0">
+                <svg class="shrink-0 size-6 sm:size-8 text-primary mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="m11 17 2 2a1 1 0 1 0 3-3" />
                   <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />
                   <path d="m21 3 1 11h-2" />
@@ -487,29 +596,29 @@
                   <path d="M3 4h8" />
                 </svg>
                 <div class="mt-3 sm:mt-5">
-                  <h3 class="text-lg sm:text-3xl font-semibold text-white">2,000+</h3>
-                  <p class="mt-1 text-sm sm:text-base text-neutral-400">Preline partners</p>
+                  <h3 class="text-lg sm:text-3xl font-semibold text-foreground">2,000+</h3>
+                  <p class="mt-1 text-sm sm:text-base text-muted-foreground-1">Preline partners</p>
                 </div>
               </div>
               <!-- End Stats -->
 
               <!-- Stats -->
-              <div class="relative text-center first:before:hidden before:absolute before:-top-full sm:before:top-1/2 before:start-1/2 sm:before:-start-6 before:w-px before:h-20 before:bg-neutral-800 before:rotate-[60deg] sm:before:rotate-12 before:transform sm:before:-translate-y-1/2 before:-translate-x-1/2 sm:before:-translate-x-0 before:mt-3.5 sm:before:mt-0">
+              <div class="relative text-center first:before:hidden before:absolute before:-top-full sm:before:top-1/2 before:start-1/2 sm:before:-start-6 before:h-20 before:border-s before:border-line-2 before:rotate-[60deg] sm:before:rotate-12 before:transform sm:before:-translate-y-1/2 before:-translate-x-1/2 sm:before:-translate-x-0 before:mt-3.5 sm:before:mt-0">
                 <div class="flex justify-center items-center -space-x-5">
-                  <img class="relative z-2 shrink-0 size-8 rounded-full border-3 border-neutral-800" src="https://images.unsplash.com/photo-1601935111741-ae98b2b230b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80" alt="Avatar">
-                  <img class="relative z-1 shrink-0 size-8 rounded-full border-3 border-neutral-800 -mt-7" src="https://images.unsplash.com/photo-1570654639102-bdd95efeca7a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80" alt="Avatar">
-                  <img class="relative shrink-0 size-8 rounded-full border-3 border-neutral-800" src="https://images.unsplash.com/photo-1679412330254-90cb240038c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2.5&w=320&h=320&q=80" alt="Avatar">
+                  <img class="relative z-2 shrink-0 size-8 rounded-full border-3 border-line-2" src="https://images.unsplash.com/photo-1601935111741-ae98b2b230b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80" alt="Avatar">
+                  <img class="relative z-1 shrink-0 size-8 rounded-full border-3 border-line-2 -mt-7" src="https://images.unsplash.com/photo-1570654639102-bdd95efeca7a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80" alt="Avatar">
+                  <img class="relative shrink-0 size-8 rounded-full border-3 border-line-2" src="https://images.unsplash.com/photo-1679412330254-90cb240038c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2.5&w=320&h=320&q=80" alt="Avatar">
                 </div>
                 <div class="mt-3 sm:mt-5">
-                  <h3 class="text-lg sm:text-3xl font-semibold text-white">85%</h3>
-                  <p class="mt-1 text-sm sm:text-base text-neutral-400">Happy customers</p>
+                  <h3 class="text-lg sm:text-3xl font-semibold text-foreground">85%</h3>
+                  <p class="mt-1 text-sm sm:text-base text-muted-foreground-1">Happy customers</p>
                 </div>
               </div>
               <!-- End Stats -->
 
               <!-- Stats -->
-              <div class="relative text-center first:before:hidden before:absolute before:-top-full sm:before:top-1/2 before:start-1/2 sm:before:-start-6 before:w-px before:h-20 before:bg-neutral-800 before:rotate-[60deg] sm:before:rotate-12 before:transform sm:before:-translate-y-1/2 before:-translate-x-1/2 sm:before:-translate-x-0 before:mt-3.5 sm:before:mt-0">
-                <svg class="shrink-0 size-6 sm:size-8 text-[#ff0] mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <div class="relative text-center first:before:hidden before:absolute before:-top-full sm:before:top-1/2 before:start-1/2 sm:before:-start-6 before:h-20 before:border-s before:border-line-2 before:rotate-[60deg] sm:before:rotate-12 before:transform sm:before:-translate-y-1/2 before:-translate-x-1/2 sm:before:-translate-x-0 before:mt-3.5 sm:before:mt-0">
+                <svg class="shrink-0 size-6 sm:size-8 text-primary mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17" />
                   <path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9" />
                   <path d="m2 16 6 6" />
@@ -517,8 +626,8 @@
                   <circle cx="6" cy="5" r="3" />
                 </svg>
                 <div class="mt-3 sm:mt-5">
-                  <h3 class="text-lg sm:text-3xl font-semibold text-white">$55M+</h3>
-                  <p class="mt-1 text-sm sm:text-base text-neutral-400">Ads managed yearly</p>
+                  <h3 class="text-lg sm:text-3xl font-semibold text-foreground">$55M+</h3>
+                  <p class="mt-1 text-sm sm:text-base text-muted-foreground-1">Ads managed yearly</p>
                 </div>
               </div>
               <!-- End Stats -->
@@ -530,13 +639,13 @@
     <!-- End Stats -->
 
     <!-- Approach -->
-    <div class="bg-neutral-900">
+    <div class="bg-background">
       <!-- Approach -->
       <div class="max-w-5xl px-4 xl:px-0 py-10 lg:pt-20  mx-auto">
         <!-- Title -->
         <div class="max-w-3xl mb-10 lg:mb-14">
-          <h2 class="text-white font-semibold text-2xl md:text-4xl md:leading-tight">Our approach</h2>
-          <p class="mt-1 text-neutral-400">This profound insight guides our comprehensive strategy — from meticulous research and strategic planning to the seamless execution of brand development and website or product deployment.</p>
+          <h2 class="text-foreground font-semibold text-2xl md:text-4xl md:leading-tight">Our approach</h2>
+          <p class="mt-1 text-muted-foreground-1">This profound insight guides our comprehensive strategy — from meticulous research and strategic planning to the seamless execution of brand development and website or product deployment.</p>
         </div>
         <!-- End Title -->
 
@@ -551,7 +660,7 @@
           <div>
             <!-- Heading -->
             <div class="mb-4">
-              <h3 class="text-[#ff0] text-xs font-medium uppercase">
+              <h3 class="text-primary text-xs font-medium uppercase">
                 Steps
               </h3>
             </div>
@@ -560,9 +669,9 @@
             <!-- Item -->
             <div class="flex gap-x-5 ms-1">
               <!-- Icon -->
-              <div class="relative last:after:hidden after:absolute after:top-8 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-neutral-800">
+              <div class="relative last:after:hidden after:absolute after:top-8 after:bottom-0 after:start-4 after:-translate-x-[0.5px] after:border-s after:border-line-2">
                 <div class="relative z-10 size-8 flex justify-center items-center">
-                  <span class="flex shrink-0 justify-center items-center size-8 border border-neutral-800 text-[#ff0] font-semibold text-xs uppercase rounded-full">
+                  <span class="flex shrink-0 justify-center items-center size-8 border border-line-2 text-primary font-semibold text-xs uppercase rounded-full">
                     1
                   </span>
                 </div>
@@ -571,8 +680,8 @@
 
               <!-- Right Content -->
               <div class="grow pt-0.5 pb-8 sm:pb-12">
-                <p class="text-sm lg:text-base text-neutral-400">
-                  <span class="text-white">Market Research and Analysis:</span>
+                <p class="text-sm lg:text-base text-muted-foreground-1">
+                  <span class="text-foreground">Market Research and Analysis:</span>
                   Identify your target audience and understand their needs, preferences, and behaviors.
                 </p>
               </div>
@@ -583,9 +692,9 @@
             <!-- Item -->
             <div class="flex gap-x-5 ms-1">
               <!-- Icon -->
-              <div class="relative last:after:hidden after:absolute after:top-8 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-neutral-800">
+              <div class="relative last:after:hidden after:absolute after:top-8 after:bottom-0 after:start-4 after:-translate-x-[0.5px] after:border-s after:border-line-2">
                 <div class="relative z-10 size-8 flex justify-center items-center">
-                  <span class="flex shrink-0 justify-center items-center size-8 border border-neutral-800 text-[#ff0] font-semibold text-xs uppercase rounded-full">
+                  <span class="flex shrink-0 justify-center items-center size-8 border border-line-2 text-primary font-semibold text-xs uppercase rounded-full">
                     2
                   </span>
                 </div>
@@ -594,8 +703,8 @@
 
               <!-- Right Content -->
               <div class="grow pt-0.5 pb-8 sm:pb-12">
-                <p class="text-sm lg:text-base text-neutral-400">
-                  <span class="text-white">Product Development and Testing:</span>
+                <p class="text-sm lg:text-base text-muted-foreground-1">
+                  <span class="text-foreground">Product Development and Testing:</span>
                   Develop digital products or services that address the needs and preferences of your target audience.
                 </p>
               </div>
@@ -606,9 +715,9 @@
             <!-- Item -->
             <div class="flex gap-x-5 ms-1">
               <!-- Icon -->
-              <div class="relative last:after:hidden after:absolute after:top-8 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-neutral-800">
+              <div class="relative last:after:hidden after:absolute after:top-8 after:bottom-0 after:start-4 after:-translate-x-[0.5px] after:border-s after:border-line-2">
                 <div class="relative z-10 size-8 flex justify-center items-center">
-                  <span class="flex shrink-0 justify-center items-center size-8 border border-neutral-800 text-[#ff0] font-semibold text-xs uppercase rounded-full">
+                  <span class="flex shrink-0 justify-center items-center size-8 border border-line-2 text-primary font-semibold text-xs uppercase rounded-full">
                     3
                   </span>
                 </div>
@@ -617,8 +726,8 @@
 
               <!-- Right Content -->
               <div class="grow pt-0.5 pb-8 sm:pb-12">
-                <p class="text-sm md:text-base text-neutral-400">
-                  <span class="text-white">Marketing and Promotion:</span>
+                <p class="text-sm md:text-base text-muted-foreground-1">
+                  <span class="text-foreground">Marketing and Promotion:</span>
                   Develop a comprehensive marketing strategy to promote your digital products or services.
                 </p>
               </div>
@@ -629,9 +738,9 @@
             <!-- Item -->
             <div class="flex gap-x-5 ms-1">
               <!-- Icon -->
-              <div class="relative last:after:hidden after:absolute after:top-8 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-neutral-800">
+              <div class="relative last:after:hidden after:absolute after:top-8 after:bottom-0 after:start-4 after:-translate-x-[0.5px] after:border-s after:border-line-2">
                 <div class="relative z-10 size-8 flex justify-center items-center">
-                  <span class="flex shrink-0 justify-center items-center size-8 border border-neutral-800 text-[#ff0] font-semibold text-xs uppercase rounded-full">
+                  <span class="flex shrink-0 justify-center items-center size-8 border border-line-2 text-primary font-semibold text-xs uppercase rounded-full">
                     4
                   </span>
                 </div>
@@ -640,8 +749,8 @@
 
               <!-- Right Content -->
               <div class="grow pt-0.5 pb-8 sm:pb-12">
-                <p class="text-sm md:text-base text-neutral-400">
-                  <span class="text-white">Launch and Optimization:</span>
+                <p class="text-sm md:text-base text-muted-foreground-1">
+                  <span class="text-foreground">Launch and Optimization:</span>
                   Launch your digital products or services to the market, closely monitoring their performance and user feedback.
                 </p>
               </div>
@@ -649,7 +758,7 @@
             </div>
             <!-- End Item -->
 
-            <a class="group inline-flex items-center gap-x-2 py-2 px-3 bg-[#ff0] font-medium text-sm text-neutral-800 rounded-full focus:outline-hidden" href="#">
+            <a class="group inline-flex items-center gap-x-2 py-2 px-3 bg-primary border border-primary-line text-primary-foreground font-medium text-sm rounded-full focus:outline-hidden" href="#">
               <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                 <path class="opacity-0 group-hover:opacity-100 group-focus:opacity-100 group-hover:delay-100 transition" d="M14.05 2a9 9 0 0 1 8 7.94"></path>
@@ -666,123 +775,123 @@
     <!-- End Approach -->
 
     <!-- Contact -->
-    <div id="contact" class="bg-neutral-900">
+    <div id="contact" class="bg-background">
       <div class="max-w-5xl px-4 xl:px-0 py-10 lg:py-20 mx-auto">
         <!-- Title -->
         <div class="max-w-3xl mb-10 lg:mb-14">
-          <h2 class="text-white font-semibold text-2xl md:text-4xl md:leading-tight">Contact us</h2>
-          <p class="mt-1 text-neutral-400">Whatever your goal - we will get you there.</p>
+          <h2 class="text-foreground font-semibold text-2xl md:text-4xl md:leading-tight">Contact us</h2>
+          <p class="mt-1 text-muted-foreground-1">Whatever your goal - we will get you there.</p>
         </div>
         <!-- End Title -->
 
         <!-- Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 lg:gap-x-16">
-          <div class="md:order-2 border-b border-neutral-800 pb-10 mb-10 md:border-b-0 md:pb-0 md:mb-0">
+          <div class="md:order-2 border-b border-line-1 pb-10 mb-10 md:border-b-0 md:pb-0 md:mb-0">
             <form>
               <div class="space-y-4">
                 <!-- Input -->
                 <div class="relative">
-                  <input type="text" id="hs-tac-input-name" class="peer p-3 sm:p-4 block w-full bg-neutral-800 border-transparent rounded-lg sm:text-sm text-white placeholder:text-transparent focus:outline-hidden focus:ring-0 focus:border-transparent disabled:opacity-50 disabled:pointer-events-none
+                  <input type="text" id="hs-tac-input-name" class="peer p-3 sm:p-4 block w-full bg-surface border-transparent rounded-lg sm:text-sm text-foreground placeholder:text-transparent focus:outline-hidden focus:ring-0 focus:border-transparent disabled:opacity-50 disabled:pointer-events-none
                   focus:pt-6
                   focus:pb-2
                   not-placeholder-shown:pt-6
                   not-placeholder-shown:pb-2
                   autofill:pt-6
                   autofill:pb-2" placeholder="Name">
-                  <label for="hs-tac-input-name" class="absolute top-0 start-0 p-3 sm:p-4 h-full text-neutral-400 text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent peer-disabled:opacity-50 peer-disabled:pointer-events-none
+                  <label for="hs-tac-input-name" class="absolute top-0 start-0 p-3 sm:p-4 h-full text-muted-foreground-1 text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent peer-disabled:opacity-50 peer-disabled:pointer-events-none
                     peer-focus:text-xs
                     peer-focus:-translate-y-1.5
-                    peer-focus:text-neutral-400
+                    peer-focus:text-muted-foreground-1
                     peer-not-placeholder-shown:text-xs
                     peer-not-placeholder-shown:-translate-y-1.5
-                    peer-not-placeholder-shown:text-neutral-400">Name</label>
+                    peer-not-placeholder-shown:text-muted-foreground-1">Name</label>
                 </div>
                 <!-- End Input -->
 
                 <!-- Input -->
                 <div class="relative">
-                  <input type="email" id="hs-tac-input-email" class="peer p-3 sm:p-4 block w-full bg-neutral-800 border-transparent rounded-lg sm:text-sm text-white placeholder:text-transparent focus:outline-hidden focus:ring-0 focus:border-transparent disabled:opacity-50 disabled:pointer-events-none
+                  <input type="email" id="hs-tac-input-email" class="peer p-3 sm:p-4 block w-full bg-surface border-transparent rounded-lg sm:text-sm text-foreground placeholder:text-transparent focus:outline-hidden focus:ring-0 focus:border-transparent disabled:opacity-50 disabled:pointer-events-none
                   focus:pt-6
                   focus:pb-2
                   not-placeholder-shown:pt-6
                   not-placeholder-shown:pb-2
                   autofill:pt-6
                   autofill:pb-2" placeholder="Email">
-                  <label for="hs-tac-input-email" class="absolute top-0 start-0 p-3 sm:p-4 h-full text-neutral-400 text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent peer-disabled:opacity-50 peer-disabled:pointer-events-none
+                  <label for="hs-tac-input-email" class="absolute top-0 start-0 p-3 sm:p-4 h-full text-muted-foreground-1 text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent peer-disabled:opacity-50 peer-disabled:pointer-events-none
                     peer-focus:text-xs
                     peer-focus:-translate-y-1.5
-                    peer-focus:text-neutral-400
+                    peer-focus:text-muted-foreground-1
                     peer-not-placeholder-shown:text-xs
                     peer-not-placeholder-shown:-translate-y-1.5
-                    peer-not-placeholder-shown:text-neutral-400">Email</label>
+                    peer-not-placeholder-shown:text-muted-foreground-1">Email</label>
                 </div>
                 <!-- End Input -->
 
                 <!-- Input -->
                 <div class="relative">
-                  <input type="text" id="hs-tac-input-company" class="peer p-3 sm:p-4 block w-full bg-neutral-800 border-transparent rounded-lg sm:text-sm text-white placeholder:text-transparent focus:outline-hidden focus:ring-0 focus:border-transparent disabled:opacity-50 disabled:pointer-events-none
+                  <input type="text" id="hs-tac-input-company" class="peer p-3 sm:p-4 block w-full bg-surface border-transparent rounded-lg sm:text-sm text-foreground placeholder:text-transparent focus:outline-hidden focus:ring-0 focus:border-transparent disabled:opacity-50 disabled:pointer-events-none
                   focus:pt-6
                   focus:pb-2
                   not-placeholder-shown:pt-6
                   not-placeholder-shown:pb-2
                   autofill:pt-6
                   autofill:pb-2" placeholder="Company">
-                  <label for="hs-tac-input-company" class="absolute top-0 start-0 p-3 sm:p-4 h-full text-neutral-400 text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent peer-disabled:opacity-50 peer-disabled:pointer-events-none
+                  <label for="hs-tac-input-company" class="absolute top-0 start-0 p-3 sm:p-4 h-full text-muted-foreground-1 text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent peer-disabled:opacity-50 peer-disabled:pointer-events-none
                     peer-focus:text-xs
                     peer-focus:-translate-y-1.5
-                    peer-focus:text-neutral-400
+                    peer-focus:text-muted-foreground-1
                     peer-not-placeholder-shown:text-xs
                     peer-not-placeholder-shown:-translate-y-1.5
-                    peer-not-placeholder-shown:text-neutral-400">Company</label>
+                    peer-not-placeholder-shown:text-muted-foreground-1">Company</label>
                 </div>
                 <!-- End Input -->
 
                 <!-- Input -->
                 <div class="relative">
-                  <input type="text" id="hs-tac-input-phone" class="peer p-3 sm:p-4 block w-full bg-neutral-800 border-transparent rounded-lg sm:text-sm text-white placeholder:text-transparent focus:outline-hidden focus:ring-0 focus:border-transparent disabled:opacity-50 disabled:pointer-events-none
+                  <input type="text" id="hs-tac-input-phone" class="peer p-3 sm:p-4 block w-full bg-surface border-transparent rounded-lg sm:text-sm text-foreground placeholder:text-transparent focus:outline-hidden focus:ring-0 focus:border-transparent disabled:opacity-50 disabled:pointer-events-none
                   focus:pt-6
                   focus:pb-2
                   not-placeholder-shown:pt-6
                   not-placeholder-shown:pb-2
                   autofill:pt-6
                   autofill:pb-2" placeholder="Phone">
-                  <label for="hs-tac-input-phone" class="absolute top-0 start-0 p-3 sm:p-4 h-full text-neutral-400 text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent peer-disabled:opacity-50 peer-disabled:pointer-events-none
+                  <label for="hs-tac-input-phone" class="absolute top-0 start-0 p-3 sm:p-4 h-full text-muted-foreground-1 text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent peer-disabled:opacity-50 peer-disabled:pointer-events-none
                     peer-focus:text-xs
                     peer-focus:-translate-y-1.5
-                    peer-focus:text-neutral-400
+                    peer-focus:text-muted-foreground-1
                     peer-not-placeholder-shown:text-xs
                     peer-not-placeholder-shown:-translate-y-1.5
-                    peer-not-placeholder-shown:text-neutral-400">Phone</label>
+                    peer-not-placeholder-shown:text-muted-foreground-1">Phone</label>
                 </div>
                 <!-- End Input -->
 
                 <!-- Textarea -->
                 <div class="relative">
-                  <textarea id="hs-tac-message" class="peer p-3 sm:p-4 block w-full bg-neutral-800 border-transparent rounded-lg sm:text-sm text-white placeholder:text-transparent focus:outline-hidden focus:ring-0 focus:border-transparent disabled:opacity-50 disabled:pointer-events-none
+                  <textarea id="hs-tac-message" class="peer p-3 sm:p-4 block w-full bg-surface border-transparent rounded-lg sm:text-sm text-foreground placeholder:text-transparent focus:outline-hidden focus:ring-0 focus:border-transparent disabled:opacity-50 disabled:pointer-events-none
                   focus:pt-6
                   focus:pb-2
                   not-placeholder-shown:pt-6
                   not-placeholder-shown:pb-2
                   autofill:pt-6
                   autofill:pb-2" placeholder="This is a textarea placeholder" data-hs-textarea-auto-height></textarea>
-                  <label for="hs-tac-message" class="absolute top-0 start-0 p-3 sm:p-4 h-full text-neutral-400 text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent peer-disabled:opacity-50 peer-disabled:pointer-events-none
+                  <label for="hs-tac-message" class="absolute top-0 start-0 p-3 sm:p-4 h-full text-muted-foreground-1 text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent peer-disabled:opacity-50 peer-disabled:pointer-events-none
                     peer-focus:text-xs
                     peer-focus:-translate-y-1.5
-                    peer-focus:text-neutral-400
+                    peer-focus:text-muted-foreground-1
                     peer-not-placeholder-shown:text-xs
                     peer-not-placeholder-shown:-translate-y-1.5
-                    peer-not-placeholder-shown:text-neutral-400">Tell us about your project</label>
+                    peer-not-placeholder-shown:text-muted-foreground-1">Tell us about your project</label>
                 </div>
                 <!-- End Textarea -->
               </div>
 
               <div class="mt-2">
-                <p class="text-xs text-neutral-500">
+                <p class="text-xs text-muted-foreground-1">
                   All fields are required
                 </p>
 
                 <p class="mt-5">
-                  <a class="group inline-flex items-center gap-x-2 py-2 px-3 bg-[#ff0] font-medium text-sm text-neutral-800 rounded-full focus:outline-hidden" href="#">
+                  <a class="group inline-flex items-center gap-x-2 py-2 px-3 bg-primary border border-primary-line text-primary-foreground font-medium text-sm rounded-full focus:outline-hidden" href="#">
                     Submit
                     <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M5 12h14" />
@@ -798,14 +907,14 @@
           <div class="space-y-14">
             <!-- Item -->
             <div class="flex gap-x-5">
-              <svg class="shrink-0 size-6 text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg class="shrink-0 size-6 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
               <div class="grow">
-                <h4 class="text-white font-semibold">Our address:</h4>
+                <h4 class="text-foreground font-semibold">Our address:</h4>
 
-                <address class="mt-1 text-neutral-400 text-sm not-italic">
+                <address class="mt-1 text-muted-foreground-1 text-sm not-italic">
                   300 Bath Street, Tay House<br>
                   Glasgow G2 4JR, United Kingdom
                 </address>
@@ -815,14 +924,14 @@
 
             <!-- Item -->
             <div class="flex gap-x-5">
-              <svg class="shrink-0 size-6 text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg class="shrink-0 size-6 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21.2 8.4c.5.38.8.97.8 1.6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 .8-1.6l8-6a2 2 0 0 1 2.4 0l8 6Z" />
                 <path d="m22 10-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 10" />
               </svg>
               <div class="grow">
-                <h4 class="text-white font-semibold">Email us:</h4>
+                <h4 class="text-foreground font-semibold">Email us:</h4>
 
-                <a class="mt-1 text-neutral-400 text-sm hover:text-neutral-200 focus:outline-hidden focus:text-neutral-200" href="#mailto:example@site.co" target="_blank">
+                <a class="mt-1 text-muted-foreground-1 text-sm hover:text-foreground focus:outline-hidden focus:text-foreground" href="#mailto:example@site.co" target="_blank">
                   hello@example.so
                 </a>
               </div>
@@ -831,15 +940,15 @@
 
             <!-- Item -->
             <div class="flex gap-x-5">
-              <svg class="shrink-0 size-6 text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg class="shrink-0 size-6 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m3 11 18-5v12L3 14v-3z" />
                 <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
               </svg>
               <div class="grow">
-                <h4 class="text-white font-semibold">We're hiring</h4>
-                <p class="mt-1 text-neutral-400">We're thrilled to announce that we're expanding our team and looking for talented individuals like you to join us.</p>
+                <h4 class="text-foreground font-semibold">We're hiring</h4>
+                <p class="mt-1 text-muted-foreground-1">We're thrilled to announce that we're expanding our team and looking for talented individuals like you to join us.</p>
                 <p class="mt-2">
-                  <a class="group inline-flex items-center gap-x-2 font-medium text-sm text-[#ff0] decoration-2 hover:underline focus:outline-hidden focus:underline" href="#">
+                  <a class="group inline-flex items-center gap-x-2 font-medium text-sm text-primary decoration-2 hover:underline focus:outline-hidden focus:underline" href="#">
                     Job openings
                     <svg class="shrink-0 size-4 transition group-hover:translate-x-0.5 group-focus:translate-x-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M5 12h14" />
@@ -861,24 +970,24 @@
   <!-- ========== END MAIN CONTENT ========== -->
 
   <!-- ========== FOOTER ========== -->
-  <footer class="relative overflow-hidden bg-neutral-900">
+  <footer class="relative overflow-hidden bg-footer">
     <svg class="absolute -bottom-20 start-1/2 w-[1900px] transform -translate-x-1/2" width="2745" height="488" viewBox="0 0 2745 488" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0.5 330.864C232.505 403.801 853.749 527.683 1482.69 439.719C2111.63 351.756 2585.54 434.588 2743.87 487" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 308.873C232.505 381.81 853.749 505.692 1482.69 417.728C2111.63 329.765 2585.54 412.597 2743.87 465.009" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 286.882C232.505 359.819 853.749 483.701 1482.69 395.738C2111.63 307.774 2585.54 390.606 2743.87 443.018" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 264.891C232.505 337.828 853.749 461.71 1482.69 373.747C2111.63 285.783 2585.54 368.615 2743.87 421.027" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 242.9C232.505 315.837 853.749 439.719 1482.69 351.756C2111.63 263.792 2585.54 346.624 2743.87 399.036" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 220.909C232.505 293.846 853.749 417.728 1482.69 329.765C2111.63 241.801 2585.54 324.633 2743.87 377.045" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 198.918C232.505 271.855 853.749 395.737 1482.69 307.774C2111.63 219.81 2585.54 302.642 2743.87 355.054" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 176.927C232.505 249.864 853.749 373.746 1482.69 285.783C2111.63 197.819 2585.54 280.651 2743.87 333.063" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 154.937C232.505 227.873 853.749 351.756 1482.69 263.792C2111.63 175.828 2585.54 258.661 2743.87 311.072" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 132.946C232.505 205.882 853.749 329.765 1482.69 241.801C2111.63 153.837 2585.54 236.67 2743.87 289.082" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 110.955C232.505 183.891 853.749 307.774 1482.69 219.81C2111.63 131.846 2585.54 214.679 2743.87 267.091" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 88.9639C232.505 161.901 853.749 285.783 1482.69 197.819C2111.63 109.855 2585.54 192.688 2743.87 245.1" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 66.9729C232.505 139.91 853.749 263.792 1482.69 175.828C2111.63 87.8643 2585.54 170.697 2743.87 223.109" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 44.9819C232.505 117.919 853.749 241.801 1482.69 153.837C2111.63 65.8733 2585.54 148.706 2743.87 201.118" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 22.991C232.505 95.9276 853.749 219.81 1482.69 131.846C2111.63 43.8824 2585.54 126.715 2743.87 179.127" class="stroke-neutral-700/50" stroke="currentColor" />
-      <path d="M0.5 1C232.505 73.9367 853.749 197.819 1482.69 109.855C2111.63 21.8914 2585.54 104.724 2743.87 157.136" class="stroke-neutral-700/50" stroke="currentColor" />
+      <path d="M0.5 330.864C232.505 403.801 853.749 527.683 1482.69 439.719C2111.63 351.756 2585.54 434.588 2743.87 487" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 308.873C232.505 381.81 853.749 505.692 1482.69 417.728C2111.63 329.765 2585.54 412.597 2743.87 465.009" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 286.882C232.505 359.819 853.749 483.701 1482.69 395.738C2111.63 307.774 2585.54 390.606 2743.87 443.018" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 264.891C232.505 337.828 853.749 461.71 1482.69 373.747C2111.63 285.783 2585.54 368.615 2743.87 421.027" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 242.9C232.505 315.837 853.749 439.719 1482.69 351.756C2111.63 263.792 2585.54 346.624 2743.87 399.036" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 220.909C232.505 293.846 853.749 417.728 1482.69 329.765C2111.63 241.801 2585.54 324.633 2743.87 377.045" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 198.918C232.505 271.855 853.749 395.737 1482.69 307.774C2111.63 219.81 2585.54 302.642 2743.87 355.054" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 176.927C232.505 249.864 853.749 373.746 1482.69 285.783C2111.63 197.819 2585.54 280.651 2743.87 333.063" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 154.937C232.505 227.873 853.749 351.756 1482.69 263.792C2111.63 175.828 2585.54 258.661 2743.87 311.072" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 132.946C232.505 205.882 853.749 329.765 1482.69 241.801C2111.63 153.837 2585.54 236.67 2743.87 289.082" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 110.955C232.505 183.891 853.749 307.774 1482.69 219.81C2111.63 131.846 2585.54 214.679 2743.87 267.091" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 88.9639C232.505 161.901 853.749 285.783 1482.69 197.819C2111.63 109.855 2585.54 192.688 2743.87 245.1" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 66.9729C232.505 139.91 853.749 263.792 1482.69 175.828C2111.63 87.8643 2585.54 170.697 2743.87 223.109" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 44.9819C232.505 117.919 853.749 241.801 1482.69 153.837C2111.63 65.8733 2585.54 148.706 2743.87 201.118" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 22.991C232.505 95.9276 853.749 219.81 1482.69 131.846C2111.63 43.8824 2585.54 126.715 2743.87 179.127" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
+      <path d="M0.5 1C232.505 73.9367 853.749 197.819 1482.69 109.855C2111.63 21.8914 2585.54 104.724 2743.87 157.136" class="stroke-black/10 dark:stroke-white/10" stroke="currentColor" />
     </svg>
 
     <div class="relative z-10">
@@ -886,16 +995,16 @@
         <div class="inline-flex items-center">
           <!-- Logo -->
           <svg class="w-24 h-auto" width="116" height="32" viewBox="0 0 116 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M33.5696 30.8182V11.3182H37.4474V13.7003H37.6229C37.7952 13.3187 38.0445 12.9309 38.3707 12.5369C38.7031 12.1368 39.134 11.8045 39.6634 11.5398C40.1989 11.2689 40.8636 11.1335 41.6577 11.1335C42.6918 11.1335 43.6458 11.4044 44.5199 11.946C45.3939 12.4815 46.0926 13.291 46.6158 14.3743C47.139 15.4515 47.4006 16.8026 47.4006 18.4276C47.4006 20.0095 47.1451 21.3452 46.6342 22.4347C46.1295 23.518 45.4401 24.3397 44.5661 24.8999C43.6982 25.4538 42.7256 25.7308 41.6484 25.7308C40.8852 25.7308 40.2358 25.6046 39.7003 25.3523C39.1709 25.0999 38.737 24.7829 38.3984 24.4013C38.0599 24.0135 37.8014 23.6226 37.6229 23.2287H37.5028V30.8182H33.5696ZM37.4197 18.4091C37.4197 19.2524 37.5367 19.9879 37.7706 20.6158C38.0045 21.2436 38.343 21.733 38.7862 22.0838C39.2294 22.4285 39.768 22.6009 40.402 22.6009C41.0421 22.6009 41.5838 22.4254 42.027 22.0746C42.4702 21.7176 42.8056 21.2251 43.0334 20.5973C43.2673 19.9633 43.3842 19.2339 43.3842 18.4091C43.3842 17.5904 43.2704 16.8703 43.0426 16.2486C42.8149 15.6269 42.4794 15.1406 42.0362 14.7898C41.593 14.4389 41.0483 14.2635 40.402 14.2635C39.7618 14.2635 39.2202 14.4328 38.777 14.7713C38.34 15.1098 38.0045 15.59 37.7706 16.2116C37.5367 16.8333 37.4197 17.5658 37.4197 18.4091ZM49.2427 25.5V11.3182H53.0559V13.7926H53.2037C53.4622 12.9124 53.8961 12.2476 54.5055 11.7983C55.1149 11.3428 55.8166 11.1151 56.6106 11.1151C56.8076 11.1151 57.02 11.1274 57.2477 11.152C57.4754 11.1766 57.6755 11.2105 57.8478 11.2536V14.7436C57.6632 14.6882 57.4077 14.639 57.0815 14.5959C56.7553 14.5528 56.4567 14.5312 56.1859 14.5312C55.6073 14.5312 55.0903 14.6574 54.6348 14.9098C54.1854 15.156 53.8284 15.5007 53.5638 15.9439C53.3052 16.3871 53.176 16.898 53.176 17.4766V25.5H49.2427ZM64.9043 25.777C63.4455 25.777 62.1898 25.4815 61.1373 24.8906C60.0909 24.2936 59.2845 23.4503 58.7182 22.3608C58.1519 21.2652 57.8688 19.9695 57.8688 18.4737C57.8688 17.0149 58.1519 15.7346 58.7182 14.6328C59.2845 13.531 60.0816 12.6723 61.1096 12.0568C62.1437 11.4413 63.3563 11.1335 64.7474 11.1335C65.683 11.1335 66.5539 11.2843 67.3603 11.5859C68.1728 11.8814 68.8806 12.3277 69.4839 12.9247C70.0932 13.5218 70.5672 14.2727 70.9057 15.1776C71.2443 16.0762 71.4135 17.1288 71.4135 18.3352V19.4155H59.4384V16.978H67.7111C67.7111 16.4117 67.588 15.91 67.3418 15.473C67.0956 15.036 66.754 14.6944 66.317 14.4482C65.8861 14.1958 65.3844 14.0696 64.812 14.0696C64.2149 14.0696 63.6856 14.2081 63.2239 14.4851C62.7684 14.7559 62.4114 15.1222 62.1529 15.5838C61.8944 16.0393 61.762 16.5471 61.7559 17.1072V19.4247C61.7559 20.1264 61.8851 20.7327 62.1437 21.2436C62.4083 21.7545 62.7807 22.1484 63.2608 22.4254C63.741 22.7024 64.3103 22.8409 64.9689 22.8409C65.406 22.8409 65.8061 22.7794 66.1692 22.6562C66.5324 22.5331 66.8432 22.3485 67.1018 22.1023C67.3603 21.8561 67.5572 21.5545 67.6927 21.1974L71.3304 21.4375C71.1458 22.3116 70.7672 23.0748 70.1948 23.7273C69.6285 24.3736 68.896 24.8783 67.9974 25.2415C67.1048 25.5985 66.0738 25.777 64.9043 25.777ZM77.1335 6.59091V25.5H73.2003V6.59091H77.1335ZM79.5043 25.5V11.3182H83.4375V25.5H79.5043ZM81.4801 9.49006C80.8954 9.49006 80.3937 9.29616 79.9752 8.90838C79.5628 8.51444 79.3566 8.04356 79.3566 7.49574C79.3566 6.95407 79.5628 6.48935 79.9752 6.10156C80.3937 5.70762 80.8954 5.51065 81.4801 5.51065C82.0649 5.51065 82.5635 5.70762 82.9759 6.10156C83.3944 6.48935 83.6037 6.95407 83.6037 7.49574C83.6037 8.04356 83.3944 8.51444 82.9759 8.90838C82.5635 9.29616 82.0649 9.49006 81.4801 9.49006ZM89.7415 17.3011V25.5H85.8083V11.3182H89.5569V13.8203H89.723C90.037 12.9955 90.5632 12.343 91.3019 11.8629C92.0405 11.3767 92.9361 11.1335 93.9887 11.1335C94.9735 11.1335 95.8322 11.349 96.5647 11.7798C97.2971 12.2107 97.8665 12.8262 98.2728 13.6264C98.679 14.4205 98.8821 15.3684 98.8821 16.4702V25.5H94.9489V17.1719C94.9551 16.304 94.7335 15.6269 94.2841 15.1406C93.8348 14.6482 93.2162 14.402 92.4283 14.402C91.8989 14.402 91.4311 14.5159 91.0249 14.7436C90.6248 14.9714 90.3109 15.3037 90.0831 15.7408C89.8615 16.1716 89.7477 16.6918 89.7415 17.3011ZM107.665 25.777C106.206 25.777 104.951 25.4815 103.898 24.8906C102.852 24.2936 102.045 23.4503 101.479 22.3608C100.913 21.2652 100.63 19.9695 100.63 18.4737C100.63 17.0149 100.913 15.7346 101.479 14.6328C102.045 13.531 102.842 12.6723 103.87 12.0568C104.905 11.4413 106.117 11.1335 107.508 11.1335C108.444 11.1335 109.315 11.2843 110.121 11.5859C110.934 11.8814 111.641 12.3277 112.245 12.9247C112.854 13.5218 113.328 14.2727 113.667 15.1776C114.005 16.0762 114.174 17.1288 114.174 18.3352V19.4155H102.199V16.978H110.472C110.472 16.4117 110.349 15.91 110.103 15.473C109.856 15.036 109.515 14.6944 109.078 14.4482C108.647 14.1958 108.145 14.0696 107.573 14.0696C106.976 14.0696 106.446 14.2081 105.985 14.4851C105.529 14.7559 105.172 15.1222 104.914 15.5838C104.655 16.0393 104.523 16.5471 104.517 17.1072V19.4247C104.517 20.1264 104.646 20.7327 104.905 21.2436C105.169 21.7545 105.542 22.1484 106.022 22.4254C106.502 22.7024 107.071 22.8409 107.73 22.8409C108.167 22.8409 108.567 22.7794 108.93 22.6562C109.293 22.5331 109.604 22.3485 109.863 22.1023C110.121 21.8561 110.318 21.5545 110.454 21.1974L114.091 21.4375C113.907 22.3116 113.528 23.0748 112.956 23.7273C112.389 24.3736 111.657 24.8783 110.758 25.2415C109.866 25.5985 108.835 25.777 107.665 25.777Z" class="fill-white" fill="currentColor" />
-            <path d="M1 29.5V16.5C1 9.87258 6.37258 4.5 13 4.5C19.6274 4.5 25 9.87258 25 16.5C25 23.1274 19.6274 28.5 13 28.5H12" class="stroke-white" stroke="currentColor" stroke-width="2" />
-            <path d="M5 29.5V16.66C5 12.1534 8.58172 8.5 13 8.5C17.4183 8.5 21 12.1534 21 16.66C21 21.1666 17.4183 24.82 13 24.82H12" class="stroke-white" stroke="currentColor" stroke-width="2" />
-            <circle cx="13" cy="16.5214" r="5" class="fill-white" fill="currentColor" />
+            <path d="M33.5696 30.8182V11.3182H37.4474V13.7003H37.6229C37.7952 13.3187 38.0445 12.9309 38.3707 12.5369C38.7031 12.1368 39.134 11.8045 39.6634 11.5398C40.1989 11.2689 40.8636 11.1335 41.6577 11.1335C42.6918 11.1335 43.6458 11.4044 44.5199 11.946C45.3939 12.4815 46.0926 13.291 46.6158 14.3743C47.139 15.4515 47.4006 16.8026 47.4006 18.4276C47.4006 20.0095 47.1451 21.3452 46.6342 22.4347C46.1295 23.518 45.4401 24.3397 44.5661 24.8999C43.6982 25.4538 42.7256 25.7308 41.6484 25.7308C40.8852 25.7308 40.2358 25.6046 39.7003 25.3523C39.1709 25.0999 38.737 24.7829 38.3984 24.4013C38.0599 24.0135 37.8014 23.6226 37.6229 23.2287H37.5028V30.8182H33.5696ZM37.4197 18.4091C37.4197 19.2524 37.5367 19.9879 37.7706 20.6158C38.0045 21.2436 38.343 21.733 38.7862 22.0838C39.2294 22.4285 39.768 22.6009 40.402 22.6009C41.0421 22.6009 41.5838 22.4254 42.027 22.0746C42.4702 21.7176 42.8056 21.2251 43.0334 20.5973C43.2673 19.9633 43.3842 19.2339 43.3842 18.4091C43.3842 17.5904 43.2704 16.8703 43.0426 16.2486C42.8149 15.6269 42.4794 15.1406 42.0362 14.7898C41.593 14.4389 41.0483 14.2635 40.402 14.2635C39.7618 14.2635 39.2202 14.4328 38.777 14.7713C38.34 15.1098 38.0045 15.59 37.7706 16.2116C37.5367 16.8333 37.4197 17.5658 37.4197 18.4091ZM49.2427 25.5V11.3182H53.0559V13.7926H53.2037C53.4622 12.9124 53.8961 12.2476 54.5055 11.7983C55.1149 11.3428 55.8166 11.1151 56.6106 11.1151C56.8076 11.1151 57.02 11.1274 57.2477 11.152C57.4754 11.1766 57.6755 11.2105 57.8478 11.2536V14.7436C57.6632 14.6882 57.4077 14.639 57.0815 14.5959C56.7553 14.5528 56.4567 14.5312 56.1859 14.5312C55.6073 14.5312 55.0903 14.6574 54.6348 14.9098C54.1854 15.156 53.8284 15.5007 53.5638 15.9439C53.3052 16.3871 53.176 16.898 53.176 17.4766V25.5H49.2427ZM64.9043 25.777C63.4455 25.777 62.1898 25.4815 61.1373 24.8906C60.0909 24.2936 59.2845 23.4503 58.7182 22.3608C58.1519 21.2652 57.8688 19.9695 57.8688 18.4737C57.8688 17.0149 58.1519 15.7346 58.7182 14.6328C59.2845 13.531 60.0816 12.6723 61.1096 12.0568C62.1437 11.4413 63.3563 11.1335 64.7474 11.1335C65.683 11.1335 66.5539 11.2843 67.3603 11.5859C68.1728 11.8814 68.8806 12.3277 69.4839 12.9247C70.0932 13.5218 70.5672 14.2727 70.9057 15.1776C71.2443 16.0762 71.4135 17.1288 71.4135 18.3352V19.4155H59.4384V16.978H67.7111C67.7111 16.4117 67.588 15.91 67.3418 15.473C67.0956 15.036 66.754 14.6944 66.317 14.4482C65.8861 14.1958 65.3844 14.0696 64.812 14.0696C64.2149 14.0696 63.6856 14.2081 63.2239 14.4851C62.7684 14.7559 62.4114 15.1222 62.1529 15.5838C61.8944 16.0393 61.762 16.5471 61.7559 17.1072V19.4247C61.7559 20.1264 61.8851 20.7327 62.1437 21.2436C62.4083 21.7545 62.7807 22.1484 63.2608 22.4254C63.741 22.7024 64.3103 22.8409 64.9689 22.8409C65.406 22.8409 65.8061 22.7794 66.1692 22.6562C66.5324 22.5331 66.8432 22.3485 67.1018 22.1023C67.3603 21.8561 67.5572 21.5545 67.6927 21.1974L71.3304 21.4375C71.1458 22.3116 70.7672 23.0748 70.1948 23.7273C69.6285 24.3736 68.896 24.8783 67.9974 25.2415C67.1048 25.5985 66.0738 25.777 64.9043 25.777ZM77.1335 6.59091V25.5H73.2003V6.59091H77.1335ZM79.5043 25.5V11.3182H83.4375V25.5H79.5043ZM81.4801 9.49006C80.8954 9.49006 80.3937 9.29616 79.9752 8.90838C79.5628 8.51444 79.3566 8.04356 79.3566 7.49574C79.3566 6.95407 79.5628 6.48935 79.9752 6.10156C80.3937 5.70762 80.8954 5.51065 81.4801 5.51065C82.0649 5.51065 82.5635 5.70762 82.9759 6.10156C83.3944 6.48935 83.6037 6.95407 83.6037 7.49574C83.6037 8.04356 83.3944 8.51444 82.9759 8.90838C82.5635 9.29616 82.0649 9.49006 81.4801 9.49006ZM89.7415 17.3011V25.5H85.8083V11.3182H89.5569V13.8203H89.723C90.037 12.9955 90.5632 12.343 91.3019 11.8629C92.0405 11.3767 92.9361 11.1335 93.9887 11.1335C94.9735 11.1335 95.8322 11.349 96.5647 11.7798C97.2971 12.2107 97.8665 12.8262 98.2728 13.6264C98.679 14.4205 98.8821 15.3684 98.8821 16.4702V25.5H94.9489V17.1719C94.9551 16.304 94.7335 15.6269 94.2841 15.1406C93.8348 14.6482 93.2162 14.402 92.4283 14.402C91.8989 14.402 91.4311 14.5159 91.0249 14.7436C90.6248 14.9714 90.3109 15.3037 90.0831 15.7408C89.8615 16.1716 89.7477 16.6918 89.7415 17.3011ZM107.665 25.777C106.206 25.777 104.951 25.4815 103.898 24.8906C102.852 24.2936 102.045 23.4503 101.479 22.3608C100.913 21.2652 100.63 19.9695 100.63 18.4737C100.63 17.0149 100.913 15.7346 101.479 14.6328C102.045 13.531 102.842 12.6723 103.87 12.0568C104.905 11.4413 106.117 11.1335 107.508 11.1335C108.444 11.1335 109.315 11.2843 110.121 11.5859C110.934 11.8814 111.641 12.3277 112.245 12.9247C112.854 13.5218 113.328 14.2727 113.667 15.1776C114.005 16.0762 114.174 17.1288 114.174 18.3352V19.4155H102.199V16.978H110.472C110.472 16.4117 110.349 15.91 110.103 15.473C109.856 15.036 109.515 14.6944 109.078 14.4482C108.647 14.1958 108.145 14.0696 107.573 14.0696C106.976 14.0696 106.446 14.2081 105.985 14.4851C105.529 14.7559 105.172 15.1222 104.914 15.5838C104.655 16.0393 104.523 16.5471 104.517 17.1072V19.4247C104.517 20.1264 104.646 20.7327 104.905 21.2436C105.169 21.7545 105.542 22.1484 106.022 22.4254C106.502 22.7024 107.071 22.8409 107.73 22.8409C108.167 22.8409 108.567 22.7794 108.93 22.6562C109.293 22.5331 109.604 22.3485 109.863 22.1023C110.121 21.8561 110.318 21.5545 110.454 21.1974L114.091 21.4375C113.907 22.3116 113.528 23.0748 112.956 23.7273C112.389 24.3736 111.657 24.8783 110.758 25.2415C109.866 25.5985 108.835 25.777 107.665 25.777Z" class="fill-foreground" fill="currentColor" />
+            <path d="M1 29.5V16.5C1 9.87258 6.37258 4.5 13 4.5C19.6274 4.5 25 9.87258 25 16.5C25 23.1274 19.6274 28.5 13 28.5H12" class="stroke-foreground" stroke="currentColor" stroke-width="2" />
+            <path d="M5 29.5V16.66C5 12.1534 8.58172 8.5 13 8.5C17.4183 8.5 21 12.1534 21 16.66C21 21.1666 17.4183 24.82 13 24.82H12" class="stroke-foreground" stroke="currentColor" stroke-width="2" />
+            <circle cx="13" cy="16.5214" r="5" class="fill-foreground" fill="currentColor" />
           </svg>
           <!-- End Logo -->
 
-          <div class="border-s border-neutral-700 ps-5 ms-5">
-            <p class="text-sm text-neutral-400">
-              © 2025 Preline Labs.
+          <div class="border-s border-line-2 ps-5 ms-5">
+            <p class="text-sm text-muted-foreground-1">
+              © 2026 Preline Labs.
             </p>
           </div>
         </div>
@@ -909,6 +1018,9 @@
   <!-- JS PLUGINS -->
   <!-- Required plugins -->
   <script src="https://cdn.jsdelivr.net/npm/preline/dist/index.js"></script>
+  <!-- Clipboard -->
+  <script src="https://cdn.jsdelivr.net/npm/clipboard/dist/clipboard.min.js"></script>
+  <script src="https://preline.co/assets/js/hs-copy-clipboard-helper.js"></script>
 
   <!-- JS THIRD PARTY PLUGINS -->
   <!-- Google Analytics. Global site tag (gtag.js) -->

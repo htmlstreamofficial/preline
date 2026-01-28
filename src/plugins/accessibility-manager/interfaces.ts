@@ -3,8 +3,8 @@ export interface IAccessibilityKeyboardHandlers {
   onEsc?: () => void;
   onSpace?: () => void;
   onArrow?: (event: KeyboardEvent) => void;
-  onTab?: () => void;
-  onShiftTab?: () => void;
+  onTab?: (event: KeyboardEvent) => void;
+  onShiftTab?: (event: KeyboardEvent) => void;
   onHome?: () => void;
   onEnd?: () => void;
   onFirstLetter?: (key: string) => void;
@@ -19,6 +19,9 @@ export interface IAccessibilityComponent {
   selector: string;
   context?: HTMLElement;
   isRegistered: boolean;
+  stopPropagation?: {
+    [key: string]: boolean;
+  };
 }
 
 export interface HSAccessibilityObserver {
@@ -29,6 +32,9 @@ export interface HSAccessibilityObserver {
     name?: string,
     selector?: string,
     context?: HTMLElement,
+    stopPropagation?: {
+      [key: string]: boolean;
+    },
   ): IAccessibilityComponent;
   addAllowedKeybinding(key: string): void;
   removeAllowedKeybinding(key: string): void;

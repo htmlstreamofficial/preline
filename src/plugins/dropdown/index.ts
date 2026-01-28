@@ -1,6 +1,6 @@
 /*
  * HSDropdown
- * @version: 3.2.3
+ * @version: 4.0.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -889,7 +889,48 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 				this.el,
 				{
 					onEnter: () => {
+						const active = document.activeElement as HTMLElement | null;
+						if (!active) return;
+
+						const menuRoot = active.closest(".hs-dropdown-menu");
+						if (menuRoot) {
+							const submenuToggle = active.closest<HTMLElement>(
+								".hs-dropdown-toggle, [data-hs-dropdown-toggle]",
+							);
+
+							if (submenuToggle) {
+								submenuToggle.click();
+
+								return;
+							}
+
+							const item = active.closest<HTMLElement>(
+								'[role="menuitem"], a, button, [data-hs-dropdown-item]',
+							);
+
+							if (item?.children?.length > 0) {
+								Array.from(item.children).forEach((child) => {
+									if (
+										child.matches(
+											"input[type='checkbox']:not([hidden]), input[type='radio']:not([hidden])",
+										)
+									) (child as HTMLElement).click();
+								});
+
+								item.focus();
+
+								return;
+							} else if (item) {
+								if (active.matches("input, textarea, select")) return;
+
+								item.click();
+							}
+
+							return;
+						}
+
 						if (!this.isOpened()) this.open(undefined, true);
+						else this.close();
 					},
 					onSpace: () => {
 						if (!this.isOpened()) this.open(undefined, true);
@@ -926,16 +967,42 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 						if (this.isOpened()) this.onStartEnd(false);
 					},
 					onTab: () => {
-						if (this.isOpened()) this.close();
+						setTimeout(() => {
+							const active = document.activeElement as HTMLElement | null;
+							const menuRoot = active.closest(".hs-dropdown-menu");
+
+							if (active && menuRoot) {
+								const submenuToggle = active.closest<HTMLElement>(
+									".hs-dropdown-toggle, [data-hs-dropdown-toggle]",
+								);
+
+								if (submenuToggle) {
+									submenuToggle.click();
+
+									return;
+								}
+
+								active.focus();
+
+								return;
+							} else if (this.isOpened()) this.close();
+							else return;
+						}, 100);
 					},
 					onFirstLetter: (key: string) => {
-						if (this.isOpened()) this.onFirstLetter(key);
+						const active = document.activeElement as HTMLElement | null;
+						const isInput = active?.matches("input, textarea");
+
+						if (!isInput && this.isOpened()) this.onFirstLetter(key);
 					},
 				},
 				this.isOpened(),
 				"Dropdown",
 				".hs-dropdown",
 				this.menu,
+				{
+					onFirstLetter: false
+				}
 			);
 	}
 
