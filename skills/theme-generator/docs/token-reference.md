@@ -16,11 +16,11 @@ Preline themes use CSS custom properties (variables) as semantic tokens. These t
 - Mapped to Tailwind utilities via `@theme inline` in the base theme
 - Consumed by Preline components for consistent styling
 
-**Important:** Generated themes override token VALUES only. Never redefine the Tailwind mappings.
+Important: Generated themes override token values only. Never redefine the Tailwind mappings.
 
 ---
 
-## Core Token Groups
+## Core token groups
 
 | Group | Tokens | Used for |
 |-------|--------|----------|
@@ -54,7 +54,7 @@ Preline themes use CSS custom properties (variables) as semantic tokens. These t
 
 ---
 
-## Component Preset Patterns
+## Component preset patterns
 
 Preline uses numbered variants for component groups to offer different ready-made looks:
 
@@ -74,9 +74,9 @@ This pattern applies to: navbar, sidebar, and similar navigation components.
 
 ---
 
-## Full Token Reference by Category
+## Full token reference by category
 
-### 1. Global Surfaces + Text
+### 1. Global surfaces + text
 
 ```css
 /* Background tokens */
@@ -93,7 +93,7 @@ This pattern applies to: navbar, sidebar, and similar navigation components.
 --inverse             /* Inverted surface color */
 ```
 
-### 2. Borders (Full Scale)
+### 2. Borders (full scale)
 
 ```css
 --border              /* Default border color */
@@ -108,7 +108,7 @@ This pattern applies to: navbar, sidebar, and similar navigation components.
 --border-line-8       /* Darkest border */
 ```
 
-### 3. Primary Ramp + States
+### 3. Primary ramp + states
 
 ```css
 /* Full color ramp (11 shades) */
@@ -137,12 +137,12 @@ This pattern applies to: navbar, sidebar, and similar navigation components.
 ### 4. Secondary
 
 ```css
---secondary           /* Base secondary color */
---secondary-line      /* Secondary border */
+--secondary            /* Base secondary color */
+--secondary-line       /* Secondary border */
 --secondary-foreground /* Text on secondary background */
---secondary-hover     /* Hover state */
---secondary-focus     /* Focus state */
---secondary-active    /* Active state */
+--secondary-hover      /* Hover state */
+--secondary-focus      /* Focus state */
+--secondary-active     /* Active state */
 ```
 
 ### 5. Layer
@@ -187,25 +187,25 @@ This pattern applies to: navbar, sidebar, and similar navigation components.
 ### 8. Destructive
 
 ```css
---destructive         /* Destructive/danger color */
+--destructive            /* Destructive/danger color */
 --destructive-foreground /* Text on destructive background */
---destructive-hover   /* Hover state */
---destructive-focus   /* Focus state */
+--destructive-hover      /* Hover state */
+--destructive-focus      /* Focus state */
 ```
 
-### 9. Navbar (Base + 2 Variants)
+### 9. Navbar (base + 2 variants)
 
 ```css
 /* Base navbar */
---navbar              /* Navbar background */
---navbar-line         /* Navbar border */
---navbar-divider      /* Navbar divider */
+--navbar                /* Navbar background */
+--navbar-line           /* Navbar border */
+--navbar-divider        /* Navbar divider */
 --navbar-nav-foreground /* Nav item text */
---navbar-nav-hover    /* Nav item hover */
---navbar-nav-focus    /* Nav item focus */
---navbar-nav-active   /* Nav item active */
+--navbar-nav-hover      /* Nav item hover */
+--navbar-nav-focus      /* Nav item focus */
+--navbar-nav-active     /* Nav item active */
 --navbar-nav-list-divider /* Nav list divider */
---navbar-inverse      /* Inverse navbar background */
+--navbar-inverse        /* Inverse navbar background */
 
 /* Navbar variant 1 (subtle/tinted) */
 --navbar-1
@@ -228,7 +228,7 @@ This pattern applies to: navbar, sidebar, and similar navigation components.
 --navbar-2-nav-list-divider
 ```
 
-### 10. Sidebar (Base + 2 Variants)
+### 10. Sidebar (base + 2 variants)
 
 ```css
 /* Base sidebar */
@@ -277,30 +277,30 @@ This pattern applies to: navbar, sidebar, and similar navigation components.
 ### 12. Dropdown
 
 ```css
---dropdown            /* Dropdown background */
---dropdown-1          /* Dropdown variant background */
---dropdown-line       /* Dropdown border */
---dropdown-divider    /* Dropdown divider */
---dropdown-header     /* Dropdown header background */
---dropdown-footer     /* Dropdown footer background */
+--dropdown                /* Dropdown background */
+--dropdown-1              /* Dropdown variant background */
+--dropdown-line           /* Dropdown border */
+--dropdown-divider        /* Dropdown divider */
+--dropdown-header         /* Dropdown header background */
+--dropdown-footer         /* Dropdown footer background */
 --dropdown-item-foreground /* Item text */
---dropdown-item-hover /* Item hover */
---dropdown-item-focus /* Item focus */
---dropdown-item-active /* Item active */
---dropdown-inverse    /* Inverse dropdown */
+--dropdown-item-hover     /* Item hover */
+--dropdown-item-focus     /* Item focus */
+--dropdown-item-active    /* Item active */
+--dropdown-inverse        /* Inverse dropdown */
 ```
 
 ### 13. Select
 
 ```css
---select              /* Select background */
---select-1            /* Select variant background */
---select-line         /* Select border */
+--select                /* Select background */
+--select-1              /* Select variant background */
+--select-line           /* Select border */
 --select-item-foreground /* Item text */
---select-item-hover   /* Item hover */
---select-item-focus   /* Item focus */
---select-item-active  /* Item active */
---select-inverse      /* Inverse select */
+--select-item-hover     /* Item hover */
+--select-item-focus     /* Item focus */
+--select-item-active    /* Item active */
+--select-inverse        /* Inverse select */
 ```
 
 ### 14. Overlay
@@ -314,7 +314,7 @@ This pattern applies to: navbar, sidebar, and similar navigation components.
 --overlay-inverse     /* Inverse overlay */
 ```
 
-### 15. Popover, Tooltip, Table, Switch
+### 15. Popover, tooltip, table, switch
 
 ```css
 /* Popover */
@@ -352,22 +352,22 @@ This pattern applies to: navbar, sidebar, and similar navigation components.
 
 ### 18. Charts (Apexcharts)
 
-**Important:** Apexcharts does NOT support oklch color format. Keep `-hex` tokens as valid hex values.
+Important: Apexcharts does NOT support oklch color format. Keep `-hex` tokens as valid hex values.
 
 ```css
 /* Primary chart color */
 --chart-primary
 --chart-colors-primary
 --chart-colors-primary-inverse
---chart-colors-primary-hex          /* Must be hex! */
---chart-colors-primary-hex-inverse  /* Must be hex! */
+--chart-colors-primary-hex          /* Must be hex */
+--chart-colors-primary-hex-inverse  /* Must be hex */
 
 /* Chart palette (1-10) */
 --chart-1 through --chart-10
 --chart-colors-chart-1 through --chart-colors-chart-10
 --chart-colors-chart-1-inverse through --chart-colors-chart-10-inverse
---chart-colors-chart-1-hex through --chart-colors-chart-10-hex           /* Must be hex! */
---chart-colors-chart-1-hex-inverse through --chart-colors-chart-10-hex-inverse /* Must be hex! */
+--chart-colors-chart-1-hex through --chart-colors-chart-10-hex           /* Must be hex */
+--chart-colors-chart-1-hex-inverse through --chart-colors-chart-10-hex-inverse /* Must be hex */
 
 /* Chart backgrounds */
 --chart-colors-background
@@ -414,7 +414,7 @@ This pattern applies to: navbar, sidebar, and similar navigation components.
 
 ---
 
-## Custom Color Palettes
+## Custom color palettes
 
 The base theme defines custom color palettes that themes can use:
 
@@ -434,9 +434,9 @@ These are useful for creating warm or soft-toned themes instead of using standar
 
 ---
 
-## Default Values Reference
+## Default values reference
 
-### Light Mode Defaults (:root)
+### Light mode defaults (:root)
 
 ```css
 :root {
@@ -445,12 +445,12 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --background-1: var(--color-gray-50);
   --background-2: var(--color-gray-100);
   --background-plain: var(--color-white);
-  
+
   /* Foregrounds */
   --foreground: var(--color-gray-800);
   --foreground-inverse: var(--color-white);
   --inverse: var(--color-gray-800);
-  
+
   /* Borders */
   --border: var(--color-gray-200);
   --border-line-inverse: var(--color-white);
@@ -462,7 +462,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --border-line-6: var(--color-gray-600);
   --border-line-7: var(--color-gray-700);
   --border-line-8: var(--color-gray-800);
-  
+
   /* Primary (blue by default) */
   --primary-50: var(--color-blue-50);
   --primary-100: var(--color-blue-100);
@@ -475,7 +475,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --primary-800: var(--color-blue-800);
   --primary-900: var(--color-blue-900);
   --primary-950: var(--color-blue-950);
-  
+
   --primary: var(--color-primary-600);
   --primary-line: transparent;
   --primary-foreground: var(--color-white);
@@ -483,7 +483,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --primary-focus: var(--color-primary-700);
   --primary-active: var(--color-primary-700);
   --primary-checked: var(--color-primary-600);
-  
+
   /* Secondary */
   --secondary: var(--color-gray-900);
   --secondary-line: transparent;
@@ -491,7 +491,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --secondary-hover: var(--color-gray-800);
   --secondary-focus: var(--color-gray-800);
   --secondary-active: var(--color-gray-800);
-  
+
   /* Layer */
   --layer: var(--color-white);
   --layer-line: var(--color-gray-200);
@@ -499,7 +499,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --layer-hover: var(--color-gray-50);
   --layer-focus: var(--color-gray-50);
   --layer-active: var(--color-gray-50);
-  
+
   /* Surface */
   --surface: var(--color-gray-100);
   --surface-1: var(--color-gray-200);
@@ -512,7 +512,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --surface-hover: var(--color-gray-200);
   --surface-focus: var(--color-gray-200);
   --surface-active: var(--color-gray-200);
-  
+
   /* Muted */
   --muted: var(--color-gray-50);
   --muted-foreground: var(--color-gray-400);
@@ -521,13 +521,13 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --muted-hover: var(--color-gray-100);
   --muted-focus: var(--color-gray-100);
   --muted-active: var(--color-gray-100);
-  
+
   /* Destructive */
   --destructive: var(--color-red-500);
   --destructive-foreground: var(--color-white);
   --destructive-hover: var(--color-red-600);
   --destructive-focus: var(--color-red-600);
-  
+
   /* Navbar (base) */
   --navbar: var(--color-white);
   --navbar-line: var(--color-gray-200);
@@ -538,7 +538,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --navbar-nav-active: var(--color-gray-100);
   --navbar-nav-list-divider: var(--color-gray-200);
   --navbar-inverse: var(--color-primary-950);
-  
+
   /* Navbar-1 */
   --navbar-1: var(--color-gray-50);
   --navbar-1-line: var(--color-gray-200);
@@ -548,7 +548,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --navbar-1-nav-focus: var(--color-gray-200);
   --navbar-1-nav-active: var(--color-gray-200);
   --navbar-1-nav-list-divider: var(--color-gray-200);
-  
+
   /* Navbar-2 */
   --navbar-2: var(--color-gray-100);
   --navbar-2-line: transparent;
@@ -558,14 +558,14 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --navbar-2-nav-focus: var(--color-gray-200);
   --navbar-2-nav-active: var(--color-gray-200);
   --navbar-2-nav-list-divider: var(--color-gray-200);
-  
+
   /* Sidebar follows same pattern as navbar */
   /* Card, Dropdown, Select, Overlay, Popover, Tooltip, Table, Switch, Footer, Scrollbar */
   /* See theme.css for complete default values */
 }
 ```
 
-### Dark Mode Defaults (.dark)
+### Dark mode defaults (.dark)
 
 ```css
 .dark {
@@ -575,7 +575,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --background-2: var(--color-neutral-900);
   --foreground: var(--color-neutral-200);
   --inverse: var(--color-neutral-950);
-  
+
   /* Borders */
   --border: var(--color-neutral-700);
   --border-line-1: var(--color-neutral-800);
@@ -586,7 +586,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --border-line-6: var(--color-neutral-300);
   --border-line-7: var(--color-neutral-200);
   --border-line-8: var(--color-neutral-100);
-  
+
   /* Primary (shifts to 500 in dark mode) */
   --primary: var(--color-primary-500);
   --primary-line: transparent;
@@ -595,7 +595,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --primary-focus: var(--color-primary-600);
   --primary-active: var(--color-primary-600);
   --primary-checked: var(--color-primary-500);
-  
+
   /* Secondary */
   --secondary: var(--color-white);
   --secondary-line: transparent;
@@ -603,7 +603,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --secondary-hover: var(--color-neutral-100);
   --secondary-focus: var(--color-neutral-100);
   --secondary-active: var(--color-neutral-100);
-  
+
   /* Layer */
   --layer: var(--color-neutral-800);
   --layer-line: var(--color-neutral-700);
@@ -611,7 +611,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --layer-hover: var(--color-neutral-700);
   --layer-focus: var(--color-neutral-700);
   --layer-active: var(--color-neutral-700);
-  
+
   /* Surface */
   --surface: var(--color-neutral-700);
   --surface-1: var(--color-neutral-600);
@@ -624,7 +624,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --surface-hover: var(--color-neutral-600);
   --surface-focus: var(--color-neutral-600);
   --surface-active: var(--color-neutral-600);
-  
+
   /* Muted */
   --muted: var(--color-neutral-800);
   --muted-foreground: var(--color-neutral-500);
@@ -633,13 +633,13 @@ These are useful for creating warm or soft-toned themes instead of using standar
   --muted-hover: var(--color-neutral-700);
   --muted-focus: var(--color-neutral-700);
   --muted-active: var(--color-neutral-700);
-  
+
   /* Destructive (same red, readable in dark) */
   --destructive: var(--color-red-500);
   --destructive-foreground: var(--color-white);
   --destructive-hover: var(--color-red-600);
   --destructive-focus: var(--color-red-600);
-  
+
   /* Components shift to neutral-800/900 backgrounds */
   /* Nav items shift to neutral-700 hover states */
   /* See theme.css for complete dark mode values */
@@ -648,7 +648,7 @@ These are useful for creating warm or soft-toned themes instead of using standar
 
 ---
 
-## Theme-Scoped Overrides
+## Theme-scoped overrides
 
 When creating a theme, override values under theme-scoped selectors:
 
@@ -667,16 +667,16 @@ When creating a theme, override values under theme-scoped selectors:
 
 ---
 
-## Color Format Guidelines
+## Color format guidelines
 
-- **For most tokens:** Use Tailwind color variables `var(--color-<color>-<shade>)`
-- **For oklch colors:** Acceptable for standard tokens
-- **For chart `-hex` tokens:** MUST use valid hex values (e.g., `#2563eb`)
-- **For custom colors:** Can use hex, rgb, hsl, or oklch
+- For most tokens: use Tailwind color variables `var(--color-<color>-<shade>)`
+- For oklch colors: acceptable for standard tokens
+- For chart `-hex` tokens: MUST use valid hex values (for example, `#2563eb`)
+- For custom colors: can use hex, rgb, hsl, or oklch
 
 ---
 
-## Quick Token Count Summary
+## Quick token count summary
 
 | Category | Token Count |
 |----------|-------------|
@@ -700,4 +700,4 @@ When creating a theme, override values under theme-scoped selectors:
 | Scrollbar | 4 |
 | Charts | ~50+ |
 | Maps | 8 |
-| **Total** | **~220+ tokens** |
+| Total | ~220+ tokens

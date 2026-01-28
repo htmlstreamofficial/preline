@@ -7,14 +7,13 @@ description: A strict output template for generated Preline theme files (full to
 
 Use this skeleton for every generated theme. Replace `<name>` with the theme name (kebab-case). Fill in ALL token values for a complete theme.
 
-> **Note:** The generate-theme.js script produces output matching this template automatically. See [skill.md](./skill.md) for interpretive guidance and [token-reference.md](./token-reference.md) for complete token documentation.
+> **Note:** The generate-theme.js script produces output matching this template automatically. See [SKILL.md](./SKILL.md) for interpretive guidance and [docs/token-reference.md](./docs/token-reference.md) for complete token documentation.
 
 ---
 
 ## Required Structure
 
 ```css
-@import "tailwindcss";
 @import "./theme.css";
 
 /* ------------------------------ */
