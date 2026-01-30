@@ -1,0 +1,23 @@
+:root[data-font="sans"],
+[data-font="sans"] {
+  --font-sans: var(--font-custom-default);
+}
+.font-custom-default {
+  font-family: var(--font-custom-default);
+}
+
+:root[data-font="serif"],
+[data-font="serif"] {
+  --font-sans: var(--font-custom-serif);
+}
+.font-custom-serif {
+  font-family: var(--font-custom-serif);
+}
+
+:root[data-font="mono"],
+[data-font="mono"] {
+  --font-sans: var(--font-custom-mono);
+}
+.font-custom-mono {
+  font-family: var(--font-custom-mono);
+}

@@ -1,0 +1,140 @@
+/* ------------------------------ */
+/* ------------ Moon ------------ */
+/* ------------------------------ */
+
+@theme theme-moon inline {
+  
+}
+
+:root[data-theme="theme-moon"],
+[data-theme="theme-moon"] {
+  --primary-50: var(--color-gray-50);
+  --primary-100: var(--color-gray-100);
+  --primary-200: var(--color-gray-200);
+  --primary-300: var(--color-gray-300);
+  --primary-400: var(--color-gray-400);
+  --primary-500: var(--color-gray-500);
+  --primary-600: var(--color-gray-600);
+  --primary-700: var(--color-gray-700);
+  --primary-800: var(--color-gray-800);
+  --primary-900: var(--color-gray-900);
+  --primary-950: var(--color-gray-950);
+
+  --primary: var(--color-primary-800);
+  --primary-hover: var(--color-primary-900);
+  --primary-focus: var(--color-primary-900);
+  --primary-active: var(--color-primary-900);
+  --primary-checked: var(--color-primary-800);
+
+  --navbar-inverse: var(--color-primary-950);
+
+  --sidebar-inverse: var(--color-primary-950);
+
+  --card-inverse: var(--color-primary-950);
+
+  --dropdown-inverse: var(--color-primary-950);
+
+  --select-inverse: var(--color-primary-950);
+  
+  --overlay-inverse: var(--color-primary-950);
+
+  --footer-inverse: var(--color-primary-950);
+
+  --chart-colors-foreground: var(--color-gray-800);
+  --chart-colors-foreground-inverse: var(--color-white);
+  --chart-primary: var(--color-primary-800);
+  --chart-colors-primary: var(--color-primary-800);
+  --chart-colors-primary-inverse: var(--color-primary-200);
+  --chart-colors-primary-hex: var(--color-primary-800);
+  --chart-colors-primary-hex-inverse: var(--color-primary-200);
+  --chart-1: var(--color-primary-50);
+  --chart-colors-chart-1: var(--color-primary-50);
+  --chart-colors-chart-1-inverse: var(--color-primary-800);
+  --chart-colors-chart-1-hex: var(--color-primary-50);
+  --chart-colors-chart-1-hex-inverse: var(--color-primary-800);
+  --chart-2: var(--color-primary-200);
+  --chart-colors-chart-2: var(--color-primary-200);
+  --chart-colors-chart-2-inverse: var(--color-primary-400);
+  --chart-colors-chart-2-hex: var(--color-primary-200);
+  --chart-colors-chart-2-hex-inverse: var(--color-primary-400);
+  --chart-3: var(--color-primary-400);
+  --chart-colors-chart-3: var(--color-primary-400);
+  --chart-colors-chart-3-inverse: var(--color-primary-600);
+  --chart-colors-chart-3-hex: var(--color-primary-400);
+  --chart-colors-chart-3-hex-inverse: var(--color-primary-600);
+  --chart-4: var(--color-primary-950);
+  --chart-colors-chart-4: var(--color-primary-950);
+  --chart-colors-chart-4-inverse: var(--color-white);
+  --chart-colors-chart-4-hex: var(--color-primary-950);
+  --chart-colors-chart-4-hex-inverse: var(--white);
+  --chart-5: var(--color-slate-400);
+  --chart-colors-chart-5: var(--color-slate-400);
+  --chart-colors-chart-5-inverse: var(--color-slate-400);
+  --chart-colors-chart-5-hex: var(--color-slate-400);
+  --chart-colors-chart-5-hex-inverse: var(--color-slate-400);
+  --chart-6: var(--color-zinc-500);
+  --chart-colors-chart-6: var(--color-zinc-500);
+  --chart-colors-chart-6-inverse: var(--color-zinc-500);
+  --chart-colors-chart-6-hex: var(--color-zinc-500);
+  --chart-colors-chart-6-hex-inverse: var(--color-zinc-500);
+  --chart-7: var(--color-stone-400);
+  --chart-colors-chart-7: var(--color-stone-400);
+  --chart-colors-chart-7-inverse: var(--color-stone-500);
+  --chart-colors-chart-7-hex: var(--color-stone-400);
+  --chart-colors-chart-7-hex-inverse: var(--color-stone-500);
+  --chart-colors-candlestick-upward: var(--color-primary-800);
+  --chart-colors-candlestick-upward-inverse: var(--color-primary-200);
+  --chart-colors-candlestick-downward: var(--color-primary-800);
+  --chart-colors-candlestick-downward-inverse: var(--color-primary-200);
+
+  --map-colors-primary: var(--color-primary-800);
+  --map-colors-primary-inverse: var(--color-primary-200);
+  --map-colors-highlight: var(--color-primary-400);
+  --map-colors-highlight-inverse: var(--color-primary-400);
+}
+
+[data-theme="theme-moon"].dark {
+  --background-plain: var(--color-neutral-800);
+
+  --primary-50: var(--color-neutral-50);
+  --primary-100: var(--color-neutral-100);
+  --primary-200: var(--color-neutral-200);
+  --primary-300: var(--color-neutral-300);
+  --primary-400: var(--color-neutral-400);
+  --primary-500: var(--color-neutral-500);
+  --primary-600: var(--color-neutral-600);
+  --primary-700: var(--color-neutral-700);
+  --primary-800: var(--color-neutral-800);
+  --primary-900: var(--color-neutral-900);
+  --primary-950: var(--color-neutral-950);
+
+  --primary: var(--color-white);
+  --primary-foreground: var(--color-primary-800);
+  --primary-hover: var(--color-primary-300);
+  --primary-focus: var(--color-primary-300);
+  --primary-active: var(--color-primary-300);
+  --primary-checked: var(--color-white);
+
+  --navbar-inverse: var(--color-primary-950);
+  
+  --sidebar-inverse: var(--color-primary-950);
+  
+  --card-inverse: var(--color-primary-950);
+  
+  --dropdown-inverse: var(--color-primary-950);
+  
+  --select-inverse: var(--color-primary-950);
+  
+  --overlay-inverse: var(--color-primary-950);
+  
+  --footer-inverse: var(--color-primary-950);
+
+  --switch: var(--color-primary-800);
+
+  --chart-primary: var(--color-primary-200);
+  --chart-1: var(--color-primary-800);
+  --chart-2: var(--color-primary-400);
+  --chart-3: var(--color-primary-600);
+  --chart-4: var(--color-white);
+  --chart-7: var(--color-stone-500);
+}
