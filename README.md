@@ -54,7 +54,7 @@ npm i preline
 Preline UI includes Agent Skills for agentic coding tools (Cursor, Claude Code, Gemini CLI, etc.) that enable automated theme generation. Install via CLI:
 
 ```bash
-npx skills add https://github.com/htmlstreamofficial/preline --skill theme-generator
+npx skills add htmlstreamofficial/preline
 ```
 
 Learn more in the [Agent Skills documentation](https://preline.co/docs/agent-skills.html).
