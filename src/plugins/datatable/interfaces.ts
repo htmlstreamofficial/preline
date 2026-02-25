@@ -18,3 +18,8 @@ export interface IDataTable {
 
 	destroy(): void;
 }
+
+export interface IColumnDef {
+	targets: number;
+	orderable: boolean;
+}

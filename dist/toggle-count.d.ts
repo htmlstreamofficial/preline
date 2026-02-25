@@ -1,3 +1,15 @@
+export interface IToggleCountOptions {
+	target: string | HTMLInputElement;
+	min: number;
+	max: number;
+	duration: number;
+}
+export interface IToggleCount {
+	options?: IToggleCountOptions;
+	countUp(): void;
+	countDown(): void;
+	destroy(): void;
+}
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -11,22 +23,6 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	createCollection(collection: any[], element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
-export interface IToggleCountOptions {
-	target: string | HTMLInputElement;
-	min: number;
-	max: number;
-	duration: number;
-}
-export interface IToggleCount {
-	options?: IToggleCountOptions;
-	countUp(): void;
-	countDown(): void;
-	destroy(): void;
 }
 declare class HSToggleCount extends HSBasePlugin<IToggleCountOptions> implements IToggleCount {
 	private readonly target;
@@ -43,7 +39,7 @@ declare class HSToggleCount extends HSBasePlugin<IToggleCountOptions> implements
 	countUp(): void;
 	countDown(): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSToggleCount | ICollectionItem<HSToggleCount>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

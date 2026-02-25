@@ -176,8 +176,6 @@
   
   --popover-line: var(--color-neutral-800);
 
-  --tooltip: var(--color-neutral-900);
-  
   --table-line: var(--color-neutral-800);
 
   --footer-line: var(--color-neutral-800);
@@ -387,7 +385,7 @@
   --dropdown: var(--color-neutral-900);
   --dropdown-1: var(--color-neutral-950);
   --dropdown-line: var(--color-neutral-400);
-  --dropdown-divider: var(--color-neutral-800);
+  --dropdown-divider: var(--color-neutral-400);
   --dropdown-header: var(--color-neutral-400);
   --dropdown-footer: var(--color-neutral-400);
   --dropdown-item-foreground: var(--color-neutral-200);
@@ -414,9 +412,6 @@
 
   --popover: var(--color-neutral-900);
   --popover-line: var(--color-neutral-400);
-
-  --tooltip: var(--color-white);
-  --tooltip-foreground: var(--color-neutral-800);
 
   --table-line: var(--color-neutral-400);
 

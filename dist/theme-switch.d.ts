@@ -1,3 +1,12 @@
+export interface IThemeSwitchOptions {
+	theme?: "dark" | "light" | "default";
+	type?: "change" | "click";
+}
+export interface IThemeSwitch {
+	options?: IThemeSwitchOptions;
+	setAppearance(theme: string, isSaveToLocalStorage: boolean, isSetDispatchEvent: boolean): void;
+	destroy(): void;
+}
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -11,19 +20,6 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	createCollection(collection: any[], element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
-export interface IThemeSwitchOptions {
-	theme?: "dark" | "light" | "default";
-	type?: "change" | "click";
-}
-export interface IThemeSwitch {
-	options?: IThemeSwitchOptions;
-	setAppearance(theme: string, isSaveToLocalStorage: boolean, isSetDispatchEvent: boolean): void;
-	destroy(): void;
 }
 declare class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements IThemeSwitch {
 	theme: string;
@@ -43,7 +39,7 @@ declare class HSThemeSwitch extends HSBasePlugin<IThemeSwitchOptions> implements
 	private toggleObserveSystemTheme;
 	setAppearance(theme?: string, isSaveToLocalStorage?: boolean, isSetDispatchEvent?: boolean): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSThemeSwitch>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

@@ -1,43 +1,43 @@
 const path = require('path');
+const fs = require('fs');
 const TerserPlugin = require('terser-webpack-plugin');
+
+const pluginsDir = path.resolve(__dirname, 'src/plugins');
+const helperEntries = {
+	'helper-shared': './src/helpers/shared/index.ts',
+	'helper-apexcharts': './src/helpers/apexcharts/index.ts',
+	'helper-clipboard': './src/helpers/clipboard/index.ts',
+	utils: './src/utils/index.ts',
+};
+const excludedPluginEntries = new Set(['accessibility-manager', 'base-plugin']);
+
+const pluginEntries = fs
+	.readdirSync(pluginsDir)
+	.filter((pluginName) => {
+		if (excludedPluginEntries.has(pluginName)) return false;
+
+		const pluginDir = path.join(pluginsDir, pluginName);
+		if (!fs.lstatSync(pluginDir).isDirectory()) return false;
+
+		return fs.existsSync(path.join(pluginDir, 'core.ts')) || fs.existsSync(path.join(pluginDir, 'index.ts'));
+	})
+	.reduce((acc, pluginName) => {
+		const pluginDir = path.join(pluginsDir, pluginName);
+		const entryFile = fs.existsSync(path.join(pluginDir, 'core.ts')) ? 'core.ts' : 'index.ts';
+
+		acc[pluginName] = `./src/plugins/${pluginName}/${entryFile}`;
+
+		return acc;
+	}, {});
 
 module.exports = {
 	mode: 'production',
 	stats: 'minimal',
 	entry: {
-		index: './src/index.ts',
-		accordion: './src/plugins/accordion/index.ts',
-		carousel: './src/plugins/carousel/index.ts',
-		collapse: './src/plugins/collapse/index.ts',
-		combobox: './src/plugins/combobox/index.ts',
-		'copy-markup': './src/plugins/copy-markup/index.ts',
-		datatable: './src/plugins/datatable/index.ts',
-		datepicker: './src/plugins/datepicker/index.ts',
-		dropdown: './src/plugins/dropdown/index.ts',
-		'file-upload': './src/plugins/file-upload/index.ts',
-		'input-number': './src/plugins/input-number/index.ts',
-		'layout-splitter': './src/plugins/layout-splitter/index.ts',
-		overlay: './src/plugins/overlay/index.ts',
-		'pin-input': './src/plugins/pin-input/index.ts',
-		'range-slider': './src/plugins/range-slider/index.ts',
-		'remove-element': './src/plugins/remove-element/index.ts',
-		'scroll-nav': './src/plugins/scroll-nav/index.ts',
-		scrollspy: './src/plugins/scrollspy/index.ts',
-		select: './src/plugins/select/index.ts',
-		stepper: './src/plugins/stepper/index.ts',
-		'strong-password': './src/plugins/strong-password/index.ts',
-		tabs: './src/plugins/tabs/index.ts',
-		'textarea-auto-height': './src/plugins/textarea-auto-height/index.ts',
-		'theme-switch': './src/plugins/theme-switch/index.ts',
-		'toggle-count': './src/plugins/toggle-count/index.ts',
-		'toggle-password': './src/plugins/toggle-password/index.ts',
-		tooltip: './src/plugins/tooltip/index.ts',
-		'tree-view': './src/plugins/tree-view/index.ts',
-
-		// Helpers
-    'helper-shared': './src/helpers/shared/index.ts',
-		'helper-apexcharts': './src/helpers/apexcharts/index.ts',
-		'helper-clipboard': './src/helpers/clipboard/index.ts',
+		index: './src/auto/index.ts',
+		'non-auto': './src/index.ts',
+		...pluginEntries,
+		...helperEntries,
 	},
 	module: {
 		rules: [

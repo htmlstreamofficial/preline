@@ -1,0 +1,20 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"declarationMap": false,
+		"outDir": "./.dts-tmp",
+		"noEmit": false
+	},
+	"include": [
+		"src/**/*",
+		"global.d.ts"
+	],
+	"exclude": [
+		"node_modules",
+		".dts-tmp",
+		"dist",
+		"**/*.spec.ts"
+	]
+}

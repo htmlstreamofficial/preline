@@ -1,21 +1,3 @@
-export interface IBasePlugin<O, E> {
-	el: E;
-	options?: O;
-	events?: {};
-}
-declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
-	el: E;
-	options: O;
-	events?: any;
-	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
-	fireEvent(evt: string, payload?: any): any;
-	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
 export interface IStepperOptions {
 	currentIndex?: number;
 	isCompleted?: boolean;
@@ -31,6 +13,20 @@ export interface IStepper {
 	enableButtons(): void;
 	setErrorNavItem(n?: number): void;
 	destroy(): void;
+}
+export interface IBasePlugin<O, E> {
+	el: E;
+	options?: O;
+	events?: {};
+}
+declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
+	el: E;
+	options: O;
+	events?: any;
+	constructor(el: E, options: O, events?: any);
+	createCollection(collection: any[], element: any): void;
+	fireEvent(evt: string, payload?: any): any;
+	on(evt: string, cb: Function): void;
 }
 declare class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	private currentIndex;
@@ -120,7 +116,7 @@ declare class HSStepper extends HSBasePlugin<{}> implements IStepper {
 	enableButtons(): void;
 	setErrorNavItem(n?: number): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSStepper | ICollectionItem<HSStepper>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

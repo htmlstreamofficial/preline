@@ -1,5 +1,5 @@
 /*
- * @version: 4.0.0
+ * @version: 4.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -442,6 +442,9 @@ function buildChart(
       if (isInitialLoad) return;
 
 			chart.updateOptions(optionsFn(evt.detail));
+
+			// If the chart is in an iframe, dispatch a resize event to the parent window
+			if (window.self !== window.top) window.dispatchEvent(new Event('resize'));
 		};
 		const applyOptionsChange = (detail: any) => {
 			let modeFromBodyClass;

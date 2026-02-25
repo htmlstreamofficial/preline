@@ -1,3 +1,9 @@
+export interface ITooltip {
+	options?: {};
+	show(): void;
+	hide(): void;
+	destroy(): void;
+}
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -11,16 +17,6 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	createCollection(collection: any[], element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
-export interface ITooltip {
-	options?: {};
-	show(): void;
-	hide(): void;
-	destroy(): void;
 }
 declare class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	private readonly toggle;
@@ -43,6 +39,7 @@ declare class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	private toggleMouseEnter;
 	private toggleMouseLeave;
 	private toggleHandle;
+	private hideOtherTooltips;
 	private init;
 	private enter;
 	private leave;
@@ -57,7 +54,7 @@ declare class HSTooltip extends HSBasePlugin<{}> implements ITooltip {
 	hide(): void;
 	destroy(): void;
 	private static findInCollection;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSTooltip>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 	static show(target: HSTooltip | HTMLElement | string): void;
 	static hide(target: HSTooltip | HTMLElement | string): void;

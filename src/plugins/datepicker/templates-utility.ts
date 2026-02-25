@@ -59,7 +59,7 @@ export const templatesBasedOnUtility: ITemplates = {
     `<div class="relative bg-white ${
       theme !== "light" ? "dark:bg-neutral-900" : ""
     }" data-vc="header" role="toolbar">
-    <div class="grid grid-cols-5 items-center gap-x-3 mx-1.5 pb-3" data-vc="header">
+    <div class="grid grid-cols-5 items-center gap-x-3 mx-1.5 py-3" data-vc="header">
       <div class="col-span-1">
         <#CustomArrowPrev />
       </div>
@@ -81,7 +81,7 @@ export const templatesBasedOnUtility: ITemplates = {
     </div>
   </div>`,
   month: (theme: string | boolean = false) =>
-    `<div class="pb-3" data-vc="header" role="toolbar">
+    `<div class="py-3" data-vc="header" role="toolbar">
     <div class="flex justify-center items-center gap-x-1" data-vc-header="content">
       <#Month />
       <span class="text-gray-800 ${

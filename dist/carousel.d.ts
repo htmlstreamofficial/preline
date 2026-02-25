@@ -1,21 +1,3 @@
-export interface IBasePlugin<O, E> {
-	el: E;
-	options?: O;
-	events?: {};
-}
-declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
-	el: E;
-	options: O;
-	events?: any;
-	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
-	fireEvent(evt: string, payload?: any): any;
-	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
 export type TCarouselOptionsSlidesQty = {
 	[key: string]: number;
 };
@@ -43,6 +25,20 @@ export interface ICarousel {
 	goToNext(): void;
 	goTo(i: number): void;
 	destroy(): void;
+}
+export interface IBasePlugin<O, E> {
+	el: E;
+	options?: O;
+	events?: {};
+}
+declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
+	el: E;
+	options: O;
+	events?: any;
+	constructor(el: E, options: O, events?: any);
+	createCollection(collection: any[], element: any): void;
+	fireEvent(evt: string, payload?: any): any;
+	on(evt: string, cb: Function): void;
 }
 declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICarousel {
 	private currentIndex;
@@ -147,7 +143,7 @@ declare class HSCarousel extends HSBasePlugin<ICarouselOptions> implements ICaro
 	goToNext(): void;
 	goTo(i: number): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSCarousel | ICollectionItem<HSCarousel>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

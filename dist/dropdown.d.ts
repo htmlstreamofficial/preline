@@ -1,5 +1,15 @@
 import { VirtualElement } from '@floating-ui/dom';
 
+export interface IDropdown {
+	options?: {};
+	open(): void;
+	close(isAnimated: boolean): void;
+	forceClearState(): void;
+	destroy(): void;
+}
+export interface IHTMLElementFloatingUI extends HTMLElement {
+	_floatingUI: any;
+}
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -13,20 +23,6 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	createCollection(collection: any[], element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
-export interface IDropdown {
-	options?: {};
-	open(): void;
-	close(isAnimated: boolean): void;
-	forceClearState(): void;
-	destroy(): void;
-}
-export interface IHTMLElementFloatingUI extends HTMLElement {
-	_floatingUI: any;
 }
 declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDropdown {
 	private accessibilityComponent;
@@ -77,7 +73,7 @@ declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implem
 	forceClearState(): void;
 	destroy(): void;
 	private static findInCollection;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSDropdown | ICollectionItem<HSDropdown>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 	static open(target: HSDropdown | HTMLElement | string, openedViaKeyboard?: boolean): void;
 	static close(target: HSDropdown | HTMLElement | string): void;

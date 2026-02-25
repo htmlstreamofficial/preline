@@ -1,24 +1,6 @@
 import { DatesArr } from 'vanilla-calendar-pro';
 import { Options } from 'vanilla-calendar-pro/types';
 
-export interface IBasePlugin<O, E> {
-	el: E;
-	options?: O;
-	events?: {};
-}
-declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
-	el: E;
-	options: O;
-	events?: any;
-	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
-	fireEvent(evt: string, payload?: any): any;
-	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
 export interface IApiFieldMap {
 	id: string;
 	val: string;
@@ -89,6 +71,7 @@ export interface ISelectOptions {
 	searchId?: string;
 	searchLimit?: number | typeof Infinity;
 	isSearchDirectMatch?: boolean;
+	searchMatchMode?: "substring" | "chars-sequence" | "token-all" | "hybrid";
 	searchClasses?: string;
 	searchWrapperClasses?: string;
 	searchPlaceholder?: string;
@@ -138,6 +121,20 @@ export interface IDatepicker {
 	options?: ICustomDatepickerOptions;
 	formatDate(date: string | number | Date, format?: string): string;
 }
+export interface IBasePlugin<O, E> {
+	el: E;
+	options?: O;
+	events?: {};
+}
+declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
+	el: E;
+	options: O;
+	events?: any;
+	constructor(el: E, options: O, events?: any);
+	createCollection(collection: any[], element: any): void;
+	fireEvent(evt: string, payload?: any): any;
+	on(evt: string, cb: Function): void;
+}
 declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private dataOptions;
 	private concatOptions;
@@ -184,7 +181,7 @@ declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	};
 	formatDate(date: string | number | Date, format?: string): string;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSDatepicker>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

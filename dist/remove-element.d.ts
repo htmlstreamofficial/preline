@@ -1,3 +1,10 @@
+export interface IRemoveElementOptions {
+	removeTargetAnimationClass: string;
+}
+export interface IRemoveElement {
+	options?: IRemoveElementOptions;
+	destroy(): void;
+}
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -12,17 +19,6 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
 }
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
-export interface IRemoveElementOptions {
-	removeTargetAnimationClass: string;
-}
-export interface IRemoveElement {
-	options?: IRemoveElementOptions;
-	destroy(): void;
-}
 declare class HSRemoveElement extends HSBasePlugin<IRemoveElementOptions> implements IRemoveElement {
 	private readonly removeTargetId;
 	private readonly removeTarget;
@@ -33,7 +29,7 @@ declare class HSRemoveElement extends HSBasePlugin<IRemoveElementOptions> implem
 	private init;
 	private remove;
 	destroy(): void;
-	static getInstance(target: HTMLElement, isInstance?: boolean): HTMLElement | ICollectionItem<HSRemoveElement>;
+	static getInstance(target: HTMLElement, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

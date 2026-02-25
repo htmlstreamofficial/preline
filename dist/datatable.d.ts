@@ -1,23 +1,5 @@
 import { Config } from 'datatables.net-dt';
 
-export interface IBasePlugin<O, E> {
-	el: E;
-	options?: O;
-	events?: {};
-}
-declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
-	el: E;
-	options: O;
-	events?: any;
-	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
-	fireEvent(evt: string, payload?: any): any;
-	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
 export interface IDataTablePagingOptions {
 	pageBtnClasses?: string;
 }
@@ -32,6 +14,20 @@ export interface IDataTableOptions extends Config {
 export interface IDataTable {
 	options?: IDataTableOptions;
 	destroy(): void;
+}
+export interface IBasePlugin<O, E> {
+	el: E;
+	options?: O;
+	events?: {};
+}
+declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
+	el: E;
+	options: O;
+	events?: any;
+	constructor(el: E, options: O, events?: any);
+	createCollection(collection: any[], element: any): void;
+	fireEvent(evt: string, payload?: any): any;
+	on(evt: string, cb: Function): void;
 }
 declare class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDataTable {
 	private concatOptions;
@@ -89,7 +85,7 @@ declare class HSDataTable extends HSBasePlugin<IDataTableOptions> implements IDa
 	private onSelectAllChange;
 	private updateSelectAllCheckbox;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSDataTable>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

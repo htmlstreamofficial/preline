@@ -1,91 +1,35 @@
 /*
- * @version: 4.0.0
+ * @version: 4.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 
-declare var _: any;
-declare var DataTable: any;
-declare var Dropzone: any;
-declare var noUiSlider: any;
-declare var VanillaCalendarPro: any;
-
-import HSAccessibilityObserver from "./plugins/accessibility-manager";
-
-if (typeof window !== "undefined") {
-	window.HSAccessibilityObserver = new HSAccessibilityObserver();
-}
-
-let HSDataTableModule;
-let HSFileUploadModule;
-let HSRangeSliderModule;
-let HSDatepickerModule: any = null;
-
-export { default as HSCopyMarkup } from "./plugins/copy-markup";
-export { default as HSAccordion } from "./plugins/accordion";
-export { default as HSCarousel } from "./plugins/carousel";
-export { default as HSCollapse } from "./plugins/collapse";
-export { default as HSComboBox } from "./plugins/combobox";
-export { default as HSDropdown } from "./plugins/dropdown";
-export { default as HSInputNumber } from "./plugins/input-number";
-export { default as HSLayoutSplitter } from "./plugins/layout-splitter";
-export { default as HSOverlay } from "./plugins/overlay";
-export { default as HSPinInput } from "./plugins/pin-input";
-export { default as HSRemoveElement } from "./plugins/remove-element";
-export { default as HSScrollNav } from "./plugins/scroll-nav";
-export { default as HSScrollspy } from "./plugins/scrollspy";
-export { default as HSSelect } from "./plugins/select";
-export { default as HSStepper } from "./plugins/stepper";
-export { default as HSStrongPassword } from "./plugins/strong-password";
-export { default as HSTabs } from "./plugins/tabs";
-export { default as HSTextareaAutoHeight } from "./plugins/textarea-auto-height";
-export { default as HSThemeSwitch } from "./plugins/theme-switch";
-export { default as HSToggleCount } from "./plugins/toggle-count";
-export { default as HSTogglePassword } from "./plugins/toggle-password";
-export { default as HSTooltip } from "./plugins/tooltip";
-export { default as HSTreeView } from "./plugins/tree-view";
-export { default as HSStaticMethods } from "./static";
-
-if (typeof window !== "undefined") {
-	try {
-		if (typeof DataTable !== "undefined" && typeof jQuery !== "undefined") {
-			HSDataTableModule = require("./plugins/datatable").default;
-		}
-	} catch (e) {
-		console.warn("HSDataTable: Required dependencies not found");
-		HSDataTableModule = null;
-	}
-
-	try {
-		if (typeof _ !== "undefined" && typeof Dropzone !== "undefined") {
-			HSFileUploadModule = require("./plugins/file-upload").default;
-		}
-	} catch (e) {
-		console.warn("HSFileUpload: Required dependencies not found");
-		HSFileUploadModule = null;
-	}
-
-	try {
-		if (typeof noUiSlider !== "undefined") {
-			HSRangeSliderModule = require("./plugins/range-slider").default;
-		}
-	} catch (e) {
-		console.warn("HSRangeSlider: Required dependencies not found");
-		HSRangeSliderModule = null;
-	}
-
-	try {
-		if (typeof VanillaCalendarPro !== "undefined") {
-			HSDatepickerModule = require("./plugins/datepicker").default;
-		}
-	} catch (e) {
-		console.warn("HSDatepicker: Required dependencies not found");
-		HSDatepickerModule = null;
-	}
-}
-
-export { HSDataTableModule as HSDataTable };
-export { HSFileUploadModule as HSFileUpload };
-export { HSRangeSliderModule as HSRangeSlider };
-export { HSDatepickerModule as HSDatepicker };
+export { default as HSCopyMarkup } from "./plugins/copy-markup/core";
+export { default as HSAccordion } from "./plugins/accordion/core";
+export { default as HSCarousel } from "./plugins/carousel/core";
+export { default as HSCollapse } from "./plugins/collapse/core";
+export { default as HSComboBox } from "./plugins/combobox/core";
+export { default as HSDataTable } from "./plugins/datatable/core";
+export { default as HSDatepicker } from "./plugins/datepicker/core";
+export { default as HSDropdown } from "./plugins/dropdown/core";
+export { default as HSFileUpload } from "./plugins/file-upload/core";
+export { default as HSInputNumber } from "./plugins/input-number/core";
+export { default as HSLayoutSplitter } from "./plugins/layout-splitter/core";
+export { default as HSOverlay } from "./plugins/overlay/core";
+export { default as HSPinInput } from "./plugins/pin-input/core";
+export { default as HSRangeSlider } from "./plugins/range-slider/core";
+export { default as HSRemoveElement } from "./plugins/remove-element/core";
+export { default as HSScrollNav } from "./plugins/scroll-nav/core";
+export { default as HSScrollspy } from "./plugins/scrollspy/core";
+export { default as HSSelect } from "./plugins/select/core";
+export { default as HSStepper } from "./plugins/stepper/core";
+export { default as HSStrongPassword } from "./plugins/strong-password/core";
+export { default as HSTabs } from "./plugins/tabs/core";
+export { default as HSTextareaAutoHeight } from "./plugins/textarea-auto-height/core";
+export { default as HSThemeSwitch } from "./plugins/theme-switch/core";
+export { default as HSToggleCount } from "./plugins/toggle-count/core";
+export { default as HSTogglePassword } from "./plugins/toggle-password/core";
+export { default as HSTooltip } from "./plugins/tooltip/core";
+export { default as HSTreeView } from "./plugins/tree-view/core";
+export { default as HSStaticMethods, COLLECTIONS } from "./auto/static-methods";

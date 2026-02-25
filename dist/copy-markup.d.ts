@@ -22,10 +22,6 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
 }
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
 declare class HSCopyMarkup extends HSBasePlugin<ICopyMarkupOptions> implements ICopyMarkup {
 	private readonly targetSelector;
 	private readonly wrapperSelector;
@@ -46,7 +42,7 @@ declare class HSCopyMarkup extends HSBasePlugin<ICopyMarkupOptions> implements I
 	private addToItems;
 	delete(target: HTMLElement): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSCopyMarkup | ICollectionItem<HSCopyMarkup>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

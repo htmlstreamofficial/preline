@@ -1,3 +1,11 @@
+export interface ITabsOptions {
+	eventType: "click" | "hover";
+	preventNavigationResolution: string | number | null;
+}
+export interface ITabs {
+	options?: ITabsOptions;
+	destroy(): void;
+}
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -11,18 +19,6 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	createCollection(collection: any[], element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
-export interface ITabsOptions {
-	eventType: "click" | "hover";
-	preventNavigationResolution: string | number | null;
-}
-export interface ITabs {
-	options?: ITabsOptions;
-	destroy(): void;
 }
 declare class HSTabs extends HSBasePlugin<ITabsOptions> implements ITabs {
 	private accessibilityComponent;
@@ -49,7 +45,7 @@ declare class HSTabs extends HSBasePlugin<ITabsOptions> implements ITabs {
 	private onArrow;
 	private onStartEnd;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSTabs | ICollectionItem<HSTabs>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 	static open(target: HTMLElement): void;
 	static on(evt: string, target: HTMLElement, cb: Function): void;

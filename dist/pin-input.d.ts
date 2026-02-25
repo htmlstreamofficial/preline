@@ -1,3 +1,10 @@
+export interface IPinInputOptions {
+	availableCharsRE?: RegExp;
+}
+export interface IPinInput {
+	options?: IPinInputOptions;
+	destroy(): void;
+}
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -11,17 +18,6 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	createCollection(collection: any[], element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
-export interface IPinInputOptions {
-	availableCharsRE?: RegExp;
-}
-export interface IPinInput {
-	options?: IPinInputOptions;
-	destroy(): void;
 }
 declare class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinInput {
 	private items;
@@ -53,7 +49,7 @@ declare class HSPinInput extends HSBasePlugin<IPinInputOptions> implements IPinI
 	private onFocusOut;
 	private onPaste;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSPinInput | ICollectionItem<HSPinInput>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

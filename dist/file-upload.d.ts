@@ -1,5 +1,14 @@
 import { DropzoneOptions } from 'dropzone';
 
+export interface IFileUploadOptions extends DropzoneOptions {
+	extensions?: {};
+	autoHideTrigger?: boolean;
+	singleton?: boolean;
+}
+export interface IFileUpload {
+	options?: IFileUploadOptions;
+	destroy(): void;
+}
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -13,19 +22,6 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	createCollection(collection: any[], element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
-export interface IFileUploadOptions extends DropzoneOptions {
-	extensions?: {};
-	autoHideTrigger?: boolean;
-	singleton?: boolean;
-}
-export interface IFileUpload {
-	options?: IFileUploadOptions;
-	destroy(): void;
 }
 declare class HSFileUpload extends HSBasePlugin<IFileUploadOptions> implements IFileUpload {
 	private concatOptions;
@@ -50,7 +46,7 @@ declare class HSFileUpload extends HSBasePlugin<IFileUploadOptions> implements I
 	private createIcon;
 	private formatFileSize;
 	private splitFileName;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSFileUpload>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

@@ -1,14 +1,14 @@
 export interface IAccessibilityKeyboardHandlers {
-	onEnter?: () => void;
-	onEsc?: () => void;
-	onSpace?: () => void;
+	onEnter?: () => boolean | void;
+	onEsc?: () => boolean | void;
+	onSpace?: () => boolean | void;
 	onArrow?: (event: KeyboardEvent) => void;
 	onTab?: (event: KeyboardEvent) => void;
 	onShiftTab?: (event: KeyboardEvent) => void;
-	onHome?: () => void;
-	onEnd?: () => void;
+	onHome?: () => boolean | void;
+	onEnd?: () => boolean | void;
 	onFirstLetter?: (key: string) => void;
-	[key: string]: ((...args: any[]) => void) | undefined;
+	[key: string]: ((...args: any[]) => boolean | void) | undefined;
 }
 export interface IAccessibilityComponent {
 	wrapper: HTMLElement;
@@ -31,6 +31,11 @@ declare class HSAccessibilityObserver {
 	private initGlobalListeners;
 	private isAllowedKeybinding;
 	private getActiveComponent;
+	private getActiveComponentForKey;
+	private getDistanceToComponent;
+	private getComponentsByNesting;
+	private getSequentialHandlersForKey;
+	private executeSequentialHandlers;
 	private handleGlobalFocusin;
 	private handleGlobalKeydown;
 	private findClosestOpenParent;

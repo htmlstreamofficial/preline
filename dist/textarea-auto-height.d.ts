@@ -1,3 +1,10 @@
+export interface ITextareaAutoHeightOptions {
+	defaultHeight: number;
+}
+export interface ITextareaAutoHeight {
+	options?: ITextareaAutoHeightOptions;
+	destroy(): void;
+}
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -12,17 +19,6 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
 }
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
-export interface ITextareaAutoHeightOptions {
-	defaultHeight: number;
-}
-export interface ITextareaAutoHeight {
-	options?: ITextareaAutoHeightOptions;
-	destroy(): void;
-}
 declare class HSTextareaAutoHeight extends HSBasePlugin<ITextareaAutoHeightOptions> implements ITextareaAutoHeight {
 	private readonly defaultHeight;
 	private onElementInputListener;
@@ -36,7 +32,7 @@ declare class HSTextareaAutoHeight extends HSBasePlugin<ITextareaAutoHeightOptio
 	private parentType;
 	private callbackAccordingToType;
 	destroy(): void;
-	static getInstance(target: HTMLTextAreaElement | string, isInstance?: boolean): HSTextareaAutoHeight | ICollectionItem<HSTextareaAutoHeight>;
+	static getInstance(target: HTMLTextAreaElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

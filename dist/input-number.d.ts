@@ -1,3 +1,13 @@
+export interface IInputNumberOptions {
+	min?: number;
+	max?: number;
+	step?: number;
+	forceBlankValue?: boolean;
+}
+export interface IInputNumber {
+	options?: IInputNumberOptions;
+	destroy(): void;
+}
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -11,16 +21,6 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	createCollection(collection: any[], element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
-}
-export interface IInputNumberOptions {
-	min?: number;
-	max?: number;
-	step?: number;
-	forceBlankValue?: boolean;
-}
-export interface IInputNumber {
-	options?: IInputNumberOptions;
-	destroy(): void;
 }
 declare class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements IInputNumber {
 	private readonly input;
@@ -49,10 +49,7 @@ declare class HSInputNumber extends HSBasePlugin<IInputNumberOptions> implements
 	private disableButtons;
 	private enableButtons;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSInputNumber | {
-		id: number;
-		element: HSInputNumber;
-	};
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

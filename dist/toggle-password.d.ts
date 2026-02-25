@@ -1,3 +1,12 @@
+export interface ITogglePasswordOptions {
+	target: string | string[] | HTMLInputElement | HTMLInputElement[];
+}
+export interface ITogglePassword {
+	options?: ITogglePasswordOptions;
+	show(): void;
+	hide(): void;
+	destroy(): void;
+}
 export interface IBasePlugin<O, E> {
 	el: E;
 	options?: O;
@@ -12,19 +21,6 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
 }
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
-export interface ITogglePasswordOptions {
-	target: string | string[] | HTMLInputElement | HTMLInputElement[];
-}
-export interface ITogglePassword {
-	options?: ITogglePasswordOptions;
-	show(): void;
-	hide(): void;
-	destroy(): void;
-}
 declare class HSTogglePassword extends HSBasePlugin<ITogglePasswordOptions> implements ITogglePassword {
 	private readonly target;
 	private isShown;
@@ -38,7 +34,7 @@ declare class HSTogglePassword extends HSBasePlugin<ITogglePasswordOptions> impl
 	show(): void;
 	hide(): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSTogglePassword | ICollectionItem<HSTogglePassword>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

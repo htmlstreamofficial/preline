@@ -43,6 +43,7 @@
   --primary-checked: var(--color-primary-600);
 
   --secondary: var(--color-avocado-soft-900);
+  --secondary-foreground: var(--color-white);
   --secondary-hover: var(--color-avocado-soft-800);
   --secondary-focus: var(--color-avocado-soft-800);
   --secondary-active: var(--color-avocado-soft-800);

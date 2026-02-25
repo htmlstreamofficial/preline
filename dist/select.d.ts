@@ -1,21 +1,3 @@
-export interface IBasePlugin<O, E> {
-	el: E;
-	options?: O;
-	events?: {};
-}
-declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
-	el: E;
-	options: O;
-	events?: any;
-	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
-	fireEvent(evt: string, payload?: any): any;
-	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
 export interface ISingleOptionOptions {
 	description?: string;
 	icon?: string;
@@ -105,6 +87,7 @@ export interface ISelectOptions {
 	searchId?: string;
 	searchLimit?: number | typeof Infinity;
 	isSearchDirectMatch?: boolean;
+	searchMatchMode?: "substring" | "chars-sequence" | "token-all" | "hybrid";
 	searchClasses?: string;
 	searchWrapperClasses?: string;
 	searchPlaceholder?: string;
@@ -132,6 +115,20 @@ export interface ISelect {
 	removeOption(values: string | string[]): void;
 	recalculateDirection(): void;
 	destroy(): void;
+}
+export interface IBasePlugin<O, E> {
+	el: E;
+	options?: O;
+	events?: {};
+}
+declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
+	el: E;
+	options: O;
+	events?: any;
+	constructor(el: E, options: O, events?: any);
+	createCollection(collection: any[], element: any): void;
+	fireEvent(evt: string, payload?: any): any;
+	on(evt: string, cb: Function): void;
 }
 declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private accessibilityComponent;
@@ -183,6 +180,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly searchId;
 	private readonly searchLimit;
 	private readonly isSearchDirectMatch;
+	private readonly searchMatchMode;
 	private readonly searchClasses;
 	private readonly searchWrapperClasses;
 	private readonly searchNoResultTemplate;
@@ -274,6 +272,10 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private sortElements;
 	private remoteSearch;
 	private filterStaticOptions;
+	private normalizeSearchText;
+	private tokenizeSearchQuery;
+	private charsSequenceMatch;
+	private optionMatchesQuery;
 	private destroyOption;
 	private buildOriginalOption;
 	private destroyOriginalOption;
@@ -308,8 +310,9 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	recalculateDirection(): boolean;
 	isOpened(): boolean;
 	containsElement(element: HTMLElement): boolean;
+	containsDropdownElement(element: HTMLElement): boolean;
 	private static findInCollection;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HSSelect | ICollectionItem<HSSelect>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 	static open(target: HSSelect | HTMLElement | string): void;
 	static close(target: HSSelect | HTMLElement | string): void;

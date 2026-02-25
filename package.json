@@ -1,9 +1,44 @@
 {
 	"name": "preline",
-	"version": "4.0.0",
+	"version": "4.1.0",
 	"description": "Preline UI is an open-source set of prebuilt UI components based on the utility-first Tailwind CSS framework.",
-	"main": "index.js",
-	"module": "./src/index.ts",
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.js"
+		},
+		"./non-auto": {
+			"types": "./dist/non-auto.d.ts",
+			"import": "./dist/non-auto.mjs",
+			"require": "./dist/non-auto.js"
+		},
+		"./plugins/*": {
+			"types": "./dist/*.d.ts",
+			"import": "./dist/*.mjs",
+			"require": "./dist/*.js"
+		},
+		"./helpers/*": {
+			"types": "./dist/helper-*.d.ts",
+			"import": "./dist/helper-*.mjs",
+			"require": "./dist/helper-*.js"
+		},
+		"./utils": {
+			"types": "./dist/utils.d.ts",
+			"import": "./dist/utils.mjs",
+			"require": "./dist/utils.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"sideEffects": [
+		"./dist/index.js",
+		"./dist/index.mjs",
+		"./dist/helper-clipboard.js",
+		"./dist/helper-clipboard.mjs"
+	],
 	"bin": {
 		"preline-theme-generator": "./skills/theme-generator/scripts/generate-theme.js"
 	},
@@ -69,10 +104,11 @@
 	"scripts": {
 		"watch": "webpack --config webpack.config.js --watch",
 		"watch:mjs": "webpack --config webpack.config.mjs.js --watch",
-		"build": "webpack --config webpack.config.js",
+		"build:js": "webpack --config webpack.config.js",
 		"build:mjs": "webpack --config webpack.config.mjs.js",
+		"build": "npm run build:js && npm run build:mjs && npm run generate-dts",
 		"pretty": "prettier --write --cache \"./**/*.{js,jsx,ts,tsx,json}\"",
-		"generate-dts": "dts-bundle-generator --config dts-config.js"
+		"generate-dts": "tsc -p tsconfig.dts.json && node ./scripts/flatten-dts.js"
 	},
 	"dependencies": {
 		"@floating-ui/dom": "^1.6.13",

@@ -1,21 +1,3 @@
-export interface IBasePlugin<O, E> {
-	el: E;
-	options?: O;
-	events?: {};
-}
-declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
-	el: E;
-	options: O;
-	events?: any;
-	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
-	fireEvent(evt: string, payload?: any): any;
-	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
 export interface ILayoutSplitterOptions {
 	horizontalSplitterClasses?: string | null;
 	horizontalSplitterTemplate?: string;
@@ -39,6 +21,20 @@ export interface ILayoutSplitter {
 		breakpoints: Record<number, number>;
 	}>): void;
 	destroy(): void;
+}
+export interface IBasePlugin<O, E> {
+	el: E;
+	options?: O;
+	events?: {};
+}
+declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
+	el: E;
+	options: O;
+	events?: any;
+	constructor(el: E, options: O, events?: any);
+	createCollection(collection: any[], element: any): void;
+	fireEvent(evt: string, payload?: any): any;
+	on(evt: string, cb: Function): void;
 }
 declare class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements ILayoutSplitter {
 	static isListenersInitialized: boolean;
@@ -89,7 +85,7 @@ declare class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> impl
 	destroy(): void;
 	private static findInCollection;
 	static autoInit(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSLayoutSplitter>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static on(evt: string, target: HSLayoutSplitter | HTMLElement | string, cb: Function): void;
 }
 

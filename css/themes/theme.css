@@ -239,8 +239,8 @@
   --color-popover-line: var(--popover-line);
 
   --color-tooltip: var(--tooltip);
-  --color-tooltip-foreground: var(--tooltip-foreground);
   --color-tooltip-line: var(--tooltip-line);
+  --color-tooltip-foreground: var(--tooltip-foreground);
 
   --color-table-line: var(--table-line);
   
@@ -443,8 +443,8 @@
   --popover-line: var(--color-gray-100);
 
   --tooltip: var(--color-gray-900);
-  --tooltip-foreground: var(--color-white);
   --tooltip-line: transparent;
+  --tooltip-foreground: var(--color-white);
   
   --table-line: var(--color-gray-200);
   
@@ -704,8 +704,8 @@
   --popover-line: var(--color-neutral-700);
 
   --tooltip: var(--color-white);
-  --tooltip-foreground: var(--color-neutral-800);
   --tooltip-line: transparent;
+  --tooltip-foreground: var(--color-neutral-800);
 
   --table-line: var(--color-neutral-700);
 

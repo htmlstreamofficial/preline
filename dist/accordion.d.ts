@@ -1,21 +1,3 @@
-export interface IBasePlugin<O, E> {
-	el: E;
-	options?: O;
-	events?: {};
-}
-declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
-	el: E;
-	options: O;
-	events?: any;
-	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
-	fireEvent(evt: string, payload?: any): any;
-	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
 export interface IAccordionTreeViewStaticOptions {
 }
 export interface IAccordionTreeView {
@@ -36,6 +18,20 @@ export interface IAccordion {
 	update(): void;
 	destroy(): void;
 }
+export interface IBasePlugin<O, E> {
+	el: E;
+	options?: O;
+	events?: {};
+}
+declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
+	el: E;
+	options: O;
+	events?: any;
+	constructor(el: E, options: O, events?: any);
+	createCollection(collection: any[], element: any): void;
+	fireEvent(evt: string, payload?: any): any;
+	on(evt: string, cb: Function): void;
+}
 declare class HSAccordion extends HSBasePlugin<IAccordionOptions> implements IAccordion {
 	private toggle;
 	content: HTMLElement | null;
@@ -54,7 +50,7 @@ declare class HSAccordion extends HSBasePlugin<IAccordionOptions> implements IAc
 	destroy(): void;
 	private static findInCollection;
 	static autoInit(): void;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSAccordion>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static show(target: HSAccordion | HTMLElement | string): void;
 	static hide(target: HSAccordion | HTMLElement | string): void;
 	static onSelectableClick: (evt: Event, item: IAccordionTreeView, el: HTMLElement) => void;

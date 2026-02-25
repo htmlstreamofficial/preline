@@ -1,21 +1,3 @@
-export interface IBasePlugin<O, E> {
-	el: E;
-	options?: O;
-	events?: {};
-}
-declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
-	el: E;
-	options: O;
-	events?: any;
-	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
-	fireEvent(evt: string, payload?: any): any;
-	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
 export interface IOverlayOptions {
 	hiddenClass?: string | null;
 	emulateScrollbarSpace?: boolean;
@@ -32,6 +14,24 @@ export interface IOverlay {
 	destroy(): void;
 }
 export type TOverlayOptionsAutoCloseEqualityType = "less-than" | "more-than";
+export interface ICollectionItem<T> {
+	id: string | number;
+	element: T;
+}
+export interface IBasePlugin<O, E> {
+	el: E;
+	options?: O;
+	events?: {};
+}
+declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
+	el: E;
+	options: O;
+	events?: any;
+	constructor(el: E, options: O, events?: any);
+	createCollection(collection: any[], element: any): void;
+	fireEvent(evt: string, payload?: any): any;
+	on(evt: string, cb: Function): void;
+}
 declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private accessibilityComponent;
 	private lastFocusedToggle;
@@ -84,12 +84,12 @@ declare class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 	private collectToggleParameters;
 	private isElementVisible;
 	private isOpened;
-	open(cb?: Function | null): Promise<void>;
+	open(cb?: Function | null): any;
 	close(forceClose?: boolean, cb?: Function | null): Promise<unknown>;
 	updateToggles(): void;
 	destroy(): void;
 	private static findInCollection;
-	static getInstance(target: HTMLElement | string, isInstance?: boolean): HTMLElement | ICollectionItem<HSOverlay>;
+	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
 	static open(target: HSOverlay | HTMLElement | string): void;
 	static close(target: HSOverlay | HTMLElement | string): void;

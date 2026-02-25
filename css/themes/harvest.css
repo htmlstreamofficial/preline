@@ -270,6 +270,7 @@
   --primary-checked: var(--color-primary-300);
 
   --secondary: var(--color-white);
+  --secondary-foreground: var(--color-stone-800);
   --secondary-hover: var(--color-stone-100);
   --secondary-focus: var(--color-stone-100);
   --secondary-active: var(--color-stone-100);
@@ -408,6 +409,7 @@
   --chart-primary: var(--color-primary-300);
   --chart-5: var(--color-primary-600);
   --chart-6: var(--color-sky-400);
+  --chart-7: var(--color-lime-700);
   --chart-8: var(--color-stone-700);
   --chart-9: var(--color-stone-500);
   --chart-10: var(--color-stone-700);

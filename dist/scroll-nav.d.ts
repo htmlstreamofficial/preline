@@ -1,21 +1,3 @@
-export interface IBasePlugin<O, E> {
-	el: E;
-	options?: O;
-	events?: {};
-}
-declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
-	el: E;
-	options: O;
-	events?: any;
-	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
-	fireEvent(evt: string, payload?: any): any;
-	on(evt: string, cb: Function): void;
-}
-export interface ICollectionItem<T> {
-	id: string | number;
-	element: T;
-}
 export interface IScrollNavOptions {
 	paging?: boolean;
 	autoCentering?: boolean;
@@ -31,6 +13,20 @@ export interface IScrollNav {
 	goTo(el: Element, cb?: () => void): void;
 	centerElement(el: HTMLElement, behavior: ScrollBehavior): void;
 	destroy(): void;
+}
+export interface IBasePlugin<O, E> {
+	el: E;
+	options?: O;
+	events?: {};
+}
+declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
+	el: E;
+	options: O;
+	events?: any;
+	constructor(el: E, options: O, events?: any);
+	createCollection(collection: any[], element: any): void;
+	fireEvent(evt: string, payload?: any): any;
+	on(evt: string, cb: Function): void;
 }
 declare class HSScrollNav extends HSBasePlugin<IScrollNavOptions> implements IScrollNav {
 	private readonly paging;
@@ -58,7 +54,7 @@ declare class HSScrollNav extends HSBasePlugin<IScrollNavOptions> implements ISc
 	goTo(el: Element, cb?: () => void): void;
 	centerElement(el: HTMLElement, behavior?: ScrollBehavior): void;
 	destroy(): void;
-	static getInstance(target: HTMLElement, isInstance?: boolean): HTMLElement | ICollectionItem<HSScrollNav>;
+	static getInstance(target: HTMLElement, isInstance?: boolean): any;
 	static autoInit(): void;
 }
 

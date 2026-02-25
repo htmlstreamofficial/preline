@@ -157,7 +157,7 @@
 }
 
 .vc-months {
-  @apply grid grid-cols-4 gap-3;
+  @apply grid grid-cols-4 gap-3 px-3 pb-3;
 }
 
 .vc-months__month {
@@ -215,7 +215,7 @@
 }
 
 .vc-years {
-  @apply grid grid-cols-5 gap-2;
+  @apply grid grid-cols-5 gap-2 px-3 pb-3;
 }
 
 .vc-years__year {

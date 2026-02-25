@@ -13,8 +13,18 @@ const config = {
 	},
 	entries: [
 		{
+			filePath: './src/globals.ts',
+			outFile: './dist/globals.d.ts',
+			output: outputConfig,
+		},
+		{
 			filePath: './src/index.ts',
 			outFile: './dist/index.d.ts',
+			output: outputConfig,
+		},
+		{
+			filePath: './src/auto/index.ts',
+			outFile: './dist/auto.d.ts',
 			output: outputConfig,
 		},
 		...fs
@@ -29,15 +39,23 @@ const config = {
 };
 
 function writeFile(dir, plugin, prefix = '') {
-	if (
-		!fs.lstatSync(`${dir}/${plugin}`).isDirectory() ||
-		excludePlugins.includes(plugin)
-	) {
+	const pluginDir = `${dir}/${plugin}`;
+	if (!fs.lstatSync(pluginDir).isDirectory() || excludePlugins.includes(plugin)) {
+		return null;
+	}
+
+	const corePath = `${pluginDir}/core.ts`;
+	const indexPath = `${pluginDir}/index.ts`;
+	let filePath = indexPath;
+
+	if (fs.existsSync(corePath)) {
+		filePath = corePath;
+	} else if (!fs.existsSync(indexPath)) {
 		return null;
 	}
 
 	return {
-		filePath: `${dir}/${plugin}/index.ts`,
+		filePath,
 		outFile: `${distDir}/${prefix}${plugin}.d.ts`,
 		output: outputConfig,
 	};
