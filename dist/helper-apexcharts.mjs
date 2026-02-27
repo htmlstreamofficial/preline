@@ -1,6 +1,6 @@
 import*as e from"ApexCharts";var t={d:(e,s)=>{for(var a in s)t.o(s,a)&&!t.o(e,a)&&Object.defineProperty(e,a,{enumerable:!0,get:s[a]})},o:(e,t)=>Object.prototype.hasOwnProperty.call(e,t)};const s=(e=>{var s={};return t.d(s,e),s})({default:()=>e.default});
 /*
- * @version: 4.1.0
+ * @version: 4.1.2
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

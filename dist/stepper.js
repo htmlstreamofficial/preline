@@ -1,6 +1,6 @@
 !function(t,e){if("object"==typeof exports&&"object"==typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var s=e();for(var i in s)("object"==typeof exports?exports:t)[i]=s[i]}}(self,(()=>(()=>{"use strict";var t={292:function(t,e){
 /*
- * @version: 4.1.0
+ * @version: 4.1.2
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -8,15 +8,15 @@
 Object.defineProperty(e,"__esModule",{value:!0}),e.stringToBoolean=e.menuSearchHistory=e.isScrollable=e.isParentOrElementHidden=e.isJson=e.isIpadOS=e.isIOS=e.isFormElement=e.isFocused=e.isEnoughSpace=e.isDirectChild=e.htmlToElement=e.getZIndex=e.getHighestZIndex=e.getClassPropertyAlt=e.getClassProperty=e.dispatch=e.debounce=e.classToClassList=e.afterTransition=void 0;e.stringToBoolean=t=>"true"===t;e.getClassProperty=(t,e,s="")=>(window.getComputedStyle(t).getPropertyValue(e)||s).replace(" ","");e.getClassPropertyAlt=(t,e,s="")=>{let i="";return t.classList.forEach((t=>{t.includes(e)&&(i=t)})),i.match(/:(.*)]/)?i.match(/:(.*)]/)[1]:s};const s=t=>window.getComputedStyle(t).getPropertyValue("z-index");e.getZIndex=s;e.getHighestZIndex=t=>{let e=Number.NEGATIVE_INFINITY;return t.forEach((t=>{let i=s(t);"auto"!==i&&(i=parseInt(i,10),i>e&&(e=i))})),e};e.isDirectChild=(t,e)=>{const s=t.children;for(let t=0;t<s.length;t++)if(s[t]===e)return!0;return!1};e.isEnoughSpace=(t,e,s="auto",i=10,n=null)=>{const o=e.getBoundingClientRect(),l=n?n.getBoundingClientRect():null,r=window.innerHeight,h=l?o.top-l.top:o.top,c=(n?l.bottom:r)-o.bottom,a=t.clientHeight+i;return"bottom"===s?c>=a:"top"===s?h>=a:h>=a||c>=a};e.isFocused=t=>document.activeElement===t;e.isFormElement=t=>t instanceof HTMLInputElement||t instanceof HTMLTextAreaElement||t instanceof HTMLSelectElement;e.isIOS=()=>!!/iPad|iPhone|iPod/.test(navigator.platform)||navigator.maxTouchPoints&&navigator.maxTouchPoints>2&&/MacIntel/.test(navigator.platform);e.isIpadOS=()=>navigator.maxTouchPoints&&navigator.maxTouchPoints>2&&/MacIntel/.test(navigator.platform);e.isJson=t=>{if("string"!=typeof t)return!1;const e=t.trim()[0],s=t.trim().slice(-1);if("{"===e&&"}"===s||"["===e&&"]"===s)try{return JSON.parse(t),!0}catch(t){return!1}return!1};const i=t=>{if(!t)return!1;return"none"===window.getComputedStyle(t).display||i(t.parentElement)};e.isParentOrElementHidden=i;e.isScrollable=t=>{const e=window.getComputedStyle(t),s=e.overflowY,i=e.overflowX,n=("scroll"===s||"auto"===s)&&t.scrollHeight>t.clientHeight,o=("scroll"===i||"auto"===i)&&t.scrollWidth>t.clientWidth;return n||o};e.debounce=(t,e=200)=>{let s;return(...i)=>{clearTimeout(s),s=setTimeout((()=>{t.apply(this,i)}),e)}};e.dispatch=(t,e,s=null)=>{const i=new CustomEvent(t,{detail:{payload:s},bubbles:!0,cancelable:!0,composed:!1});e.dispatchEvent(i)};e.afterTransition=(t,e)=>{const s=()=>{e(),t.removeEventListener("transitionend",s,!0)},i=window.getComputedStyle(t),n=i.getPropertyValue("transition-duration");"none"!==i.getPropertyValue("transition-property")&&parseFloat(n)>0?t.addEventListener("transitionend",s,!0):e()};e.htmlToElement=t=>{const e=document.createElement("template");return t=t.trim(),e.innerHTML=t,e.content.firstChild};e.classToClassList=(t,e,s=" ",i="add")=>{t.split(s).forEach((t=>{t.trim()&&("add"===i?e.classList.add(t):e.classList.remove(t))}))};const n={historyIndex:-1,addHistory(t){this.historyIndex=t},existsInHistory(t){return t>this.historyIndex},clearHistory(){this.historyIndex=-1}};e.menuSearchHistory=n},2961:(t,e)=>{
 /*
  * HSBasePlugin
- * @version: 4.1.0
+ * @version: 4.1.2
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
-Object.defineProperty(e,"__esModule",{value:!0});e.default=class{constructor(t,e,s){this.el=t,this.options=e,this.events=s,this.el=t,this.options=e,this.events={}}createCollection(t,e){var s;t.push({id:(null===(s=null==e?void 0:e.el)||void 0===s?void 0:s.id)||t.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},8572:function(t,e,s){
+Object.defineProperty(e,"__esModule",{value:!0});e.default=class{constructor(t,e,s){this.el=t,this.options=e,this.events=s,this.el=t,this.options=e,this.events={}}createCollection(t,e){var s,i;let n=t;if(!Array.isArray(n)&&"undefined"!=typeof window){const t=null===(s=this.constructor)||void 0===s?void 0:s.name,e="string"==typeof t&&t.startsWith("HS")?`$hs${t.slice(2)}Collection`:null;e&&(Array.isArray(window[e])||(window[e]=[]),n=window[e])}Array.isArray(n)&&n.push({id:(null===(i=null==e?void 0:e.el)||void 0===i?void 0:i.id)||n.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},8572:function(t,e,s){
 /*
  * HSStepper
- * @version: 4.1.0
+ * @version: 4.1.2
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

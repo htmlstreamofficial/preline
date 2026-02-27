@@ -1,14 +1,14 @@
 var t={615:(t,e,s)=>{s.d(e,{A:()=>o});
 /*
  * HSBasePlugin
- * @version: 4.1.0
+ * @version: 4.1.2
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
-class o{constructor(t,e,s){this.el=t,this.options=e,this.events=s,this.el=t,this.options=e,this.events={}}createCollection(t,e){var s;t.push({id:(null===(s=null==e?void 0:e.el)||void 0===s?void 0:s.id)||t.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},926:(t,e,s)=>{s.d(e,{JD:()=>i,V6:()=>o});
+class o{constructor(t,e,s){this.el=t,this.options=e,this.events=s,this.el=t,this.options=e,this.events={}}createCollection(t,e){var s,o;let i=t;if(!Array.isArray(i)&&"undefined"!=typeof window){const t=null===(s=this.constructor)||void 0===s?void 0:s.name,e="string"==typeof t&&t.startsWith("HS")?`$hs${t.slice(2)}Collection`:null;e&&(Array.isArray(window[e])||(window[e]=[]),i=window[e])}Array.isArray(i)&&i.push({id:(null===(o=null==e?void 0:e.el)||void 0===o?void 0:o.id)||i.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},926:(t,e,s)=>{s.d(e,{JD:()=>i,V6:()=>o});
 /*
- * @version: 4.1.0
+ * @version: 4.1.2
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -16,7 +16,7 @@ class o{constructor(t,e,s){this.el=t,this.options=e,this.events=s,this.el=t,this
 const o=t=>t instanceof HTMLInputElement||t instanceof HTMLTextAreaElement||t instanceof HTMLSelectElement,i=(t,e,s=null)=>{const o=new CustomEvent(t,{detail:{payload:s},bubbles:!0,cancelable:!0,composed:!1});e.dispatchEvent(o)}}},e={};function s(o){var i=e[o];if(void 0!==i)return i.exports;var l=e[o]={exports:{}};return t[o](l,l.exports,s),l.exports}s.d=(t,e)=>{for(var o in e)s.o(e,o)&&!s.o(t,o)&&Object.defineProperty(t,o,{enumerable:!0,get:e[o]})},s.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e);var o={};s.d(o,{A:()=>r});var i=s(926),l=s(615);
 /*
  * HSTogglePassword
- * @version: 4.1.0
+ * @version: 4.1.2
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

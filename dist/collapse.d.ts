@@ -14,7 +14,7 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	options: O;
 	events?: any;
 	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
+	createCollection(collection: any[] | undefined, element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
 }

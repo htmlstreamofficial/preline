@@ -25,7 +25,7 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	options: O;
 	events?: any;
 	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
+	createCollection(collection: any[] | undefined, element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
 }
@@ -292,6 +292,7 @@ export interface IComboBox {
 	destroy(): void;
 }
 export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
+	private static globalListenersInitialized;
 	gap: number;
 	viewport: string | HTMLElement | null;
 	preventVisibility: boolean;
@@ -397,6 +398,7 @@ export declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implement
 	destroy(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
+	private static ensureGlobalHandlers;
 	static close(target: HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;
 }
@@ -683,6 +685,7 @@ export interface IHTMLElementFloatingUI extends HTMLElement {
 	_floatingUI: any;
 }
 export declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDropdown {
+	private static globalListenersInitialized;
 	private accessibilityComponent;
 	private readonly toggle;
 	private readonly closers;
@@ -733,6 +736,7 @@ export declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI>
 	private static findInCollection;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
+	private static ensureGlobalHandlers;
 	static open(target: HSDropdown | HTMLElement | string, openedViaKeyboard?: boolean): void;
 	static close(target: HSDropdown | HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null, isAnimated?: boolean): void;
@@ -846,6 +850,7 @@ export interface ILayoutSplitter {
 }
 export declare class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements ILayoutSplitter {
 	static isListenersInitialized: boolean;
+	static isWindowListenersInitialized: boolean;
 	private readonly horizontalSplitterClasses;
 	private readonly horizontalSplitterTemplate;
 	private readonly verticalSplitterClasses;
@@ -893,6 +898,7 @@ export declare class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOption
 	destroy(): void;
 	private static findInCollection;
 	static autoInit(): void;
+	private static ensureGlobalHandlers;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static on(evt: string, target: HSLayoutSplitter | HTMLElement | string, cb: Function): void;
 }
@@ -1156,6 +1162,7 @@ export declare class HSScrollspy extends HSBasePlugin<IScrollspyOptions> impleme
 	static autoInit(): void;
 }
 export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
+	private static globalListenersInitialized;
 	private accessibilityComponent;
 	value: string | string[] | null;
 	private readonly placeholder;
@@ -1339,6 +1346,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private static findInCollection;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
+	private static ensureGlobalHandlers;
 	static open(target: HSSelect | HTMLElement | string): void;
 	static close(target: HSSelect | HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;

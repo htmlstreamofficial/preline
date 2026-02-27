@@ -126,11 +126,12 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	options: O;
 	events?: any;
 	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
+	createCollection(collection: any[] | undefined, element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
 }
 declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
+	private static globalListenersInitialized;
 	private accessibilityComponent;
 	value: string | string[] | null;
 	private readonly placeholder;
@@ -314,6 +315,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private static findInCollection;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
+	private static ensureGlobalHandlers;
 	static open(target: HSSelect | HTMLElement | string): void;
 	static close(target: HSSelect | HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;

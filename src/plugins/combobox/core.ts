@@ -1,6 +1,6 @@
 /*
  * HSComboBox
- * @version: 4.1.0
+ * @version: 4.1.2
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -25,6 +25,8 @@ import { IAccessibilityComponent } from '../accessibility-manager/interfaces';
 import HSAccessibilityObserver from '../accessibility-manager';
 
 class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
+	private static globalListenersInitialized = false;
+
 	gap: number;
 	viewport: string | HTMLElement | null;
 	preventVisibility: boolean;
@@ -215,6 +217,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	}
 
 	private init() {
+		HSComboBox.ensureGlobalHandlers();
 		this.createCollection(window.$hsComboBoxCollection, this);
 
 		this.build();
@@ -1296,15 +1299,7 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	}
 
 	static autoInit() {
-		if (!window.$hsComboBoxCollection) {
-			window.$hsComboBoxCollection = [];
-
-			window.addEventListener('click', (evt) => {
-				const evtTarget = evt.target;
-
-				HSComboBox.closeCurrentlyOpened(evtTarget as HTMLElement);
-			});
-		}
+		HSComboBox.ensureGlobalHandlers();
 
 		if (window.$hsComboBoxCollection) {
 			window.$hsComboBoxCollection = window.$hsComboBoxCollection.filter(
@@ -1326,6 +1321,21 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 					new HSComboBox(el, options);
 				}
 			});
+	}
+
+	private static ensureGlobalHandlers() {
+		if (typeof window === 'undefined') return;
+
+		if (!window.$hsComboBoxCollection) window.$hsComboBoxCollection = [];
+		if (HSComboBox.globalListenersInitialized) return;
+
+		HSComboBox.globalListenersInitialized = true;
+
+		window.addEventListener('click', (evt) => {
+			const evtTarget = evt.target;
+
+			HSComboBox.closeCurrentlyOpened(evtTarget as HTMLElement);
+		});
 	}
 
 	static close(target: HTMLElement | string) {

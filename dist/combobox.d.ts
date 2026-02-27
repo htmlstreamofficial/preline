@@ -42,11 +42,12 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	options: O;
 	events?: any;
 	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
+	createCollection(collection: any[] | undefined, element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
 }
 declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
+	private static globalListenersInitialized;
 	gap: number;
 	viewport: string | HTMLElement | null;
 	preventVisibility: boolean;
@@ -152,6 +153,7 @@ declare class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComb
 	destroy(): void;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
+	private static ensureGlobalHandlers;
 	static close(target: HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null): void;
 }

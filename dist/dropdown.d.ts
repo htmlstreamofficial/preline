@@ -20,11 +20,12 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	options: O;
 	events?: any;
 	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
+	createCollection(collection: any[] | undefined, element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
 }
 declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDropdown {
+	private static globalListenersInitialized;
 	private accessibilityComponent;
 	private readonly toggle;
 	private readonly closers;
@@ -75,6 +76,7 @@ declare class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implem
 	private static findInCollection;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static autoInit(): void;
+	private static ensureGlobalHandlers;
 	static open(target: HSDropdown | HTMLElement | string, openedViaKeyboard?: boolean): void;
 	static close(target: HSDropdown | HTMLElement | string): void;
 	static closeCurrentlyOpened(evtTarget?: HTMLElement | null, isAnimated?: boolean): void;

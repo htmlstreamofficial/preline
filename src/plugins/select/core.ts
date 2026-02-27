@@ -1,6 +1,6 @@
 /*
  * HSSelect
- * @version: 4.1.0
+ * @version: 4.1.2
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -31,6 +31,8 @@ import HSAccessibilityObserver from '../accessibility-manager';
 import { POSITIONS } from '../../constants';
 
 class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
+	private static globalListenersInitialized = false;
+
 	private accessibilityComponent: IAccessibilityComponent;
 
 	value: string | string[] | null;
@@ -437,6 +439,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	}
 
 	private init() {
+		HSSelect.ensureGlobalHandlers();
 		this.createCollection(window.$hsSelectCollection, this);
 
 		this.build();
@@ -2756,15 +2759,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	}
 
 	static autoInit() {
-		if (!window.$hsSelectCollection) {
-			window.$hsSelectCollection = [];
-
-			window.addEventListener('click', (evt) => {
-				const evtTarget = evt.target;
-
-				HSSelect.closeCurrentlyOpened(evtTarget as HTMLElement);
-			});
-		}
+		HSSelect.ensureGlobalHandlers();
 
 		if (window.$hsSelectCollection) {
 			window.$hsSelectCollection = window.$hsSelectCollection.filter(
@@ -2786,6 +2781,21 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 					new HSSelect(el, options);
 				}
 			});
+	}
+
+	private static ensureGlobalHandlers() {
+		if (typeof window === 'undefined') return;
+
+		if (!window.$hsSelectCollection) window.$hsSelectCollection = [];
+		if (HSSelect.globalListenersInitialized) return;
+
+		HSSelect.globalListenersInitialized = true;
+
+		window.addEventListener('click', (evt) => {
+			const evtTarget = evt.target;
+
+			HSSelect.closeCurrentlyOpened(evtTarget as HTMLElement);
+		});
 	}
 
 	static open(target: HSSelect | HTMLElement | string) {

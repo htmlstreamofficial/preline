@@ -32,12 +32,13 @@ declare class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, E> {
 	options: O;
 	events?: any;
 	constructor(el: E, options: O, events?: any);
-	createCollection(collection: any[], element: any): void;
+	createCollection(collection: any[] | undefined, element: any): void;
 	fireEvent(evt: string, payload?: any): any;
 	on(evt: string, cb: Function): void;
 }
 declare class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements ILayoutSplitter {
 	static isListenersInitialized: boolean;
+	static isWindowListenersInitialized: boolean;
 	private readonly horizontalSplitterClasses;
 	private readonly horizontalSplitterTemplate;
 	private readonly verticalSplitterClasses;
@@ -85,6 +86,7 @@ declare class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> impl
 	destroy(): void;
 	private static findInCollection;
 	static autoInit(): void;
+	private static ensureGlobalHandlers;
 	static getInstance(target: HTMLElement | string, isInstance?: boolean): any;
 	static on(evt: string, target: HSLayoutSplitter | HTMLElement | string, cb: Function): void;
 }

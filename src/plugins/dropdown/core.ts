@@ -1,6 +1,6 @@
 /*
  * HSDropdown
- * @version: 4.1.0
+ * @version: 4.1.2
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -35,6 +35,8 @@ import { IAccessibilityComponent } from "../accessibility-manager/interfaces";
 import { POSITIONS } from "../../constants";
 
 class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDropdown {
+	private static globalListenersInitialized = false;
+
 	private accessibilityComponent: IAccessibilityComponent;
 
 	private readonly toggle: HTMLElement | null;
@@ -136,6 +138,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 	}
 
 	private init() {
+		HSDropdown.ensureGlobalHandlers();
 		this.createCollection(window.$hsDropdownCollection, this);
 
 		if ((this.toggle as HTMLButtonElement).disabled) return false;
@@ -747,23 +750,7 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 	}
 
 	static autoInit() {
-		if (!window.$hsDropdownCollection) {
-			window.$hsDropdownCollection = [];
-
-			window.addEventListener("click", (evt) => {
-				const evtTarget = evt.target;
-
-				HSDropdown.closeCurrentlyOpened(evtTarget as HTMLElement);
-			});
-
-			let prevWidth = window.innerWidth;
-			window.addEventListener("resize", () => {
-				if (window.innerWidth !== prevWidth) {
-					prevWidth = innerWidth;
-					HSDropdown.closeCurrentlyOpened(null, false);
-				}
-			});
-		}
+		HSDropdown.ensureGlobalHandlers();
 
 		if (window.$hsDropdownCollection) {
 			window.$hsDropdownCollection = window.$hsDropdownCollection.filter(
@@ -782,6 +769,30 @@ class HSDropdown extends HSBasePlugin<{}, IHTMLElementFloatingUI> implements IDr
 					new HSDropdown(el);
 				}
 			});
+	}
+
+	private static ensureGlobalHandlers() {
+		if (typeof window === "undefined") return;
+
+		if (!window.$hsDropdownCollection) window.$hsDropdownCollection = [];
+
+		if (HSDropdown.globalListenersInitialized) return;
+
+		HSDropdown.globalListenersInitialized = true;
+
+		window.addEventListener("click", (evt) => {
+			const evtTarget = evt.target;
+
+			HSDropdown.closeCurrentlyOpened(evtTarget as HTMLElement);
+		});
+
+		let prevWidth = window.innerWidth;
+		window.addEventListener("resize", () => {
+			if (window.innerWidth !== prevWidth) {
+				prevWidth = innerWidth;
+				HSDropdown.closeCurrentlyOpened(null, false);
+			}
+		});
 	}
 
 	static open(

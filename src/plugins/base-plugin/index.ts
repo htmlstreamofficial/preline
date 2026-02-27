@@ -1,6 +1,6 @@
 /*
  * HSBasePlugin
- * @version: 4.1.0
+ * @version: 4.1.2
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -19,9 +19,29 @@ export default class HSBasePlugin<O, E = HTMLElement> implements IBasePlugin<O, 
 		this.events = {};
 	}
 
-	public createCollection(collection: any[], element: any) {
-		collection.push({
-			id: element?.el?.id || collection.length + 1,
+	public createCollection(collection: any[] | undefined, element: any) {
+		let targetCollection = collection;
+
+		if (!Array.isArray(targetCollection) && typeof window !== 'undefined') {
+			const pluginName = this.constructor?.name;
+			const collectionName =
+				typeof pluginName === 'string' && pluginName.startsWith('HS')
+					? `$hs${pluginName.slice(2)}Collection`
+					: null;
+
+			if (collectionName) {
+				if (!Array.isArray((window as any)[collectionName])) {
+					(window as any)[collectionName] = [];
+				}
+
+				targetCollection = (window as any)[collectionName];
+			}
+		}
+
+		if (!Array.isArray(targetCollection)) return;
+
+		targetCollection.push({
+			id: element?.el?.id || targetCollection.length + 1,
 			element,
 		});
 	}

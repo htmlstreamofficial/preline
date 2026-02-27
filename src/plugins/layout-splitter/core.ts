@@ -1,6 +1,6 @@
 /*
  * HSLayoutSplitter
- * @version: 4.1.0
+ * @version: 4.1.2
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -19,6 +19,7 @@ import { ICollectionItem } from '../../interfaces';
 
 class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements ILayoutSplitter {
 	static isListenersInitialized = false;
+	static isWindowListenersInitialized = false;
 
 	private readonly horizontalSplitterClasses: string | null;
 	private readonly horizontalSplitterTemplate: string;
@@ -133,6 +134,7 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 	};
 
 	private init() {
+		HSLayoutSplitter.ensureGlobalHandlers();
 		this.createCollection(window.$hsLayoutSplitterCollection, this);
 		this.buildSplitters();
 
@@ -638,31 +640,7 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 	}
 
 	static autoInit() {
-		if (!window.$hsLayoutSplitterCollection) {
-			window.$hsLayoutSplitterCollection = [];
-
-			window.addEventListener('pointerup', () => {
-				if (!window.$hsLayoutSplitterCollection) return false;
-
-				const draggingElement = document.querySelector(
-					'.hs-layout-splitter-control.dragging',
-				);
-				const draggingSections = document.querySelectorAll(
-					'[data-hs-layout-splitter-item].dragging',
-				);
-
-				if (!draggingElement) return false;
-
-				const draggingInstance = HSLayoutSplitter.getInstance(
-					draggingElement.closest('[data-hs-layout-splitter]') as HTMLElement,
-					true,
-				) as ICollectionItem<HSLayoutSplitter>;
-
-				draggingElement.classList.remove('dragging');
-				draggingSections.forEach((el) => el.classList.remove('dragging'));
-				draggingInstance.element.isDragging = false;
-			});
-		}
+		HSLayoutSplitter.ensureGlobalHandlers();
 
 		if (window.$hsLayoutSplitterCollection)
 			window.$hsLayoutSplitterCollection =
@@ -682,6 +660,39 @@ class HSLayoutSplitter extends HSBasePlugin<ILayoutSplitterOptions> implements I
 				)
 					new HSLayoutSplitter(el);
 			});
+	}
+
+	private static ensureGlobalHandlers() {
+		if (typeof window === 'undefined') return;
+
+		if (!window.$hsLayoutSplitterCollection) {
+			window.$hsLayoutSplitterCollection = [];
+		}
+
+		if (HSLayoutSplitter.isWindowListenersInitialized) return;
+		HSLayoutSplitter.isWindowListenersInitialized = true;
+
+		window.addEventListener('pointerup', () => {
+			if (!window.$hsLayoutSplitterCollection) return false;
+
+			const draggingElement = document.querySelector(
+				'.hs-layout-splitter-control.dragging',
+			);
+			const draggingSections = document.querySelectorAll(
+				'[data-hs-layout-splitter-item].dragging',
+			);
+
+			if (!draggingElement) return false;
+
+			const draggingInstance = HSLayoutSplitter.getInstance(
+				draggingElement.closest('[data-hs-layout-splitter]') as HTMLElement,
+				true,
+			) as ICollectionItem<HSLayoutSplitter>;
+
+			draggingElement.classList.remove('dragging');
+			draggingSections.forEach((el) => el.classList.remove('dragging'));
+			draggingInstance.element.isDragging = false;
+		});
 	}
 
 	static getInstance(target: HTMLElement | string, isInstance?: boolean) {
