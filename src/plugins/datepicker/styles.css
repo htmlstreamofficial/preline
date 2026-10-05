@@ -85,7 +85,11 @@
   }
 
   &[data-vc-date-today] {
-    @apply bg-primary-600 text-white;
+    @apply text-primary-600;
+
+    &::before {
+      @apply border-primary-600;
+    }
   }
 
   &[data-vc-date-selected] {
@@ -135,7 +139,7 @@
       @apply rounded-none;
     }
 
-    &:not([data-vc-date-today]):not([data-vc-date-hover="first-and-last"]) {
+    &:not([data-vc-date-hover="first-and-last"]) {
       @apply bg-primary-50;
     }
   }
@@ -150,9 +154,18 @@
     @apply text-neutral-600;
   }
 
+  &[data-vc-date-today]:not([data-vc-date-selected]),
+  &[data-vc-date-today][data-vc-date-selected="middle"] {
+    @apply text-primary-500;
+
+    &::before {
+      @apply border-primary-500;
+    }
+  }
+
   &[data-vc-date-hover],
   &[data-vc-date-selected="middle"] {
-    &:not([data-vc-date-today]):not([data-vc-date-hover="first-and-last"]) {
+    &:not([data-vc-date-hover="first-and-last"]) {
       @apply bg-neutral-800;
     }
   }
