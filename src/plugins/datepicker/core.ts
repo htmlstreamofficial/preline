@@ -7,7 +7,12 @@
  */
 
 import { dispatch } from '../../utils';
-import { Calendar, DatesArr, Range } from 'vanilla-calendar-pro';
+import {
+	Calendar,
+	DatesArr,
+	FormatDateString,
+	Range,
+} from 'vanilla-calendar-pro';
 
 import CustomVanillaCalendar from './vanilla-datepicker-pro';
 
@@ -105,6 +110,14 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			onInit: chainCallbacks(this.dataOptions.onInit, (self) => {
 				if (defaults.mode === 'custom-select' && !this.dataOptions.inputMode) {
 					initTime(self);
+				}
+				if (this.dataOptions.showTodayButton) {
+					self.context.mainElement.addEventListener('click', (evt) => {
+						const target = evt.target as HTMLElement;
+
+						if (target.closest('[data-hs-datepicker-today]'))
+							this.selectToday();
+					});
 				}
 			}),
 			onShow: chainCallbacks(this.dataOptions.onShow, (self) => {
@@ -706,6 +719,53 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		return template;
 	}
 
+	private generateCustomTodayMarkup() {
+		if (!this.dataOptions?.showTodayButton) return '';
+
+		const label = this.getLocalizedTodayText(this.dataOptions?.dateLocale);
+
+		return `<div class="vc-footer"><button type="button" class="vc-today" data-hs-datepicker-today>${label}</button></div>`;
+	}
+
+	private parseCustomToday(template: string) {
+		template = template.replace(
+			/<#CustomToday\s*\/>/g,
+			this.generateCustomTodayMarkup(),
+		);
+
+		return template;
+	}
+
+	private selectToday() {
+		const today = new Date();
+		const year = today.getFullYear();
+		const month = today.getMonth() as Range<12>;
+		// Local parts, not toISOString(): that is the UTC date, a day off near midnight.
+		const iso = [
+			year,
+			String(month + 1).padStart(2, '0'),
+			String(today.getDate()).padStart(2, '0'),
+		].join('-') as FormatDateString;
+		const { dateMin, dateMax } = this.vanillaCalendar.context;
+
+		if (iso < dateMin || iso > dateMax) return;
+
+		this.vanillaCalendar.set(
+			{ selectedYear: year, selectedMonth: month },
+			{ year: true, month: true },
+		);
+
+		if (this.vanillaCalendar.context.selectedDates.includes(iso)) return;
+
+		// Clicking the date itself reuses the calendar's own selection path, so
+		// the input, onChangeToInput and the change event behave as for a click.
+		const dateBtn = this.vanillaCalendar.context.mainElement.querySelector(
+			`[data-vc-date="${iso}"]:not([data-vc-date-disabled]) [data-vc-date-btn]`,
+		) as HTMLElement | null;
+
+		dateBtn?.click();
+	}
+
 	private processCustomTemplate(
 		template: string,
 		type: 'default' | 'multiple',
@@ -720,8 +780,11 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		const processedCustomYear = this.parseCustomYear(processedCustomMonth);
 		const processedCustomTime = this.parseCustomTime(processedCustomYear);
 		const processedCustomArrowPrev = this.parseArrowPrev(processedCustomTime);
-		const processedCustomTemplate = this.parseArrowNext(
+		const processedCustomArrowNext = this.parseArrowNext(
 			processedCustomArrowPrev,
+		);
+		const processedCustomTemplate = this.parseCustomToday(
+			processedCustomArrowNext,
 		);
 
 		return processedCustomTemplate;
