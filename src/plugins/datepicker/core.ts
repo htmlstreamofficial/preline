@@ -203,9 +203,12 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 		this.vanillaCalendar.init();
 
-		if (this.dataOptions?.selectedDates) {
+		const { inputElement } = this.vanillaCalendar.context;
+
+		// An inline calendar (inputMode: false) has no input to write to.
+		if (this.dataOptions?.selectedDates && inputElement) {
 			this.setInputValue(
-				this.vanillaCalendar.context.inputElement,
+				inputElement,
 				this.formatDateArrayToIndividualDates(this.dataOptions?.selectedDates),
 			);
 		}
