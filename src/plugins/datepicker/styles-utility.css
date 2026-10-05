@@ -84,6 +84,10 @@
     @apply text-gray-400;
   }
 
+  &[data-vc-date-disabled] {
+    @apply opacity-50 pointer-events-none;
+  }
+
   &[data-vc-date-today] {
     @apply bg-blue-600 text-white;
   }
