@@ -302,3 +302,39 @@
     @apply bg-neutral-800;
   }
 }
+
+.vc-footer {
+  @apply mt-3 pt-3 flex justify-center border-t border-border;
+}
+
+.vc[data-vc-type="multiple"] .vc-footer {
+  @apply mt-0 mx-3;
+}
+
+/* Dark theme for footer */
+.dark .vc:not([data-vc-theme="light"]) .vc-footer {
+  @apply border-neutral-700;
+}
+
+.vc-today {
+  @apply py-1.5 px-2.5 inline-flex items-center text-xs font-medium text-primary-600 rounded-lg;
+
+  &:hover,
+  &:focus {
+    @apply bg-line-1;
+  }
+
+  &:focus {
+    @apply outline-hidden;
+  }
+}
+
+/* Dark theme for today button */
+.dark .vc:not([data-vc-theme="light"]) .vc-today {
+  @apply text-primary-500;
+
+  &:hover,
+  &:focus {
+    @apply bg-neutral-800;
+  }
+}

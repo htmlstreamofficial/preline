@@ -24,6 +24,7 @@ export const templatesBasedOnUtility: ITemplates = {
         <#Dates />
       </div>
     </div>
+    <#CustomToday />
   </div>`,
 	multiple: (theme: string | boolean = false) =>
 		`<div class="relative flex flex-col overflow-hidden">
@@ -54,6 +55,7 @@ export const templatesBasedOnUtility: ITemplates = {
         </div>
       <#/Multiple>
     </div>
+    <#CustomToday />
   </div>`,
 	year: (theme: string | boolean = false) =>
 		`<div class="relative bg-white ${

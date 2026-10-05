@@ -181,6 +181,7 @@ Data options are specified in the `data-hs-datepicker` attribute as a JSON objec
 | `:dateFormat` | Inside `data-hs-datepicker` | string | - | Allows to define a custom date format. |
 | `:dateLocale` | Inside `data-hs-datepicker` | string | - | Allows to define the locale for the datepicker. |
 | `:replaceTodayWithText` | Inside `data-hs-datepicker` | boolean | - | Replace the current day name with the text "Today". |
+| `:showTodayButton` | Inside `data-hs-datepicker` | boolean | `false` | Adds a "Today" button below the dates that jumps to the current month and selects today. The label follows `dateLocale`. When today is outside `dateMin` / `dateMax` the button does nothing. A custom `layouts.default` or `layouts.multiple` places it with `<#CustomToday />`. |
 
 **Example:**
 ```html
@@ -341,6 +342,21 @@ Set a custom date format and separator.
     "inputModeOptions": {
       "dateSeparator": "/"
     }
+  }'>
+```
+
+### Pattern 3: Today Button
+
+Add a shortcut back to the current date. Picking today goes through the same path as clicking the date, so the input and the `change` event update as usual.
+
+```html
+<input
+  class="hs-datepicker"
+  type="text"
+  readonly
+  data-hs-datepicker='{
+    "dateLocale": "es",
+    "showTodayButton": true
   }'>
 ```
 

@@ -27,6 +27,7 @@ export interface ICustomDatepickerOptions extends Options {
 	dateFormat?: string;
 	dateLocale?: string;
 	replaceTodayWithText?: boolean;
+	showTodayButton?: boolean;
 }
 
 export interface IDatepicker {
