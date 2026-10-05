@@ -153,6 +153,8 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 					this.fireEvent('change', data);
 					dispatch('change.hs.datepicker', this.el, data);
+
+					if (this.shouldCloseOnSelect(self)) self.hide();
 				},
 			),
 			onChangeTime: chainCallbacks(this.dataOptions.onChangeTime, initTime),
@@ -362,6 +364,21 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		) as HTMLElement;
 
 		return hours && minutes && meridiem;
+	}
+
+	private shouldCloseOnSelect(self: Calendar) {
+		if (this.dataOptions?.inputModeOptions?.closeOnSelect === false)
+			return false;
+
+		// Only a single date is complete after one click; ranges, multiple dates
+		// and time pickers still expect more input, and an empty selection means
+		// the user just toggled the date off.
+		return (
+			(self.selectionDatesMode ?? 'single') === 'single' &&
+			!self.selectionTimeMode &&
+			!this.hasTime(self) &&
+			self.context.selectedDates.length === 1
+		);
 	}
 
 	private createArrowFromTemplate(
