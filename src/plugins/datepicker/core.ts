@@ -367,8 +367,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	}
 
 	private shouldCloseOnSelect(self: Calendar) {
-		if (this.dataOptions?.inputModeOptions?.closeOnSelect === false)
-			return false;
+		if (!this.dataOptions?.inputModeOptions?.closeOnSelect) return false;
 
 		// Only a single date is complete after one click; ranges, multiple dates
 		// and time pickers still expect more input, and an empty selection means
