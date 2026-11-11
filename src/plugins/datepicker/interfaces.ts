@@ -8,6 +8,7 @@ export interface ICustomDatepickerOptions extends Options {
 	inputModeOptions?: {
 		dateSeparator?: string;
 		itemsSeparator?: string;
+		closeOnSelect?: boolean;
 	};
 	templates?: {
 		time?: string;
