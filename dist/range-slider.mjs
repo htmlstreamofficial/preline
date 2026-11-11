@@ -1,7 +1,7 @@
 var t={7615(t,i,o){o.d(i,{A:()=>e});
 /*
  * HSBasePlugin
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -9,7 +9,7 @@ var t={7615(t,i,o){o.d(i,{A:()=>e});
 class e{constructor(t,i,o){this.el=t,this.options=i,this.events=o,this.el=t,this.options=i,this.events={}}createCollection(t,i){var o,e;let n=t;if(!Array.isArray(n)&&"undefined"!=typeof window){const t=null===(o=this.constructor)||void 0===o?void 0:o.name,i="string"==typeof t&&t.startsWith("HS")?`$hs${t.slice(2)}Collection`:null;i&&(Array.isArray(window[i])||(window[i]=[]),n=window[i])}Array.isArray(n)&&n.push({id:(null===(e=null==i?void 0:i.el)||void 0===e?void 0:e.id)||n.length+1,element:i})}fireEvent(t,i=null){if(this.events.hasOwnProperty(t))return this.events[t](i)}on(t,i){this.events[t]=i}}},794(t,i,o){o.d(i,{A:()=>s});var e=o(7615);
 /*
  * HSRangeSlider
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

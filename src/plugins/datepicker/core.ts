@@ -1,6 +1,6 @@
 /*
  * HSDatepicker
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -13,6 +13,7 @@ import {
 	FormatDateString,
 	Range,
 } from 'vanilla-calendar-pro';
+import { getDate, getDateString, parseDates } from 'vanilla-calendar-pro/utils';
 
 import CustomVanillaCalendar from './vanilla-datepicker-pro';
 
@@ -32,6 +33,12 @@ import {
 
 import HSBasePlugin from '../base-plugin';
 import { ICollectionItem } from '../../interfaces';
+
+// "YYYY-MM-DD" is a calendar date, not UTC midnight; anything else keeps native Date parsing.
+const toDate = (date: string | number | Date): Date =>
+	typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)
+		? getDate(date as Parameters<typeof getDate>[0])
+		: new Date(date);
 
 declare var _: any;
 
@@ -85,7 +92,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		const defaults = {
 			selectedTheme: this.dataOptions.selectedTheme ?? '',
 			styles: this.updatedStyles,
-			dateMin: this.dataOptions.dateMin ?? today.toISOString().split('T')[0],
+			dateMin: this.dataOptions.dateMin ?? getDateString(today),
 			dateMax: this.dataOptions.dateMax ?? '2470-12-31',
 			mode: this.dataOptions.mode ?? 'default',
 			inputMode:
@@ -303,7 +310,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 		separator = '.',
 		defaultSeparator = '-',
 	) {
-		const dateObj = new Date(date);
+		const dateObj = toDate(date);
 
 		if (this.dataOptions?.replaceTodayWithText) {
 			const today = new Date();
@@ -322,24 +329,14 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 	private formatDateArrayToIndividualDates(dates: DatesArr): string[] {
 		const selectionDatesMode = this.dataOptions?.selectionDatesMode ?? 'single';
-		const expandDateRange = (start: string, end: string): string[] => {
-			const startDate = new Date(start);
-			const endDate = new Date(end);
-			const result: string[] = [];
-
-			while (startDate <= endDate) {
-				result.push(startDate.toISOString().split('T')[0]);
-				startDate.setDate(startDate.getDate() + 1);
-			}
-
-			return result;
-		};
+		const expandDateRange = (start: string, end: string): string[] =>
+			parseDates([`${start}:${end}`]);
 		const formatDate = (date: string | number | Date): string[] => {
 			if (typeof date === 'string') {
 				if (date.toLowerCase() === 'today') {
 					const today = new Date();
 
-					return [today.toISOString().split('T')[0]];
+					return [getDateString(today)];
 				}
 
 				const rangeMatch = date.match(
@@ -356,9 +353,9 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 				return [date];
 			} else if (typeof date === 'number') {
-				return [new Date(date).toISOString().split('T')[0]];
+				return [getDateString(new Date(date))];
 			} else if (date instanceof Date) {
-				return [date.toISOString().split('T')[0]];
+				return [getDateString(date)];
 			}
 
 			return [];
@@ -554,8 +551,8 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 				instance.el.addEventListener('change.hs.select', (evt: CustomEvent) => {
 					const { dateMax, displayMonthsCount } = this.vanillaCalendar.context;
-					const maxYear = new Date(dateMax).getFullYear();
-					const maxMonth = new Date(dateMax).getMonth();
+					const maxYear = toDate(dateMax).getFullYear();
+					const maxMonth = toDate(dateMax).getMonth();
 
 					this.destroySelects(mainElement);
 					self.set(
@@ -635,12 +632,11 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 
 		if (mode === 'custom-select') {
 			const today = new Date();
-			const dateMin =
-				this?.dataOptions?.dateMin ?? today.toISOString().split('T')[0];
+			const dateMin = this?.dataOptions?.dateMin ?? getDateString(today);
 			const tempDateMax = this?.dataOptions?.dateMax ?? '2470-12-31';
 			const dateMax = tempDateMax;
-			const startDate = new Date(dateMin);
-			const endDate = new Date(dateMax);
+			const startDate = toDate(dateMin);
+			const endDate = toDate(dateMax);
 			const startDateYear = startDate.getFullYear();
 			const endDateYear = endDate.getFullYear();
 			const generateOptions = () => {
@@ -812,7 +808,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private disableOptions() {
 		const { mainElement, dateMax, displayMonthsCount } =
 			this.vanillaCalendar.context;
-		const maxDate = new Date(dateMax);
+		const maxDate = toDate(dateMax);
 		const columns = Array.from(mainElement.querySelectorAll('.--single-month'));
 
 		columns.forEach((column, idx) => {
@@ -851,7 +847,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			selectedMonth,
 			displayMonthsCount,
 		} = this.vanillaCalendar.context;
-		const maxYear = new Date(dateMax).getFullYear();
+		const maxYear = toDate(dateMax).getFullYear();
 		const next = mainElement.querySelector(
 			'[data-vc-arrow="next"]',
 		) as HTMLElement;
@@ -931,7 +927,7 @@ class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 			return this.changeDateSeparator(date, dateSeparator);
 		}
 
-		const dateObj = new Date(date);
+		const dateObj = toDate(date);
 
 		if (isNaN(dateObj.getTime())) {
 			return this.changeDateSeparator(date as string);

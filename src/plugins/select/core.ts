@@ -1,6 +1,6 @@
 /*
  * HSSelect
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -112,6 +112,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly searchNoResultText: string | null;
 	private readonly searchNoResultClasses: string | null;
 	private readonly optionAllowEmptyOption: boolean;
+	private readonly optionValueAsTitle: boolean;
 	private readonly optionTag: string | null;
 	private readonly optionTemplate: string | null;
 	private readonly optionClasses: string | null;
@@ -291,6 +292,10 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			typeof concatOptions?.optionAllowEmptyOption !== 'undefined'
 				? concatOptions?.optionAllowEmptyOption
 				: false;
+		this.optionValueAsTitle =
+			typeof concatOptions?.optionValueAsTitle !== 'undefined'
+				? concatOptions?.optionValueAsTitle
+				: false;
 		this.optionTemplate = concatOptions?.optionTemplate || null;
 		this.optionTag = concatOptions?.optionTag || null;
 		this.optionClasses = concatOptions?.optionClasses || null;
@@ -399,9 +404,10 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 					this.hasValue() ? '' : this.placeholder,
 				);
 			} else {
-				this.toggleTextWrapper.innerHTML = this.hasValue()
-					? this.stringFromValue()
-					: this.placeholder;
+				this.setToggleText(
+					this.toggleTextWrapper,
+					this.hasValue() ? this.stringFromValue() : null,
+				);
 
 				this.unselectMultipleItems();
 				this.selectMultipleItems();
@@ -593,12 +599,15 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		if (!this.isMultiple && icon) this.setToggleIcon();
 		if (!this.isMultiple && title) this.setToggleTitle();
 		if (this.isMultiple) {
-			this.toggleTextWrapper.innerHTML = this.hasValue()
-				? this.stringFromValue()
-				: this.placeholder;
+			this.setToggleText(
+				this.toggleTextWrapper,
+				this.hasValue() ? this.stringFromValue() : null,
+			);
 		} else {
-			this.toggleTextWrapper.innerHTML =
-				this.getItemByValue(this.value as string)?.title || this.placeholder;
+			this.setToggleText(
+				this.toggleTextWrapper,
+				this.getItemByValue(this.value as string)?.title || null,
+			);
 		}
 		if (!title) this.toggle.append(this.toggleTextWrapper);
 		if (this.toggleClasses) classToClassList(this.toggleClasses, this.toggle);
@@ -657,15 +666,20 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		}
 	}
 
+	private setToggleText(target: Element, text: string | null) {
+		if (text === null) target.innerHTML = this.placeholder;
+		else target.textContent = text;
+	}
+
 	private setToggleTitle() {
 		const title = this.toggle.querySelector('[data-title]');
-		let value = this.placeholder;
+		let value: string | null = null;
 
 		if (this.optionAllowEmptyOption && this.value === '') {
 			const emptyOption = this.selectOptions.find(
 				(el: ISingleOption) => el.val === '',
 			);
-			value = emptyOption?.title || this.placeholder;
+			value = emptyOption?.title || null;
 		} else if (this.value) {
 			if (this.apiUrl) {
 				const staticOption = this.staticOptions.find(
@@ -695,11 +709,11 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 		}
 
 		if (title) {
-			title.innerHTML = value;
+			this.setToggleText(title, value);
 			title.classList.add('truncate');
 			this.toggle.append(title);
 		} else {
-			this.toggleTextWrapper.innerHTML = value;
+			this.setToggleText(this.toggleTextWrapper, value);
 		}
 	}
 
@@ -712,7 +726,6 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 	private reassignTagsInputPlaceholder(placeholder: string) {
 		(this.tagsInput as HTMLInputElement).placeholder = placeholder;
-		this.tagsInputHelper.innerHTML = placeholder;
 		this.calculateInputWidth();
 	}
 
@@ -1286,11 +1299,13 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 
 			option.append(template);
 		}
+		const displayTitle = this.optionValueAsTitle ? val : title;
+
 		if (template) {
 			titleWrapper = template.querySelector('[data-title]');
-			titleWrapper.textContent = title || '';
+			titleWrapper.textContent = displayTitle || '';
 		} else {
-			option.textContent = title || '';
+			option.textContent = displayTitle || '';
 		}
 		if (options) {
 			const iconValue = options.apiFields?.icon ?? options.icon;
@@ -1611,9 +1626,12 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 					this.setToggleTitle();
 				} else if (this.toggleTextWrapper) {
 					if (this.isMultiple) {
-						this.toggleTextWrapper.innerHTML = this.stringFromValue();
+						this.setToggleText(this.toggleTextWrapper, this.stringFromValue());
 					} else {
-						this.toggleTextWrapper.innerHTML = remoteData.title as string;
+						this.setToggleText(
+							this.toggleTextWrapper,
+							remoteData.title as string,
+						);
 					}
 				}
 			}
@@ -2019,6 +2037,8 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	}
 
 	private calculateInputWidth() {
+		if (!this.tagsInputHelper) return;
+
 		this.tagsInputHelper.textContent =
 			(this.tagsInput as HTMLInputElement).value ||
 			(this.tagsInput as HTMLInputElement).placeholder;
@@ -2167,8 +2187,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 				const emptyOption = this.selectOptions.find(
 					(el: ISingleOption) => el.val === '',
 				);
-				this.toggleTextWrapper.innerHTML =
-					emptyOption?.title || this.placeholder;
+				this.setToggleText(this.toggleTextWrapper, emptyOption?.title || null);
 			} else {
 				if (this.hasValue()) {
 					if (this.apiUrl) {
@@ -2176,15 +2195,16 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 							`[data-value="${this.value}"]`,
 						);
 						if (selectedItem) {
-							this.toggleTextWrapper.innerHTML =
-								selectedItem.getAttribute('data-title-value') ||
-								this.placeholder;
+							this.setToggleText(
+								this.toggleTextWrapper,
+								selectedItem.getAttribute('data-title-value') || null,
+							);
 						} else {
 							const staticOption = this.staticOptions.find(
 								(el: ISingleOption) => el.val === this.value,
 							);
 							if (staticOption) {
-								this.toggleTextWrapper.innerHTML = staticOption.title;
+								this.setToggleText(this.toggleTextWrapper, staticOption.title);
 							} else {
 								const selectedOption = (
 									this.remoteOptions as IApiFieldMap[]
@@ -2194,16 +2214,19 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 										: (el[this.apiFieldsMap.title] as string);
 									return val === this.value;
 								});
-								this.toggleTextWrapper.innerHTML = selectedOption
-									? `${selectedOption[this.apiFieldsMap.title]}`
-									: this.stringFromValue();
+								this.setToggleText(
+									this.toggleTextWrapper,
+									selectedOption
+										? `${selectedOption[this.apiFieldsMap.title]}`
+										: this.stringFromValue(),
+								);
 							}
 						}
 					} else {
-						this.toggleTextWrapper.innerHTML = this.stringFromValue();
+						this.setToggleText(this.toggleTextWrapper, this.stringFromValue());
 					}
 				} else {
-					this.toggleTextWrapper.innerHTML = this.placeholder;
+					this.setToggleText(this.toggleTextWrapper, null);
 				}
 			}
 		}

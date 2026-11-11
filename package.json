@@ -1,6 +1,6 @@
 {
 	"name": "preline",
-	"version": "5.0.0",
+	"version": "5.1.0",
 	"description": "Preline UI is an open-source set of prebuilt UI components based on the utility-first Tailwind CSS framework.",
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
@@ -104,7 +104,6 @@
 	],
 	"author": "Preline Labs Ltd.",
 	"engines": {
-		"node": "22.22.2",
 		"npm": ">=10"
 	},
 	"license": "Licensed under MIT and Preline UI Fair Use License",
@@ -129,7 +128,7 @@
 		"datatables.net-dt": "^2.2.2",
 		"dropzone": "^6.0.0-beta.2",
 		"nouislider": "^15.8.1",
-		"vanilla-calendar-pro": "^3.0.4"
+		"vanilla-calendar-pro": "^3.4.0"
 	},
 	"devDependencies": {
 		"@types/dropzone": "5.7.9",

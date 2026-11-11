@@ -1,6 +1,6 @@
 /*
  * HSOverlay
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -931,6 +931,7 @@ class HSOverlay extends HSBasePlugin<{}> implements IOverlay {
 				'Overlay',
 				'.hs-overlay',
 			);
+		this.accessibilityComponent.onEnterSelfOnly = true;
 
 		this.toggleButtons.forEach((toggleButton) => {
 			window.HSAccessibilityObserver.registerComponent(

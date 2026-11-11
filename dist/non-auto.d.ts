@@ -591,6 +591,7 @@ export interface ISelectOptions {
 	searchNoResultText?: string | null;
 	searchNoResultClasses?: string | null;
 	optionAllowEmptyOption?: boolean;
+	optionValueAsTitle?: boolean;
 	optionTemplate?: string;
 	optionTag?: string;
 	optionClasses?: string;
@@ -619,6 +620,7 @@ export interface ICustomDatepickerOptions extends Options {
 	inputModeOptions?: {
 		dateSeparator?: string;
 		itemsSeparator?: string;
+		closeOnSelect?: boolean;
 	};
 	templates?: {
 		time?: string;
@@ -638,6 +640,7 @@ export interface ICustomDatepickerOptions extends Options {
 	dateFormat?: string;
 	dateLocale?: string;
 	replaceTodayWithText?: boolean;
+	showTodayButton?: boolean;
 }
 export interface IDatepicker {
 	options?: ICustomDatepickerOptions;
@@ -660,6 +663,7 @@ export declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicke
 	private changeDateSeparator;
 	private formatDateArrayToIndividualDates;
 	private hasTime;
+	private shouldCloseOnSelect;
 	private createArrowFromTemplate;
 	private concatObjectProperties;
 	private updateTemplate;
@@ -676,6 +680,9 @@ export declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicke
 	private parseCustomYear;
 	private parseArrowPrev;
 	private parseArrowNext;
+	private generateCustomTodayMarkup;
+	private parseCustomToday;
+	private selectToday;
 	private processCustomTemplate;
 	private disableOptions;
 	private disableNav;
@@ -1249,6 +1256,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private readonly searchNoResultText;
 	private readonly searchNoResultClasses;
 	private readonly optionAllowEmptyOption;
+	private readonly optionValueAsTitle;
 	private readonly optionTag;
 	private readonly optionTemplate;
 	private readonly optionClasses;
@@ -1312,6 +1320,7 @@ export declare class HSSelect extends HSBasePlugin<ISelectOptions> implements IS
 	private buildExtraMarkup;
 	private buildToggle;
 	private setToggleIcon;
+	private setToggleText;
 	private setToggleTitle;
 	private buildTags;
 	private reassignTagsInputPlaceholder;

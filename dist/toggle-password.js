@@ -1,7 +1,7 @@
 !function(t,e){if("object"==typeof exports&&"object"==typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var s=e();for(var o in s)("object"==typeof exports?exports:t)[o]=s[o]}}(self,()=>(()=>{"use strict";var t={2961(t,e){
 /*
  * HSBasePlugin
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -9,14 +9,14 @@
 Object.defineProperty(e,"__esModule",{value:!0});e.default=class{constructor(t,e,s){this.el=t,this.options=e,this.events=s,this.el=t,this.options=e,this.events={}}createCollection(t,e){var s,o;let i=t;if(!Array.isArray(i)&&"undefined"!=typeof window){const t=null===(s=this.constructor)||void 0===s?void 0:s.name,e="string"==typeof t&&t.startsWith("HS")?`$hs${t.slice(2)}Collection`:null;e&&(Array.isArray(window[e])||(window[e]=[]),i=window[e])}Array.isArray(i)&&i.push({id:(null===(o=null==e?void 0:e.el)||void 0===o?void 0:o.id)||i.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},2061(t,e,s){var o=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(e,"__esModule",{value:!0});const i=o(s(8549));window.addEventListener("load",()=>{i.default.autoInit()}),"undefined"!=typeof window&&(window.HSTogglePassword=i.default)},8549(t,e,s){
 /*
  * HSTogglePassword
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 var o=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(e,"__esModule",{value:!0});const i=s(292),n=o(s(2961));class l extends n.default{constructor(t,e){super(t,e);const s=t.getAttribute("data-hs-toggle-password"),o=s?JSON.parse(s):{},n=Object.assign(Object.assign({},o),e),l=[];if((null==n?void 0:n.target)&&"string"==typeof(null==n?void 0:n.target)){(null==n?void 0:n.target.split(",")).forEach(t=>{l.push(document.querySelector(t))})}else(null==n?void 0:n.target)&&"object"==typeof(null==n?void 0:n.target)?n.target.forEach(t=>l.push(document.querySelector(t))):n.target.forEach(t=>l.push(t));this.target=l,this.isShown=!!this.el.hasAttribute("type")&&this.el.checked,this.eventType=(0,i.isFormElement)(this.el)?"change":"click",this.isMultiple=this.target.length>1&&!!this.el.closest("[data-hs-toggle-password-group]"),this.target&&this.init()}elementAction(){this.isShown?this.hide():this.show(),this.fireEvent("toggle",this.target),(0,i.dispatch)("toggle.hs.toggle-select",this.el,this.target)}init(){this.createCollection(window.$hsTogglePasswordCollection,this),this.isShown?this.show():this.hide(),this.onElementActionListener=()=>this.elementAction(),this.el.addEventListener(this.eventType,this.onElementActionListener)}getMultipleToggles(){const t=this.el.closest("[data-hs-toggle-password-group]").querySelectorAll("[data-hs-toggle-password]"),e=[];return t.forEach(t=>{e.push(l.getInstance(t))}),e}show(){if(this.isMultiple){this.getMultipleToggles().forEach(t=>!!t&&(t.isShown=!0)),this.el.closest("[data-hs-toggle-password-group]").classList.add("active")}else this.isShown=!0,this.el.classList.add("active");this.target.forEach(t=>{t.type="text"})}hide(){if(this.isMultiple){this.getMultipleToggles().forEach(t=>!!t&&(t.isShown=!1)),this.el.closest("[data-hs-toggle-password-group]").classList.remove("active")}else this.isShown=!1,this.el.classList.remove("active");this.target.forEach(t=>{t.type="password"})}destroy(){this.isMultiple?this.el.closest("[data-hs-toggle-password-group]").classList.remove("active"):this.el.classList.remove("active"),this.target.forEach(t=>{t.type="password"}),this.el.removeEventListener(this.eventType,this.onElementActionListener),this.isShown=!1,window.$hsTogglePasswordCollection=window.$hsTogglePasswordCollection.filter(({element:t})=>t.el!==this.el)}static getInstance(t,e){const s=window.$hsTogglePasswordCollection.find(e=>e.element.el===("string"==typeof t?document.querySelector(t):t));return s?e?s:s.element:null}static autoInit(){window.$hsTogglePasswordCollection||(window.$hsTogglePasswordCollection=[]),window.$hsTogglePasswordCollection&&(window.$hsTogglePasswordCollection=window.$hsTogglePasswordCollection.filter(({element:t})=>document.contains(t.el))),document.querySelectorAll("[data-hs-toggle-password]:not(.--prevent-on-load-init)").forEach(t=>{window.$hsTogglePasswordCollection.find(e=>{var s;return(null===(s=null==e?void 0:e.element)||void 0===s?void 0:s.el)===t})||new l(t)})}}e.default=l},292(t,e){
 /*
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

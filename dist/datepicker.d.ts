@@ -79,6 +79,7 @@ export interface ISelectOptions {
 	searchNoResultText?: string | null;
 	searchNoResultClasses?: string | null;
 	optionAllowEmptyOption?: boolean;
+	optionValueAsTitle?: boolean;
 	optionTemplate?: string;
 	optionTag?: string;
 	optionClasses?: string;
@@ -97,6 +98,7 @@ export interface ICustomDatepickerOptions extends Options {
 	inputModeOptions?: {
 		dateSeparator?: string;
 		itemsSeparator?: string;
+		closeOnSelect?: boolean;
 	};
 	templates?: {
 		time?: string;
@@ -116,6 +118,7 @@ export interface ICustomDatepickerOptions extends Options {
 	dateFormat?: string;
 	dateLocale?: string;
 	replaceTodayWithText?: boolean;
+	showTodayButton?: boolean;
 }
 export interface IDatepicker {
 	options?: ICustomDatepickerOptions;
@@ -152,6 +155,7 @@ declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private changeDateSeparator;
 	private formatDateArrayToIndividualDates;
 	private hasTime;
+	private shouldCloseOnSelect;
 	private createArrowFromTemplate;
 	private concatObjectProperties;
 	private updateTemplate;
@@ -168,6 +172,9 @@ declare class HSDatepicker extends HSBasePlugin<{}> implements IDatepicker {
 	private parseCustomYear;
 	private parseArrowPrev;
 	private parseArrowNext;
+	private generateCustomTodayMarkup;
+	private parseCustomToday;
+	private selectToday;
 	private processCustomTemplate;
 	private disableOptions;
 	private disableNav;

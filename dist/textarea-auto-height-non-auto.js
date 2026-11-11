@@ -1,7 +1,7 @@
 !function(e,t){if("object"==typeof exports&&"object"==typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var i=t();for(var n in i)("object"==typeof exports?exports:e)[n]=i[n]}}(self,()=>(()=>{"use strict";var e={2961(e,t){
 /*
  * HSBasePlugin
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -9,7 +9,7 @@
 Object.defineProperty(t,"__esModule",{value:!0});t.default=class{constructor(e,t,i){this.el=e,this.options=t,this.events=i,this.el=e,this.options=t,this.events={}}createCollection(e,t){var i,n;let o=e;if(!Array.isArray(o)&&"undefined"!=typeof window){const e=null===(i=this.constructor)||void 0===i?void 0:i.name,t="string"==typeof e&&e.startsWith("HS")?`$hs${e.slice(2)}Collection`:null;t&&(Array.isArray(window[t])||(window[t]=[]),o=window[t])}Array.isArray(o)&&o.push({id:(null===(n=null==t?void 0:t.el)||void 0===n?void 0:n.id)||o.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},6473(e,t,i){
 /*
  * HSTextareaAutoHeight
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

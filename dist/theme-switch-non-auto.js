@@ -1,7 +1,7 @@
 !function(e,t){if("object"==typeof exports&&"object"==typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var s=t();for(var i in s)("object"==typeof exports?exports:e)[i]=s[i]}}(self,()=>(()=>{"use strict";var e={2961(e,t){
 /*
  * HSBasePlugin
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -9,7 +9,7 @@
 Object.defineProperty(t,"__esModule",{value:!0});t.default=class{constructor(e,t,s){this.el=e,this.options=t,this.events=s,this.el=e,this.options=t,this.events={}}createCollection(e,t){var s,i;let n=e;if(!Array.isArray(n)&&"undefined"!=typeof window){const e=null===(s=this.constructor)||void 0===s?void 0:s.name,t="string"==typeof e&&e.startsWith("HS")?`$hs${e.slice(2)}Collection`:null;t&&(Array.isArray(window[t])||(window[t]=[]),n=window[t])}Array.isArray(n)&&n.push({id:(null===(i=null==t?void 0:t.el)||void 0===i?void 0:i.id)||n.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},9419(e,t,s){
 /*
  * HSThemeSwitch
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

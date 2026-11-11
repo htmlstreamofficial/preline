@@ -1,14 +1,14 @@
 var t={189(t,e,s){s.d(e,{LO:()=>i});const i={xs:0,sm:640,md:768,lg:1024,xl:1280,"2xl":1536}},7615(t,e,s){s.d(e,{A:()=>i});
 /*
  * HSBasePlugin
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 class i{constructor(t,e,s){this.el=t,this.options=e,this.events=s,this.el=t,this.options=e,this.events={}}createCollection(t,e){var s,i;let n=t;if(!Array.isArray(n)&&"undefined"!=typeof window){const t=null===(s=this.constructor)||void 0===s?void 0:s.name,e="string"==typeof t&&t.startsWith("HS")?`$hs${t.slice(2)}Collection`:null;e&&(Array.isArray(window[e])||(window[e]=[]),n=window[e])}Array.isArray(n)&&n.push({id:(null===(i=null==e?void 0:e.el)||void 0===i?void 0:i.id)||n.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},1926(t,e,s){s.d(e,{en:()=>r,fc:()=>n,sg:()=>i});
 /*
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -16,7 +16,7 @@ class i{constructor(t,e,s){this.el=t,this.options=e,this.events=s,this.el=t,this
 const i=(t,e=200)=>{let s;return(...i)=>{clearTimeout(s),s=setTimeout(()=>{t.apply(void 0,i)},e)}},n=t=>{const e=document.createElement("template");return t=t.trim(),e.innerHTML=t,e.content.firstChild},r=(t,e,s=" ",i="add")=>{t.split(s).forEach(t=>{t.trim()&&("add"===i?e.classList.add(t):e.classList.remove(t))})}}},e={};function s(i){var n=e[i];if(void 0!==n)return n.exports;var r=e[i]={exports:{}};return t[i](r,r.exports,s),r.exports}s.d=(t,e)=>{for(var i in e)s.o(e,i)&&!s.o(t,i)&&Object.defineProperty(t,i,{enumerable:!0,get:e[i]})},s.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e);var i={};s.d(i,{A:()=>l});var n=s(1926),r=s(7615),h=s(189);
 /*
  * HSCarousel
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

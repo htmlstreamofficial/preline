@@ -1,14 +1,14 @@
 var e={7615(e,t,n){n.d(t,{A:()=>i});
 /*
  * HSBasePlugin
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 class i{constructor(e,t,n){this.el=e,this.options=t,this.events=n,this.el=e,this.options=t,this.events={}}createCollection(e,t){var n,i;let s=e;if(!Array.isArray(s)&&"undefined"!=typeof window){const e=null===(n=this.constructor)||void 0===n?void 0:n.name,t="string"==typeof e&&e.startsWith("HS")?`$hs${e.slice(2)}Collection`:null;t&&(Array.isArray(window[t])||(window[t]=[]),s=window[t])}Array.isArray(s)&&s.push({id:(null===(i=null==t?void 0:t.el)||void 0===i?void 0:i.id)||s.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},1926(e,t,n){n.d(t,{JD:()=>i,yd:()=>s});
 /*
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -16,7 +16,7 @@ class i{constructor(e,t,n){this.el=e,this.options=t,this.events=n,this.el=e,this
 const i=(e,t,n=null)=>{const i=new CustomEvent(e,{detail:{payload:n},bubbles:!0,cancelable:!0,composed:!1});t.dispatchEvent(i)},s=(e,t)=>{const n=()=>{t(),e.removeEventListener("transitionend",n,!0)},i=window.getComputedStyle(e),s=i.getPropertyValue("transition-duration");"none"!==i.getPropertyValue("transition-property")&&parseFloat(s)>0?e.addEventListener("transitionend",n,!0):t()}}},t={};function n(i){var s=t[i];if(void 0!==s)return s.exports;var o=t[i]={exports:{}};return e[i](o,o.exports,n),o.exports}n.d=(e,t)=>{for(var i in t)n.o(t,i)&&!n.o(e,i)&&Object.defineProperty(e,i,{enumerable:!0,get:t[i]})},n.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var i={};n.d(i,{A:()=>a});var s=n(1926),o=n(7615);
 /*
  * HSCollapse
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

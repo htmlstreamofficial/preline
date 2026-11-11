@@ -1,7 +1,7 @@
 var e={7615(e,t,n){n.d(t,{A:()=>o});
 /*
  * HSBasePlugin
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -9,14 +9,14 @@ var e={7615(e,t,n){n.d(t,{A:()=>o});
 class o{constructor(e,t,n){this.el=e,this.options=t,this.events=n,this.el=e,this.options=t,this.events={}}createCollection(e,t){var n,o;let i=e;if(!Array.isArray(i)&&"undefined"!=typeof window){const e=null===(n=this.constructor)||void 0===n?void 0:n.name,t="string"==typeof e&&e.startsWith("HS")?`$hs${e.slice(2)}Collection`:null;t&&(Array.isArray(window[t])||(window[t]=[]),i=window[t])}Array.isArray(i)&&i.push({id:(null===(o=null==t?void 0:t.el)||void 0===o?void 0:o.id)||i.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},242(e,t,n){n.d(t,{A:()=>s});var o=n(1926),i=n(7615);
 /*
  * HSRemoveElement
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 class r extends i.A{constructor(e,t){super(e,t);const n=e.getAttribute("data-hs-remove-element-options"),o=n?JSON.parse(n):{},i=Object.assign(Object.assign({},o),t);this.removeTargetId=this.el.getAttribute("data-hs-remove-element"),this.removeTarget=document.querySelector(this.removeTargetId),this.removeTargetAnimationClass=(null==i?void 0:i.removeTargetAnimationClass)||"hs-removing",this.removeTarget&&this.init()}elementClick(){this.remove()}init(){this.createCollection(window.$hsRemoveElementCollection,this),this.onElementClickListener=()=>this.elementClick(),this.el.addEventListener("click",this.onElementClickListener)}remove(){if(!this.removeTarget)return!1;this.removeTarget.classList.add(this.removeTargetAnimationClass),(0,o.yd)(this.removeTarget,()=>setTimeout(()=>this.removeTarget.remove()))}destroy(){this.removeTarget.classList.remove(this.removeTargetAnimationClass),this.el.removeEventListener("click",this.onElementClickListener),window.$hsRemoveElementCollection=window.$hsRemoveElementCollection.filter(({element:e})=>e.el!==this.el)}static getInstance(e,t){const n=window.$hsRemoveElementCollection.find(t=>t.element.el===("string"==typeof e?document.querySelector(e):e)||t.element.el===("string"==typeof e?document.querySelector(e):e));return n?t?n:n.element.el:null}static autoInit(){window.$hsRemoveElementCollection||(window.$hsRemoveElementCollection=[]),window.$hsRemoveElementCollection&&(window.$hsRemoveElementCollection=window.$hsRemoveElementCollection.filter(({element:e})=>document.contains(e.el))),document.querySelectorAll("[data-hs-remove-element]:not(.--prevent-on-load-init)").forEach(e=>{window.$hsRemoveElementCollection.find(t=>{var n;return(null===(n=null==t?void 0:t.element)||void 0===n?void 0:n.el)===e})||new r(e)})}}const s=r},1926(e,t,n){n.d(t,{yd:()=>o});
 /*
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

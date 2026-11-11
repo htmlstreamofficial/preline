@@ -207,7 +207,11 @@ class HSAccessibilityObserver {
 
 		return components
 			.map((component) => {
-				if (key === 'Enter') return component.handlers.onEnter;
+				if (key === 'Enter') {
+					return !component.onEnterSelfOnly || component.wrapper === el
+						? component.handlers.onEnter
+						: undefined;
+				}
 
 				return component.handlers.onSpace;
 			})

@@ -18,6 +18,7 @@ export interface IAccessibilityComponent {
 	selector: string;
 	context?: HTMLElement;
 	isRegistered: boolean;
+	onEnterSelfOnly?: boolean;
 	stopPropagation?: {
 		[key: string]: boolean;
 	};

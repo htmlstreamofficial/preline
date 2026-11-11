@@ -1,14 +1,14 @@
 var t={189(t,e,n){n.d(e,{lP:()=>o});const o={auto:"auto","auto-start":"auto-start","auto-end":"auto-end",top:"top","top-left":"top-start","top-right":"top-end",bottom:"bottom","bottom-left":"bottom-start","bottom-right":"bottom-end",right:"right","right-start":"right-start","right-end":"right-end",left:"left","left-start":"left-start","left-end":"left-end"}},7615(t,e,n){n.d(e,{A:()=>o});
 /*
  * HSBasePlugin
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 class o{constructor(t,e,n){this.el=t,this.options=e,this.events=n,this.el=t,this.options=e,this.events={}}createCollection(t,e){var n,o;let i=t;if(!Array.isArray(i)&&"undefined"!=typeof window){const t=null===(n=this.constructor)||void 0===n?void 0:n.name,e="string"==typeof t&&t.startsWith("HS")?`$hs${t.slice(2)}Collection`:null;e&&(Array.isArray(window[e])||(window[e]=[]),i=window[e])}Array.isArray(i)&&i.push({id:(null===(o=null==e?void 0:e.el)||void 0===o?void 0:o.id)||i.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},1926(t,e,n){n.d(e,{JD:()=>i,gj:()=>o,yd:()=>s});
 /*
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

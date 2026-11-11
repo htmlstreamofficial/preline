@@ -1,7 +1,7 @@
 var e={7615(e,t,n){n.d(t,{A:()=>i});
 /*
  * HSBasePlugin
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -9,14 +9,14 @@ var e={7615(e,t,n){n.d(t,{A:()=>i});
 class i{constructor(e,t,n){this.el=e,this.options=t,this.events=n,this.el=e,this.options=t,this.events={}}createCollection(e,t){var n,i;let s=e;if(!Array.isArray(s)&&"undefined"!=typeof window){const e=null===(n=this.constructor)||void 0===n?void 0:n.name,t="string"==typeof e&&e.startsWith("HS")?`$hs${e.slice(2)}Collection`:null;t&&(Array.isArray(window[t])||(window[t]=[]),s=window[t])}Array.isArray(s)&&s.push({id:(null===(i=null==t?void 0:t.el)||void 0===i?void 0:i.id)||s.length+1,element:t})}fireEvent(e,t=null){if(this.events.hasOwnProperty(e))return this.events[e](t)}on(e,t){this.events[e]=t}}},9632(e,t,n){n.d(t,{A:()=>l});var i=n(1926),s=n(7615);
 /*
  * HSCollapse
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
  */
 class o extends s.A{constructor(e,t,n){super(e,t,n),this.contentId=this.el.dataset.hsCollapse,this.content=document.querySelector(this.contentId),this.animationInProcess=!1,this.content&&this.init()}elementClick(){this.content.classList.contains("open")?this.hide():this.show()}init(){var e;this.createCollection(window.$hsCollapseCollection,this),this.onElementClickListener=()=>this.elementClick(),(null===(e=null==this?void 0:this.el)||void 0===e?void 0:e.ariaExpanded)&&(this.el.classList.contains("open")?this.el.ariaExpanded="true":this.el.ariaExpanded="false"),this.el.addEventListener("click",this.onElementClickListener)}hideAllMegaMenuItems(){this.content.querySelectorAll(".hs-mega-menu-content.block").forEach(e=>{e.classList.remove("block"),e.classList.add("hidden")})}show(){var e;if(this.animationInProcess||this.el.classList.contains("open"))return!1;this.animationInProcess=!0,this.el.classList.add("open"),(null===(e=null==this?void 0:this.el)||void 0===e?void 0:e.ariaExpanded)&&(this.el.ariaExpanded="true"),this.content.classList.add("open"),this.content.classList.remove("hidden"),this.content.style.height="0",setTimeout(()=>{this.content.style.height=`${this.content.scrollHeight}px`,this.fireEvent("beforeOpen",this.el),(0,i.JD)("beforeOpen.hs.collapse",this.el,this.el),(0,i.yd)(this.content,()=>{this.content.style.height="",this.fireEvent("open",this.el),(0,i.JD)("open.hs.collapse",this.el,this.el),this.animationInProcess=!1})})}hide(){var e;if(this.animationInProcess||!this.el.classList.contains("open"))return!1;this.animationInProcess=!0,this.el.classList.remove("open"),(null===(e=null==this?void 0:this.el)||void 0===e?void 0:e.ariaExpanded)&&(this.el.ariaExpanded="false"),this.content.style.height=`${this.content.scrollHeight}px`,setTimeout(()=>{this.content.style.height="0"}),this.content.classList.remove("open"),(0,i.yd)(this.content,()=>{this.content.classList.add("hidden"),this.content.style.height="",this.fireEvent("hide",this.el),(0,i.JD)("hide.hs.collapse",this.el,this.el),this.animationInProcess=!1}),this.content.querySelectorAll(".hs-mega-menu-content.block").length&&this.hideAllMegaMenuItems()}destroy(){this.el.removeEventListener("click",this.onElementClickListener),this.content=null,this.animationInProcess=!1,window.$hsCollapseCollection=window.$hsCollapseCollection.filter(({element:e})=>e.el!==this.el)}static findInCollection(e){return window.$hsCollapseCollection.find(t=>e instanceof o?t.element.el===e.el:"string"==typeof e?t.element.el===document.querySelector(e):t.element.el===e)||null}static getInstance(e,t=!1){const n=window.$hsCollapseCollection.find(t=>t.element.el===("string"==typeof e?document.querySelector(e):e));return n?t?n:n.element.el:null}static autoInit(){window.$hsCollapseCollection||(window.$hsCollapseCollection=[]),window.$hsCollapseCollection&&(window.$hsCollapseCollection=window.$hsCollapseCollection.filter(({element:e})=>document.contains(e.el))),document.querySelectorAll(".hs-collapse-toggle:not(.--prevent-on-load-init)").forEach(e=>{window.$hsCollapseCollection.find(t=>{var n;return(null===(n=null==t?void 0:t.element)||void 0===n?void 0:n.el)===e})||new o(e)})}static show(e){const t=o.findInCollection(e);t&&t.element.content.classList.contains("hidden")&&t.element.show()}static hide(e){const t=o.findInCollection(e);t&&!t.element.content.classList.contains("hidden")&&t.element.hide()}static on(e,t,n){const i=o.findInCollection(t);i&&(i.element.events[e]=n)}}const l=o},1926(e,t,n){n.d(t,{JD:()=>i,yd:()=>s});
 /*
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

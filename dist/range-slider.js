@@ -1,7 +1,7 @@
 !function(t,e){if("object"==typeof exports&&"object"==typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var i=e();for(var o in i)("object"==typeof exports?exports:t)[o]=i[o]}}(self,()=>(()=>{"use strict";var t={2961(t,e){
 /*
  * HSBasePlugin
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.
@@ -9,7 +9,7 @@
 Object.defineProperty(e,"__esModule",{value:!0});e.default=class{constructor(t,e,i){this.el=t,this.options=e,this.events=i,this.el=t,this.options=e,this.events={}}createCollection(t,e){var i,o;let n=t;if(!Array.isArray(n)&&"undefined"!=typeof window){const t=null===(i=this.constructor)||void 0===i?void 0:i.name,e="string"==typeof t&&t.startsWith("HS")?`$hs${t.slice(2)}Collection`:null;e&&(Array.isArray(window[e])||(window[e]=[]),n=window[e])}Array.isArray(n)&&n.push({id:(null===(o=null==e?void 0:e.el)||void 0===o?void 0:o.id)||n.length+1,element:e})}fireEvent(t,e=null){if(this.events.hasOwnProperty(t))return this.events[t](e)}on(t,e){this.events[t]=e}}},2648(t,e,i){var o=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(e,"__esModule",{value:!0});const n=o(i(4808));window.addEventListener("load",()=>{n.default.autoInit()}),"undefined"!=typeof window&&(window.HSRangeSlider=n.default)},4808(t,e,i){
 /*
  * HSRangeSlider
- * @version: 5.0.0
+ * @version: 5.1.0
  * @author: Preline Labs Ltd.
  * @license: Licensed under MIT and Preline UI Fair Use License (https://preline.co/docs/license.html)
  * Copyright 2024 Preline Labs Ltd.

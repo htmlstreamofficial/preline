@@ -109,6 +109,7 @@ export interface ISelectOptions {
 	searchNoResultText?: string | null;
 	searchNoResultClasses?: string | null;
 	optionAllowEmptyOption?: boolean;
+	optionValueAsTitle?: boolean;
 
 	optionTemplate?: string;
 	optionTag?: string;

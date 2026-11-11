@@ -1,9 +1,20 @@
-import { Calendar } from 'vanilla-calendar-pro';
+import {
+	Calendar,
+	annotations,
+	months,
+	motion,
+	time,
+	weeks,
+} from 'vanilla-calendar-pro';
 import { Options, Reset, Styles } from 'vanilla-calendar-pro/types';
+
+// The ESM build registers no extensions; keep every option user configs may pass working.
+// Applied last: JSON data options can't hold extension objects, so an override only breaks init.
+const extensions = [months, time, motion, annotations, weeks];
 
 class CustomVanillaCalendar extends Calendar {
 	constructor(selector: HTMLElement | string, options?: Partial<Options>) {
-		super(selector, options);
+		super(selector, { ...options, extensions });
 
 		const parentSet = this.set;
 

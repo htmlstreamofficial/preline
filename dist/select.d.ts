@@ -95,6 +95,7 @@ export interface ISelectOptions {
 	searchNoResultText?: string | null;
 	searchNoResultClasses?: string | null;
 	optionAllowEmptyOption?: boolean;
+	optionValueAsTitle?: boolean;
 	optionTemplate?: string;
 	optionTag?: string;
 	optionClasses?: string;
@@ -188,6 +189,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private readonly searchNoResultText;
 	private readonly searchNoResultClasses;
 	private readonly optionAllowEmptyOption;
+	private readonly optionValueAsTitle;
 	private readonly optionTag;
 	private readonly optionTemplate;
 	private readonly optionClasses;
@@ -251,6 +253,7 @@ declare class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	private buildExtraMarkup;
 	private buildToggle;
 	private setToggleIcon;
+	private setToggleText;
 	private setToggleTitle;
 	private buildTags;
 	private reassignTagsInputPlaceholder;

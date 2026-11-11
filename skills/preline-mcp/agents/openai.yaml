@@ -1,4 +1,0 @@
-interface:
-  display_name: "Preline MCP"
-  short_description: "Add Preline UI components and blocks to HTML files via the Preline MCP server"
-  default_prompt: "Use $preline-mcp to add Preline UI components or blocks to the target HTML file via the Preline MCP server. Call components_list first to discover valid section and component slugs, then single_component to get the HTML/CSS/JS, then integrate into the target file."
