@@ -2067,6 +2067,12 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 	}
 
 	private onSelectOption(val: string) {
+		if (this.el.matches(':disabled')) return;
+
+		this.selectOption(val);
+	}
+
+	private selectOption(val: string) {
 		this.clearSelections();
 
 		if (this.isMultiple) {
@@ -2769,7 +2775,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 				this.buildOption(title, val, disabled, selected, options, i);
 				this.buildOriginalOption(title, val, null, disabled, selected, options);
 
-				if (selected && !this.isMultiple) this.onSelectOption(val);
+				if (selected && !this.isMultiple) this.selectOption(val);
 			}
 		};
 
