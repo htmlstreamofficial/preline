@@ -591,6 +591,8 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 
 		if (!this.preventSelection) {
 			item.addEventListener('click', () => {
+				if (this.input?.matches(':disabled')) return;
+
 				this.close(val, data);
 				this.setSelectedByValue(this.valuesBySelector(item));
 			});
@@ -698,6 +700,8 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 
 			if (!this.preventSelection) {
 				(newItem as HTMLElement).addEventListener('click', () => {
+					if (this.input?.matches(':disabled')) return;
+
 					this.close(
 						(newItem as HTMLElement).querySelector('[data-hs-combo-box-value]')
 							.textContent,
@@ -1038,6 +1042,8 @@ class HSComboBox extends HSBasePlugin<IComboBoxOptions> implements IComboBox {
 	}
 
 	private onEnter(evt?: KeyboardEvent): void {
+		if (this.input?.matches(':disabled')) return;
+
 		if (!this.isOpened) {
 			this.open();
 		} else {
